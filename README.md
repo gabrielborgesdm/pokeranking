@@ -1,1 +1,1 @@
-# poc-pokemon-ranking
+# pokemon-ranking
