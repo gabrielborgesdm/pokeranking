@@ -1,6 +1,7 @@
 import mongoose from '../config/DatabaseConfig'
+import { Document } from 'mongoose'
 
-export interface UserInterface {
+export interface UserInterface extends Document {
   _id: string,
   username: string,
   email: string,
@@ -18,9 +19,6 @@ export interface AddUserInterface {
 }
 
 export interface UpdateUserInterface {
-  _id: string,
-  username?: string,
-  email?: string,
   bio?: string,
   password?: string
 }
