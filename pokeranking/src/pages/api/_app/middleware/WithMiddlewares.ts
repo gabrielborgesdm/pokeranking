@@ -16,8 +16,7 @@ const withMiddlewares = (handler: NextApiHandler, ...middlewares: Array<Function
     for (const middleware of middlewares) {
       const response: MiddlewareInterface = await middleware(req, res)
       if (!response.success) {
-        const { code, ...rest } = response
-        return res.status(code).json(rest)
+        return res.status(response.code).json(response)
       }
     }
     return handler(req, res)

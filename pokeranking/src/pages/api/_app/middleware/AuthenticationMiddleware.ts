@@ -1,10 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { SUCCESS, UNAUTHORIZED } from '../config/APIConfig'
+import { FORBIDDEN, SUCCESS, UNAUTHORIZED } from '../config/APIConfig'
+import { isTokenValid } from '../helper/AuthenticationHelper'
 import { MiddlewareInterface } from './WithMiddlewares'
 
+const getTokenFromRequest = (req: NextApiRequest): string => {
+  const authHeader = req.headers.authorization
+  const token = authHeader && authHeader.split(' ')[1]
+  return token
+}
 const AuthenticationMiddleware = async (req: NextApiRequest, res: NextApiResponse) : Promise<MiddlewareInterface> => {
-  // console.log('AuthenticationMiddleware')
-  // return UNAUTHORIZED
+  const token = getTokenFromRequest(req)
+  if (!token) return UNAUTHORIZED
+  if (!isTokenValid(token)) return FORBIDDEN
   return SUCCESS
 }
 
