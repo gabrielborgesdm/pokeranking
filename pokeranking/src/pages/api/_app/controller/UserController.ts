@@ -1,7 +1,8 @@
 import UserRepository from '../repository/UserRepository'
-import { ERROR, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../config/APIConfig'
-import { Error } from 'mongoose'
+import { ERROR, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../config/APIConfig'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { compareHash, generateAccessToken, hashPassword, isPasswordValid } from '../helper/AuthenticationHelper'
+import { cpuUsage } from 'process'
 
 const userRepository = new UserRepository()
 
@@ -50,6 +51,7 @@ export const storeUser = async (req: NextApiRequest, res: NextApiResponse) => {
   if (await getUser({ $or: [{ username }, { email }] })) {
     return res.status(USER_ALREADY_REGISTERED.code).json(USER_ALREADY_REGISTERED)
   }
+  userInfo.password = await hashPassword(userInfo.password)
   const response = await userRepository.store(userInfo)
   if (!response) {
     return res.status(ERROR.code).json(ERROR)
@@ -57,6 +59,17 @@ export const storeUser = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = response.toObject()
   delete user.password
   return res.status(SUCCESS.code).json({ ...SUCCESS, user })
+}
+
+export const login = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { email, password } = req.body
+  const response = await getUser({ email })
+  if (!response) return res.status(USER_NOT_FOUND.code).json(USER_NOT_FOUND)
+  if (!await isPasswordValid(password, response.password)) {
+    return res.status(INVALID_CREDENTIALS.code).json(INVALID_CREDENTIALS)
+  }
+  const token = generateAccessToken({ _id: response._id })
+  return res.status(SUCCESS.code).json({ ...SUCCESS, token })
 }
 
 export const updateUser = async (req: NextApiRequest, res: NextApiResponse) => {
