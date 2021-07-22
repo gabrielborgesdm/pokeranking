@@ -1,3 +1,4 @@
+import { IMessage } from './types/IMessage'
 
 export const STATUS = {
   SUCCESS: 'success',
@@ -21,49 +22,54 @@ export const CODE = {
   INVALID_CREDENTIALS: 200
 }
 
-export const SUCCESS = {
+export const USER_ROLES = {
+  ADMIN: 'admin',
+  USER: 'user'
+}
+
+export const SUCCESS: IMessage = {
   success: true,
   message: 'Operation executed with success',
   status: STATUS.SUCCESS,
   code: CODE.SUCCESS
 }
 
-export const ERROR = {
+export const ERROR: IMessage = {
   success: false,
   message: 'An unexpected error occurred',
   status: STATUS.ERROR,
   code: CODE.ERROR
 }
 
-export const UNAUTHORIZED = {
+export const UNAUTHORIZED: IMessage = {
   success: false,
-  message: 'Unauthorized access',
+  message: 'Unauthorized',
   status: STATUS.UNAUTHORIZED,
   code: CODE.UNAUTHORIZED
 }
 
-export const FORBIDDEN = {
+export const FORBIDDEN: IMessage = {
   success: false,
-  message: 'Forbidden access',
+  message: 'Forbidden',
   status: STATUS.FORBIDDEN,
   code: CODE.FORBIDDEN
 }
 
-export const USER_NOT_FOUND = {
+export const USER_NOT_FOUND: IMessage = {
   success: false,
   message: 'User was not found',
   status: STATUS.NOT_FOUND,
   code: CODE.NOT_FOUND
 }
 
-export const USER_ALREADY_REGISTERED = {
+export const USER_ALREADY_REGISTERED: IMessage = {
   success: false,
   message: 'User is already registered',
   status: STATUS.ALREADY_REGISTERED,
   code: CODE.ALREADY_REGISTERED
 }
 
-export const INVALID_CREDENTIALS = {
+export const INVALID_CREDENTIALS: IMessage = {
   success: false,
   message: 'Credentials are invalid',
   status: STATUS.INVALID_CREDENTIALS,
