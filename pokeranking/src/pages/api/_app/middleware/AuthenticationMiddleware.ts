@@ -1,17 +1,29 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 import { FORBIDDEN, SUCCESS, UNAUTHORIZED } from '../config/APIConfig'
-import { isTokenValid } from '../helper/AuthenticationHelper'
+import { IRequest } from '../config/types/IRequest'
+import { verifyTokenAndGetUserId } from '../helper/AuthenticationHelpers'
+import UserRepository from '../repository/UserRepository'
 import { MiddlewareInterface } from './WithMiddlewares'
 
-const getTokenFromRequest = (req: NextApiRequest): string => {
+const userRepository = new UserRepository()
+
+const getTokenFromRequest = (req: IRequest): string => {
   const authHeader = req.headers.authorization
   const token = authHeader && authHeader.split(' ')[1]
   return token
 }
-const AuthenticationMiddleware = async (req: NextApiRequest, res: NextApiResponse) : Promise<MiddlewareInterface> => {
+
+const validateAndAddUserToRequest = async (_id: string, req: IRequest) => {
+  const response = await userRepository.getById(_id)
+  if (!response) return false
+  req.user = response.toObject()
+  return true
+}
+
+const AuthenticationMiddleware = async (req: IRequest) : Promise<MiddlewareInterface> => {
   const token = getTokenFromRequest(req)
   if (!token) return UNAUTHORIZED
-  if (!isTokenValid(token)) return FORBIDDEN
+  const _id = verifyTokenAndGetUserId(token)
+  if (!_id || !await validateAndAddUserToRequest(_id, req)) return FORBIDDEN
   return SUCCESS
 }
 

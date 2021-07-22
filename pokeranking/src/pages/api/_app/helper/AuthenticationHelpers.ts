@@ -15,7 +15,7 @@ export const isPasswordValid = async (reqPassword: string, accountHash: string) 
 
 export const generateAccessToken = (payload: object) => jwt.sign(payload, accessTokenSecret)
 
-export const isTokenValid = (token: string): boolean => {
+export const verifyTokenAndGetUserId = (token: string): string => {
   const payload: JwtPayload = jwt.verify(token, accessTokenSecret) as Payload
-  return !!payload._id
+  return payload._id ? payload._id : null
 }

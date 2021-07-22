@@ -1,37 +1,17 @@
 import mongoose from '../config/DatabaseConfig'
-import { Document } from 'mongoose'
+import { USER_ROLES } from '../config/APIConfig'
+import { IUserInterface } from '../config/types/IUser'
 
-export interface UserInterface extends Document {
-  _id: string,
-  username: string,
-  email: string,
-  bio?: string,
-  password: string,
-  updatedAt: number,
-  createdAt: number
-}
-
-export interface AddUserInterface {
-  username: string,
-  email: string,
-  bio?: string,
-  password: string,
-}
-
-export interface UpdateUserInterface {
-  bio?: string,
-  password?: string
-}
-
-const UserModel = new mongoose.Schema<UserInterface>({
+const UserModel = new mongoose.Schema<IUserInterface>({
   username: { type: String, require: true },
   email: { type: String, require: true },
   password: { type: String, require: true },
   bio: { type: String, require: false },
   country: { type: String, require: true },
+  role: { type: String, default: USER_ROLES.USER },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 })
 
-const User = mongoose.models.Users || mongoose.model<UserInterface>('Users', UserModel)
+const User = mongoose.models.Users || mongoose.model<IUserInterface>('Users', UserModel)
 export default User

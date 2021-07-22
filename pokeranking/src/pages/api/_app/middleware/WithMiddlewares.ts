@@ -1,4 +1,5 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
+import { NextApiHandler, NextApiResponse } from 'next'
+import { IRequest } from '../config/types/IRequest'
 import AuthenticationMiddleware from './AuthenticationMiddleware'
 
 export const middlewares = {
@@ -12,9 +13,9 @@ export interface MiddlewareInterface {
 }
 
 const withMiddlewares = (handler: NextApiHandler, ...middlewares: Array<Function>) => {
-  return async (req: NextApiRequest, res: NextApiResponse) => {
+  return async (req: IRequest, res: NextApiResponse) => {
     for (const middleware of middlewares) {
-      const response: MiddlewareInterface = await middleware(req, res)
+      const response: MiddlewareInterface = await middleware(req)
       if (!response.success) {
         return res.status(response.code).json(response)
       }
