@@ -1,4 +1,4 @@
-import { IMessage } from './types/IMessage'
+import { IMessage } from './type/IMessage'
 
 export const STATUS = {
   SUCCESS: 'success',

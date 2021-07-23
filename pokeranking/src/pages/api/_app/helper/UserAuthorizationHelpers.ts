@@ -1,5 +1,5 @@
 import { USER_KEYS, USER_ROLES } from '../config/APIConfig'
-import { IUserInterface } from '../config/types/IUser'
+import { IUserInterface } from '../config/type/IUser'
 
 export const isUserAuthorized = (authenticatedUser: IUserInterface, targetUser: IUserInterface): boolean => {
   return authenticatedUser.role === USER_ROLES.ADMIN || authenticatedUser._id.toString() === targetUser._id.toString()

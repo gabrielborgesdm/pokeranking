@@ -1,5 +1,5 @@
 import { FORBIDDEN, SUCCESS, UNAUTHORIZED } from '../config/APIConfig'
-import { IRequest } from '../config/types/IRequest'
+import { IRequest } from '../config/type/IRequest'
 import { verifyTokenAndGetUserId } from '../helper/AuthenticationHelpers'
 import UserRepository from '../repository/UserRepository'
 import { MiddlewareInterface } from './WithMiddlewares'
