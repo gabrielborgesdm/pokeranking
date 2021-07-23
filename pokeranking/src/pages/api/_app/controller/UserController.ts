@@ -53,8 +53,7 @@ export const updateUser = async (req: IRequest, res: NextApiResponse) => {
   if (!updateResponse) {
     return res.status(ERROR.code).json(ERROR)
   }
-  const user = updateResponse.toObject()
-  delete user.password
+  const user = abstractUserBasedOnAuthorizationLevel(req.user, updateResponse)
   return res.status(SUCCESS.code).json({ ...SUCCESS, user })
 }
 
@@ -65,8 +64,7 @@ export const deleteUser = async (req: IRequest, res: NextApiResponse) => {
   if (!message.success) return res.status(message.code).json(message)
   const deleteResponse = await userRepository.delete(response._id)
   if (!deleteResponse) return res.status(ERROR.code).json(ERROR)
-  const user = deleteResponse.toObject()
-  delete user.password
+  const user = abstractUserBasedOnAuthorizationLevel(req.user, deleteResponse)
   return res.status(SUCCESS.code).json({ ...SUCCESS, user })
 }
 
@@ -81,8 +79,7 @@ export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   if (!response) {
     return res.status(ERROR.code).json(ERROR)
   }
-  const user = response.toObject()
-  delete user.password
+  const user = abstractUserBasedOnAuthorizationLevel(req.user, response)
   return res.status(SUCCESS.code).json({ ...SUCCESS, user })
 }
 

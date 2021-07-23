@@ -27,6 +27,18 @@ export const USER_ROLES = {
   USER: 'user'
 }
 
+export const USER_KEYS = {
+  _ID: '_id',
+  ROLE: 'role',
+  USERNAME: 'username',
+  PASSWORD: 'password',
+  BIO: 'bio',
+  __V: '__v',
+  EMAIL: 'email',
+  CREATED_AT: 'createdAt',
+  UPDATED_AT: 'updatedAt'
+}
+
 export const SUCCESS: IMessage = {
   success: true,
   message: 'Operation executed with success',
