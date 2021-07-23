@@ -1,6 +1,6 @@
 import mongoose from '../config/DatabaseConfig'
 import { USER_ROLES } from '../config/APIConfig'
-import { IUserInterface } from '../config/types/IUser'
+import { IUserInterface } from '../config/type/IUser'
 
 const UserModel = new mongoose.Schema<IUserInterface>({
   username: { type: String, require: true },
