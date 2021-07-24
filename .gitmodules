@@ -1,0 +1,3 @@
+[submodule "pokeranking/src/assets/pokemon.json"]
+	path = pokeranking/src/assets/pokemon.json
+	url = git@github.com:gabrielborgesdm/pokemon.json.git

@@ -1,6 +1,6 @@
 import { NextApiRequest } from 'next'
-import { IUserInterface } from './IUser'
+import { IUser } from './IUser'
 
 export interface IRequest extends NextApiRequest{
-  user: IUserInterface
+  user: IUser
 }

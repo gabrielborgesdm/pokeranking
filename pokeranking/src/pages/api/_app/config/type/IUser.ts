@@ -1,14 +1,11 @@
+import { IModel } from './IModel'
 
-export interface IUserInterface {
-  _id?: string,
+export interface IUser extends IModel{
   username: string,
   email?: string,
   bio?: string,
   password?: string,
   role?: string
-  updatedAt?: number,
-  createdAt?: number,
-  toObject?: Function
 }
 
 export interface IUserAdd {
