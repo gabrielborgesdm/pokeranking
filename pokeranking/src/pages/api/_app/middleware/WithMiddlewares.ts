@@ -16,8 +16,8 @@ export interface MiddlewareInterface {
 const migration = new Migration()
 
 const withMiddlewares = (handler: NextApiHandler, ...middlewares: Array<Function>) => {
-  if (!migration.isMigrated) migration.executeMigrations()
   return async (req: IRequest, res: NextApiResponse) => {
+    if (!migration.isMigrated) await migration.executeMigrations()
     for (const middleware of middlewares) {
       const response: MiddlewareInterface = await middleware(req)
       if (!response.success) {
