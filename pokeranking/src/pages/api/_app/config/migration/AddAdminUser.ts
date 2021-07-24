@@ -1,3 +1,4 @@
+import { hashPassword } from '../../helper/AuthenticationHelpers'
 import UserRepository from '../../repository/UserRepository'
 
 export const addAdminUser = async () => {
@@ -5,6 +6,6 @@ export const addAdminUser = async () => {
   await userRepository.store({
     username: 'admin',
     email: 'admin@admin.com',
-    password: 'admin'
+    password: await hashPassword('admin')
   })
 }
