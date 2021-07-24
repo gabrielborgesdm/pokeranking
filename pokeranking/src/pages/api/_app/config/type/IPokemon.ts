@@ -1,24 +1,33 @@
+import { IModel } from './IModel'
+import { IUser } from './IUser'
 
-export interface IPokemon {
-  _id?: string,
-  username: string,
-  email?: string,
-  bio?: string,
-  password?: string,
-  role?: string
-  updatedAt?: number,
-  createdAt?: number,
-  toObject?: Function
+interface IPokemonAttributes {
+  hp: number;
+  attack: number;
+  defense: number;
+  spAttack: number;
+  spDefense: number;
+  speed: number;
 }
 
-export interface IPokemonAdd {
-  username: string,
-  email: string,
-  bio?: string,
-  password: string,
+interface IPokemon {
+  id: string,
+  name: object,
+  types: Array<string>,
+  image: string
+  attributes: IPokemonAttributes,
 }
 
-export interface IPokemonUpdate {
-  bio?: string,
-  password?: string
+export interface IUserPokemons extends IModel{
+  user: IUser,
+  pokemons: Array<IPokemon>
+}
+
+export interface IUserPokemonsAdd {
+  user: string,
+  pokemons: Array<string>
+}
+
+export interface IUserPokemonsUpdate {
+  pokemons: Array<string>
 }

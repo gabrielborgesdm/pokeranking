@@ -1,7 +1,6 @@
-export interface IMigration {
-  _id?: string,
+import { IModel } from './IModel'
+
+export interface IMigration extends IModel{
   name: string,
   executed: boolean
-  updatedAt?: number,
-  createdAt?: number
 }
