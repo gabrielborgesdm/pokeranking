@@ -1,22 +1,8 @@
 import { IModel } from './IModel'
 import { IUser } from './IUser'
+import pokemons from '../../../../../assets/pokemon.json/pokemons.json'
 
-interface IPokemonAttributes {
-  hp: number;
-  attack: number;
-  defense: number;
-  spAttack: number;
-  spDefense: number;
-  speed: number;
-}
-
-interface IPokemon {
-  id: string,
-  name: object,
-  types: Array<string>,
-  image: string
-  attributes: IPokemonAttributes,
-}
+export type IPokemon = typeof pokemons[0]
 
 export interface IUserPokemons extends IModel{
   user: IUser,

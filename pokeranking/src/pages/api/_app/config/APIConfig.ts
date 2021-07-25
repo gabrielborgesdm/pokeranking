@@ -39,6 +39,8 @@ export const USER_KEYS = {
   UPDATED_AT: 'updatedAt'
 }
 
+export const IMAGE_ROUTE_URL = 'image'
+
 export const SUCCESS: IMessage = {
   success: true,
   message: 'Operation executed with success',
@@ -70,6 +72,13 @@ export const FORBIDDEN: IMessage = {
 export const USER_NOT_FOUND: IMessage = {
   success: false,
   message: 'User was not found',
+  status: STATUS.NOT_FOUND,
+  code: CODE.NOT_FOUND
+}
+
+export const IMAGE_NOT_FOUND: IMessage = {
+  success: false,
+  message: 'Image not found',
   status: STATUS.NOT_FOUND,
   code: CODE.NOT_FOUND
 }
