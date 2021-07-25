@@ -1,5 +1,5 @@
 import { IPokemon } from '../config/type/IPokemon'
-import pokemons from '../../../../assets/pokemon.json/pokemons.json'
+import pokemons from '../../../../assets/pokemons.json'
 import { shouldFilterPokemon } from '../helper/PokemonHelpers'
 
 export default class PokemonRepository {
