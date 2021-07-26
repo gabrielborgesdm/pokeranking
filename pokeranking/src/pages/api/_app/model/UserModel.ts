@@ -10,6 +10,7 @@ const UserModel = new mongoose.Schema<IUser>({
   country: { type: String, require: true },
   role: { type: String, default: USER_ROLES.USER },
   createdAt: { type: Date, default: Date.now },
+  pokemons: { type: Array, default: [] },
   updatedAt: { type: Date, default: Date.now }
 })
 

@@ -1,9 +1,9 @@
-import { IUserAdd, IUser, IUserUpdate } from '../config/type/IUser'
+import { IUserAdd, IUserDocument, IUserUpdate } from '../config/type/IUser'
 import User from '../model/UserModel'
 
 export default class UserRepository {
-  async getAll (): Promise<Array<IUser>> {
-    let users: Array<IUser> = null
+  async getAll (): Promise<Array<IUserDocument>> {
+    let users: Array<IUserDocument> = null
     try {
       users = await User.find().exec()
     } catch (error) {
@@ -12,8 +12,8 @@ export default class UserRepository {
     return users
   }
 
-  async getById (_id: string): Promise<IUser> {
-    let user: IUser = null
+  async getById (_id: string): Promise<IUserDocument> {
+    let user: IUserDocument = null
     try {
       user = await User.findById(_id).exec()
     } catch (error) {
@@ -22,8 +22,8 @@ export default class UserRepository {
     return user
   }
 
-  async get (query: object): Promise<IUser> {
-    let user: IUser = null
+  async get (query: object): Promise<IUserDocument> {
+    let user: IUserDocument = null
     try {
       user = await User.findOne(query).exec()
     } catch (error) {
@@ -32,8 +32,8 @@ export default class UserRepository {
     return user
   }
 
-  async delete (_id: string): Promise<IUser> {
-    let user: IUser = null
+  async delete (_id: string): Promise<IUserDocument> {
+    let user: IUserDocument = null
     try {
       user = await User.findByIdAndDelete(_id).exec()
     } catch (error) {
@@ -42,8 +42,8 @@ export default class UserRepository {
     return user
   }
 
-  async store (userInfo: IUserAdd): Promise<IUser> {
-    let user: IUser = null
+  async store (userInfo: IUserAdd): Promise<IUserDocument> {
+    let user: IUserDocument = null
     try {
       user = await User.create(userInfo)
     } catch (error) {
@@ -52,8 +52,8 @@ export default class UserRepository {
     return user
   }
 
-  async update (_id: string, userInfo: IUserUpdate): Promise<IUser> {
-    let user: IUser = null
+  async update (_id: string, userInfo: IUserUpdate): Promise<IUserDocument> {
+    let user: IUserDocument = null
     try {
       user = await User.findByIdAndUpdate(_id, userInfo, { new: true })
     } catch (error) {
