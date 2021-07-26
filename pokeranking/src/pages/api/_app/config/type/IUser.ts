@@ -1,21 +1,34 @@
 import { IModel } from './IModel'
+import { IUserPokemon, IUserPokemonMutate } from './IPokemon'
 
-export interface IUser extends IModel{
-  username: string,
-  email?: string,
-  bio?: string,
-  password?: string,
-  role?: string
+export interface IUserDocument extends IModel{
+  username: string;
+  email: string;
+  bio?: string;
+  pokemons: Array<IUserPokemonMutate>;
+  password: string;
+  role: string;
+}
+
+export interface IUserResponse extends IModel{
+  username: string;
+  email?: string;
+  bio?: string;
+  pokemons: Array<IUserPokemon>;
+  password?: string;
+  role?: string;
 }
 
 export interface IUserAdd {
-  username: string,
-  email: string,
-  bio?: string,
-  password: string,
+  username: string;
+  email: string;
+  bio?: string;
+  pokemons: Array<string>;
+  password: string;
 }
 
 export interface IUserUpdate {
-  bio?: string,
-  password?: string
+  bio?: string;
+  pokemons: Array<string>;
+  password?: string;
 }

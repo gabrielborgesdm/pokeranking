@@ -3,9 +3,9 @@ import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED
 import { NextApiResponse } from 'next'
 import { generateAccessToken, hashPassword, isPasswordValid } from '../helper/AuthenticationHelpers'
 import { IRequest } from '../config/type/IRequest'
-import { IUser } from '../config/type/IUser'
 import { abstractUserBasedOnAuthorizationLevel, isUserAuthorized } from '../helper/UserAuthorizationHelpers'
 import { IMessage } from '../config/type/IMessage'
+import { IUserDocument, IUserResponse } from '../config/type/IUser'
 
 const userRepository = new UserRepository()
 
@@ -24,15 +24,15 @@ const getUser = async (query: object) => {
 
 export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => {
   const { slug: username } = req.query
-  const response: IUser = await userRepository.get({ username })
+  const response: IUserDocument = await userRepository.get({ username })
   if (!response) {
     return res.status(USER_NOT_FOUND.code).json(USER_NOT_FOUND)
   }
-  const user = abstractUserBasedOnAuthorizationLevel(req.user, response)
+  const user: IUserResponse = abstractUserBasedOnAuthorizationLevel(req.user, response)
   return res.status(SUCCESS.code).json({ ...SUCCESS, user })
 }
 
-const isOkayToExecuteMutation = (authenticatedUser: IUser, response: IUser) : IMessage => {
+const isOkayToExecuteMutation = (authenticatedUser: IUserDocument, response: IUserDocument) : IMessage => {
   if (!response) {
     return USER_NOT_FOUND
   }
