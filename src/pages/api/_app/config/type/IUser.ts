@@ -21,10 +21,10 @@ export interface IUserResponse extends IModel{
 
 export interface IUserAdd {
   username: string;
+  password: string;
   email: string;
   bio?: string;
   pokemons: Array<string>;
-  password: string;
 }
 
 export interface IUserUpdate {
