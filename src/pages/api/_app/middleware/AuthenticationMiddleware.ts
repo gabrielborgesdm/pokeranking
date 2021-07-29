@@ -1,8 +1,10 @@
+import { NextApiResponse } from 'next'
 import { FORBIDDEN, SUCCESS, UNAUTHORIZED } from '../config/APIConfig'
+import { IMiddlewareResponse } from '../config/type/IMiddleware'
 import { IRequest } from '../config/type/IRequest'
 import { verifyTokenAndGetUserId } from '../helper/AuthenticationHelpers'
+import { sendResponse } from '../helper/ResponseHelpers'
 import UserRepository from '../repository/UserRepository'
-import { MiddlewareInterface } from './WithMiddlewares'
 
 const userRepository = new UserRepository()
 
@@ -19,12 +21,20 @@ const validateAndAddUserToRequest = async (_id: string, req: IRequest) => {
   return true
 }
 
-const AuthenticationMiddleware = async (req: IRequest) : Promise<MiddlewareInterface> => {
+const AuthenticationMiddleware = async (req: IRequest, res: NextApiResponse) : Promise<boolean> => {
+  let isOkay = true
   const token = getTokenFromRequest(req)
-  if (!token) return UNAUTHORIZED
-  const _id = verifyTokenAndGetUserId(token)
-  if (!_id || !await validateAndAddUserToRequest(_id, req)) return FORBIDDEN
-  return SUCCESS
+  if (!token) {
+    sendResponse(res, UNAUTHORIZED)
+    isOkay = false
+  } else {
+    const _id = verifyTokenAndGetUserId(token)
+    if (!_id || !await validateAndAddUserToRequest(_id, req)) {
+      sendResponse(res, FORBIDDEN)
+      isOkay = false
+    }
+  }
+  return isOkay
 }
 
 export default AuthenticationMiddleware
