@@ -1,10 +1,11 @@
 import { NextApiResponse } from 'next'
 import { IRequest } from '../_app/config/type/IRequest'
 import { login } from '../_app/controller/UserController'
-import withMiddlewares from '../_app/middleware/WithMiddlewares'
+import withMiddlewares, { VALIDATION } from '../_app/middleware/WithMiddlewares'
+import { UserLoginSchema } from '../_app/model/schemas/UserSchemas'
 
 const handler = async (req: IRequest, res: NextApiResponse) => {
   await login(req, res)
 }
 
-export default withMiddlewares(handler)
+export default withMiddlewares(handler, { name: VALIDATION, parameters: [UserLoginSchema] })
