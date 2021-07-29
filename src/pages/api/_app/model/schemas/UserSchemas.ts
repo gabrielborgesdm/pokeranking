@@ -12,7 +12,7 @@ export const UserAddSchema = Joi.object({
 })
 
 export const UserLoginSchema = Joi.object({
-  username: Joi.string().max(30).required(),
+  email: Joi.string().email().max(70).required(),
   password: Joi.string().max(60).required()
 })
 
