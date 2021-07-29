@@ -3,9 +3,10 @@ import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED
 import { NextApiResponse } from 'next'
 import { generateAccessToken, hashPassword, isPasswordValid } from '../helper/AuthenticationHelpers'
 import { IRequest } from '../config/type/IRequest'
-import { abstractUserBasedOnAuthorizationLevel, isUserAuthorized } from '../helper/UserAuthorizationHelpers'
+import { abstractUserBasedOnAuthorizationLevel, deleteUnnecessaryDataFromUser, formatUserDocument, isUserAuthorized } from '../helper/UserAuthorizationHelpers'
 import { IMessage } from '../config/type/IMessage'
 import { IUserDocument, IUserResponse } from '../config/type/IUser'
+import { sendResponse } from '../helper/ResponseHelpers'
 
 const userRepository = new UserRepository()
 
@@ -32,7 +33,7 @@ export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => 
   return res.status(SUCCESS.code).json({ ...SUCCESS, user })
 }
 
-const isOkayToExecuteMutation = (authenticatedUser: IUserDocument, response: IUserDocument) : IMessage => {
+const isOkayToExecuteMutation = (authenticatedUser: IUserResponse, response: IUserDocument) : IMessage => {
   if (!response) {
     return USER_NOT_FOUND
   }
@@ -61,26 +62,22 @@ export const deleteUser = async (req: IRequest, res: NextApiResponse) => {
   const { slug: username } = req.query
   const response = await userRepository.get({ username })
   const message = isOkayToExecuteMutation(req.user, response)
-  if (!message.success) return res.status(message.code).json(message)
+  if (!message.success) return sendResponse(res, message)
   const deleteResponse = await userRepository.delete(response._id)
-  if (!deleteResponse) return res.status(ERROR.code).json(ERROR)
+  if (!deleteResponse) return sendResponse(res, ERROR)
   const user = abstractUserBasedOnAuthorizationLevel(req.user, deleteResponse)
-  return res.status(SUCCESS.code).json({ ...SUCCESS, user })
+  return sendResponse(res, SUCCESS, { user: user })
 }
 
 export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   const { user: userInfo } = req.body
   const { username, email } = userInfo
-  if (await getUser({ $or: [{ username }, { email }] })) {
-    return res.status(USER_ALREADY_REGISTERED.code).json(USER_ALREADY_REGISTERED)
-  }
+  if (await getUser({ $or: [{ username }, { email }] })) return sendResponse(res, USER_ALREADY_REGISTERED)
   userInfo.password = await hashPassword(userInfo.password)
   const response = await userRepository.store(userInfo)
-  if (!response) {
-    return res.status(ERROR.code).json(ERROR)
-  }
-  const user = abstractUserBasedOnAuthorizationLevel(req.user, response)
-  return res.status(SUCCESS.code).json({ ...SUCCESS, user })
+  if (!response) return sendResponse(res, ERROR)
+  const user: IUserResponse = formatUserDocument(response)
+  sendResponse(res, SUCCESS, { user })
 }
 
 export const login = async (req: IRequest, res: NextApiResponse) => {

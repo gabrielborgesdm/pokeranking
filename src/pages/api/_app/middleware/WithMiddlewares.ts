@@ -1,30 +1,33 @@
 import { NextApiHandler, NextApiResponse } from 'next'
 import Migration from '../config/migration/Migration'
+import { IMiddleware } from '../config/type/IMiddleware'
 import { IRequest } from '../config/type/IRequest'
 import AuthenticationMiddleware from './AuthenticationMiddleware'
+import ValidationMiddleware from './ValidationMiddleware'
 
-export const middlewares = {
-  authentication: AuthenticationMiddleware
-}
+export const AUTHENTICATION = 'authentication'
+export const VALIDATION = 'validation'
 
-export interface MiddlewareInterface {
-  success: boolean,
-  code: number,
-  message: string
+const callMiddleware = {
+  authentication: AuthenticationMiddleware,
+  validation: ValidationMiddleware
 }
 
 const migration = new Migration()
 
-const withMiddlewares = (handler: NextApiHandler, ...middlewares: Array<Function>) => {
+const executeMiddlewares = async (req: IRequest, res: NextApiResponse, middlewares: Array<IMiddleware>): Promise<boolean> => {
+  for (const middleware of middlewares) {
+    const isOkay = await callMiddleware[middleware.name](req, res, middleware.parameters)
+    if (!isOkay) return false
+  }
+  return true
+}
+
+const withMiddlewares = (handler: NextApiHandler, ...middlewares: Array<IMiddleware>) => {
   return async (req: IRequest, res: NextApiResponse) => {
     if (!migration.isMigrated) await migration.executeMigrations()
-    for (const middleware of middlewares) {
-      const response: MiddlewareInterface = await middleware(req)
-      if (!response.success) {
-        return res.status(response.code).json(response)
-      }
-    }
-    return handler(req, res)
+    const isOkay = await executeMiddlewares(req, res, middlewares)
+    if (isOkay) await handler(req, res)
   }
 }
 

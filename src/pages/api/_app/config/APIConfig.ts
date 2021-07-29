@@ -69,6 +69,13 @@ export const FORBIDDEN: IMessage = {
   code: CODE.FORBIDDEN
 }
 
+export const FIELD_VALIDATION_ERROR: IMessage = {
+  success: false,
+  message: 'Field validation error',
+  status: STATUS.FIELD_VALIDATION_ERROR,
+  code: CODE.FIELD_VALIDATION_ERROR
+}
+
 export const USER_NOT_FOUND: IMessage = {
   success: false,
   message: 'User was not found',
