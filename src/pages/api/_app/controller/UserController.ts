@@ -26,11 +26,9 @@ const getUser = async (query: object) => {
 export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => {
   const { slug: username } = req.query
   const response: IUserDocument = await userRepository.get({ username })
-  if (!response) {
-    return res.status(USER_NOT_FOUND.code).json(USER_NOT_FOUND)
-  }
+  if (!response) return sendResponse(res, USER_NOT_FOUND)
   const user: IUserResponse = abstractUserBasedOnAuthorizationLevel(req.user, response)
-  return res.status(SUCCESS.code).json({ ...SUCCESS, user })
+  sendResponse(res, SUCCESS, { user })
 }
 
 const isOkayToExecuteMutation = (authenticatedUser: IUserResponse, response: IUserDocument) : IMessage => {
@@ -48,7 +46,6 @@ export const updateUser = async (req: IRequest, res: NextApiResponse) => {
   const { user: userInfo } = req.body
   const response = await userRepository.get({ username })
   const message = isOkayToExecuteMutation(req.user, response)
-  console.log(message)
   if (!message.success) return res.status(message.code).json(message)
   const updateResponse = await userRepository.update(response._id, userInfo)
   if (!updateResponse) {
