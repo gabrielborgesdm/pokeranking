@@ -1,23 +1,13 @@
-import React from 'react'
-import Head from 'next/head'
-import Image from 'next/image'
+import React, { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const Home: React.FC = () => {
-  return (
-    <div>
-      <Head>
-        <title>Pokeranking</title>
-        <meta name="description" content="Pokemon ranking" />
-      </Head>
+  const router = useRouter()
+  useEffect(() => {
+    router.push('/login')
+  }, [])
 
-      <main>
-        <h1>
-          Salve
-        </h1>
-        <Image src="/pokemons/001.png" alt="Picture of the author" width={200} height={200}/>
-      </main>
-    </div>
-  )
+  return <></>
 }
 
 export default Home
