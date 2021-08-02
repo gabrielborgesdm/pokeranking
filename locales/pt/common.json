@@ -1,6 +1,4 @@
 {
-  "pokeranking": "Pokeranking",
-  "email": "E-mail",
-  "password": "Senha",
-  "username": "Nome de usuário"
+  "title" : "Pokeranking",
+  "description": "Ranking pokemon"
 }

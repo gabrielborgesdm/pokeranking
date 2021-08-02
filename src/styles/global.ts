@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import background from '../assets/images/background.png'
 
 export default createGlobalStyle`
   * {
@@ -8,8 +9,17 @@ export default createGlobalStyle`
   }
 
   body {
+    background-image: url("/images/background.png");
     background-color: ${props => props.theme.colors.background};
     color: ${props => props.theme.colors.text};
     font: 400 16px Roboto, sans-serif;
+  }
+
+  html,
+  body,
+  body > div:first-child,
+  div#__next,
+  div#__next > div {
+    height: 100%;
   }
 `
