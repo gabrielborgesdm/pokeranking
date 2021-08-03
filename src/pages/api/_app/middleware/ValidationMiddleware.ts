@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { NextApiResponse } from 'next'
-import { FIELD_VALIDATION_ERROR } from '../config/APIConfig'
-import { IRequest } from '../config/type/IRequest'
+import { FIELD_VALIDATION_ERROR } from '../../../../config/APIConfig'
+import { IRequest } from '../../../../config/type/IRequest'
 import { sendResponse } from '../helper/ResponseHelpers'
 
 export const QUERY_TYPE = 'query'
