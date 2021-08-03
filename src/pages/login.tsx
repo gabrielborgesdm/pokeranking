@@ -1,24 +1,33 @@
 import React, { FormEvent, useState } from 'react'
 import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation'
-import { AccountContainer, BlueButton, FullScreenContainer, YellowLink } from '../styles/common'
+import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
 import axios from 'axios'
+import { ILoginResponse } from '../config/types/IUser'
+import { LOCAL_STORAGE } from '../config/AppConfig'
+import { useRouter } from 'next/router'
+import FormButton from '../components/templates/FormButton'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [status, setStatus] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    const data = await submitLoginRequest()
+    const data: ILoginResponse = await submitLoginRequest()
     if (data.token) {
-      console.log(data.token)
-      localStorage.setItem('token', data.token)
+      localStorage.setItem(LOCAL_STORAGE.TOKEN, data.token)
+      cleanForm()
+      router.push('/login')
     }
   }
+
   const submitLoginRequest = async () => {
     let data = null
     try {
@@ -28,6 +37,11 @@ const Login: React.FC = () => {
       console.log(error)
     }
     return data
+  }
+
+  const cleanForm = () => {
+    setEmail('')
+    setPassword('')
   }
 
   return (
@@ -53,9 +67,7 @@ const Login: React.FC = () => {
                 <YellowLink>{t('no-account-create-one')}</YellowLink>
               </Link>
             </Form.Group>
-            <BlueButton variant="secondary" type="submit">
-              {t('enter')}
-            </BlueButton>
+            <FormButton isLoading={isLoading} title={t('enter')} />
           </Form>
         </AccountContainer>
       </FullScreenContainer>

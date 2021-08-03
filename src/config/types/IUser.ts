@@ -1,3 +1,4 @@
+import { IMessage } from './IMessage'
 import { IModel } from './IModel'
 import { IUserPokemon, IUserPokemonMutate } from './IPokemon'
 
@@ -17,6 +18,10 @@ export interface IUserResponse extends IModel{
   pokemons: Array<IUserPokemon>;
   password?: string;
   role?: string;
+}
+
+export interface ILoginResponse extends IMessage{
+  token?: string;
 }
 
 export interface IUserAdd {
