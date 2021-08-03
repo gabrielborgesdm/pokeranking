@@ -1,8 +1,8 @@
 import mongoose from '../../../../config/DatabaseConfig'
 import { USER_ROLES } from '../../../../config/APIConfig'
-import { IUser } from '../../../../config/type/IUser'
+import { IUserDocument } from '../../../../config/types/IUser'
 
-const UserModel = new mongoose.Schema<IUser>({
+const UserModel = new mongoose.Schema<IUserDocument>({
   username: { type: String, require: true },
   email: { type: String, require: true },
   password: { type: String, require: true },
@@ -14,5 +14,5 @@ const UserModel = new mongoose.Schema<IUser>({
   updatedAt: { type: Date, default: Date.now }
 })
 
-const User = mongoose.models.Users || mongoose.model<IUser>('Users', UserModel)
+const User = mongoose.models.Users || mongoose.model<IUserDocument>('Users', UserModel)
 export default User

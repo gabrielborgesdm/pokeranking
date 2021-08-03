@@ -1,4 +1,4 @@
-import { IMigration } from '../../../../config/type/IMigration'
+import { IMigration } from '../../../../config/types/IMigration'
 import Migration from '../model/MigrationModel'
 
 export default class MigrationRepository {

@@ -1,4 +1,4 @@
-import { IUserAdd, IUserDocument, IUserUpdate } from '../../../../config/type/IUser'
+import { IUserAdd, IUserDocument, IUserUpdate } from '../../../../config/types/IUser'
 import User from '../model/UserModel'
 
 export default class UserRepository {

@@ -1,6 +1,6 @@
 
 import { NextApiResponse } from 'next'
-import { IRequest } from '../../../../config/type/IRequest'
+import { IRequest } from '../../../../config/types/IRequest'
 import { deleteUser } from '../../_app/controller/UserController'
 import withMiddlewares, { AUTHENTICATION, VALIDATION } from '../../_app/middleware/WithMiddlewares'
 import { UserUsernameSchema } from '../../_app/model/schemas/UserSchemas'
