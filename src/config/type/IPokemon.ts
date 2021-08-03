@@ -1,4 +1,4 @@
-import pokemons from '../../../../../assets/pokemons.json'
+import pokemons from '../../assets/pokemons.json'
 
 export type IPokemon = typeof pokemons[0]
 

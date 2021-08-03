@@ -1,4 +1,4 @@
-import { IPokemon } from '../config/type/IPokemon'
+import { IPokemon } from '../../../../config/type/IPokemon'
 
 export const shouldFilterPokemon = (filter: string, pokemon: IPokemon) => {
   return pokemon.name.toLowerCase().includes(filter.toLowerCase())

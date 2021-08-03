@@ -1,7 +1,7 @@
 import { NextApiHandler, NextApiResponse } from 'next'
-import Migration from '../config/migration/Migration'
-import { IMiddleware } from '../config/type/IMiddleware'
-import { IRequest } from '../config/type/IRequest'
+import Migration from '../migration/Migration'
+import { IMiddleware } from '../../../../config/type/IMiddleware'
+import { IRequest } from '../../../../config/type/IRequest'
 import AuthenticationMiddleware from './AuthenticationMiddleware'
 import ValidationMiddleware from './ValidationMiddleware'
 

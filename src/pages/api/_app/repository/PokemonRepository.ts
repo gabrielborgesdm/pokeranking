@@ -1,4 +1,4 @@
-import { IPokemon, IUserPokemon, IUserPokemonMutate } from '../config/type/IPokemon'
+import { IPokemon, IUserPokemon, IUserPokemonMutate } from '../../../../config/type/IPokemon'
 import pokemons from '../../../../assets/pokemons.json'
 import { formatPokemons, shouldFilterPokemon } from '../helper/PokemonHelpers'
 

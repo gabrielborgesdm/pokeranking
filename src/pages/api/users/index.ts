@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next'
-import { IRequest } from '../_app/config/type/IRequest'
+import { IRequest } from '../../../config/type/IRequest'
 import { getAllUsernames } from '../_app/controller/UserController'
 import withMiddlewares, { AUTHENTICATION } from '../_app/middleware/WithMiddlewares'
 

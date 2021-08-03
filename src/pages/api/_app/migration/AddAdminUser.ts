@@ -1,5 +1,5 @@
-import { hashPassword } from '../../helper/AuthenticationHelpers'
-import UserRepository from '../../repository/UserRepository'
+import { hashPassword } from '../helper/AuthenticationHelpers'
+import UserRepository from '../repository/UserRepository'
 
 export const addAdminUser = async () => {
   const userRepository = new UserRepository()

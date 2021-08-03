@@ -1,5 +1,5 @@
-import mongoose from '../config/DatabaseConfig'
-import { IMigration } from '../config/type/IMigration'
+import mongoose from '../../../../config/DatabaseConfig'
+import { IMigration } from '../../../../config/type/IMigration'
 
 const MigrationModel = new mongoose.Schema<IMigration>({
   name: { type: String, require: true },

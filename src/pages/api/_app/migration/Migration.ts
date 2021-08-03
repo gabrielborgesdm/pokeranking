@@ -1,4 +1,4 @@
-import MigrationRepository from '../../repository/MigrationRepository'
+import MigrationRepository from '../repository/MigrationRepository'
 import { addAdminUser } from './AddAdminUser'
 
 const migrations = {

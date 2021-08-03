@@ -1,6 +1,6 @@
-import { USER_KEYS, USER_ROLES } from '../config/APIConfig'
-import { IUserPokemonMutate } from '../config/type/IPokemon'
-import { IUserDocument, IUserResponse } from '../config/type/IUser'
+import { USER_KEYS, USER_ROLES } from '../../../../config/APIConfig'
+import { IUserPokemonMutate } from '../../../../config/type/IPokemon'
+import { IUserDocument, IUserResponse } from '../../../../config/type/IUser'
 import PokemonRepository from '../repository/PokemonRepository'
 
 const pokemonRepository = new PokemonRepository()
