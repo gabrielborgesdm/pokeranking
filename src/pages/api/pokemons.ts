@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next'
-import { IRequest } from '../../config/type/IRequest'
+import { IRequest } from '../../config/types/IRequest'
 import { getManyPokemons } from './_app/controller/PokemonController'
 import withMiddlewares, { AUTHENTICATION } from './_app/middleware/WithMiddlewares'
 

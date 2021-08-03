@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next'
-import { IRequest } from '../../../config/type/IRequest'
+import { IRequest } from '../../../config/types/IRequest'
 import { storeUser } from '../_app/controller/UserController'
 import withMiddlewares, { VALIDATION } from '../_app/middleware/WithMiddlewares'
 import { UserAddSchema } from '../_app/model/schemas/UserSchemas'

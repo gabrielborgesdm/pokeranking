@@ -2,10 +2,10 @@ import UserRepository from '../repository/UserRepository'
 import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../../../../config/APIConfig'
 import { NextApiResponse } from 'next'
 import { generateAccessToken, hashPassword, isPasswordValid } from '../helper/AuthenticationHelpers'
-import { IRequest } from '../../../../config/type/IRequest'
+import { IRequest } from '../../../../config/types/IRequest'
 import { abstractUserBasedOnAuthorizationLevel, deleteUnnecessaryDataFromUser, formatUserDocument, isUserAuthorized } from '../helper/UserAuthorizationHelpers'
-import { IMessage } from '../../../../config/type/IMessage'
-import { IUserDocument, IUserResponse } from '../../../../config/type/IUser'
+import { IMessage } from '../../../../config/types/IMessage'
+import { IUserDocument, IUserResponse } from '../../../../config/types/IUser'
 import { sendResponse } from '../helper/ResponseHelpers'
 
 const userRepository = new UserRepository()

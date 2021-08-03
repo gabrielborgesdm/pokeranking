@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { NextApiResponse } from 'next'
 import { FIELD_VALIDATION_ERROR } from '../../../../config/APIConfig'
-import { IRequest } from '../../../../config/type/IRequest'
+import { IRequest } from '../../../../config/types/IRequest'
 import { sendResponse } from '../helper/ResponseHelpers'
 
 export const QUERY_TYPE = 'query'
@@ -18,7 +18,6 @@ const ValidationMiddleware = async (req: IRequest, res: NextApiResponse, paramet
     error = getValidationError(parameters[0], req.body)
   }
   if (parameters[1]) {
-    console.log('req.query')
     error = getValidationError(parameters[1], req.query)
   }
   if (error) {
