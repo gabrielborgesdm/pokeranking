@@ -32,3 +32,12 @@ export const YellowLink = styled.a`
     color: ${colors.blue};
   }
 `
+export const StatusContainer = styled.div`
+  display: flex;
+  padding: 2.5px 0;
+  margin: 15px 0;
+  border-radius: 3px;
+  justify-content:center;
+  align-items: center;
+  transition: all 0.5s;
+`
