@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react'
+import React, { FormEvent, useState, useEffect } from 'react'
 import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation'
 import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
@@ -6,32 +6,40 @@ import Image from 'next/image'
 import { Form } from 'react-bootstrap'
 import axios from 'axios'
 import { ILoginResponse } from '../config/types/IUser'
-import { LOCAL_STORAGE } from '../config/AppConfig'
+import { REQUEST_URL } from '../config/AppConfig'
 import { useRouter } from 'next/router'
-import FormButton from '../components/templates/FormButton'
+import FormButton from '../components/common/FormButton'
+import { removeStorageToken, setStorageToken } from '../components/helper/StorageHelpers'
+import StatusBar from '../components/common/StatusBar'
+import { IStatus, IStatusType } from '../config/types/IStatus'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [status, setStatus] = useState({})
+  const [status, setStatus]: IStatus = useState({ message: '', type: IStatusType.Success })
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    removeStorageToken()
+  }, [])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
     const data: ILoginResponse = await submitLoginRequest()
     if (data.token) {
-      localStorage.setItem(LOCAL_STORAGE.TOKEN, data.token)
-      cleanForm()
+      setStorageToken(data.token)
       router.push('/login')
     }
+    setIsLoading(false)
   }
 
   const submitLoginRequest = async () => {
     let data = null
     try {
-      const response = await axios.post('/api/users/login', { email, password })
+      const response = await axios.post(REQUEST_URL.LOGIN, { email, password })
       data = response?.data
     } catch (error) {
       console.log(error)
@@ -39,16 +47,12 @@ const Login: React.FC = () => {
     return data
   }
 
-  const cleanForm = () => {
-    setEmail('')
-    setPassword('')
-  }
-
   return (
     <div>
       <FullScreenContainer>
         <AccountContainer>
           <Image src="/images/pokeranking.png" width="656" height="184" quality="100" layout="responsive" />
+          <StatusBar message={status.message} type={status.type} />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>{t('email')}</Form.Label>
