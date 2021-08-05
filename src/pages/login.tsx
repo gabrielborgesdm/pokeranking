@@ -11,12 +11,11 @@ import FormButton from '../components/common/FormButton'
 import { removeStorageToken, setStorageToken } from '../components/helper/StorageHelpers'
 import StatusBar from '../components/common/StatusBar'
 import { IStatus, IStatusType } from '../config/types/IStatus'
-import { useAxios } from '../components/helper/AxiosHelpers'
+import { getAxiosInstance } from '../components/service/AxiosService'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
-  const axios = useAxios()
-
+  const { t: c } = useTranslation('common')
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,7 +36,7 @@ const Login: React.FC = () => {
     } else if (data) {
       setStatus({ message: data.message, type: IStatusType.Warning })
     } else {
-      setStatus({ message: 'Oops', type: IStatusType.Danger })
+      setStatus({ message: c('server-error'), type: IStatusType.Danger })
     }
     setIsLoading(false)
   }
@@ -46,6 +45,7 @@ const Login: React.FC = () => {
     let data = null
     setStatus({ ...status, message: '' })
     try {
+      const axios = getAxiosInstance()
       const response = await axios.post(REQUEST_URL.LOGIN, { email, password })
       data = response?.data
     } catch (error) {

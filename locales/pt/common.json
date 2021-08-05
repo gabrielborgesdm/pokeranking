@@ -1,5 +1,6 @@
 {
   "title" : "Pokeranking",
   "description": "Ranking pokemon",
-  "loading": "Carregando"
+  "loading": "Carregando",
+  "server-error": "Ocorreu um erro com o servidor"
 }

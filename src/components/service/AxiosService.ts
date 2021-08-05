@@ -1,7 +1,7 @@
 import axios, { AxiosStatic } from 'axios'
 import { LOCAL_STORAGE } from '../../config/AppConfig'
 
-export const useAxios = () : AxiosStatic => {
+export const getAxiosInstance = () : AxiosStatic => {
   const axiosInstance = axios
   setAxiosDefaults(axiosInstance)
   return axiosInstance
