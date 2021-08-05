@@ -4,7 +4,6 @@ import useTranslation from 'next-translate/useTranslation'
 import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
-import axios from 'axios'
 import { ILoginResponse } from '../config/types/IUser'
 import { REQUEST_URL } from '../config/AppConfig'
 import { useRouter } from 'next/router'
@@ -12,13 +11,16 @@ import FormButton from '../components/common/FormButton'
 import { removeStorageToken, setStorageToken } from '../components/helper/StorageHelpers'
 import StatusBar from '../components/common/StatusBar'
 import { IStatus, IStatusType } from '../config/types/IStatus'
+import { useAxios } from '../components/helper/AxiosHelpers'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
+  const axios = useAxios()
+
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [status, setStatus]: IStatus = useState({ message: '', type: IStatusType.Success })
+  const [status, setStatus] = useState<IStatus>({ message: '', type: IStatusType.Success })
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -29,15 +31,20 @@ const Login: React.FC = () => {
     e.preventDefault()
     setIsLoading(true)
     const data: ILoginResponse = await submitLoginRequest()
-    if (data.token) {
+    if (data?.token) {
       setStorageToken(data.token)
       router.push('/login')
+    } else if (data) {
+      setStatus({ message: data.message, type: IStatusType.Warning })
+    } else {
+      setStatus({ message: 'Oops', type: IStatusType.Danger })
     }
     setIsLoading(false)
   }
 
   const submitLoginRequest = async () => {
     let data = null
+    setStatus({ ...status, message: '' })
     try {
       const response = await axios.post(REQUEST_URL.LOGIN, { email, password })
       data = response?.data
