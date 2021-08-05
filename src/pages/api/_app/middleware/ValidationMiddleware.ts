@@ -21,7 +21,7 @@ const ValidationMiddleware = async (req: IRequest, res: NextApiResponse, paramet
     error = getValidationError(parameters[1], req.query)
   }
   if (error) {
-    sendResponse(res, FIELD_VALIDATION_ERROR, { error })
+    sendResponse(req, res, FIELD_VALIDATION_ERROR, { error })
     return false
   }
   return true

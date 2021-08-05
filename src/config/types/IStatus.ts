@@ -5,7 +5,7 @@ export enum IStatusType {
 }
 
 export interface IStatus {
-  message: string,
+  message?: string,
   type: IStatusType,
 }
 

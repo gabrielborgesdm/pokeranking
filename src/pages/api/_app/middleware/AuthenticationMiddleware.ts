@@ -24,12 +24,12 @@ const AuthenticationMiddleware = async (req: IRequest, res: NextApiResponse) : P
   let isOkay = true
   const token = getTokenFromRequest(req)
   if (!token) {
-    sendResponse(res, UNAUTHORIZED)
+    sendResponse(req, res, UNAUTHORIZED)
     isOkay = false
   } else {
     const _id = verifyTokenAndGetUserId(token)
     if (!_id || !await validateAndAddUserToRequest(_id, req)) {
-      sendResponse(res, FORBIDDEN)
+      sendResponse(req, res, FORBIDDEN)
       isOkay = false
     }
   }

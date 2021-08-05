@@ -1,5 +1,6 @@
 export const LOCAL_STORAGE = {
-  TOKEN: 'token'
+  TOKEN: 'token',
+  LANG: 'lang'
 }
 
 export const REQUEST_URL = {

@@ -6,9 +6,16 @@ import useTranslation from 'next-translate/useTranslation'
 import GlobalStyle from '../styles/global'
 import theme from '../styles/theme'
 import Head from 'next/head'
+import { LOCAL_STORAGE } from '../config/AppConfig'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
-  const { t } = useTranslation('common')
+  const { t, lang } = useTranslation('common')
+
+  const runInitialSetup = () => {
+    if (localStorage.getItem(LOCAL_STORAGE.LANG) !== lang) localStorage.setItem(LOCAL_STORAGE.LANG, lang)
+  }
+
+  runInitialSetup()
   return (
 
   <ThemeProvider theme={theme}>
