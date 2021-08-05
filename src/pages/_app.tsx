@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
 import useTranslation from 'next-translate/useTranslation'
@@ -15,7 +15,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
     if (localStorage.getItem(LOCAL_STORAGE.LANG) !== lang) localStorage.setItem(LOCAL_STORAGE.LANG, lang)
   }
 
-  runInitialSetup()
+  useEffect(runInitialSetup, [])
   return (
 
   <ThemeProvider theme={theme}>

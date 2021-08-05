@@ -51,7 +51,7 @@ export const MESSAGES = {
     not_found: 'User was not found',
     image_not_found: 'Image not found',
     already_registered: 'User is already registered',
-    invalid_credentials: 'Credentials are invalid'
+    invalid_credentials: 'Invalid credentials'
   },
   pt: {
     success: 'Operação executada com sucesso',
