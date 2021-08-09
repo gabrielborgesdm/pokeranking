@@ -1,4 +1,5 @@
 {
-  "have-account-login": "Do you have an Account? Click here to log in"
-  
+  "have-account-login": "Do you have an Account? Click here to log in",
+  "both-passwords-must-be-the-same": "Both passwords must be the same",
+  "account-created-with-success-click-to-log-in": "Account created with success, click here to log in"
 }

@@ -29,7 +29,7 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    const data: ILoginResponse = await submitLoginRequest()
+    const data: ILoginResponse = await submitRequest()
     if (data?.token) {
       setStorageToken(data.token)
       router.push('/login')
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
     setIsLoading(false)
   }
 
-  const submitLoginRequest = async () => {
+  const submitRequest = async () => {
     let data = null
     setStatus({ ...status, message: '' })
     try {

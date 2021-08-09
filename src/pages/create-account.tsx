@@ -6,13 +6,13 @@ import Image from 'next/image'
 import { Form } from 'react-bootstrap'
 import { ILoginResponse } from '../config/types/IUser'
 import { PAGE_URL, REQUEST_URL } from '../config/AppConfig'
-import { useRouter } from 'next/router'
 import FormButton from '../components/common/FormButton'
-import { removeStorageToken, setStorageToken } from '../components/helper/StorageHelpers'
+import { removeStorageToken } from '../components/helper/StorageHelpers'
 import StatusBar from '../components/common/StatusBar'
 import { IStatus, IStatusType } from '../config/types/IStatus'
 import { getAxiosInstance } from '../components/service/AxiosService'
 import { UsernameRegex } from '../config/Regex'
+import { useRouter } from 'next/router'
 
 const CreateAccount: React.FC = () => {
   const { t } = useTranslation('create-account')
@@ -32,24 +32,47 @@ const CreateAccount: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    const data: ILoginResponse = await submitLoginRequest()
-    if (data?.token) {
-      setStorageToken(data.token)
-      router.push('/login')
-    } else if (data) {
-      setStatus({ message: data.message, type: IStatusType.Warning })
-    } else {
-      setStatus({ message: c('server-error'), type: IStatusType.Danger })
+    if (isFormValid()) {
+      const data: ILoginResponse = await submitRequest()
+      if (data?.success) {
+        setStatus({ message: t('account-created-with-success-click-to-log-in'), type: IStatusType.Success, onClickRoute: PAGE_URL.LOGIN })
+        clearForm()
+      } else if (data) {
+        setStatus({ message: data.message, type: IStatusType.Warning })
+      } else {
+        setStatus({ message: c('server-error'), type: IStatusType.Danger })
+      }
     }
     setIsLoading(false)
   }
 
-  const submitLoginRequest = async () => {
+  const isFormValid = (): boolean => {
+    const validations = [isPasswordValid]
+    let isValid = true
+    validations.forEach((callValidationFunction: Function) => {
+      if (!callValidationFunction()) {
+        isValid = false
+      }
+    })
+    return isValid
+  }
+
+  const isPasswordValid = (): boolean => {
+    console.log(password, rePassword, password === rePassword)
+    if (password === rePassword) {
+      return true
+    } else {
+      setStatus({ message: t('both-passwords-must-be-the-same'), type: IStatusType.Warning })
+      return false
+    }
+  }
+
+  const submitRequest = async () => {
     let data = null
     setStatus({ ...status, message: '' })
     try {
       const axios = getAxiosInstance()
-      const response = await axios.post(REQUEST_URL.LOGIN, { email, password })
+      const response = await axios.post(REQUEST_URL.CREATE_ACCOUNT, { user: { username, password, email } })
       data = response?.data
     } catch (error) {
       console.log(error)
@@ -59,6 +82,18 @@ const CreateAccount: React.FC = () => {
 
   const updateUsername = (value: string) => {
     setUsername(oldUsername => value.match(UsernameRegex) || !value.length ? value : oldUsername)
+  }
+
+  const clearForm = () => {
+    setEmail('')
+    setUsername('')
+    setPassword('')
+    setRePassword('')
+  }
+
+  const goToLoginPage = () => {
+    console.log('hello')
+    router.push(PAGE_URL.LOGIN)
   }
 
   return (

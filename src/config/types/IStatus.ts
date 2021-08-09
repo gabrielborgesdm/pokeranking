@@ -7,10 +7,12 @@ export enum IStatusType {
 export interface IStatus {
   message?: string,
   type: IStatusType,
+  onClickRoute?: string
 }
 
 export interface IStatusStyle {
   display?: string;
   backgroundColor?: string;
   color?: string;
+  cursor?: string;
 }
