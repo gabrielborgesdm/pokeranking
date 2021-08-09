@@ -3,6 +3,7 @@
   "defaultLocale": "en",
   "pages": {
     "*": ["common"],
-    "/login": ["login"]
+    "/login": ["login"],
+    "/create-account": ["create-account"]
   }
 }

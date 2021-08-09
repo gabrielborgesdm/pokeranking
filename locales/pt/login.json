@@ -1,10 +1,3 @@
 {
-  "no-account-create-one": "Não tem uma conta? Clique aqui para criar uma",
-  "email": "Endereço de e-mail",
-  "we-will-not-share-your-email": "Nós não iremos compartilhar o seu e-mail com mais ninguém",
-  "enter-your-email-address": "Insira o seu endereço de e-mail",
-  "password": "Senha",
-  "enter-your-password": "Insira a sua senha",
-  "username": "Nome de usuário",
-  "enter": "Entrar"
+  "no-account-create-one": "Não tem uma conta? Clique aqui para criar uma"
 }

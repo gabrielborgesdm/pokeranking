@@ -1,10 +1,4 @@
 {
-  "no-account-create-one": "Don't you have an Account? Click here to create one",
-  "email": "E-mail Address",
-  "we-will-not-share-your-email": "We'll never share your email with anyone else",
-  "enter-your-email-address": "Enter your e-mail address",
-  "password": "Password",
-  "enter-your-password": "Enter your password",
-  "username": "Username",
-  "enter": "Enter"
+  "no-account-create-one": "Don't you have an Account? Click here to create one"
+  
 }
