@@ -21,7 +21,7 @@ export const AccountContainer = styled.div`
   border: 1px solid ${colors.dark};
   border-radius: 5px;
   background: ${colors.dark};
-  padding: 15px;
+  padding: 15px 25px;
   color: ${colors.white};
 `
 export const YellowLink = styled.a`

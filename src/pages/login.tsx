@@ -5,7 +5,7 @@ import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/com
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
 import { ILoginResponse } from '../config/types/IUser'
-import { REQUEST_URL } from '../config/AppConfig'
+import { PAGE_URL, REQUEST_URL } from '../config/AppConfig'
 import { useRouter } from 'next/router'
 import FormButton from '../components/common/FormButton'
 import { removeStorageToken, setStorageToken } from '../components/helper/StorageHelpers'
@@ -62,23 +62,20 @@ const Login: React.FC = () => {
           <StatusBar message={status.message} type={status.type} />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>{t('email')}</Form.Label>
-              <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t('enter-your-email-address')} required />
-              <Form.Text className="text-muted">
-                {t('we-will-not-share-your-email')}
-              </Form.Text>
+              <Form.Label>{c('email')}</Form.Label>
+              <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={c('enter-your-email-address')} maxLength={70} required />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>{t('password')}</Form.Label>
-              <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={t('enter-your-password')} required />
+              <Form.Label>{c('password')}</Form.Label>
+              <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={c('enter-your-password')} maxLength={60} required />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Link href="/create-account">
+              <Link href={PAGE_URL.CREATE_ACCOUNT}>
                 <YellowLink>{t('no-account-create-one')}</YellowLink>
               </Link>
             </Form.Group>
-            <FormButton isLoading={isLoading} title={t('enter')} />
+            <FormButton isLoading={isLoading} title={c('enter')} />
           </Form>
         </AccountContainer>
       </FullScreenContainer>

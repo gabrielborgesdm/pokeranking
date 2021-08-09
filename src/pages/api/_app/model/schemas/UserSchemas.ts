@@ -1,9 +1,10 @@
 import Joi from 'joi'
+import { UsernameRegex } from '../../../../../config/Regex'
 import { PokemonMutateSchema } from './PokemonSchemas'
 
 export const UserAddSchema = Joi.object({
   user: Joi.object({
-    username: Joi.string().max(30).required(),
+    username: Joi.string().max(30).required().regex(UsernameRegex),
     password: Joi.string().max(60).required(),
     email: Joi.string().email().max(70).required(),
     bio: Joi.string().max(250),

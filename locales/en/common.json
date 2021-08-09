@@ -2,5 +2,17 @@
   "title" : "Pokeranking",
   "description": "Pokemon ranking",
   "loading": "Loading",
-  "server-error": "A server error occurred"
+  "server-error": "A server error occurred",
+  "email": "E-mail Address",
+  "we-will-not-share-your-email": "We'll never share your email with anyone else",
+  "enter-your-email-address": "Enter your e-mail address",
+  "password": "Password",
+  "repeat-password": "Repeat your password",
+  "enter-your-password": "Enter your password",
+  "enter": "Enter",
+  "create-account": "Create account",
+  "username": "Username",
+  "enter-your-username": "Enter your username",
+  "your-username-cannot-contain-special-characters": "Your username cannot contain special characters",
+  "enter-a-safe-password": "Enter a safe password"
 }

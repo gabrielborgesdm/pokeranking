@@ -2,5 +2,18 @@
   "title" : "Pokeranking",
   "description": "Ranking pokemon",
   "loading": "Carregando",
-  "server-error": "Ocorreu um erro com o servidor"
+  "server-error": "Ocorreu um erro com o servidor",
+  "we-will-not-share-your-email": "Nós não iremos compartilhar o seu e-mail com mais ninguém",
+  "enter-your-email-address": "Insira o seu endereço de e-mail",
+  "enter-your-password": "Insira a sua senha",
+  "email": "Endereço de e-mail",
+  "password": "Senha",
+  "repeat-password": "Repita a sua senha",
+  "enter": "Entrar",
+  "create-account": "Criar conta",
+  "username": "Nome de usuário",
+  "enter-your-username": "Insira o seu nome de usuário",
+  "your-username-cannot-contain-special-characters": "O seu nome de usuário não pode conter caracteres especiais",
+  "enter-a-safe-password": "Insira uma senha segura"
+
 }

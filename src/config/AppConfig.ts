@@ -4,9 +4,11 @@ export const LOCAL_STORAGE = {
 }
 
 export const REQUEST_URL = {
-  LOGIN: '/api/users/login'
+  LOGIN: '/api/users/login',
+  CREATE_ACCOUNT: '/api/users/create'
 }
 
 export const PAGE_URL = {
-  LOGIN: '/login'
+  LOGIN: '/login',
+  CREATE_ACCOUNT: '/create-account'
 }
