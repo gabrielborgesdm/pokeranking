@@ -1,23 +1,21 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 import { IStatus, IStatusStyle, IStatusType } from '../../config/types/IStatus'
 import { StatusContainer } from '../../styles/common'
 import { colors } from '../../styles/theme'
 
-const StatusBar: React.FC<IStatus> = ({ message = '', type = IStatusType.Success, onClickRoute }: IStatus) => {
-  const router = useRouter()
+const StatusBar: React.FC<IStatus> = ({ message = '', type = IStatusType.Success, onClick }: IStatus) => {
   return (
-    <StatusContainer style={{ ...getStatusStyle(message, type, onClickRoute) }}>
-      <div onClick={onClickRoute ? () => router.push(onClickRoute) : () => { }}>
+    <StatusContainer style={{ ...getStatusStyle(message, type, onClick) }}>
+      <div onClick={onClick ? () => { onClick() } : () => {}}>
         {message || <>&nbsp;</>}
       </div>
     </StatusContainer>
   )
 }
 
-const getStatusStyle = (message: string, type: string, onClickRoute: string): IStatusStyle => {
+const getStatusStyle = (message: string, type: string, onClick: Function): IStatusStyle => {
   const styles: IStatusStyle = { color: colors.white, display: 'none' }
-  if (onClickRoute) styles.cursor = 'pointer'
+  if (onClick) styles.cursor = 'pointer'
   if (!message) return styles
   switch (type) {
     case IStatusType.Warning:

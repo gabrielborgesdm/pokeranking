@@ -7,7 +7,7 @@ export enum IStatusType {
 export interface IStatus {
   message?: string,
   type: IStatusType,
-  onClickRoute?: string
+  onClick?: Function
 }
 
 export interface IStatusStyle {

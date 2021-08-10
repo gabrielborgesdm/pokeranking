@@ -4,7 +4,6 @@ import useTranslation from 'next-translate/useTranslation'
 import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
-import { ILoginResponse } from '../config/types/IUser'
 import { PAGE_URL, REQUEST_URL } from '../config/AppConfig'
 import FormButton from '../components/common/FormButton'
 import { removeStorageToken } from '../components/helper/StorageHelpers'
@@ -33,9 +32,9 @@ const CreateAccount: React.FC = () => {
     e.preventDefault()
     setIsLoading(true)
     if (isFormValid()) {
-      const data: ILoginResponse = await submitRequest()
+      const data = await submitRequest()
       if (data?.success) {
-        setStatus({ message: t('account-created-with-success-click-to-log-in'), type: IStatusType.Success, onClickRoute: PAGE_URL.LOGIN })
+        setStatus({ message: t('account-created-with-success-click-to-log-in'), type: IStatusType.Success, onClick: goToLoginPage })
         clearForm()
       } else if (data) {
         setStatus({ message: data.message, type: IStatusType.Warning })
@@ -92,7 +91,6 @@ const CreateAccount: React.FC = () => {
   }
 
   const goToLoginPage = () => {
-    console.log('hello')
     router.push(PAGE_URL.LOGIN)
   }
 
@@ -101,7 +99,7 @@ const CreateAccount: React.FC = () => {
       <FullScreenContainer>
         <AccountContainer>
           <Image src="/images/pokeranking.png" width="656" height="184" quality="100" layout="responsive" />
-          <StatusBar message={status.message} type={status.type} />
+          <StatusBar message={status.message} type={status.type} onClick={status.onClick} />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>{c('email')}</Form.Label>
