@@ -4,14 +4,14 @@ import useTranslation from 'next-translate/useTranslation'
 import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
-import { ILoginResponse } from '../config/types/IUser'
-import { PAGE_URL, REQUEST_URL } from '../config/AppConfig'
+import { ILoginResponse } from '../configs/types/IUser'
+import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { useRouter } from 'next/router'
 import FormButton from '../components/common/FormButton'
-import { removeStorageToken, setStorageToken } from '../components/helper/StorageHelpers'
-import StatusBar from '../components/common/StatusBar'
-import { IStatus, IStatusType } from '../config/types/IStatus'
-import { getAxiosInstance } from '../components/service/AxiosService'
+import { removeStorageToken, setStorageToken } from '../helpers/StorageHelpers'
+import StatusBar from '../components/StatusBar'
+import { IStatus, IStatusType } from '../configs/types/IStatus'
+import { getAxiosInstance } from '../services/AxiosService'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     const data: ILoginResponse = await submitRequest()
     if (data?.token) {
       setStorageToken(data.token)
-      router.push('/login')
+      router.push(PAGE_URL.USERS)
     } else if (data) {
       setStatus({ message: data.message, type: IStatusType.Warning })
     } else {

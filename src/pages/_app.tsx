@@ -6,7 +6,7 @@ import useTranslation from 'next-translate/useTranslation'
 import GlobalStyle from '../styles/global'
 import theme from '../styles/theme'
 import Head from 'next/head'
-import { LOCAL_STORAGE } from '../config/AppConfig'
+import { LOCAL_STORAGE } from '../configs/AppConfig'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   const { t, lang } = useTranslation('common')

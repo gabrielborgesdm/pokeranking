@@ -1,9 +1,9 @@
 
 import { NextApiResponse } from 'next'
-import { IRequest } from '../../../../config/types/IRequest'
-import { deleteUser } from '../../_app/controller/UserController'
-import withMiddlewares, { AUTHENTICATION, VALIDATION } from '../../_app/middleware/WithMiddlewares'
-import { UserUsernameSchema } from '../../_app/model/schemas/UserSchemas'
+import { IRequest } from '../../../../configs/types/IRequest'
+import { deleteUser } from '../../_app/controllers/UserController'
+import withMiddlewares, { AUTHENTICATION, VALIDATION } from '../../_app/middlewares/WithMiddlewares'
+import { UserUsernameSchema } from '../../_app/models/schemas/UserSchemas'
 
 const handler = async (req: IRequest, res: NextApiResponse) => {
   await deleteUser(req, res)

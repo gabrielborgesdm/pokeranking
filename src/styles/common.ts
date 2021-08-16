@@ -24,6 +24,18 @@ export const AccountContainer = styled.div`
   padding: 15px 25px;
   color: ${colors.white};
 `
+export const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 95vw;
+  min-height: 90vh;
+  border: 1px solid ${colors.dark};
+  border-radius: 5px;
+  background: ${colors.dark};
+  padding: 15px 25px;
+  color: ${colors.white};
+`
+
 export const YellowLink = styled.a`
   color: ${colors.yellow};
   text-decoration: none;
