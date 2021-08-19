@@ -4,7 +4,7 @@ import { NextApiResponse } from 'next'
 import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/AuthenticationHelpers'
 import { IRequest } from '../../../../configs/types/IRequest'
 import { abstractUserBasedOnAuthorizationLevel, formatUserDocument, isUserAuthorized } from '../helpers/UserAuthorizationHelpers'
-import { IMessage } from '../../../../configs/types/IMessage'
+import { IResponse } from '../../../../configs/types/IResponse'
 import { IUserDocument, IUserResponse } from '../../../../configs/types/IUser'
 import { sendResponse } from '../helpers/ResponseHelpers'
 
@@ -31,7 +31,7 @@ export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => 
   sendResponse(req, res, SUCCESS, { user })
 }
 
-const isOkayToExecuteMutation = (authenticatedUser: IUserResponse, response: IUserDocument) : IMessage => {
+const isOkayToExecuteMutation = (authenticatedUser: IUserResponse, response: IUserDocument) : IResponse => {
   if (!response) {
     return USER_NOT_FOUND
   }
@@ -85,5 +85,5 @@ export const login = async (req: IRequest, res: NextApiResponse) => {
     return sendResponse(req, res, INVALID_CREDENTIALS)
   }
   const token = generateAccessToken({ _id: response._id })
-  sendResponse(req, res, SUCCESS, { token })
+  sendResponse(req, res, SUCCESS, { token, user: formatUserDocument(response) })
 }

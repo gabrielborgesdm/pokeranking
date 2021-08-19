@@ -1,4 +1,4 @@
-import { IMessage } from './types/IMessage'
+import { IResponse } from './types/IResponse'
 
 export const STATUS = {
   SUCCESS: 'success',
@@ -68,55 +68,55 @@ export const MESSAGES = {
 
 export const IMAGE_ROUTE_URL = 'image'
 
-export const SUCCESS: IMessage = {
+export const SUCCESS: IResponse = {
   success: true,
   status: STATUS.SUCCESS,
   code: CODE.SUCCESS
 }
 
-export const ERROR: IMessage = {
+export const ERROR: IResponse = {
   success: false,
   status: STATUS.ERROR,
   code: CODE.ERROR
 }
 
-export const UNAUTHORIZED: IMessage = {
+export const UNAUTHORIZED: IResponse = {
   success: false,
   status: STATUS.UNAUTHORIZED,
   code: CODE.UNAUTHORIZED
 }
 
-export const FORBIDDEN: IMessage = {
+export const FORBIDDEN: IResponse = {
   success: false,
   status: STATUS.FORBIDDEN,
   code: CODE.FORBIDDEN
 }
 
-export const FIELD_VALIDATION_ERROR: IMessage = {
+export const FIELD_VALIDATION_ERROR: IResponse = {
   success: false,
   status: STATUS.FIELD_VALIDATION_ERROR,
   code: CODE.FIELD_VALIDATION_ERROR
 }
 
-export const USER_NOT_FOUND: IMessage = {
+export const USER_NOT_FOUND: IResponse = {
   success: false,
   status: STATUS.NOT_FOUND,
   code: CODE.NOT_FOUND
 }
 
-export const IMAGE_NOT_FOUND: IMessage = {
+export const IMAGE_NOT_FOUND: IResponse = {
   success: false,
   status: STATUS.IMAGE_NOT_FOUND,
   code: CODE.IMAGE_NOT_FOUND
 }
 
-export const USER_ALREADY_REGISTERED: IMessage = {
+export const USER_ALREADY_REGISTERED: IResponse = {
   success: false,
   status: STATUS.ALREADY_REGISTERED,
   code: CODE.ALREADY_REGISTERED
 }
 
-export const INVALID_CREDENTIALS: IMessage = {
+export const INVALID_CREDENTIALS: IResponse = {
   success: false,
   status: STATUS.INVALID_CREDENTIALS,
   code: CODE.INVALID_CREDENTIALS

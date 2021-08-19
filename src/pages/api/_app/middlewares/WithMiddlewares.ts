@@ -4,6 +4,8 @@ import { IMiddleware } from '../../../../configs/types/IMiddleware'
 import { IRequest } from '../../../../configs/types/IRequest'
 import AuthenticationMiddleware from './AuthenticationMiddleware'
 import ValidationMiddleware from './ValidationMiddleware'
+import { sendResponse } from '../helpers/ResponseHelpers'
+import { ERROR } from '../../../../configs/APIConfig'
 
 export const AUTHENTICATION = 'authentication'
 export const VALIDATION = 'validation'
@@ -25,10 +27,18 @@ const executeMiddlewares = async (req: IRequest, res: NextApiResponse, middlewar
 
 const withMiddlewares = (handler: NextApiHandler, ...middlewares: Array<IMiddleware>) => {
   return async (req: IRequest, res: NextApiResponse) => {
-    if (!migration.isMigrated) await migration.executeMigrations()
-    const isOkay = await executeMiddlewares(req, res, middlewares)
-    if (isOkay) await handler(req, res)
+    const isValidated = await checkAndExecuteMigrations(req, res, middlewares)
+    if (isValidated) await handler(req, res)
   }
+}
+
+const checkAndExecuteMigrations = async (req: IRequest, res: NextApiResponse, middlewares: Array<IMiddleware>): Promise<boolean> => {
+  if (!migration.isMigrated) await migration.executeMigrations()
+  if (!migration.isMigrated) {
+    sendResponse(req, res, ERROR)
+    return false
+  }
+  return await executeMiddlewares(req, res, middlewares)
 }
 
 export default withMiddlewares
