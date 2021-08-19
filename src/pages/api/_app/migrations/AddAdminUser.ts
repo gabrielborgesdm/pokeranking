@@ -6,6 +6,7 @@ export const addAdminUser = async () => {
   await userRepository.store({
     username: 'admin',
     email: 'admin@admin.com',
-    password: await hashPassword('admin')
+    password: await hashPassword('admin'),
+    pokemons: []
   })
 }
