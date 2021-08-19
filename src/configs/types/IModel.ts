@@ -1,4 +1,4 @@
-export interface IModel {
+export type IModel = {
   _id?: string;
   updatedAt?: number;
   createdAt?: number;

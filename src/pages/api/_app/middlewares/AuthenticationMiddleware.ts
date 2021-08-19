@@ -7,19 +7,6 @@ import UserRepository from '../repositories/UserRepository'
 
 const userRepository = new UserRepository()
 
-const getTokenFromRequest = (req: IRequest): string => {
-  const authHeader = req.headers.authorization
-  const token = authHeader && authHeader.split(' ')[1]
-  return token
-}
-
-const validateAndAddUserToRequest = async (_id: string, req: IRequest) => {
-  const response = await userRepository.getById(_id)
-  if (!response) return false
-  req.user = response.toObject()
-  return true
-}
-
 const AuthenticationMiddleware = async (req: IRequest, res: NextApiResponse) : Promise<boolean> => {
   let isOkay = true
   const token = getTokenFromRequest(req)
@@ -34,6 +21,19 @@ const AuthenticationMiddleware = async (req: IRequest, res: NextApiResponse) : P
     }
   }
   return isOkay
+}
+
+const getTokenFromRequest = (req: IRequest): string => {
+  const authHeader = req.headers.authorization
+  const token = authHeader && authHeader.split(' ')[1]
+  return token
+}
+
+const validateAndAddUserToRequest = async (_id: string, req: IRequest) => {
+  const response = await userRepository.getById(_id)
+  if (!response) return false
+  req.user = response.toObject()
+  return true
 }
 
 export default AuthenticationMiddleware

@@ -1,13 +1,21 @@
 import pokemons from '../../assets/pokemons.json'
 
-export type IPokemon = typeof pokemons[0]
+export type IPokemonType = typeof pokemons[0]
 
-export interface IUserPokemon {
-  pokemon: IPokemon;
+interface IPokemon {
+  pokemon: IPokemonType;
   note?: string;
 }
 
-export interface IUserPokemonMutate {
+interface IPokemonMutate {
   pokemon: number;
   note?: string;
+}
+
+export interface IUserPokemons {
+  pokemons: Array<IPokemon>;
+}
+
+export interface IUserPokemonsMutate {
+  pokemons: Array<IPokemonMutate>;
 }
