@@ -1,29 +1,32 @@
-import React, { FormEvent, useState, useEffect } from 'react'
+import React, { FormEvent, useState, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation'
 import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
-import { ILoginResponse } from '../configs/types/IUser'
 import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { useRouter } from 'next/router'
-import FormButton from '../components/common/FormButton'
-import { removeStorageToken, setStorageToken } from '../helpers/StorageHelpers'
 import StatusBar from '../components/StatusBar'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
-import { getAxiosInstance } from '../services/AxiosService'
+import axios from '../services/AxiosService'
+import FormButton from '../components/FormButton'
+
+import { AuthContext } from '../models/AuthContext'
+import { ILoginResponse } from '../configs/types/ILogin'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
   const { t: c } = useTranslation('common')
   const router = useRouter()
+  const { login, logout } = useContext(AuthContext)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [status, setStatus] = useState<IStatus>({ message: '', type: IStatusType.Success })
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    removeStorageToken()
+    logout()
   }, [])
 
   const handleSubmit = async (e: FormEvent) => {
@@ -31,7 +34,7 @@ const Login: React.FC = () => {
     setIsLoading(true)
     const data: ILoginResponse = await submitRequest()
     if (data?.token) {
-      setStorageToken(data.token)
+      login(data.token, data.user.username)
       router.push(PAGE_URL.USERS)
     } else if (data) {
       setStatus({ message: data.message, type: IStatusType.Warning })
@@ -41,11 +44,10 @@ const Login: React.FC = () => {
     setIsLoading(false)
   }
 
-  const submitRequest = async () => {
+  const submitRequest = async (): Promise<ILoginResponse> => {
     let data = null
     setStatus({ ...status, message: '' })
     try {
-      const axios = getAxiosInstance()
       const response = await axios.post(REQUEST_URL.LOGIN, { email, password })
       data = response?.data
     } catch (error) {

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
-import { BlueButton } from '../../styles/common'
+import { BlueButton } from '../styles/common'
 
 interface IFormButton {
   title: string,
