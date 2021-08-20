@@ -5,13 +5,13 @@ import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/com
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
 import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
-import FormButton from '../components/common/FormButton'
 import { removeStorageToken } from '../helpers/StorageHelpers'
 import StatusBar from '../components/StatusBar'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
-import { getAxiosInstance } from '../services/AxiosService'
+import axios from '../services/AxiosService'
 import { UsernameRegex } from '../configs/Regex'
 import { useRouter } from 'next/router'
+import FormButton from '../components/FormButton'
 
 const CreateAccount: React.FC = () => {
   const { t } = useTranslation('create-account')
@@ -70,7 +70,6 @@ const CreateAccount: React.FC = () => {
     let data = null
     setStatus({ ...status, message: '' })
     try {
-      const axios = getAxiosInstance()
       const response = await axios.post(REQUEST_URL.CREATE_ACCOUNT, { user: { username, password, email } })
       data = response?.data
     } catch (error) {

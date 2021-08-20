@@ -1,15 +1,9 @@
-import axios, { AxiosStatic } from 'axios'
-import { LOCAL_STORAGE } from '../configs/AppConfig'
+import axios from 'axios'
+import { STORAGE } from '../configs/AppConfig'
+import { parseCookies } from 'nookies'
 
-export const getAxiosInstance = () : AxiosStatic => {
-  const axiosInstance = axios
-  setAxiosDefaults(axiosInstance)
-  return axiosInstance
-}
-
-const setAxiosDefaults = (axios: AxiosStatic) => {
-  const token = localStorage.getItem(LOCAL_STORAGE.TOKEN)
-  const lang = localStorage.getItem(LOCAL_STORAGE.LANG)
-  axios.defaults.headers.common.Authorization = token ? `Bearer ${token}` : ''
-  axios.defaults.headers.common['Accept-Language'] = lang || 'en'
-}
+const token = parseCookies()[`nextauth.${STORAGE.USER_TOKEN}`]
+const lang = parseCookies()[`nextauth.${STORAGE.LANG}`]
+axios.defaults.headers.common.Authorization = token ? `Bearer ${token}` : ''
+axios.defaults.headers.common['Accept-Language'] = lang || 'en'
+export default axios

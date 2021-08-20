@@ -25,14 +25,9 @@ export const AccountContainer = styled.div`
   color: ${colors.white};
 `
 export const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 95vw;
-  min-height: 90vh;
-  border: 1px solid ${colors.dark};
-  border-radius: 5px;
+  width: 100%;
+  height: 100%;
   background: ${colors.dark};
-  padding: 15px 25px;
   color: ${colors.white};
 `
 
