@@ -10,6 +10,10 @@ export type IUserType = {
   role?: string;
 }
 
+export type IUsersType = {
+  users: Array<IUserType>
+}
+
 export type IUserAdd = {
   username: string;
   email: string;
@@ -27,3 +31,5 @@ export type IUserUpdate = {
 export interface IUserDocument extends IUserType, IUserPokemonsMutate, IModel {}
 
 export interface IUserResponse extends IUserType, IUserPokemons, IResponse {}
+
+export interface IUsersResponse extends IUsersType, IUserPokemons, IResponse {}

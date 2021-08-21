@@ -12,9 +12,9 @@ const userRepository = new UserRepository()
 
 export const getAllUsernames = async (req: IRequest, res: NextApiResponse) => {
   const response = await userRepository.getAll()
-  let users: Array<string> = []
+  let users: Array<IUserResponse> = []
   if (response) {
-    users = response.map((user) => user.username)
+    users = response.map((user) => abstractUserBasedOnAuthorizationLevel(req.user, user))
   }
   sendResponse(req, res, SUCCESS, { users })
 }
