@@ -16,11 +16,9 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
   }, [])
 
   const runInitialSetup = () => {
-    console.log(getCookies())
     const { lang: storedLangCookie } = getCookies()
     if (storedLangCookie !== lang) {
       setLang(lang)
-      console.log('setando')
     }
   }
 
