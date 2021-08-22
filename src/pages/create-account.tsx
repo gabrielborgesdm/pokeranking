@@ -1,21 +1,21 @@
-import React, { FormEvent, useState, useEffect } from 'react'
+import React, { FormEvent, useState, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation'
 import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
 import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
-import { removeStorageToken } from '../helpers/StorageHelpers'
 import StatusBar from '../components/StatusBar'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
-import axios from '../services/AxiosService'
 import { UsernameRegex } from '../configs/Regex'
 import { useRouter } from 'next/router'
 import FormButton from '../components/FormButton'
+import { AuthContext } from '../models/AuthContext'
 
 const CreateAccount: React.FC = () => {
   const { t } = useTranslation('create-account')
   const { t: c } = useTranslation('common')
+  const { getAxios, logout } = useContext(AuthContext)
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
@@ -25,7 +25,7 @@ const CreateAccount: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    removeStorageToken()
+    logout()
   }, [])
 
   const handleSubmit = async (e: FormEvent) => {
@@ -70,7 +70,7 @@ const CreateAccount: React.FC = () => {
     let data = null
     setStatus({ ...status, message: '' })
     try {
-      const response = await axios.post(REQUEST_URL.CREATE_ACCOUNT, { user: { username, password, email } })
+      const response = await getAxios().post(REQUEST_URL.CREATE_ACCOUNT, { user: { username, password, email } })
       data = response?.data
     } catch (error) {
       console.log(error)

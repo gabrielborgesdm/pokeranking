@@ -1,9 +1,12 @@
-import axios from '../services/AxiosService'
+
+import { useContext } from 'react'
 import useSWR from 'swr'
+import { AuthContext } from '../models/AuthContext'
 
 export function useFetch<Data = any, Error = any> (url: string) {
+  const { getAxios } = useContext(AuthContext)
   const { data, error, mutate } = useSWR<Data, Error>(url, async url => {
-    const response = await axios.get(url)
+    const response = await getAxios().get(url)
     return response.data
   })
 

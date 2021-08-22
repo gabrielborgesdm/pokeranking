@@ -8,7 +8,6 @@ import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { useRouter } from 'next/router'
 import StatusBar from '../components/StatusBar'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
-import axios from '../services/AxiosService'
 import FormButton from '../components/FormButton'
 
 import { AuthContext } from '../models/AuthContext'
@@ -18,7 +17,7 @@ const Login: React.FC = () => {
   const { t } = useTranslation('login')
   const { t: c } = useTranslation('common')
   const router = useRouter()
-  const { login, logout } = useContext(AuthContext)
+  const { login, logout, getAxios } = useContext(AuthContext)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -35,7 +34,7 @@ const Login: React.FC = () => {
     const data: ILoginResponse = await submitRequest()
     if (data?.token) {
       login(data.token, data.user.username)
-      router.push(PAGE_URL.USERS)
+      router.replace(PAGE_URL.USERS)
     } else if (data) {
       setStatus({ message: data.message, type: IStatusType.Warning })
     } else {
@@ -46,6 +45,7 @@ const Login: React.FC = () => {
 
   const submitRequest = async (): Promise<ILoginResponse> => {
     let data = null
+    const axios = getAxios()
     setStatus({ ...status, message: '' })
     try {
       const response = await axios.post(REQUEST_URL.LOGIN, { email, password })
