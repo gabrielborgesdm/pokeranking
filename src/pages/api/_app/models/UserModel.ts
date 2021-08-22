@@ -4,6 +4,7 @@ import { IUserDocument } from '../../../../configs/types/IUser'
 
 const UserModel = new mongoose.Schema<IUserDocument>({
   username: { type: String, require: true },
+  avatar: { type: Number, require: true },
   email: { type: String, require: true },
   password: { type: String, require: true },
   bio: { type: String, require: false },

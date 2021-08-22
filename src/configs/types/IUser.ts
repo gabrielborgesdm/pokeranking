@@ -3,7 +3,9 @@ import { IUserPokemons, IUserPokemonsMutate } from './IPokemon'
 import { IResponse } from './IResponse'
 
 export type IUserType = {
+  _id?: string;
   username: string;
+  avatar: string;
   email?: string;
   bio?: string;
   password?: string;
@@ -16,6 +18,7 @@ export type IUsersType = {
 
 export type IUserAdd = {
   username: string;
+  avatar?: number
   email: string;
   password: string;
   bio?: string;
@@ -24,6 +27,7 @@ export type IUserAdd = {
 
 export type IUserUpdate = {
   bio?: string;
+  avatar?: number
   pokemons: Array<string>;
   password?: string;
 }
