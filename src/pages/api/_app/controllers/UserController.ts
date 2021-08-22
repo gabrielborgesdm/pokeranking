@@ -5,12 +5,12 @@ import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/A
 import { IRequest } from '../../../../configs/types/IRequest'
 import { abstractUserBasedOnAuthorizationLevel, formatUserDocument, isUserAuthorized } from '../helpers/UserAuthorizationHelpers'
 import { IResponse } from '../../../../configs/types/IResponse'
-import { IUserDocument, IUserResponse } from '../../../../configs/types/IUser'
+import { IUserAdd, IUserDocument, IUserResponse } from '../../../../configs/types/IUser'
 import { sendResponse } from '../helpers/ResponseHelpers'
 
 const userRepository = new UserRepository()
 
-export const getAllUsernames = async (req: IRequest, res: NextApiResponse) => {
+export const getAllUsers = async (req: IRequest, res: NextApiResponse) => {
   const response = await userRepository.getAll()
   let users: Array<IUserResponse> = []
   if (response) {
@@ -67,10 +67,11 @@ export const deleteUser = async (req: IRequest, res: NextApiResponse) => {
 }
 
 export const storeUser = async (req: IRequest, res: NextApiResponse) => {
-  const { user: userInfo } = req.body
+  const userInfo: IUserAdd = req.body.user
   const { username, email } = userInfo
   if (await getUser({ $or: [{ username }, { email }] })) return sendResponse(req, res, USER_ALREADY_REGISTERED)
   userInfo.password = await hashPassword(userInfo.password)
+  if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * 809) + 1
   const response = await userRepository.store(userInfo)
   if (!response) return sendResponse(req, res, ERROR)
   const user: IUserResponse = formatUserDocument(response)

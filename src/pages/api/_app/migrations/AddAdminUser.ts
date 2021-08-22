@@ -7,6 +7,7 @@ export const addAdminUser = async () => {
     username: 'admin',
     email: 'admin@admin.com',
     password: await hashPassword('admin'),
-    pokemons: []
+    pokemons: [],
+    avatar: 1
   })
 }

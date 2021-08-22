@@ -1,5 +1,5 @@
 import { USER_KEYS, USER_ROLES } from '../../../../configs/APIConfig'
-import { IUserPokemonMutate } from '../../../../configs/types/IPokemon'
+import { IPokemonMutate } from '../../../../configs/types/IPokemon'
 import { IUserDocument, IUserResponse } from '../../../../configs/types/IUser'
 import PokemonRepository from '../repositories/PokemonRepository'
 
@@ -8,7 +8,7 @@ const pokemonRepository = new PokemonRepository()
 export const isUserAuthorized = (authenticatedUser: IUserResponse, targetUser: IUserDocument): boolean => {
   return authenticatedUser.role === USER_ROLES.ADMIN || authenticatedUser._id.toString() === targetUser._id.toString()
 }
-const populateUserWithPokemons = (user: IUserResponse, pokemons: Array<IUserPokemonMutate>) => {
+const populateUserWithPokemons = (user: IUserResponse, pokemons: Array<IPokemonMutate>) => {
   user.pokemons = pokemonRepository.populatePokemons(pokemons)
 }
 const deleteFromUser = (user: IUserResponse, ...fields: Array<string>) => {
@@ -18,6 +18,7 @@ export const formatUserDocument = (response: IUserDocument): IUserResponse => {
   const user = response.toObject()
   deleteFromUser(user, USER_KEYS.PASSWORD, USER_KEYS.__V)
   populateUserWithPokemons(user, response.pokemons)
+  user.avatar = pokemonRepository.getAvatarImage(user.avatar)
   return user
 }
 
