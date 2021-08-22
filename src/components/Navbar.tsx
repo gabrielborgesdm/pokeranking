@@ -1,9 +1,10 @@
 import React from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
+import { CustomNavbar } from '../styles/common'
 
 const NavbarComponent: React.FC = () => {
   return (
-    <Navbar bg="dark" variant="dark">
+    <CustomNavbar variant="dark">
       <Container>
       <Navbar.Brand href="#home">Navbar</Navbar.Brand>
       <Nav className="me-auto">
@@ -12,7 +13,7 @@ const NavbarComponent: React.FC = () => {
         <Nav.Link href="#pricing">Pricing</Nav.Link>
       </Nav>
       </Container>
-    </Navbar>
+    </CustomNavbar>
   )
 }
 

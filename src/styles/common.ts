@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Button } from 'react-bootstrap'
+import { Button, Navbar } from 'react-bootstrap'
 import { colors } from './theme'
 
 export const FullScreenContainer = styled.div`
@@ -47,4 +47,10 @@ export const StatusContainer = styled.div`
   justify-content:center;
   align-items: center;
   transition: all 0.5s;
+`
+
+export const CustomNavbar = styled(Navbar)`
+  background: ${colors.grey};
+  color: white;
+  min-width: 80px;
 `

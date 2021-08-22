@@ -1,10 +1,10 @@
 import React, { createContext, useEffect } from 'react'
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { parseCookies, setCookie } from 'nookies'
 import { REQUEST_URL, STORAGE } from '../configs/AppConfig'
-import axios from '../services/AxiosService'
 import { IUserResponse } from '../configs/types/IUser'
 import { IAuthContextType, IAuthProvider, ICookiesType } from '../configs/types/IAuthContext'
 import useTranslation from 'next-translate/useTranslation'
+import axios, { AxiosInstance } from 'axios'
 
 export const AuthContext = createContext({} as IAuthContextType)
 
@@ -35,6 +35,15 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
     }
   }
 
+  const getAxios = (): AxiosInstance => {
+    const token = parseCookies()[STORAGE.USER_TOKEN]
+    const lang = parseCookies()[STORAGE.LANG]
+    console.log('axios', token, lang)
+    axios.defaults.headers.common.Authorization = token ? `Bearer ${token}` : ''
+    axios.defaults.headers.common['Accept-Language'] = lang || 'en'
+    return axios
+  }
+
   const login = (token: string, username: string) => {
     setCookie(undefined, STORAGE.USER_TOKEN, token, {
       maxAge: 60 * 60 * 24 * 7
@@ -52,8 +61,8 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
   }
 
   const logout = () => {
-    destroyCookie(undefined, STORAGE.USER_TOKEN)
-    destroyCookie(undefined, STORAGE.USER_USERNAME)
+    setCookie(undefined, STORAGE.USER_TOKEN, '')
+    setCookie(undefined, STORAGE.USER_USERNAME, '')
   }
 
   const recoverUserInformation = async (): Promise<IUserResponse | null> => {
@@ -66,7 +75,7 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
     let data = null
     const username = getCookies().username
     try {
-      const response = await axios.post(`${REQUEST_URL.USERS}/${username}`)
+      const response = await getAxios().post(`${REQUEST_URL.USERS}/${username}`)
       data = response?.data
     } catch (error) {
       console.log(error)
@@ -81,7 +90,8 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
       logout,
       recoverUserInformation,
       getCookies,
-      setLang
+      setLang,
+      getAxios
     }}>
       {children}
     </AuthContext.Provider>
