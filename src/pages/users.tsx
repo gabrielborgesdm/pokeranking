@@ -1,10 +1,12 @@
+import { GetServerSideProps } from 'next'
 import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Row } from 'react-bootstrap'
 import MainContainerComponent from '../components/MainContainerComponent'
 import UserBox from '../components/UserBox'
 import { REQUEST_URL } from '../configs/AppConfig'
 
 import { IUsersResponse, IUserType } from '../configs/types/IUser'
+import { checkIsAuthenticated, serverSideRedirection } from '../services/AuthService'
 import { useFetch } from '../services/FetchService'
 
 const Users: React.FC = () => {
@@ -35,3 +37,8 @@ const Users: React.FC = () => {
 }
 
 export default Users
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  if (!checkIsAuthenticated(context)) return serverSideRedirection
+  return { props: {} }
+}

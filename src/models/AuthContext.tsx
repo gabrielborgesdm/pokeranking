@@ -22,10 +22,6 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
     }
   }
 
-  const checkIsAuthenticated = () => {
-    return !!getCookies().token
-  }
-
   const getCookies = (): ICookiesType => {
     console.log(parseCookies())
     return {
@@ -38,7 +34,6 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
   const getAxios = (): AxiosInstance => {
     const token = parseCookies()[STORAGE.USER_TOKEN]
     const lang = parseCookies()[STORAGE.LANG]
-    console.log('axios', token, lang)
     axios.defaults.headers.common.Authorization = token ? `Bearer ${token}` : ''
     axios.defaults.headers.common['Accept-Language'] = lang || 'en'
     return axios
@@ -85,7 +80,7 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
 
   return (
     <AuthContext.Provider value={{
-      checkIsAuthenticated,
+
       login,
       logout,
       recoverUserInformation,
