@@ -14,6 +14,9 @@
   "username": "Nome de usuário",
   "enter-your-username": "Insira o seu nome de usuário",
   "your-username-cannot-contain-special-characters": "O seu nome de usuário não pode conter caracteres especiais",
-  "enter-a-safe-password": "Insira uma senha segura"
+  "enter-a-safe-password": "Insira uma senha segura",
+  "users": "Usuários",
+  "account": "Conta",
+  "pokemons": "Pokémons"
 
 }

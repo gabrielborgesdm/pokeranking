@@ -1,7 +1,9 @@
 import { createGlobalStyle } from 'styled-components'
-import background from '../assets/images/background.png'
+import { colors } from './theme'
 
 export default createGlobalStyle`
+
+
   * {
     margin: 0;
     padding: 0;
@@ -15,11 +17,21 @@ export default createGlobalStyle`
     font: 400 16px Roboto, sans-serif;
   }
 
+  .nav-link {
+    font-size: 1.2rem;
+  }
+  
+  .active-nav-link {
+    color: ${colors.yellow} !important;
+  }
+
   html,
   body,
   body > div:first-child,
   div#__next,
   div#__next > div {
     height: 100%;
+    font-family: 'Roboto', sans-serif;
+
   }
 `

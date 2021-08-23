@@ -2,10 +2,11 @@ import { GetServerSideProps } from 'next'
 import React, { useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap'
 import MainContainerComponent from '../components/MainContainerComponent'
-import UserBox from '../components/UserBox'
+import UserBoxes from '../components/UserBoxes'
+import UserBox from '../components/UserBoxes'
 import { REQUEST_URL } from '../configs/AppConfig'
 
-import { IUsersResponse, IUserType } from '../configs/types/IUser'
+import { IUsersResponse } from '../configs/types/IUser'
 import { checkIsAuthenticated, serverSideRedirection } from '../services/AuthService'
 import { useFetch } from '../services/FetchService'
 
@@ -26,11 +27,7 @@ const Users: React.FC = () => {
   return (
     <div>
       <MainContainerComponent>
-        <Row>
-          {(users && users.length > 0 && users.map((user: IUserType) => (
-            <UserBox key={user.username} user={user} />
-          )))}
-        </Row>
+        <UserBoxes users={users} />
       </MainContainerComponent>
     </div>
   )
