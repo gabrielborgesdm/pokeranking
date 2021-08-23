@@ -1,5 +1,5 @@
 import { IUserType } from './IUser'
 
-export interface IUserBox {
-  user?: IUserType;
+export interface IUserBoxes {
+  users?: Array<IUserType>;
 }

@@ -14,5 +14,8 @@
   "username": "Username",
   "enter-your-username": "Enter your username",
   "your-username-cannot-contain-special-characters": "Your username cannot contain special characters",
-  "enter-a-safe-password": "Enter a safe password"
+  "enter-a-safe-password": "Enter a safe password",
+  "users": "Users",
+  "account": "Account",
+  "pokemons": "Pokemons"
 }

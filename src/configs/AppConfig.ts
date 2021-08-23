@@ -13,5 +13,7 @@ export const REQUEST_URL = {
 export const PAGE_URL = {
   LOGIN: '/login',
   CREATE_ACCOUNT: '/create-account',
-  USERS: '/users'
+  USERS: '/users',
+  POKEMONS: '/pokemons',
+  ACCOUNT: '/account'
 }

@@ -52,5 +52,10 @@ export const StatusContainer = styled.div`
 export const CustomNavbar = styled(Navbar)`
   background: ${colors.grey};
   color: white;
-  min-width: 80px;
+  padding: 15px 10px;
+`
+
+export const NavbarTitle = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
 `
