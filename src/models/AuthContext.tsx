@@ -15,6 +15,10 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
     runInitialSetup()
   }, [])
 
+  const checkIsAuthenticated = () => {
+    return !!getCookies().token
+  }
+
   const runInitialSetup = () => {
     const { lang: storedLangCookie } = getCookies()
     if (storedLangCookie !== lang) {
@@ -80,7 +84,7 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
 
   return (
     <AuthContext.Provider value={{
-
+      checkIsAuthenticated,
       login,
       logout,
       recoverUserInformation,

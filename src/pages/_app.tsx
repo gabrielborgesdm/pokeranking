@@ -17,6 +17,18 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }: any) => {
       <Head>
         <meta name="description" content={t('description')} />
         <title>{t('title')}</title>
+        <link
+            rel="preload"
+            href="/fonts/EBGaramond/EBGaramond-Regular.ttf"
+            as="font"
+            crossOrigin=""
+          />
+        <link
+          rel="preload"
+          href="/fonts/EBGaramond/EBGaramond-Medium.ttf"
+          as="font"
+          crossOrigin=""
+        />
       </Head>
       <Component {...pageProps} />
       <GlobalStyle />

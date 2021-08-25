@@ -28,6 +28,7 @@ export const MainContainer = styled.div`
   width: 100%;
   height: 100%;
   background: ${colors.dark};
+  background-image: url("/images/background.png");
   color: ${colors.white};
 `
 

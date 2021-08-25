@@ -14,6 +14,13 @@ export const CustomUserBox = styled.div`
   font-weight: bold;
   padding: 15px 25px;
   border-radius: 3px;
+  transition: all 0.3s;
+  &:hover {
+    cursor: pointer;
+    filter: brightness(0.9);
+    -webkit-box-shadow: 5px 5px 0px 0px #404040, 10px 10px 0px 0px #595959, 15px 15px 0px 0px #737373; 
+    box-shadow: 5px 5px 0px 0px #404040, 10px 10px 0px 0px #595959, 15px 15px 0px 0px #737373;
+  }
 `
 
 export const CustomUserBoxTitle = styled.span`

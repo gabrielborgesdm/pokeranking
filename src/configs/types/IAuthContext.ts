@@ -10,6 +10,7 @@ export type ICookiesType = {
 
 export type IAuthContextType = {
   login: (token: string, username: string) => void;
+  checkIsAuthenticated: () => boolean
   recoverUserInformation: () => Promise<IUserResponse | null>;
   logout: () => void;
   getCookies: () => ICookiesType;
