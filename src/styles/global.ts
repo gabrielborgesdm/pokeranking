@@ -2,7 +2,20 @@ import { createGlobalStyle } from 'styled-components'
 import { colors } from './theme'
 
 export default createGlobalStyle`
-
+  @font-face {
+    font-family: "Roboto";
+    src: url("/fonts/roboto/Roboto-Regular.ttf");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Roboto";
+    src: url("/fonts/roboto/Roboto-Medium.ttf");
+    font-style: medium;
+    font-weight: 500;
+    font-display: swap;
+  }
 
   * {
     margin: 0;
@@ -11,19 +24,16 @@ export default createGlobalStyle`
   }
 
   body {
-    background-image: url("/images/background.png");
     background-color: ${props => props.theme.colors.background};
+    background-image: url("/images/background.png");
     color: ${props => props.theme.colors.text};
-    font: 400 16px Roboto, sans-serif;
   }
 
   .nav-link {
     font-size: 1.2rem;
   }
   
-  .active-nav-link {
-    color: ${colors.yellow} !important;
-  }
+  
 
   html,
   body,
@@ -31,7 +41,16 @@ export default createGlobalStyle`
   div#__next,
   div#__next > div {
     height: 100%;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif !important;
 
+  }
+  .navbar-dark .navbar-nav .nav-link {
+    color: ${colors.grey};
+    font-weight: 500;
+  }
+
+  .active-nav-link {
+    color: ${colors.red} !important;
+    font-weight: 500;
   }
 `

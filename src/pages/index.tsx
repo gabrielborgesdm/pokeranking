@@ -1,12 +1,19 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { PAGE_URL } from '../configs/AppConfig'
+import { AuthContext } from '../models/AuthContext'
 
 const Home: React.FC = () => {
   const router = useRouter()
+  const { checkIsAuthenticated } = useContext(AuthContext)
+
   useEffect(() => {
-    router.push(PAGE_URL.LOGIN)
+    checkAuthenticationAndRedirect()
   }, [])
+
+  const checkAuthenticationAndRedirect = () => {
+    router.push(checkIsAuthenticated() ? PAGE_URL.USERS : PAGE_URL.LOGIN)
+  }
 
   return <></>
 }

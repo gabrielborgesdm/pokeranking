@@ -1,12 +1,17 @@
+import { faExternalLinkAlt, faLink } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { Col } from 'react-bootstrap'
+import { PAGE_URL } from '../configs/AppConfig'
 import { IUserType } from '../configs/types/IUser'
 import { IUserBoxes } from '../configs/types/IUserBox'
 import { CustomUserBox, CustomUserBoxRow, CustomUserBoxTitle } from '../styles/pages/users'
 import { colors } from '../styles/theme'
 
 const UserBoxes: React.FC<IUserBoxes> = ({ users }: IUserBoxes) => {
+  const router = useRouter()
   let lastColorPositions = []
   const { green, blue, orange, yellow, red, white, lightGrey } = colors
   const backgrounds = [green, blue, orange, yellow, red]
@@ -27,13 +32,20 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users }: IUserBoxes) => {
     return index
   }
 
+  const navigateToUser = (user: string) => {
+    router.push(`${PAGE_URL.USERS}/${user}`)
+  }
+
   return (
       <CustomUserBoxRow>
         {(users && users.length > 0 && users.map((user: IUserType) => (
-          <Col xs={12} md={4} key={user.username}>
+          <Col xs={12} md={4} key={user.username} onClick={() => navigateToUser(user.username)}>
             <CustomUserBox style={getRandomBoxColors()}>
               <Image src={user.avatar} width={80} height={80}/>
-              <CustomUserBoxTitle>{user.username}</CustomUserBoxTitle>
+              <div className="d-flex justify-content-between flex-grow-1">
+                <CustomUserBoxTitle>{user.username}</CustomUserBoxTitle>
+                <FontAwesomeIcon icon={faExternalLinkAlt} />
+              </div>
             </CustomUserBox>
           </Col>
         )))}
