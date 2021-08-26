@@ -19,13 +19,13 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }: any) => {
         <title>{t('title')}</title>
         <link
             rel="preload"
-            href="/fonts/EBGaramond/EBGaramond-Regular.ttf"
+            href="/fonts/roboto/Roboto-Regular.ttf"
             as="font"
             crossOrigin=""
           />
         <link
           rel="preload"
-          href="/fonts/EBGaramond/EBGaramond-Medium.ttf"
+          href="/fonts/roboto/Roboto-Medium.ttf"
           as="font"
           crossOrigin=""
         />
