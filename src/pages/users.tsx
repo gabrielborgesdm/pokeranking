@@ -21,6 +21,7 @@ const Users: React.FC = () => {
   const updateUser = () => {
     if (data?.success) {
       setUsers(data.users)
+      console.log(users)
     }
   }
 

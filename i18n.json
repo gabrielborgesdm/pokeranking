@@ -4,6 +4,7 @@
   "pages": {
     "*": ["common"],
     "/login": ["login"],
+    "/users": ["users"],
     "/create-account": ["create-account"]
   }
 }

@@ -1,5 +1,6 @@
-import { faExternalLinkAlt, faLink } from '@fortawesome/fontawesome-free-solid'
+import { faExternalLinkAlt, faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -12,6 +13,9 @@ import { colors } from '../styles/theme'
 
 const UserBoxes: React.FC<IUserBoxes> = ({ users }: IUserBoxes) => {
   const router = useRouter()
+  const { t } = useTranslation('users')
+  const { t: c } = useTranslation('common')
+
   let lastColorPositions = []
   const { green, blue, orange, yellow, red, white, lightGrey } = colors
   const backgrounds = [green, blue, orange, yellow, red]
@@ -38,7 +42,8 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users }: IUserBoxes) => {
 
   return (
       <CustomUserBoxRow>
-        {(users && users.length > 0 && users.map((user: IUserType) => (
+        {(users && users.length > 0
+          ? users.map((user: IUserType) => (
           <Col xs={12} md={4} key={user.username} onClick={() => navigateToUser(user.username)}>
             <CustomUserBox style={getRandomBoxColors()}>
               <Image src={user.avatar} width={80} height={80}/>
@@ -48,7 +53,13 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users }: IUserBoxes) => {
               </div>
             </CustomUserBox>
           </Col>
-        )))}
+          ))
+          : (
+            <div className="d-flex justify-content-center align-items-center flex-grow-1">
+              <FontAwesomeIcon icon={faSpinner} spin={true} size="3x" className="m-3" />&nbsp;
+              <h1 className="mb-0">{c('loading')}</h1>
+            </div>
+            ))}
     </CustomUserBoxRow>
   )
 }
