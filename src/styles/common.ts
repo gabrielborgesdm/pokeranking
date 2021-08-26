@@ -58,5 +58,6 @@ export const CustomNavbar = styled(Navbar)`
 
 export const NavbarTitle = styled.span`
   font-size: 1.2rem;
+  color: ${colors.grey};
   font-weight: bold;
 `
