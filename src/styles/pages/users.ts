@@ -11,6 +11,25 @@ export const CustomUserBoxRow = styled(Row)`
 export const CustomUsersContainer = styled(Col)`
   max-height: 80vh;
   overflow-y: auto;
+  overflow-x: hidden;
+
+  @media (min-width: 768px) and (max-width: 846px), (max-width: 346px) {
+    img {
+      display: none !important;
+    }
+  }
+  
+  .user-name {
+    width: 10%;
+    
+  }
+
+  .user-name span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
 `
 
 export const CustomUserBox = styled.div`

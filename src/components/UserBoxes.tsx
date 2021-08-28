@@ -64,7 +64,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
               <CustomUsersContainer xs={12} md={4} key={user.username + index} onClick={() => navigateToUser(user.username)} >
                 <CustomUserBox style={getColorByIndex()}>
                   <Image src={user.avatar} width={80} height={80}/>
-                  <div className="d-flex justify-content-between flex-grow-1">
+                  <div className="user-name d-flex justify-content-between flex-grow-1 align-items-center">
                     <CustomUserBoxTitle>{user.username}</CustomUserBoxTitle>
                     <FontAwesomeIcon icon={faExternalLinkAlt} />
                   </div>
