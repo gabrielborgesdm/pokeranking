@@ -1,21 +1,22 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { BlueButton } from '../styles/common'
 
 interface IFormButton {
-  title: string,
+  className: string,
+  children: ReactNode,
   type?: string,
   isLoading?: boolean,
   isDisabled?: boolean,
   onClick?: Function,
 }
 
-const FormButton: React.FC<IFormButton> = ({ title, type = 'submit', onClick, isLoading, isDisabled }: IFormButton) => {
+const FormButton: React.FC<IFormButton> = ({ className, children, type = 'submit', onClick, isLoading, isDisabled }: IFormButton) => {
   const { t } = useTranslation('common')
   return (
-    <BlueButton variant="secondary" type={type} onClick={onClick} disabled={isLoading || isDisabled}>
+    <BlueButton variant="secondary" className={className} type={type} onClick={onClick} disabled={isLoading || isDisabled}>
       {isLoading
         ? (
         <>
@@ -23,7 +24,7 @@ const FormButton: React.FC<IFormButton> = ({ title, type = 'submit', onClick, is
           {t('loading')}
         </>
           )
-        : title}
+        : children}
     </BlueButton>
   )
 }

@@ -1,10 +1,21 @@
 {
-  "locales": ["en", "pt"],
+  "locales": [
+    "en",
+    "pt"
+  ],
   "defaultLocale": "en",
   "pages": {
-    "*": ["common"],
-    "/login": ["login"],
-    "/users": ["users"],
-    "/create-account": ["create-account"]
+    "*": [
+      "common"
+    ],
+    "/login": [
+      "login"
+    ],
+    "/users": [
+      "users"
+    ],
+    "/create-account": [
+      "create-account"
+    ]
   }
 }
