@@ -1,18 +1,26 @@
-import { Row } from 'react-bootstrap'
+import { Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 
 export const CustomUserBoxRow = styled(Row)`
   display: flex;
   margin: 25px 0;
   justify-content: space-between;
+  flex-grow: 1;
+`
+
+export const CustomUsersContainer = styled(Col)`
+  max-height: 80vh;
+  overflow-y: auto;
 `
 
 export const CustomUserBox = styled.div`
   display: flex;
   align-items: center;
+  margin: 15px 0;
   font-size: 1.2rem;
   font-weight: bold;
-  padding: 15px 25px;
+  height: 110px;
+  padding: 0 25px;
   border-radius: 3px;
   transition: all 0.3s;
   &:hover {

@@ -32,6 +32,15 @@ export default createGlobalStyle`
   .nav-link {
     font-size: 1.2rem;
   }
+
+
+  .ml-10px { 
+    margin-left: 10px;
+  }
+  
+  .ml-0 { 
+    margin-left: 0px;
+  }
   
   
 
@@ -52,5 +61,27 @@ export default createGlobalStyle`
   .active-nav-link {
     color: ${colors.red} !important;
     font-weight: 500;
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 2px grey; 
+    border-radius: 5px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: ${colors.blue}; 
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: ${colors.lightGrey};
   }
 `

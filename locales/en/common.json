@@ -1,5 +1,5 @@
 {
-  "title" : "Pokeranking",
+  "title": "Pokeranking",
   "description": "Pokemon ranking",
   "loading": "Loading",
   "server-error": "A server error occurred",
@@ -17,5 +17,6 @@
   "enter-a-safe-password": "Enter a safe password",
   "users": "Users",
   "account": "Account",
-  "pokemons": "Pokemons"
+  "pokemons": "Pokemons",
+  "search": "Search"
 }

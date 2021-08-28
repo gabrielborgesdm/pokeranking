@@ -26,9 +26,10 @@ export const AccountContainer = styled.div`
 `
 export const MainContainer = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: ${colors.dark};
   background-image: url("/images/background.png");
+  background-repeat: repeat;
   color: ${colors.white};
 `
 
