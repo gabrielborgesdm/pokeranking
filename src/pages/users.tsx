@@ -17,6 +17,7 @@ const Users: React.FC = () => {
   const { data } = useFetch<IUsersResponse>(REQUEST_URL.USERS)
   const [filteredUsername, setFilteredUsername] = useState('')
   const [filteredUsers, setFilteredUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [users, setUsers] = useState([])
   const { t } = useTranslation('users')
   const { t: c } = useTranslation('common')
@@ -34,6 +35,7 @@ const Users: React.FC = () => {
       }
       setUsers(data.users)
       setFilteredUsers(data.users)
+      setIsLoading(false)
     }
   }
 
@@ -58,7 +60,7 @@ const Users: React.FC = () => {
               </Col>
             </Form.Group>
           </Form>
-        <UserBoxes users={filteredUsers} />
+        <UserBoxes users={filteredUsers} isLoading={isLoading} />
       </MainContainerComponent>
     </div>
   )

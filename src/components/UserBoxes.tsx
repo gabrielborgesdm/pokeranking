@@ -11,8 +11,9 @@ import { IUserBoxes } from '../configs/types/IUserBox'
 import { CustomUserBox, CustomUserBoxRow, CustomUserBoxTitle, CustomUsersContainer } from '../styles/pages/users'
 import { colors } from '../styles/theme'
 
-const UserBoxes: React.FC<IUserBoxes> = ({ users }: IUserBoxes) => {
+const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
   const router = useRouter()
+  const { t } = useTranslation('users')
   const { t: c } = useTranslation('common')
   const [numberOfUsersRendered, setNumberOfUsersRendered] = useState(50)
   let lastColorPosition = 0
@@ -72,8 +73,15 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users }: IUserBoxes) => {
             ))
             : (
               <div className="d-flex justify-content-center align-items-center flex-grow-1">
-                <FontAwesomeIcon icon={faSpinner} spin={true} size="3x" className="m-3" />&nbsp;
-                <h1 className="mb-0">{c('loading')}</h1>
+                {isLoading
+                  ? (
+                  <>
+                    <FontAwesomeIcon icon={faSpinner} spin={true} size="3x" className="m-3" />&nbsp;
+                    <h1 className="mb-0">{c('loading')}</h1>
+                  </>
+                    )
+                  : <h1 className="mb-0">{t('no-trainers-found')}</h1>
+                }
               </div>
               ))}
           </Row>
