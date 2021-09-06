@@ -28,11 +28,6 @@ const Users: React.FC = () => {
 
   const updateUser = () => {
     if (data?.success) {
-      for (let i = 0; i < 100; i++) {
-        const user: IUserType = { ...data.users[0] }
-        user.username = `${user.username}_${i}`
-        data.users.push(user)
-      }
       setUsers(data.users)
       setFilteredUsers(data.users)
       setIsLoading(false)

@@ -77,7 +77,9 @@ const Login: React.FC = () => {
                 <YellowLink>{t('no-account-create-one')}</YellowLink>
               </Link>
             </Form.Group>
-            <FormButton isLoading={isLoading} title={c('enter')} />
+            <FormButton isLoading={isLoading}>
+              {c('enter')}
+            </FormButton>
           </Form>
         </AccountContainer>
       </FullScreenContainer>

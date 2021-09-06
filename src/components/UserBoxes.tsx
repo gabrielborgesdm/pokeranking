@@ -8,15 +8,14 @@ import { Row } from 'react-bootstrap'
 import { PAGE_URL } from '../configs/AppConfig'
 import { IUserType } from '../configs/types/IUser'
 import { IUserBoxes } from '../configs/types/IUserBox'
-import { CustomUserBox, CustomUserBoxRow, CustomUserBoxTitle, CustomUsersContainer } from '../styles/pages/users'
-import { colors } from '../styles/theme'
+import { getThemedColors } from '../helpers/ColorHelpers'
+import { CustomBoxRow, CustomContainer, CustomBox, CustomBoxTitle } from '../styles/common'
 
 const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
   const router = useRouter()
   const { t } = useTranslation('users')
   const { t: c } = useTranslation('common')
   const [numberOfUsersRendered, setNumberOfUsersRendered] = useState(50)
-  let lastColorPosition = 0
 
   useEffect(() => resetListingAfterUsersChange(), [users])
 
@@ -41,35 +40,25 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
     usersContainer.scrollTo(0, 0)
   }
 
-  const getColorByIndex = () => {
-    const { green, blue, white, orange } = colors
-    const backgrounds = [green, blue, orange]
-
-    const colorPosition = lastColorPosition++
-    if (lastColorPosition === backgrounds.length) lastColorPosition = 0
-
-    return { color: white, backgroundColor: backgrounds[colorPosition] }
-  }
-
-  const navigateToUser = (user: string) => {
-    router.push(`${PAGE_URL.USERS}/${user}`)
+  const navigateToPokemon = (user: string) => {
+    router.push(`${PAGE_URL.POKEMONS}/${user}`)
   }
 
   return (
-      <CustomUserBoxRow>
-        <CustomUsersContainer xs={12} className="users-container" onScroll={(element) => handleScrollAndLoadUsers(element)}>
+      <CustomBoxRow>
+        <CustomContainer xs={12} className="users-container" onScroll={(element) => handleScrollAndLoadUsers(element)}>
           <Row>
           {(users && users.length > 0
             ? users.slice(0, numberOfUsersRendered).map((user: IUserType, index: number) => (
-              <CustomUsersContainer xs={12} md={4} key={user.username + index} onClick={() => navigateToUser(user.username)} >
-                <CustomUserBox style={getColorByIndex()}>
+              <CustomContainer xs={12} md={4} key={user.username + index} onClick={() => navigateToPokemon(user.username)} >
+                <CustomBox style={getThemedColors('users')}>
                   <Image src={user.avatar} width={80} height={80}/>
-                  <div className="user-name d-flex justify-content-between flex-grow-1 align-items-center">
-                    <CustomUserBoxTitle>{user.username}</CustomUserBoxTitle>
+                  <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center">
+                    <CustomBoxTitle>{user.username}</CustomBoxTitle>
                     <FontAwesomeIcon icon={faExternalLinkAlt} />
                   </div>
-                </CustomUserBox>
-              </CustomUsersContainer>
+                </CustomBox>
+              </CustomContainer>
             ))
             : (
               <div className="d-flex justify-content-center align-items-center flex-grow-1">
@@ -85,8 +74,8 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
               </div>
               ))}
           </Row>
-        </CustomUsersContainer>
-    </CustomUserBoxRow>
+        </CustomContainer>
+    </CustomBoxRow>
   )
 }
 

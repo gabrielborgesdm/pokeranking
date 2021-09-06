@@ -84,4 +84,5 @@ export default createGlobalStyle`
   ::-webkit-scrollbar-thumb:hover {
     background: ${colors.lightGrey};
   }
+
 `

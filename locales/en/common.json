@@ -18,5 +18,7 @@
   "users": "Users",
   "account": "Account",
   "pokemons": "Pokemons",
-  "search": "Search"
+  "search": "Search",
+  "change": "Change",
+  "position": "Position"
 }

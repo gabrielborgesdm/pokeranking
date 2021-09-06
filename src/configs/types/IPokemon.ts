@@ -2,8 +2,7 @@ import pokemons from '../../assets/pokemons.json'
 
 export type IPokemonType = typeof pokemons[0]
 
-export interface IPokemon {
-  pokemon: IPokemonType;
+export interface IPokemon extends IPokemonType {
   note?: string;
 }
 

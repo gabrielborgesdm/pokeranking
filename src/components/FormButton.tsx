@@ -5,8 +5,8 @@ import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { BlueButton } from '../styles/common'
 
 interface IFormButton {
-  className: string,
-  children: ReactNode,
+  className?: string,
+  children?: ReactNode,
   type?: string,
   isLoading?: boolean,
   isDisabled?: boolean,
