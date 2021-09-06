@@ -130,7 +130,9 @@ const CreateAccount: React.FC = () => {
                 <YellowLink>{t('have-account-login')}</YellowLink>
               </Link>
             </Form.Group>
-            <FormButton isLoading={isLoading} title={c('create-account')} />
+            <FormButton isLoading={isLoading}>
+              {c('create-account')}
+            </FormButton>
           </Form>
         </AccountContainer>
       </FullScreenContainer>

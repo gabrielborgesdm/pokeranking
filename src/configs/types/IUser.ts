@@ -1,5 +1,5 @@
 import { IModel } from './IModel'
-import { IUserPokemons, IUserPokemonsMutate } from './IPokemon'
+import { IPokemon } from './IPokemon'
 import { IResponse } from './IResponse'
 
 export type IUserType = {
@@ -9,6 +9,7 @@ export type IUserType = {
   email?: string;
   bio?: string;
   password?: string;
+  pokemons?: Array<IPokemon>;
   role?: string;
 }
 
@@ -32,8 +33,10 @@ export type IUserUpdate = {
   password?: string;
 }
 
-export interface IUserDocument extends IUserType, IUserPokemonsMutate, IModel {}
+export interface IUserDocument extends IUserType, IModel {}
 
-export interface IUserResponse extends IUserType, IUserPokemons, IResponse {}
+export interface IUserResponse extends IResponse {
+  user: IUserType;
+}
 
-export interface IUsersResponse extends IUsersType, IUserPokemons, IResponse {}
+export interface IUsersResponse extends IUsersType, IResponse {}

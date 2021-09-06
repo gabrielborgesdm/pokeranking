@@ -27,7 +27,6 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
   }
 
   const getCookies = (): ICookiesType => {
-    console.log(parseCookies())
     return {
       token: parseCookies()[STORAGE.USER_TOKEN],
       username: parseCookies()[STORAGE.USER_USERNAME],
