@@ -7,7 +7,8 @@ export const STORAGE = {
 export const REQUEST_URL = {
   LOGIN: '/api/users/login',
   CREATE_ACCOUNT: '/api/users/create',
-  USERS: '/api/users'
+  USERS: '/api/users',
+  POKEMONS: '/api/pokemons'
 }
 
 export const PAGE_URL = {

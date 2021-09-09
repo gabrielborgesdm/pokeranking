@@ -1,4 +1,5 @@
 import pokemons from '../../assets/pokemons.json'
+import { IResponse } from './IResponse'
 
 export type IPokemonType = typeof pokemons[0]
 
@@ -17,4 +18,8 @@ export interface IUserPokemons {
 
 export interface IUserPokemonsMutate {
   pokemons: Array<IPokemonMutate>;
+}
+
+export interface IPokemonsResponse extends IResponse {
+  pokemons: Array<IPokemonType>;
 }
