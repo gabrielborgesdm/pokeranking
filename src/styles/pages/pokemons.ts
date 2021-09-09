@@ -44,7 +44,7 @@ export const CustomPokemonBoxTitle = styled.span`
 `
 export const CustomPokemonToolsBox = styled.div`
   position: absolute;
-  z-index: 100;
+  display: flex;
   top: 15px;
   right: 15px;
 `

@@ -11,7 +11,7 @@ export interface IPokemonEditButton {
   pokemon: IPokemonType;
   currentPosition: number;
   pokemonsLength: number;
-  onUpdatePosition: (pokemon: IPokemonType, nextPosition: number) => void;
+  onUpdatePosition: (pokemon: IPokemonType, nextIndex: number) => void;
 }
 
 const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosition, onUpdatePosition, pokemonsLength }: IPokemonEditButton) => {
@@ -20,7 +20,7 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    onUpdatePosition(pokemon, pokemonPosition)
+    onUpdatePosition(pokemon, pokemonPosition - 1)
   }
 
   const placement = 'right'

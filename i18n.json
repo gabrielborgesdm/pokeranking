@@ -6,7 +6,8 @@
   "defaultLocale": "en",
   "pages": {
     "*": [
-      "common"
+      "common",
+      "pokemons"
     ],
     "/login": [
       "login"
