@@ -8,7 +8,7 @@ import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { useRouter } from 'next/router'
 import StatusBar from '../components/StatusBar'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
-import FormButton from '../components/FormButton'
+import CustomButton from '../components/CustomButton'
 
 import { AuthContext } from '../models/AuthContext'
 import { ILoginResponse } from '../configs/types/ILogin'
@@ -77,9 +77,9 @@ const Login: React.FC = () => {
                 <YellowLink>{t('no-account-create-one')}</YellowLink>
               </Link>
             </Form.Group>
-            <FormButton isLoading={isLoading}>
+            <CustomButton isLoading={isLoading}>
               {c('enter')}
-            </FormButton>
+            </CustomButton>
           </Form>
         </AccountContainer>
       </FullScreenContainer>

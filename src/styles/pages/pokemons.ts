@@ -1,5 +1,6 @@
 import { Col, Popover, Row } from 'react-bootstrap'
 import styled from 'styled-components'
+import { colors } from '../theme'
 
 export const CustomPokemonContainer = styled(Col)`
   overflow-x: auto;
@@ -50,4 +51,28 @@ export const CustomPokemonToolsBox = styled.div`
 `
 export const CustomPokemonPopover = styled(Popover)`
   width: 400px;
+`
+
+export const CustomPokerankingNav = styled.div`
+  background-color: ${colors.dark};
+  border-radius: 5px;
+  margin: 0 4px; 
+  padding: 25px 15px;
+  justify-content: space-between;
+  font-size: 1.2rem;
+
+  h3 {
+    margin-bottom: 0;
+  }
+
+  .nav-title {
+    display: flex;
+    align-items: center;
+    
+  }
+
+  .nav-buttons {
+    display: flex;
+    align-items: center;
+  }
 `

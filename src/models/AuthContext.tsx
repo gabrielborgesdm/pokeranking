@@ -35,8 +35,8 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
   }
 
   const getAxios = (): AxiosInstance => {
-    const token = parseCookies()[STORAGE.USER_TOKEN]
-    const lang = parseCookies()[STORAGE.LANG]
+    const { token, lang } = getCookies()
+
     axios.defaults.headers.common.Authorization = token ? `Bearer ${token}` : ''
     axios.defaults.headers.common['Accept-Language'] = lang || 'en'
     return axios

@@ -20,5 +20,7 @@
   "pokemons": "Pokemons",
   "search": "Search",
   "change": "Change",
-  "position": "Position"
+  "position": "Position",
+  "save-changes": "Save changes",
+  "changes-saved": "Changes saved"
 }

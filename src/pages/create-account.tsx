@@ -9,7 +9,7 @@ import StatusBar from '../components/StatusBar'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
 import { UsernameRegex } from '../configs/Regex'
 import { useRouter } from 'next/router'
-import FormButton from '../components/FormButton'
+import CustomButton from '../components/CustomButton'
 import { AuthContext } from '../models/AuthContext'
 
 const CreateAccount: React.FC = () => {
@@ -130,9 +130,9 @@ const CreateAccount: React.FC = () => {
                 <YellowLink>{t('have-account-login')}</YellowLink>
               </Link>
             </Form.Group>
-            <FormButton isLoading={isLoading}>
+            <CustomButton isLoading={isLoading}>
               {c('create-account')}
-            </FormButton>
+            </CustomButton>
           </Form>
         </AccountContainer>
       </FullScreenContainer>
