@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
-import FormButton from '../components/FormButton'
+import CustomButton from '../components/CustomButton'
 import MainContainerComponent from '../components/MainContainerComponent'
 import UserBoxes from '../components/UserBoxes'
 import { REQUEST_URL } from '../configs/AppConfig'
@@ -51,7 +51,7 @@ const Users: React.FC = () => {
             <Form.Group as={Row} className="mt-4 ml-0">
               <Col sm={12} className="d-flex">
                 <Form.Control type="text" value={filteredUsername} onChange={e => setFilteredUsername(e.target.value)} placeholder={t('search-for-a-trainer')} maxLength={70} />
-                <FormButton className="py-2 ml-10px"><FontAwesomeIcon icon={faSearch} /></FormButton>
+                <CustomButton className="py-2 ml-10px"><FontAwesomeIcon icon={faSearch} /></CustomButton>
               </Col>
             </Form.Group>
           </Form>

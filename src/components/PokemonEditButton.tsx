@@ -5,7 +5,7 @@ import React, { FormEvent, useState } from 'react'
 import { Form, OverlayTrigger, Popover } from 'react-bootstrap'
 import { IPokemonType } from '../configs/types/IPokemon'
 import { CustomPokemonPopover } from '../styles/pages/pokemons'
-import FormButton from './FormButton'
+import CustomButton from './CustomButton'
 
 export interface IPokemonEditButton {
   pokemon: IPokemonType;
@@ -46,9 +46,9 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
                 />
               </Form.Group>
               <Form.Group>
-                <FormButton>
+                <CustomButton>
                   {c('change')}
-                </FormButton>
+                </CustomButton>
               </Form.Group>
 
             </Form>

@@ -2,19 +2,18 @@ import { faPlus } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import React, { FormEvent, useEffect, useState } from 'react'
-import { Button, Form, Modal } from 'react-bootstrap'
-import { REQUEST_URL } from '../configs/AppConfig'
-import { IPokemon, IPokemonsResponse } from '../configs/types/IPokemon'
-import { useFetch } from '../services/FetchService'
-import FormButton from './FormButton'
+import { Form, Modal } from 'react-bootstrap'
+import { IPokemon } from '../configs/types/IPokemon'
+import CustomButton from './CustomButton'
 import { PokemonsSelectList } from './PokemonsSelectList'
 
 interface IPokemonAddModal {
   onAddPokemon: (pokemon: IPokemon, pokemonIndex: number) => void;
-  userPokemons: Array<IPokemon>
+  userPokemons: Array<IPokemon>;
+  isLoading: boolean;
 }
 
-const PokemonAddModal: React.FC<IPokemonAddModal> = ({ onAddPokemon, userPokemons }: IPokemonAddModal) => {
+const PokemonAddModal: React.FC<IPokemonAddModal> = ({ onAddPokemon, userPokemons, isLoading }: IPokemonAddModal) => {
   const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [pokemonPosition, setPokemonPosition] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -68,17 +67,18 @@ const PokemonAddModal: React.FC<IPokemonAddModal> = ({ onAddPokemon, userPokemon
 
         <PokemonsSelectList userPokemons={userPokemons} selectedPokemon={selectedPokemon} setSelectedPokemon={setSelectedPokemon} />
         <Form.Group>
-          <FormButton variant="primary" disabled={!checkFormIsValid()}>
+          <CustomButton disabled={!checkFormIsValid()}>
             <FontAwesomeIcon icon={faPlus} />&nbsp;
             {t('add-pokemon')}
-          </FormButton>
+          </CustomButton>
         </Form.Group>
         </Form>
       </Modal.Body>
     </Modal>
-    <FormButton variant="primary" onClick={() => setIsModalVisible(true)} type="button">
-      <FontAwesomeIcon icon={faPlus} />
-    </FormButton>
+    <CustomButton isLoading={isLoading} onClick={() => setIsModalVisible(true)} type="button" className="ml-10px">
+      <FontAwesomeIcon icon={faPlus} />&nbsp;
+      {t('add-pokemon')}
+    </CustomButton>
     </>
   )
 }
