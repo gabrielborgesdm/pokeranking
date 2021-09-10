@@ -17,7 +17,7 @@ const ValidationMiddleware = async (req: IRequest, res: NextApiResponse, paramet
   if (parameters[0]) {
     error = getValidationError(parameters[0], req.body)
   }
-  if (parameters[1]) {
+  if (!error && parameters[1]) {
     error = getValidationError(parameters[1], req.query)
   }
   if (error) {
