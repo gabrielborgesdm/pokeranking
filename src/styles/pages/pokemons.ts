@@ -4,7 +4,6 @@ import { colors } from '../theme'
 
 export const CustomPokemonContainer = styled(Col)`
   overflow-x: auto;
-
   @media (min-width: 768px) and (max-width: 846px), (max-width: 346px) {
     img {
       display: none !important;
@@ -27,7 +26,7 @@ export const CustomPokemonContainer = styled(Col)`
 export const CustomPokemonBox = styled.div`
   display: flex;
   align-items: center;
-  margin: 15px 0;
+  margin-bottom: 15px;
   height: 110px;
   padding: 0 10px;
   border-radius: 3px;

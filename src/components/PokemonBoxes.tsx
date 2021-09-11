@@ -1,8 +1,8 @@
+import Image from 'next/image'
 import React from 'react'
 import { Row } from 'react-bootstrap'
-import { IPokemon, IPokemonType } from '../configs/types/IPokemon'
+import { IPokemon } from '../configs/types/IPokemon'
 import { getThemedColors } from '../helpers/ColorHelpers'
-import Image from 'next/image'
 import { CustomPokemonBox, CustomPokemonBoxTitle, CustomPokemonContainer, CustomPokemonToolsBox } from '../styles/pages/pokemons'
 import PokemonEditButton from './PokemonEditButton'
 
@@ -10,9 +10,10 @@ export interface IPokemonBoxes {
   userPokemons: Array<IPokemon>;
   onUpdatePokemon: (pokemon: IPokemon, nextIndex: number) => void;
   isLoading: boolean;
+  isRankingFromAuthUser: boolean;
 }
 
-const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePokemon }: IPokemonBoxes) => {
+const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePokemon, isRankingFromAuthUser }: IPokemonBoxes) => {
   return (
     <Row>
       {(userPokemons && userPokemons.length > 0 && userPokemons.map((pokemon, index) => (
@@ -24,7 +25,13 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePokemon }
             </div>
             <CustomPokemonToolsBox>
               <CustomPokemonBoxTitle className="px-2">{index + 1}º</CustomPokemonBoxTitle>
-              <PokemonEditButton pokemon={pokemon} currentPosition={index + 1} pokemonsLength={userPokemons.length} onUpdatePokemon={onUpdatePokemon} />
+              <PokemonEditButton
+                  pokemon={pokemon}
+                  currentPosition={index + 1}
+                  pokemonsLength={userPokemons.length}
+                  onUpdatePokemon={onUpdatePokemon}
+                  isRankingFromAuthUser={isRankingFromAuthUser}
+              />
             </CustomPokemonToolsBox>
           </CustomPokemonBox>
         </CustomPokemonContainer>

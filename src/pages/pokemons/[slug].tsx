@@ -1,4 +1,4 @@
-import { faSave } from '@fortawesome/fontawesome-free-solid'
+import { faSave, faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import fileDownload from 'js-file-download'
@@ -12,7 +12,7 @@ import MainContainerComponent from '../../components/MainContainerComponent'
 import PokemonAddModal from '../../components/PokemonAddModal'
 import PokemonBoxes from '../../components/PokemonBoxes'
 import { REQUEST_URL } from '../../configs/AppConfig'
-import { IPokemon } from '../../configs/types/IPokemon'
+import { IPokemon, IPokemonMutate } from '../../configs/types/IPokemon'
 import { IUserResponse } from '../../configs/types/IUser'
 import { convertPokemonsToCSV } from '../../helpers/PokemonHelpers'
 import { AuthContext } from '../../models/AuthContext'
@@ -31,6 +31,7 @@ const Pokemons: React.FC = () => {
   const [userPokemons, setUserPokemons] = useState<Array<IPokemon>>([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasChanges, setHasChanges] = useState(false)
+  const [isRankingFromAuthUser] = useState(getCookies().username === user)
 
   useEffect(() => {
     updatePokemons()
@@ -80,9 +81,13 @@ const Pokemons: React.FC = () => {
     try {
       const response = await axios.put(`${REQUEST_URL.USERS}/${user}/update`, {
         user: {
-          pokemons: userPokemons.map(pokemon => (
-            { pokemon: pokemon.id, note: pokemon.note }
-          ))
+          pokemons: userPokemons.map(pokemon => {
+            const pokemonObject: IPokemonMutate = { pokemon: pokemon.id }
+            if (pokemon.note) {
+              pokemonObject.note = pokemon.note
+            }
+            return pokemonObject
+          })
         }
       })
       data = response?.data
@@ -90,10 +95,6 @@ const Pokemons: React.FC = () => {
       console.log(error)
     }
     return data
-  }
-
-  const checkIfRankingBelongsToUser = (): boolean => {
-    return getCookies().username === user
   }
 
   const downloadPokemonRanking = () => {
@@ -115,7 +116,7 @@ const Pokemons: React.FC = () => {
                   <CustomButton color={colors.green} type="button" isDisabled={!userPokemons.length} isLoading={isLoading} onClick={downloadPokemonRanking} tooltip={c('download-ranking')}>
                     <FontAwesomeIcon icon={faFileCsv} />
                   </CustomButton>
-                  {checkIfRankingBelongsToUser() &&
+                  {isRankingFromAuthUser &&
                     (
                     <>
                       <PokemonAddModal userPokemons={userPokemons} onAddPokemon={onAddPokemon} isLoading={isLoading} />
@@ -143,9 +144,16 @@ const Pokemons: React.FC = () => {
             </CustomPokerankingNav>
           </Col>
         </Row>
-        {userPokemons.length
-          ? <PokemonBoxes userPokemons={userPokemons} onUpdatePokemon={onUpdatePokemon} isLoading={isLoading} />
-          : <h3 className="text-center mt-2">{t('no-pokemons-were-added')}</h3>
+        {isLoading
+          ? (
+            <div className="text-center">
+              <FontAwesomeIcon icon={faSpinner} spin={true} size="3x" className="m-3" />&nbsp;
+              <h1 className="mb-0">{c('loading')}</h1>
+            </div>
+            )
+          : userPokemons.length
+            ? <PokemonBoxes userPokemons={userPokemons} onUpdatePokemon={onUpdatePokemon} isLoading={isLoading} isRankingFromAuthUser={isRankingFromAuthUser} />
+            : <h3 className="text-center mt-2">{t('no-pokemons-were-added')}</h3>
         }
       </MainContainerComponent>
     </div>

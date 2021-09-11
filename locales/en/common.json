@@ -11,12 +11,14 @@
   "enter-your-password": "Enter your password",
   "enter": "Enter",
   "create-account": "Create account",
+  "update-account": "Update account",
   "username": "Username",
   "enter-your-username": "Enter your username",
   "your-username-cannot-contain-special-characters": "Your username cannot contain special characters",
   "enter-a-safe-password": "Enter a safe password",
   "users": "Users",
-  "account": "Account",
+  "my-account": "My account",
+  "ranking": "Ranking",
   "pokemons": "Pokemons",
   "search": "Search",
   "change": "Change",
@@ -25,5 +27,6 @@
   "changes-saved": "Saved",
   "note": "Note",
   "leave-a-note": "Leave a note",
-  "download-ranking": "Download Ranking"
+  "download-ranking": "Download Ranking",
+  "user-bio": "User biography"
 }

@@ -11,12 +11,14 @@
   "repeat-password": "Repita a sua senha",
   "enter": "Entrar",
   "create-account": "Criar conta",
+  "update-account": "Atualizar conta",
   "username": "Nome de usuário",
   "enter-your-username": "Insira o seu nome de usuário",
   "your-username-cannot-contain-special-characters": "O seu nome de usuário não pode conter caracteres especiais",
   "enter-a-safe-password": "Insira uma senha segura",
   "users": "Usuários",
-  "account": "Conta",
+  "my-account": "Minha Conta",
+  "ranking": "Ranking",
   "pokemons": "Pokémons",
   "search": "Pesquisar",
   "change": "Alterar",
@@ -25,5 +27,6 @@
   "changes-saved": "Salvo",
   "note": "Nota",
   "leave-a-note": "Deixe uma anotação",
-  "download-ranking": "Baixar Ranking"
+  "download-ranking": "Baixar Ranking",
+  "user-bio": "Biografia do usuário"
 }

@@ -59,7 +59,7 @@ export default createGlobalStyle`
   }
 
   .active-nav-link {
-    color: ${colors.red} !important;
+    color: ${colors.white} !important;
     font-weight: 500;
   }
 

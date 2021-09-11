@@ -8,7 +8,7 @@ export const convertPokemonsToCSV = (pokemons: Array<IPokemon>, lang: string) =>
     csvData += `${header}${separator}`
   })
   pokemons.forEach((pokemon, index) => {
-    csvData += `\n${pokemon.id};${index + 1};${pokemon.name};${pokemon.note}`
+    csvData += `\n${pokemon.id};${index + 1};${pokemon.name};${pokemon.note || ''}`
   })
   return csvData
 }

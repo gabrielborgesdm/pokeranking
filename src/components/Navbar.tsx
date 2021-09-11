@@ -1,4 +1,4 @@
-import { faUserCircle, IconDefinition } from '@fortawesome/fontawesome-free-solid'
+import { faUserCircle, faUsers, IconDefinition } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'
@@ -20,7 +20,7 @@ const NavbarComponent: React.FC = () => {
   const getNavLink = (link: string, title: string, icon?: IconDefinition) => {
     return (
       <Nav.Link
-        className={`nav-link ${router.pathname === link ? 'active-nav-link' : ''}`}
+        className={`nav-link ${router.pathname.includes(link) ? 'active-nav-link' : ''}`}
         href=""
         onClick={() => navigate(link)}>
           { icon && (<><FontAwesomeIcon icon={icon} size="lg"/>&nbsp;</>)}
@@ -39,10 +39,11 @@ const NavbarComponent: React.FC = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
+            {getNavLink(PAGE_URL.POKEMONS, t('ranking'))}
             {getNavLink(PAGE_URL.USERS, t('users'))}
           </Nav>
           <Nav>
-            {getNavLink(PAGE_URL.ACCOUNT, t('account'), faUserCircle)}
+            {getNavLink(PAGE_URL.ACCOUNT, t('my-account'), faUserCircle)}
           </Nav>
         </Navbar.Collapse>
       </Container>
