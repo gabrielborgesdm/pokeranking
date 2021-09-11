@@ -2,5 +2,7 @@
   "add-pokemon": "Adicionar pokémon",
   "search-pokemon": "Pesquisar pokémon",
   "select-a-pokemon": "Selecione um pokémon",
-  "pokemon-ranking": "Ranking pokémon"
+  "pokemon-ranking": "Ranking pokémon",
+  "ranking-of": "Ranking de",
+  "no-pokemons-were-added": "Nenhum pokémon foi adicionado"
 }

@@ -1,19 +1,16 @@
-import React, { useContext, useState } from 'react'
-import Image from 'next/image'
+import { faUserCircle, IconDefinition } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useTranslation from 'next-translate/useTranslation'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import React from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
+import { PAGE_URL } from '../configs/AppConfig'
 import { CustomNavbar, NavbarTitle } from '../styles/common'
 import { colors } from '../styles/theme'
-import { useRouter } from 'next/router'
-import { PAGE_URL, STORAGE } from '../configs/AppConfig'
-import { faUserCircle, IconDefinition } from '@fortawesome/fontawesome-free-solid'
-import useTranslation from 'next-translate/useTranslation'
-import { AuthContext } from '../models/AuthContext'
 
 const NavbarComponent: React.FC = () => {
   const router = useRouter()
-  const { getCookies } = useContext(AuthContext)
-  const [username] = useState(getCookies().username)
   const { t } = useTranslation('common')
 
   const navigate = (link: string) => {
@@ -43,7 +40,6 @@ const NavbarComponent: React.FC = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
             {getNavLink(PAGE_URL.USERS, t('users'))}
-            {getNavLink(PAGE_URL.u, t('pokemons'))}
           </Nav>
           <Nav>
             {getNavLink(PAGE_URL.ACCOUNT, t('account'), faUserCircle)}
