@@ -1,4 +1,4 @@
-import { Col, Popover, Row } from 'react-bootstrap'
+import { Col, Popover } from 'react-bootstrap'
 import styled from 'styled-components'
 import { colors } from '../theme'
 
@@ -33,9 +33,11 @@ export const CustomPokemonBox = styled.div`
   border-radius: 3px;
   position: relative;
   transition: all 0.3s;
-  &:hover {
-    cursor: pointer;
-    filter: brightness(0.9);
+  svg {
+    &:hover {
+      filter: brightness(0.8);
+      cursor: pointer;
+    }
   }
 `
 
@@ -51,6 +53,17 @@ export const CustomPokemonToolsBox = styled.div`
 `
 export const CustomPokemonPopover = styled(Popover)`
   width: 400px;
+`
+
+export const CustomPokemonPopoverHeader = styled(Popover.Header)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${colors.blue};
+  color: ${colors.white};
+  svg{
+    cursor: pointer;
+  }
 `
 
 export const CustomPokerankingNav = styled.div`

@@ -75,9 +75,8 @@ const PokemonAddModal: React.FC<IPokemonAddModal> = ({ onAddPokemon, userPokemon
         </Form>
       </Modal.Body>
     </Modal>
-    <CustomButton isLoading={isLoading} onClick={() => setIsModalVisible(true)} type="button" className="ml-10px">
-      <FontAwesomeIcon icon={faPlus} />&nbsp;
-      {t('add-pokemon')}
+    <CustomButton isLoading={isLoading} onClick={() => setIsModalVisible(true)} type="button" className="ml-10px" tooltip={t('add-pokemon')}>
+      <FontAwesomeIcon icon={faPlus} />
     </CustomButton>
     </>
   )

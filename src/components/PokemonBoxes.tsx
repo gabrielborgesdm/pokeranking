@@ -8,15 +8,15 @@ import PokemonEditButton from './PokemonEditButton'
 
 export interface IPokemonBoxes {
   userPokemons: Array<IPokemon>;
-  onUpdatePosition: (pokemon: IPokemonType, nextIndex: number) => void;
+  onUpdatePokemon: (pokemon: IPokemon, nextIndex: number) => void;
   isLoading: boolean;
 }
 
-const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePosition, isLoading }: IPokemonBoxes) => {
+const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePokemon, isLoading }: IPokemonBoxes) => {
   return (
     <Row>
       {(userPokemons && userPokemons.length > 0 && userPokemons.map((pokemon, index) => (
-        <CustomPokemonContainer xs={12} md={4} lg={3} xl={2} key={pokemon.name + index} >
+        <CustomPokemonContainer xs={12} md={4} lg={3} xl={2} key={pokemon.name + index} id={`pokemon-${pokemon.id}-box`}>
           <CustomPokemonBox style={getThemedColors('pokemons')}>
             <Image src={pokemon.image} width={80} height={80}/>
             <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center ">
@@ -24,7 +24,7 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePosition,
             </div>
             <CustomPokemonToolsBox>
               <CustomPokemonBoxTitle className="px-2">{index + 1}º</CustomPokemonBoxTitle>
-              <PokemonEditButton pokemon={pokemon} currentPosition={index + 1} pokemonsLength={userPokemons.length} onUpdatePosition={onUpdatePosition} />
+              <PokemonEditButton pokemon={pokemon} currentPosition={index + 1} pokemonsLength={userPokemons.length} onUpdatePokemon={onUpdatePokemon} />
             </CustomPokemonToolsBox>
           </CustomPokemonBox>
         </CustomPokemonContainer>

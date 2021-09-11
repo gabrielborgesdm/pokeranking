@@ -2,5 +2,7 @@
   "add-pokemon": "Add pokemon",
   "search-pokemon": "Search pokemon",
   "select-a-pokemon": "Select pokemon",
-  "pokemon-ranking": "Pokemon ranking"
+  "pokemon-ranking": "Pokemon ranking",
+  "ranking-of": "Ranking of",
+  "no-pokemons-were-added": "No pokemons were added"
 }

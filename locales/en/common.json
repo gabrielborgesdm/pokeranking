@@ -21,6 +21,9 @@
   "search": "Search",
   "change": "Change",
   "position": "Position",
-  "save-changes": "Save changes",
-  "changes-saved": "Changes saved"
+  "save-changes": "Save",
+  "changes-saved": "Saved",
+  "note": "Note",
+  "leave-a-note": "Leave a note",
+  "download-ranking": "Download Ranking"
 }

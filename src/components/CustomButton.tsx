@@ -4,6 +4,7 @@ import React, { ReactNode } from 'react'
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { BlueButton } from '../styles/common'
 import { colors } from '../styles/theme'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
 interface ICustomButton {
   className?: string;
@@ -13,6 +14,7 @@ interface ICustomButton {
   isDisabled?: boolean;
   onClick?: Function;
   color?: string;
+  tooltip?: string;
 }
 
 const CustomButton: React.FC<ICustomButton> = ({
@@ -22,10 +24,29 @@ const CustomButton: React.FC<ICustomButton> = ({
   onClick,
   isLoading,
   isDisabled,
-  color = colors.blue
+  color = colors.blue,
+  tooltip
 }: ICustomButton) => {
   const { t } = useTranslation('common')
-  return (
+
+  const renderWithOverlay = (element) => {
+    const renderTooltip = (props) => (
+      <Tooltip id={tooltip} {...props}>
+        {tooltip}
+      </Tooltip>
+    )
+
+    return (
+    <OverlayTrigger
+      placement="bottom"
+      overlay={renderTooltip}
+    >
+      {element}
+    </OverlayTrigger>
+    )
+  }
+
+  const button = (
     <BlueButton variant="secondary" style={{ backgroundColor: color }} className={className} type={type} onClick={onClick} disabled={isLoading || isDisabled}>
       {isLoading
         ? (
@@ -37,6 +58,7 @@ const CustomButton: React.FC<ICustomButton> = ({
         : children}
     </BlueButton>
   )
+  return (tooltip ? renderWithOverlay(button) : button)
 }
 
 export default CustomButton
