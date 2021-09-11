@@ -12,7 +12,7 @@ export interface IPokemonBoxes {
   isLoading: boolean;
 }
 
-const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePokemon, isLoading }: IPokemonBoxes) => {
+const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePokemon }: IPokemonBoxes) => {
   return (
     <Row>
       {(userPokemons && userPokemons.length > 0 && userPokemons.map((pokemon, index) => (

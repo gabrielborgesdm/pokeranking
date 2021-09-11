@@ -56,7 +56,9 @@ const Pokemons: React.FC = () => {
     const oldIndex = userPokemons.indexOf(oldPokemon[0])
     const newPokemons = [...userPokemons]
     newPokemons.splice(oldIndex, 1)
-    newPokemons.splice(nextIndex, 0, pokemon)
+    if (nextIndex !== -1) {
+      newPokemons.splice(nextIndex, 0, pokemon)
+    }
     setUserPokemons(newPokemons)
     setHasChanges(true)
   }
