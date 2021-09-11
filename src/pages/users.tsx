@@ -8,7 +8,6 @@ import CustomButton from '../components/CustomButton'
 import MainContainerComponent from '../components/MainContainerComponent'
 import UserBoxes from '../components/UserBoxes'
 import { REQUEST_URL } from '../configs/AppConfig'
-
 import { IUsersResponse, IUserType } from '../configs/types/IUser'
 import { checkIsAuthenticated, serverSideRedirection } from '../services/AuthService'
 import { useFetch } from '../services/FetchService'
@@ -20,7 +19,6 @@ const Users: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [users, setUsers] = useState([])
   const { t } = useTranslation('users')
-  const { t: c } = useTranslation('common')
 
   useEffect(() => {
     updateUser()

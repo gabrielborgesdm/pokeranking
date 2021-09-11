@@ -50,10 +50,9 @@ const CustomButton: React.FC<ICustomButton> = ({
     <BlueButton variant="secondary" style={{ backgroundColor: color }} className={className} type={type} onClick={onClick} disabled={isLoading || isDisabled}>
       {isLoading
         ? (
-        <>
+        <span>
           <FontAwesomeIcon icon={faSpinner} spin />&nbsp;
-          {t('loading')}
-        </>
+        </span>
           )
         : children}
     </BlueButton>

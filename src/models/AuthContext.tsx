@@ -1,7 +1,7 @@
 import React, { createContext, useEffect } from 'react'
 import { parseCookies, setCookie } from 'nookies'
 import { REQUEST_URL, STORAGE } from '../configs/AppConfig'
-import { IUserResponse } from '../configs/types/IUser'
+import { IUserResponse, IUserType } from '../configs/types/IUser'
 import { IAuthContextType, IAuthProvider, ICookiesType } from '../configs/types/IAuthContext'
 import useTranslation from 'next-translate/useTranslation'
 import axios, { AxiosInstance } from 'axios'
@@ -63,10 +63,15 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
     setCookie(undefined, STORAGE.USER_USERNAME, '')
   }
 
-  const recoverUserInformation = async (): Promise<IUserResponse | null> => {
+  const recoverUserInformation = async (): Promise<IUserType | null> => {
+    let user = null
     const token = getCookies().token
     if (!token) return null
-    return await submitUserRequest()
+    const data = await submitUserRequest()
+    if (data.success) {
+      user = data.user
+    }
+    return user
   }
 
   const submitUserRequest = async (): Promise<IUserResponse> => {

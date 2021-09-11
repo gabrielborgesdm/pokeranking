@@ -7,13 +7,13 @@ import { IPokemon } from '../configs/types/IPokemon'
 import CustomButton from './CustomButton'
 import { PokemonsSelectList } from './PokemonsSelectList'
 
-interface IPokemonAddModal {
-  onAddPokemon: (pokemon: IPokemon, pokemonIndex: number) => void;
+interface IPokemonEditAvatarModal {
+  onUpdateAvatar: (pokemon: IPokemon, pokemonIndex: number) => void;
   userPokemons: Array<IPokemon>;
   isLoading: boolean;
 }
 
-const PokemonAddModal: React.FC<IPokemonAddModal> = ({ onAddPokemon, userPokemons, isLoading }: IPokemonAddModal) => {
+const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({ onAddPokemon, userPokemons, isLoading }: IPokemonEditAvatarModal) => {
   const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [pokemonPosition, setPokemonPosition] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -82,4 +82,4 @@ const PokemonAddModal: React.FC<IPokemonAddModal> = ({ onAddPokemon, userPokemon
   )
 }
 
-export default PokemonAddModal
+export default PokemonEditAvatarModal
