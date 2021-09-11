@@ -1,10 +1,11 @@
-import { faEdit, faTimesCircle } from '@fortawesome/fontawesome-free-solid'
+import { faEdit, faTimes, faTimesCircle, faTrash } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import React, { FormEvent, useState } from 'react'
 import { FloatingLabel, Form, OverlayTrigger, Popover } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
 import { CustomPokemonPopover, CustomPokemonPopoverHeader } from '../styles/pages/pokemons'
+import { colors } from '../styles/theme'
 import CustomButton from './CustomButton'
 
 export interface IPokemonEditButton {
@@ -18,6 +19,7 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
   const [newPosition, setNewPosition] = useState(currentPosition)
   const [newNote, setNewNote] = useState(pokemon.note || '')
   const [isVisible, setIsVisible] = useState(false)
+  const { t } = useTranslation('pokemons')
   const { t: c } = useTranslation('common')
 
   const handleSubmit = (e: FormEvent) => {
@@ -26,6 +28,13 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
     newPokemon.note = newNote
     onUpdatePokemon(newPokemon, newPosition - 1)
     setIsVisible(false)
+  }
+
+  const handleRemovePokemon = () => {
+    if (window.confirm(`${t('do-you-want-to-remove-the-pokemon')} ${pokemon.name}?`)) {
+      onUpdatePokemon(pokemon, -1)
+      setIsVisible(false)
+    }
   }
 
   const getPopoverPlacement = (elementClass: string) => {
@@ -48,8 +57,9 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
       overlay={
         <CustomPokemonPopover id={`popover-${pokemon.id}`} style={{ width: 400 }}>
           <CustomPokemonPopoverHeader>
-            <span>{pokemon.name}</span>
-            <FontAwesomeIcon icon={faTimesCircle} color="#fff" onClick={() => setIsVisible(false)}/>
+              <FontAwesomeIcon icon={faTrash} color="#fff" size="sm" onClick={() => handleRemovePokemon()}/>
+              <span>{pokemon.name}</span>
+              <FontAwesomeIcon icon={faTimesCircle} color="#fff" size="md" className="ml-10px" onClick={() => setIsVisible(false)}/>
           </CustomPokemonPopoverHeader>
           <Popover.Body>
             <Form onSubmit={handleSubmit}>

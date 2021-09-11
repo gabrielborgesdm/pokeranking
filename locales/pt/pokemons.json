@@ -4,5 +4,6 @@
   "select-a-pokemon": "Selecione um pokémon",
   "pokemon-ranking": "Ranking pokémon",
   "ranking-of": "Ranking de",
-  "no-pokemons-were-added": "Nenhum pokémon foi adicionado"
+  "no-pokemons-were-added": "Nenhum pokémon foi adicionado",
+  "do-you-want-to-remove-the-pokemon": "Você deseja remover o pokémon"
 }
