@@ -16,9 +16,7 @@ const PokemonAvatar: React.FC<IPokemonAvatar> = ({ avatar, isLoading }: IPokemon
     <CustomPokemonAvatar className="mx-2 mx-md-0">
       <div className="toolbox">
         {!isLoading &&
-          <CustomButton color={colors.grey} isDisabled={isLoading}>
-            <FontAwesomeIcon icon={faEdit} color={colors.orange} size="2x" />
-          </CustomButton>
+          <FontAwesomeIcon icon={faEdit} color={colors.orange} size="2x" />
         }
       </div>
       {!isLoading

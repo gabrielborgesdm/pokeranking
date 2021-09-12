@@ -11,7 +11,7 @@ import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
 import { IUserType } from '../configs/types/IUser'
 import { AuthContext } from '../models/AuthContext'
-import { YellowLink } from '../styles/common'
+import { CustomBoxRow, CustomContainer, YellowLink } from '../styles/common'
 import { AccountFormContainer } from '../styles/pages/account'
 import { colors } from '../styles/theme'
 
@@ -103,7 +103,8 @@ const Account: React.FC<IAccount> = () => {
 
   return (
     <MainContainerComponent>
-      <Row>
+      <CustomBoxRow>
+        <CustomContainer>
         <AccountFormContainer className="mx-auto" xs={10}>
           <StatusBar message={status.message} type={status.type} onClick={status.onClick} />
             <Form onSubmit={handleSubmit}>
@@ -147,7 +148,8 @@ const Account: React.FC<IAccount> = () => {
               </CustomButton>
             </Form>
           </AccountFormContainer>
-      </Row>
+        </CustomContainer>
+      </CustomBoxRow>
     </MainContainerComponent>
   )
 }
