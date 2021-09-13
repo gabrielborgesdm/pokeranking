@@ -4,22 +4,22 @@ import { colors } from '../theme'
 
 export const AccountFormContainer = styled(Col)`
   background-color: ${colors.blue};
-  padding: 15px;
-  border-radius: 3px;
+  padding: 20px;
+  border-radius: 5px;
   margin: 35px 0;
 
 `
 
 export const CustomPokemonAvatar = styled.div`
   width: 250px;
-  height: 250px;
+  height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: ${colors.grey};
   border-radius: 15px;
   margin-bottom: 15px;
-  padding: 20px;
+  padding: 10px;
   position: relative;
   .toolbox {
     position: absolute;

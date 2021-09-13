@@ -115,32 +115,58 @@ const Account: React.FC<IAccount> = () => {
                   </div>
                   <div className="d-flex flex-column flex-grow-1 ml-10px mt-3 mt-sm-0">
                     <Form.Group className="mb-3">
-                      <Form.Label>{c('email')}</Form.Label>
-                      <Form.Control type="email" value={email} readOnly={true} placeholder={c('enter-your-email-address')} maxLength={70} required />
+                      <Form.Label htmlFor="account-email" >{c('email')}</Form.Label>
+                      <Form.Control id="account-email"
+                        type="email"
+                        value={email}
+                        readOnly={true}
+                        placeholder={c('enter-your-email-address')}
+                        required
+                      />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                      <Form.Label>{c('username')}</Form.Label>
-                      <Form.Control type="text" value={username} readOnly={true} required />
+                      <Form.Label htmlFor="account-username">{c('username')}</Form.Label>
+                      <Form.Control id="account-username" type="text" value={username} readOnly={true} required />
                     </Form.Group>
-                    <div style={{ color: colors.lightGrey }}>
+                    <Form.Group>
+                      <Form.Label htmlFor="account-bio">{c('user-bio')}</Form.Label>
+                      <div style={{ color: colors.lightGrey }}>
                       <FloatingLabel controlId="user-bio" label={c('user-bio')}>
                         <Form.Control
+                          id="account-bio"
                           as="textarea"
                           placeholder={c('write-bio')}
                           style={{ height: '70px', resize: 'none' }}
                         />
                       </FloatingLabel>
                   </div>
+                    </Form.Group>
+
                   </div>
                 </div>
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>{c('password')}</Form.Label>
-                <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={c('enter-your-password')} maxLength={60} required />
+                <Form.Label htmlFor="account-password">{c('password')}</Form.Label>
+                <Form.Control id="account-password"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder={c('enter-your-password')}
+                  maxLength={60}
+                  required
+                />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label>{c('repeat-password')}</Form.Label>
-                <Form.Control type="password" value={rePassword} onChange={e => setRePassword(e.target.value)} placeholder={c('enter-your-password')} maxLength={60} required />
+                <Form.Label htmlFor="account-re-password">{c('repeat-password')}</Form.Label>
+                <Form.Control
+                  id="account-re-password"
+                  type="password"
+                  value={rePassword}
+                  onChange={e => setRePassword(e.target.value)}
+                  placeholder={c('enter-your-password')}
+                  maxLength={60}
+                  required
+                />
               </Form.Group>
 
               <CustomButton isLoading={isLoading} color={colors.dark}>
