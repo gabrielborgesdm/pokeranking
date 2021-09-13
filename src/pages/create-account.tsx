@@ -101,29 +101,57 @@ const CreateAccount: React.FC = () => {
           <StatusBar message={status.message} type={status.type} onClick={status.onClick} />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>{c('email')}</Form.Label>
-              <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={c('enter-your-email-address')} maxLength={70} required />
+              <Form.Label htmlFor="create-account-email">{c('email')}</Form.Label>
+              <Form.Control id="create-account-email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder={c('enter-your-email-address')}
+                maxLength={70}
+                required
+              />
               <Form.Text className="text-muted">
                 {c('we-will-not-share-your-email')}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>{c('username')}</Form.Label>
-              <Form.Control type="text" value={username} onChange={e => updateUsername(e.target.value)} placeholder={c('enter-your-username')} maxLength={30} required />
+              <Form.Label htmlFor="create-account-username">{c('username')}</Form.Label>
+              <Form.Control id="create-account-username"
+                type="text"
+                value={username}
+                onChange={e => updateUsername(e.target.value)}
+                placeholder={c('enter-your-username')}
+                maxLength={30}
+                required
+              />
               <Form.Text className="text-muted">
                 {c('your-username-cannot-contain-special-characters')}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>{c('password')}</Form.Label>
-              <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={c('enter-your-password')} maxLength={60} required />
+              <Form.Label htmlFor="create-account-password">{c('password')}</Form.Label>
+              <Form.Control id="create-account-password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder={c('enter-your-password')}
+                maxLength={60}
+                required
+              />
               <Form.Text className="text-muted">
                 {c('enter-a-safe-password')}
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>{c('repeat-password')}</Form.Label>
-              <Form.Control type="password" value={rePassword} onChange={e => setRePassword(e.target.value)} placeholder={c('enter-your-password')} maxLength={60} required />
+              <Form.Label htmlFor="create-account-repeat">{c('repeat-password')}</Form.Label>
+              <Form.Control id="create-account-repeat"
+                type="password"
+                value={rePassword}
+                onChange={e => setRePassword(e.target.value)}
+                placeholder={c('enter-your-password')}
+                maxLength={60}
+                required
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Link href={PAGE_URL.LOGIN}>

@@ -64,13 +64,28 @@ const Login: React.FC = () => {
           <StatusBar message={status.message} type={status.type} />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>{c('email')}</Form.Label>
-              <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={c('enter-your-email-address')} maxLength={70} required />
+              <Form.Label htmlFor="login-email">{c('email')}</Form.Label>
+              <Form.Control
+                type="email"
+                id="login-email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder={c('enter-your-email-address')}
+                maxLength={70}
+                required
+              />
             </Form.Group>
-
             <Form.Group className="mb-3">
-              <Form.Label>{c('password')}</Form.Label>
-              <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={c('enter-your-password')} maxLength={60} required />
+              <Form.Label htmlFor="login-password">{c('password')}</Form.Label>
+              <Form.Control
+                type="password"
+                id="login-password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder={c('enter-your-password')}
+                maxLength={60}
+                required
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Link href={PAGE_URL.CREATE_ACCOUNT}>

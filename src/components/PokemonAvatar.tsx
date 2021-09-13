@@ -1,10 +1,9 @@
-import React from 'react'
-import Image from 'next/image'
-import { CustomPokemonAvatar } from '../styles/pages/account'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faSpinner } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Image from 'next/image'
+import React from 'react'
+import { CustomPokemonAvatar } from '../styles/pages/account'
 import { colors } from '../styles/theme'
-import CustomButton from './CustomButton'
 
 export interface IPokemonAvatar {
   avatar: string;
