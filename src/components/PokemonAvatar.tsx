@@ -1,21 +1,23 @@
-import { faEdit, faSpinner } from '@fortawesome/fontawesome-free-solid'
+import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import React from 'react'
+import { IPokemon } from '../configs/types/IPokemon'
 import { CustomPokemonAvatar } from '../styles/pages/account'
-import { colors } from '../styles/theme'
+import PokemonEditAvatarModal from './PokemonEditAvatarModal'
 
 export interface IPokemonAvatar {
   avatar: string;
+  onUpdateAvatar: (pokemon: IPokemon) => void;
   isLoading: boolean;
 }
 
-const PokemonAvatar: React.FC<IPokemonAvatar> = ({ avatar, isLoading }: IPokemonAvatar) => {
+const PokemonAvatar: React.FC<IPokemonAvatar> = ({ avatar, isLoading, onUpdateAvatar }: IPokemonAvatar) => {
   return (
     <CustomPokemonAvatar className="mx-2 mx-md-0">
       <div className="toolbox">
         {!isLoading &&
-          <FontAwesomeIcon icon={faEdit} color={colors.orange} size="2x" />
+          <PokemonEditAvatarModal avatar={avatar} onUpdateAvatar={onUpdateAvatar} isLoading={isLoading} />
         }
       </div>
       {!isLoading

@@ -57,11 +57,10 @@ const CreateAccount: React.FC = () => {
   }
 
   const isPasswordValid = (): boolean => {
-    console.log(password, rePassword, password === rePassword)
     if (password === rePassword) {
       return true
     } else {
-      setStatus({ message: t('both-passwords-must-be-the-same'), type: IStatusType.Warning })
+      setStatus({ message: c('both-passwords-must-be-the-same'), type: IStatusType.Warning })
       return false
     }
   }
