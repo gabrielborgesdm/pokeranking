@@ -47,6 +47,7 @@ export const updateUser = async (req: IRequest, res: NextApiResponse) => {
   const response = await userRepository.get({ username })
   const message = isOkayToExecuteMutation(req.user, response)
   if (!message.success) return sendResponse(req, res, message, message)
+  userInfo.password = await hashPassword(userInfo.password)
   const updateResponse = await userRepository.update(response._id, userInfo)
   if (!updateResponse) {
     return sendResponse(req, res, ERROR)
