@@ -66,11 +66,11 @@ const Pokemons: React.FC = () => {
 
   const handleSaveChangesClick = async () => {
     setIsLoading(true)
-    const data = await submitUpdateRequest()
-    if (data.success) {
+    const response = await submitUpdateRequest()
+    if (response?.success) {
       setHasChanges(false)
     } else {
-      alert(data?.message || c('server-error'))
+      alert(response?.message || c('server-error'))
     }
     setIsLoading(false)
   }
