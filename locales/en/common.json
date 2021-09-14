@@ -28,5 +28,7 @@
   "note": "Note",
   "leave-a-note": "Leave a note",
   "download-ranking": "Download Ranking",
-  "user-bio": "User biography"
+  "user-bio": "User biography",
+  "logout": "Logout",
+  "both-passwords-must-be-the-same": "Both passwords must be the same"
 }

@@ -2,6 +2,7 @@ import useTranslation from 'next-translate/useTranslation'
 import React, { useEffect, useState } from 'react'
 import { Dropdown, Form, FormControl } from 'react-bootstrap'
 import { REQUEST_URL } from '../configs/AppConfig'
+import Image from 'next/image'
 import { IPokemon, IPokemonsResponse, IPokemonType } from '../configs/types/IPokemon'
 import { useFetch } from '../services/FetchService'
 
@@ -83,8 +84,9 @@ export const PokemonsSelectList: React.FC<IPokemonsSelectList> = ({ userPokemons
                 <Dropdown.Item onClick={() => setSelectedPokemon(pokemon)}
                   key={`list_pokemon_${pokemon.id}`}
                   eventKey={`list_pokemon_${pokemon.id}`}
+                  className="d-flex align-items-center"
                   active={pokemon.name === selectedPokemon?.name}>
-                  {pokemon.name}
+                  <span className="ml-10px">{pokemon.name}</span>
                 </Dropdown.Item>
               )}
             </Dropdown.Menu>

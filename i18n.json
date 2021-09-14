@@ -17,6 +17,9 @@
     ],
     "/create-account": [
       "create-account"
+    ],
+    "/account": [
+      "account"
     ]
   }
 }

@@ -79,7 +79,7 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-              <FloatingLabel controlId={`pokemon-${pokemon.name}-note`} label={c('note')}>
+              <FloatingLabel label={c('note')}>
                 <Form.Control
                   readOnly={!isRankingFromAuthUser}
                   as="textarea"

@@ -1,4 +1,4 @@
-import { faUserCircle, faUsers, IconDefinition } from '@fortawesome/fontawesome-free-solid'
+import { faSignOutAlt, faUserCircle, IconDefinition } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'
@@ -44,6 +44,7 @@ const NavbarComponent: React.FC = () => {
           </Nav>
           <Nav>
             {getNavLink(PAGE_URL.ACCOUNT, t('my-account'), faUserCircle)}
+            {getNavLink(PAGE_URL.LOGIN, t('logout'), faSignOutAlt)}
           </Nav>
         </Navbar.Collapse>
       </Container>
