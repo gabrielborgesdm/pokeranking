@@ -1,10 +1,11 @@
-import React, { createContext, useEffect } from 'react'
-import { parseCookies, setCookie } from 'nookies'
-import { REQUEST_URL, STORAGE } from '../configs/AppConfig'
-import { IUserResponse, IUserType } from '../configs/types/IUser'
-import { IAuthContextType, IAuthProvider, ICookiesType } from '../configs/types/IAuthContext'
+import { AxiosInstance } from 'axios'
 import useTranslation from 'next-translate/useTranslation'
-import axios, { AxiosInstance } from 'axios'
+import React, { createContext, useEffect } from 'react'
+import { REQUEST_URL } from '../configs/AppConfig'
+import { IAuthContextType, IAuthProvider, ICookiesType } from '../configs/types/IAuthContext'
+import { IUserResponse, IUserType } from '../configs/types/IUser'
+import { getAxiosInstance } from '../helpers/AxiosHelpers'
+import { addAccountCookies, addLanguageCookies, getAccountCookies, removeAccountCookies } from '../helpers/CookiesHelpers'
 
 export const AuthContext = createContext({} as IAuthContextType)
 
@@ -27,40 +28,24 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
   }
 
   const getCookies = (): ICookiesType => {
-    return {
-      token: parseCookies()[STORAGE.USER_TOKEN],
-      username: parseCookies()[STORAGE.USER_USERNAME],
-      lang: parseCookies()[STORAGE.LANG]
-    }
+    return getAccountCookies()
   }
 
   const getAxios = (): AxiosInstance => {
     const { token, lang } = getCookies()
-
-    axios.defaults.headers.common.Authorization = token ? `Bearer ${token}` : ''
-    axios.defaults.headers.common['Accept-Language'] = lang || 'en'
-    return axios
+    return getAxiosInstance(token, lang)
   }
 
   const login = (token: string, username: string) => {
-    setCookie(undefined, STORAGE.USER_TOKEN, token, {
-      maxAge: 60 * 60 * 24 * 7
-    })
-
-    setCookie(undefined, STORAGE.USER_USERNAME, username, {
-      maxAge: 60 * 60 * 24 * 7
-    })
+    addAccountCookies(token, username)
   }
 
   const setLang = (lang: string) => {
-    setCookie(undefined, STORAGE.LANG, lang, {
-      maxAge: 60 * 60 * 24 * 7
-    })
+    addLanguageCookies(lang)
   }
 
   const logout = () => {
-    setCookie(undefined, STORAGE.USER_TOKEN, '')
-    setCookie(undefined, STORAGE.USER_USERNAME, '')
+    removeAccountCookies()
   }
 
   const recoverUserInformation = async (): Promise<IUserType | null> => {
