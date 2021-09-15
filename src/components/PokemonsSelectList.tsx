@@ -85,7 +85,7 @@ export const PokemonsSelectList: React.FC<IPokemonsSelectList> = ({ userPokemons
                   eventKey={`list_pokemon_${pokemon.id}`}
                   className="d-flex align-items-center"
                   active={pokemon.name === selectedPokemon?.name}>
-                  <span className="ml-10px">{pokemon.name}</span>
+                  {pokemon.name}
                 </Dropdown.Item>
               )}
             </Dropdown.Menu>
