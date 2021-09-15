@@ -32,7 +32,7 @@ const NavbarComponent: React.FC = () => {
   return (
     <CustomNavbar variant="dark" expand="lg" style={{ backgroundColor: colors.blue }}>
       <Container fluid={true}>
-        <Navbar.Brand href={PAGE_URL.POKEMONS} className="d-flex align-items-center">
+        <Navbar.Brand href={PAGE_URL.USERS} className="d-flex align-items-center">
           <Image src="/pokeball.svg" height={40} width={40}/>
           <NavbarTitle >{t('title')}</NavbarTitle>
         </Navbar.Brand>
