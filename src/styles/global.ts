@@ -85,4 +85,17 @@ export default createGlobalStyle`
     background: ${colors.lightGrey};
   }
 
+  .modal-content {
+    background-color: ${colors.blue};
+    color: ${colors.white};
+  }
+
+  .modal-header {
+    border: none;
+    box-shadow: 0 1px 4px 1px ${colors.dark};
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
 `

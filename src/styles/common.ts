@@ -8,10 +8,14 @@ export const FullScreenContainer = styled.div`
   justify-content:center;
   align-items: center;
 `
-export const BlueButton = styled(Button)`
+export const CustomButtonStyle = styled(Button)`
   background: ${colors.blue};
   border: ${colors.blue};
   min-width: 80px;
+
+  &:hover{
+    filter: brightness(0.9);
+  }
 `
 
 export const AccountContainer = styled.div`
