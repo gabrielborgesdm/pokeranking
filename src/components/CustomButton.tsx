@@ -1,10 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import useTranslation from 'next-translate/useTranslation'
-import React, { ReactNode } from 'react'
 import { faSpinner } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, { ReactNode } from 'react'
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { BlueButton } from '../styles/common'
 import { colors } from '../styles/theme'
-import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
 interface ICustomButton {
   className?: string;
@@ -27,8 +26,6 @@ const CustomButton: React.FC<ICustomButton> = ({
   color = colors.blue,
   tooltip
 }: ICustomButton) => {
-  const { t } = useTranslation('common')
-
   const renderWithOverlay = (element) => {
     const renderTooltip = (props) => (
       <Tooltip id={tooltip} {...props}>
