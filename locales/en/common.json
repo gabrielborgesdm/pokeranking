@@ -30,5 +30,7 @@
   "download-ranking": "Download Ranking",
   "user-bio": "User biography",
   "logout": "Logout",
-  "both-passwords-must-be-the-same": "Both passwords must be the same"
+  "both-passwords-must-be-the-same": "Both passwords must be the same",
+  "about": "About",
+  "click-here-to-have-access-to-it": "Click here to have access to it"
 }
