@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
 export const PokemonMutateSchema = Joi.object({
-  pokemon: Joi.number().required().min(1).max(809),
+  pokemon: Joi.number().required().min(1).max(898),
   note: Joi.string().max(100)
 })

@@ -16,7 +16,6 @@ export const CustomPokemonAvatar = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${colors.grey};
   border-radius: 15px;
   margin-bottom: 15px;
   padding: 10px;

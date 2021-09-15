@@ -4,12 +4,13 @@ import { MainContainer } from '../styles/common'
 import NavbarComponent from './Navbar'
 
 type Props = {
-  children?: React.ReactNode
+  children?: React.ReactNode;
+  className?: string;
 };
 
-const MainContainerComponent: React.FC<Props> = ({ children }: Props) => {
+const MainContainerComponent: React.FC<Props> = ({ children, className }: Props) => {
   return (
-      <MainContainer>
+      <MainContainer className={className}>
         <NavbarComponent />
         <Container fluid={true}>
           {children}
