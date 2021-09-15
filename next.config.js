@@ -1,6 +1,5 @@
 const withPlugins = require('next-compose-plugins')
 const nextTranslate = require('next-translate')
-const { withSentryConfig } = require('@sentry/nextjs')
 
 const nextConfig = {
   esModule: true,
@@ -10,4 +9,4 @@ const nextConfig = {
   }
 }
 
-module.exports = withPlugins([nextTranslate, withSentryConfig], nextConfig)
+module.exports = withPlugins([nextTranslate], nextConfig)
