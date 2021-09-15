@@ -26,7 +26,6 @@ const PokemonAddModal: React.FC<IPokemonAddModal> = ({ onAddPokemon, userPokemon
   }, [userPokemons])
 
   const handleSubmit = (e: FormEvent) => {
-    console.log('salve')
     e.preventDefault()
     if (!checkFormIsValid()) return
     onAddPokemon({ ...selectedPokemon }, pokemonPosition - 1)
