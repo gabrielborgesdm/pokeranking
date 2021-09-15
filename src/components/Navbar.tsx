@@ -1,4 +1,4 @@
-import { faSignOutAlt, faUserCircle, IconDefinition } from '@fortawesome/fontawesome-free-solid'
+import { faQuestionCircle, faSignOutAlt, faUserCircle, IconDefinition } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'
@@ -43,6 +43,7 @@ const NavbarComponent: React.FC = () => {
             {getNavLink(PAGE_URL.USERS, t('users'))}
           </Nav>
           <Nav>
+            {getNavLink(PAGE_URL.ABOUT, t('about'), faQuestionCircle)}
             {getNavLink(PAGE_URL.ACCOUNT, t('my-account'), faUserCircle)}
             {getNavLink(PAGE_URL.LOGIN, t('logout'), faSignOutAlt)}
           </Nav>

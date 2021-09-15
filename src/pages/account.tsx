@@ -12,7 +12,7 @@ import { IStatus, IStatusType } from '../configs/types/IStatus'
 import { IUserType } from '../configs/types/IUser'
 import { AuthContext } from '../models/AuthContext'
 import { CustomBoxRow, CustomContainer } from '../styles/common'
-import { AccountFormContainer } from '../styles/pages/account'
+import { FormContainer } from '../styles/pages/account'
 import { colors } from '../styles/theme'
 
 const Account: React.FC = () => {
@@ -114,7 +114,7 @@ const Account: React.FC = () => {
     <MainContainerComponent>
       <CustomBoxRow>
         <CustomContainer>
-        <AccountFormContainer className="mx-auto" xs={10}>
+        <FormContainer className="mx-auto" xs={10}>
           <StatusBar message={status.message} type={status.type} onClick={status.onClick} />
             <Form onSubmit={handleSubmit}>
               <Form.Group>
@@ -182,7 +182,7 @@ const Account: React.FC = () => {
                 {c('update-account')}
               </CustomButton>
             </Form>
-          </AccountFormContainer>
+          </FormContainer>
         </CustomContainer>
       </CustomBoxRow>
     </MainContainerComponent>

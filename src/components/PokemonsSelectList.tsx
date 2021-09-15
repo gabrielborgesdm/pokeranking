@@ -2,7 +2,6 @@ import useTranslation from 'next-translate/useTranslation'
 import React, { useEffect, useState } from 'react'
 import { Dropdown, Form, FormControl } from 'react-bootstrap'
 import { REQUEST_URL } from '../configs/AppConfig'
-import Image from 'next/image'
 import { IPokemon, IPokemonsResponse, IPokemonType } from '../configs/types/IPokemon'
 import { useFetch } from '../services/FetchService'
 
