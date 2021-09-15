@@ -19,6 +19,7 @@ const Account: React.FC = () => {
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [avatar, setAvatar] = useState('')
+  const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [bio, setBio] = useState('')
   const [password, setPassword] = useState('')
   const [rePassword, setRePassword] = useState('')
@@ -91,6 +92,7 @@ const Account: React.FC = () => {
       const payload: any = { user: {} }
       if (password) payload.user.password = password
       if (bio) payload.user.bio = bio
+      if (selectedPokemon) payload.user.avatar = selectedPokemon.id
 
       const response = await getAxios().put(`${REQUEST_URL.USERS}/${username}/update`, payload)
       data = response?.data
@@ -105,8 +107,8 @@ const Account: React.FC = () => {
     setRePassword('')
   }
 
-  const onUpdateAvatar = (selectedPokemon: IPokemonType | null) => {
-    if (selectedPokemon) setAvatar(selectedPokemon.image)
+  const onUpdateSelectedPokemon = (selectedPokemon: IPokemonType | null) => {
+    if (selectedPokemon) setSelectedPokemon(selectedPokemon)
   }
 
   return (
@@ -119,7 +121,7 @@ const Account: React.FC = () => {
               <Form.Group>
                 <div className="d-flex flex-column flex-sm-row">
                   <div className="d-flex flex-column flex-sm-row align-items-center">
-                    <PokemonAvatar avatar={avatar} isLoading={isLoading} onUpdateAvatar={onUpdateAvatar} />
+                    <PokemonAvatar avatar={selectedPokemon ? selectedPokemon.image : avatar} isLoading={isLoading} onUpdateAvatar={onUpdateSelectedPokemon} />
                   </div>
                   <div className="d-flex flex-column flex-grow-1 ml-10px mt-3 mt-sm-0">
                     <Form.Group className="mb-3">
