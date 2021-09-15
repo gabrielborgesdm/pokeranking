@@ -52,7 +52,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
             ? users.slice(0, numberOfUsersRendered).map((user: IUserType, index: number) => (
               <CustomContainer xs={12} md={4} lg={3} key={user.username + index} onClick={() => navigateToPokemon(user.username)} >
                 <CustomBox style={getThemedColors('users')}>
-                  <Image src={user.avatar} width={80} height={80}/>
+                  <Image src={user.avatar} width={80} height={80} className="pokemon-image"/>
                   <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center">
                     <CustomBoxTitle>{user.username}</CustomBoxTitle>
                     <FontAwesomeIcon icon={faExternalLinkAlt} />

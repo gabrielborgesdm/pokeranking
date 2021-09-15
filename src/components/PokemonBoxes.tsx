@@ -19,7 +19,7 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({ userPokemons, onUpdatePokemon, 
       {(userPokemons && userPokemons.length > 0 && userPokemons.map((pokemon, index) => (
         <CustomPokemonContainer xs={12} md={4} lg={3} xl={2} key={pokemon.name + index} id={`pokemon-${pokemon.id}-box`}>
           <CustomPokemonBox style={getThemedColors('pokemons')}>
-            <Image src={pokemon.image} width={80} height={80}/>
+            <Image src={pokemon.image} width={80} height={80} className="pokemon-image"/>
             <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center ">
               <CustomPokemonBoxTitle>{pokemon.name}</CustomPokemonBoxTitle>
             </div>

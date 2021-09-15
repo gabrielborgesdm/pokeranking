@@ -76,7 +76,7 @@ export const CustomContainer = styled(Col)`
   overflow-x: hidden;
 
   @media (min-width: 768px) and (max-width: 846px), (max-width: 346px) {
-    img {
+    img.pokemon-image {
       display: none !important;
     }
   }

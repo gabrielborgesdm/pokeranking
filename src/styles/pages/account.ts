@@ -2,7 +2,7 @@ import { Col } from 'react-bootstrap'
 import styled from 'styled-components'
 import { colors } from '../theme'
 
-export const AccountFormContainer = styled(Col)`
+export const FormContainer = styled(Col)`
   background-color: ${colors.blue};
   padding: 20px;
   border-radius: 5px;
