@@ -19,7 +19,7 @@ export const About: React.FC = () => {
                 <Row>
                   <div className="d-flex flex-column flex-md-row align-items-center">
                     <div>
-                      <PokemonAvatar />
+                      <PokemonAvatar avatar="/pokemons/122.png" />
                     </div>
                     <div className="ml-10px">
                       <Col xs={12}>
