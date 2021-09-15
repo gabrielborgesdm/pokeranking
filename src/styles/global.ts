@@ -66,18 +66,19 @@ export default createGlobalStyle`
   /* width */
   ::-webkit-scrollbar {
     width: 12px;
+    background-color: ${colors.dark};
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
     box-shadow: inset 0 0 2px grey; 
-    border-radius: 5px;
+    border-radius: 0;
   }
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
     background: ${colors.blue}; 
-    border-radius: 10px;
+    border-radius: 0;
   }
 
   /* Handle on hover */

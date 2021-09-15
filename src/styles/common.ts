@@ -36,7 +36,6 @@ export const MainContainer = styled.div`
   background-image: url("/images/background.png");
   background-repeat: repeat;
   color: ${colors.white};
-  padding-bottom: 35px;
 `
 
 export const YellowLink = styled.a`
@@ -77,10 +76,10 @@ export const CustomBoxRow = styled(Row)`
 `
 
 export const CustomContainer = styled(Col)`
-  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh;
   overflow-y: auto;
-  overflow-x: hidden;
-
   @media (min-width: 768px) and (max-width: 846px), (max-width: 346px) {
     img.pokemon-image {
       display: none !important;
@@ -107,7 +106,7 @@ export const CustomBox = styled.div`
   font-size: 1.2rem;
   font-weight: bold;
   height: 110px;
-  padding: 0 25px;
+  padding: 0 10px;
   border-radius: 3px;
   transition: all 0.3s;
   &:hover {
