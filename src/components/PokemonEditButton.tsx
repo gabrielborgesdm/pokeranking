@@ -1,11 +1,10 @@
-import { faEdit, faEye, faTimes, faTimesCircle, faTrash } from '@fortawesome/fontawesome-free-solid'
+import { faEdit, faEye, faTimesCircle, faTrash } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import React, { FormEvent, useState } from 'react'
 import { FloatingLabel, Form, OverlayTrigger, Popover } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
 import { CustomPokemonPopover, CustomPokemonPopoverHeader } from '../styles/pages/pokemons'
-import { colors } from '../styles/theme'
 import CustomButton from './CustomButton'
 
 export interface IPokemonEditButton {
