@@ -1,22 +1,19 @@
-import React, { FormEvent, useState, useEffect, useContext } from 'react'
-import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation'
-import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 import Image from 'next/image'
+import Link from 'next/link'
+import React, { FormEvent, useContext, useEffect, useState } from 'react'
 import { Form } from 'react-bootstrap'
-import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
-import { useRouter } from 'next/router'
-import StatusBar from '../components/StatusBar'
-import { IStatus, IStatusType } from '../configs/types/IStatus'
 import CustomButton from '../components/CustomButton'
-
-import { AuthContext } from '../models/AuthContext'
+import StatusBar from '../components/StatusBar'
+import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { ILoginResponse } from '../configs/types/ILogin'
+import { IStatus, IStatusType } from '../configs/types/IStatus'
+import { AuthContext } from '../models/AuthContext'
+import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
   const { t: c } = useTranslation('common')
-  const router = useRouter()
   const { login, logout, getAxios } = useContext(AuthContext)
 
   const [email, setEmail] = useState('')
@@ -34,7 +31,7 @@ const Login: React.FC = () => {
     const data: ILoginResponse = await submitRequest()
     if (data?.token) {
       login(data.token, data.user.username)
-      router.replace(PAGE_URL.USERS)
+      document.location.replace(PAGE_URL.USERS)
     } else if (data) {
       setStatus({ message: data.message, type: IStatusType.Warning })
     } else {

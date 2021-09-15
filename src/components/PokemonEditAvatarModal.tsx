@@ -6,6 +6,7 @@ import React, { FormEvent, useState } from 'react'
 import { Form, Modal } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
 import { CustomPokemonAvatar } from '../styles/pages/account'
+import { colors } from '../styles/theme'
 import CustomButton from './CustomButton'
 import { PokemonsSelectList } from './PokemonsSelectList'
 
@@ -58,7 +59,7 @@ const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({ onUpdateAva
       </Form>
       </Modal.Body>
     </Modal>
-    <CustomButton isLoading={isLoading} onClick={() => setIsModalVisible(true)} type="button" className="ml-10px" tooltip={t('change-avatar')}>
+    <CustomButton isLoading={isLoading} onClick={() => setIsModalVisible(true)} color={colors.dark} type="button" className="ml-10px" tooltip={t('change-avatar')}>
       <FontAwesomeIcon icon={faEdit} />
     </CustomButton>
     </>
