@@ -11,12 +11,16 @@ import CustomButton from './CustomButton'
 import { PokemonsSelectList } from './PokemonsSelectList'
 
 interface IPokemonEditAvatarModal {
-  onUpdateAvatar: (pokemon: IPokemon) => void;
-  avatar: string;
-  isLoading: boolean;
+  onUpdateAvatar: (pokemon: IPokemon) => void
+  avatar: string
+  isLoading: boolean
 }
 
-const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({ onUpdateAvatar, avatar, isLoading }: IPokemonEditAvatarModal) => {
+const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({
+  onUpdateAvatar,
+  avatar,
+  isLoading
+}: IPokemonEditAvatarModal) => {
   const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -30,37 +34,59 @@ const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({ onUpdateAva
 
   return (
     <>
-    <Modal
-      size="lg"
-      show={isModalVisible}
-      onHide={() => setIsModalVisible(false)}
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          {t('change-avatar')}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-      <Form onSubmit={e => e.preventDefault()}>
-        <CustomPokemonAvatar className="mx-auto">
-          {selectedPokemon || avatar
-            ? <Image src={selectedPokemon?.image || avatar} width={250} height={250} />
-            : <FontAwesomeIcon icon={faSpinner} spin size="8x"/>
-          }
-        </CustomPokemonAvatar>
-        <PokemonsSelectList userPokemons={[]} selectedPokemon={selectedPokemon} setSelectedPokemon={setSelectedPokemon} />
-        <Form.Group>
-          <CustomButton isDisabled={!selectedPokemon} type="button" onClick={handleChangeButton}>
-            <FontAwesomeIcon icon={faEdit} />&nbsp;
+      <Modal
+        size="lg"
+        show={isModalVisible}
+        onHide={() => setIsModalVisible(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
             {t('change-avatar')}
-          </CustomButton>
-        </Form.Group>
-      </Form>
-      </Modal.Body>
-    </Modal>
-    <CustomButton isLoading={isLoading} onClick={() => setIsModalVisible(true)} color={colors.dark} type="button" className="ml-10px" tooltip={t('change-avatar')}>
-      <FontAwesomeIcon icon={faEdit} />
-    </CustomButton>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={e => e.preventDefault()}>
+            <CustomPokemonAvatar className="mx-auto">
+              {selectedPokemon || avatar ? (
+                <Image
+                  src={selectedPokemon?.image || avatar}
+                  width={250}
+                  height={250}
+                />
+              ) : (
+                <FontAwesomeIcon icon={faSpinner} spin size="8x" />
+              )}
+            </CustomPokemonAvatar>
+            <PokemonsSelectList
+              userPokemons={[]}
+              selectedPokemon={selectedPokemon}
+              setSelectedPokemon={setSelectedPokemon}
+            />
+            <Form.Group>
+              <CustomButton
+                isDisabled={!selectedPokemon}
+                type="button"
+                onClick={handleChangeButton}
+                color={colors.dark}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+                &nbsp;
+                {t('change-avatar')}
+              </CustomButton>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+      </Modal>
+      <CustomButton
+        isLoading={isLoading}
+        onClick={() => setIsModalVisible(true)}
+        color={colors.dark}
+        type="button"
+        className="ml-10px"
+        tooltip={t('change-avatar')}
+      >
+        <FontAwesomeIcon icon={faEdit} />
+      </CustomButton>
     </>
   )
 }
