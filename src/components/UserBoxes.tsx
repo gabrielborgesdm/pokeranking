@@ -29,7 +29,6 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
     const isNearBottom = usersContainer.scrollHeight - usersContainer.scrollTop <= usersContainer.clientHeight + 300
     if (isNearBottom) {
       const newNumberOfUsersRendered = numberOfUsersRendered + 30 > users.length ? users.length : numberOfUsersRendered + 30
-      console.log(newNumberOfUsersRendered)
       setNumberOfUsersRendered(newNumberOfUsersRendered)
     }
   }
