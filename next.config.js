@@ -1,7 +1,10 @@
 const withImages = require('next-images')
 const nextTranslate = require('next-translate')
 
-module.exports = nextTranslate(withImages({
+module.exports = nextTranslate({
   esModule: true,
-  reactStrictMode: true
-}))
+  reactStrictMode: true,
+  typescript: {
+    ignoreBuildErrors: true
+  }
+})
