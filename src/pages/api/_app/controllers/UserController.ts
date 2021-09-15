@@ -72,7 +72,7 @@ export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   const { username, email } = userInfo
   if (await getUser({ $or: [{ username }, { email }] })) return sendResponse(req, res, USER_ALREADY_REGISTERED)
   userInfo.password = await hashPassword(userInfo.password)
-  if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * 809) + 1
+  if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * 898) + 1
   const response = await userRepository.store(userInfo)
   if (!response) return sendResponse(req, res, ERROR)
   const user: IUserResponse = formatUserDocument(response)

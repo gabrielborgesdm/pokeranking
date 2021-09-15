@@ -46,7 +46,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
 
   return (
       <CustomBoxRow>
-        <CustomContainer xs={12} className="users-container" onScroll={(element) => handleScrollAndLoadUsers(element)}>
+        <CustomContainer xs={12} className="users-container mb-5" onScroll={(element) => handleScrollAndLoadUsers(element)}>
           <Row>
           {(users && users.length > 0
             ? users.slice(0, numberOfUsersRendered).map((user: IUserType, index: number) => (
