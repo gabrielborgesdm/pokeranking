@@ -22,8 +22,7 @@ const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({ onUpdateAva
 
   const { t } = useTranslation('pokemons')
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
+  const handleChangeButton = () => {
     onUpdateAvatar(selectedPokemon)
     setIsModalVisible(false)
     setSelectedPokemon(null)
@@ -42,7 +41,7 @@ const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({ onUpdateAva
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={e => e.preventDefault()}>
         <CustomPokemonAvatar className="mx-auto">
           {selectedPokemon || avatar
             ? <Image src={selectedPokemon?.image || avatar} width={250} height={250} />
@@ -51,7 +50,7 @@ const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({ onUpdateAva
         </CustomPokemonAvatar>
         <PokemonsSelectList userPokemons={[]} selectedPokemon={selectedPokemon} setSelectedPokemon={setSelectedPokemon} />
         <Form.Group>
-          <CustomButton isDisabled={!selectedPokemon}>
+          <CustomButton isDisabled={!selectedPokemon} type="button" onClick={handleChangeButton}>
             <FontAwesomeIcon icon={faEdit} />&nbsp;
             {t('change-avatar')}
           </CustomButton>
