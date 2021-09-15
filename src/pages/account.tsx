@@ -76,7 +76,6 @@ const Account: React.FC = () => {
   }
 
   const isPasswordValid = (): boolean => {
-    console.log(password, rePassword, password === rePassword)
     if (password === rePassword) {
       return true
     } else {
