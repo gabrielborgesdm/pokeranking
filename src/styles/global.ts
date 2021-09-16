@@ -25,7 +25,6 @@ export default createGlobalStyle`
 
   body {
     background-color: ${props => props.theme.colors.background};
-    background-image: url("/images/background.png");
     color: ${props => props.theme.colors.text};
   }
 
@@ -46,6 +45,8 @@ export default createGlobalStyle`
   body > div:first-child,
   div#__next,
   div#__next > div {
+    background: url("/images/background.png"), ${colors.dark};
+    background-repeat: repeat;
     height: 100%;
     font-family: 'Roboto', sans-serif !important;
 
