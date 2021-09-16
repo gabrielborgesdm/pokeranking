@@ -27,7 +27,7 @@ const NavbarComponent: React.FC = () => {
   const getNavLink = (link: string, title: string, icon?: IconDefinition) => {
     return (
       <Nav.Link
-        className={`nav-link navbar-button ml-10px ${
+        className={`nav-link d-flex align-items-center ml-10px ${
           router.pathname.includes(link) ? 'active-nav-link' : ''
         }`}
         href=""
@@ -61,7 +61,7 @@ const NavbarComponent: React.FC = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {getNavLink(PAGE_URL.POKEMONS, t('ranking'), faTrophy)}
+            {getNavLink(PAGE_URL.POKEMONS, t('my-ranking'), faTrophy)}
             {getNavLink(PAGE_URL.USERS, t('users'), faUsers)}
             {getNavLink(PAGE_URL.ABOUT, t('about'), faQuestionCircle)}
           </Nav>
