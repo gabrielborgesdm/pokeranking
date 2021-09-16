@@ -11,7 +11,7 @@ import { IPokemonType } from '../configs/types/IPokemon'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
 import { IUserType } from '../configs/types/IUser'
 import { AuthContext } from '../models/AuthContext'
-import { CustomBoxRow, CustomContainer } from '../styles/common'
+import { CustomBoxRow, FloatingContainer } from '../styles/common'
 import { FormContainer } from '../styles/pages/account'
 import { colors } from '../styles/theme'
 
@@ -23,7 +23,10 @@ const Account: React.FC = () => {
   const [bio, setBio] = useState('')
   const [password, setPassword] = useState('')
   const [rePassword, setRePassword] = useState('')
-  const [status, setStatus] = useState<IStatus>({ message: '', type: IStatusType.Success })
+  const [status, setStatus] = useState<IStatus>({
+    message: '',
+    type: IStatusType.Success
+  })
   const [isLoading, setIsLoading] = useState(true)
 
   const { t } = useTranslation('account')
@@ -54,7 +57,10 @@ const Account: React.FC = () => {
     if (isFormValid()) {
       const data = await submitRequest()
       if (data?.success) {
-        setStatus({ message: t('account-updated-with-success'), type: IStatusType.Success })
+        setStatus({
+          message: t('account-updated-with-success'),
+          type: IStatusType.Success
+        })
         clearForm()
       } else if (data) {
         setStatus({ message: data.message, type: IStatusType.Warning })
@@ -80,7 +86,10 @@ const Account: React.FC = () => {
     if (password === rePassword) {
       return true
     } else {
-      setStatus({ message: c('both-passwords-must-be-the-same'), type: IStatusType.Warning })
+      setStatus({
+        message: c('both-passwords-must-be-the-same'),
+        type: IStatusType.Warning
+      })
       return false
     }
   }
@@ -94,7 +103,10 @@ const Account: React.FC = () => {
       if (bio) payload.user.bio = bio
       if (selectedPokemon) payload.user.avatar = selectedPokemon.id
 
-      const response = await getAxios().put(`${REQUEST_URL.USERS}/${username}/update`, payload)
+      const response = await getAxios().put(
+        `${REQUEST_URL.USERS}/${username}/update`,
+        payload
+      )
       data = response?.data
     } catch (error) {
       console.log(error)
@@ -114,19 +126,30 @@ const Account: React.FC = () => {
   return (
     <MainContainerComponent>
       <CustomBoxRow>
-        <CustomContainer>
-        <FormContainer className="mx-auto" xs={10}>
-          <StatusBar message={status.message} type={status.type} onClick={status.onClick} />
+        <FloatingContainer>
+          <FormContainer className="mx-auto" xs={12}>
+            <StatusBar
+              message={status.message}
+              type={status.type}
+              onClick={status.onClick}
+            />
             <Form onSubmit={handleSubmit}>
               <Form.Group>
                 <div className="d-flex flex-column flex-sm-row">
                   <div className="d-flex flex-column flex-sm-row align-items-center">
-                    <PokemonAvatar avatar={selectedPokemon ? selectedPokemon.image : avatar} isLoading={isLoading} onUpdateAvatar={onUpdateSelectedPokemon} />
+                    <PokemonAvatar
+                      avatar={selectedPokemon ? selectedPokemon.image : avatar}
+                      isLoading={isLoading}
+                      onUpdateAvatar={onUpdateSelectedPokemon}
+                    />
                   </div>
-                  <div className="d-flex flex-column flex-grow-1 ml-10px mt-3 mt-sm-0">
-                    <Form.Group className="mb-3">
-                      <Form.Label htmlFor="account-email" >{c('email')}</Form.Label>
-                      <Form.Control id="account-email"
+                  <div className="d-flex flex-column flex-grow-1 mt-3 mt-sm-0">
+                    <Form.Group className="mb-3 mt-1">
+                      <Form.Label htmlFor="account-email">
+                        {c('email')}
+                      </Form.Label>
+                      <Form.Control
+                        id="account-email"
                         type="email"
                         value={email}
                         readOnly={true}
@@ -135,31 +158,43 @@ const Account: React.FC = () => {
                       />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                      <Form.Label htmlFor="account-username">{c('username')}</Form.Label>
-                      <Form.Control id="account-username" type="text" value={username} readOnly={true} required />
+                      <Form.Label htmlFor="account-username">
+                        {c('username')}
+                      </Form.Label>
+                      <Form.Control
+                        id="account-username"
+                        type="text"
+                        value={username}
+                        readOnly={true}
+                        required
+                      />
                     </Form.Group>
                     <Form.Group>
-                      <Form.Label htmlFor="account-bio">{c('user-bio')}</Form.Label>
+                      <Form.Label htmlFor="account-bio">
+                        {c('user-bio')}
+                      </Form.Label>
                       <div style={{ color: colors.lightGrey }}>
-                      <FloatingLabel label={c('user-bio')}>
-                        <Form.Control
-                          id="account-bio"
-                          as="textarea"
-                          value={bio}
-                          onChange={e => setBio(e.target.value)}
-                          placeholder={c('user-bio')}
-                          style={{ height: '70px', resize: 'none' }}
-                        />
-                      </FloatingLabel>
-                  </div>
+                        <FloatingLabel label={c('user-bio')}>
+                          <Form.Control
+                            id="account-bio"
+                            as="textarea"
+                            value={bio}
+                            onChange={e => setBio(e.target.value)}
+                            placeholder={c('user-bio')}
+                            style={{ height: '70px', resize: 'none' }}
+                          />
+                        </FloatingLabel>
+                      </div>
                     </Form.Group>
-
                   </div>
                 </div>
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label htmlFor="account-password">{t('change-your-password')}</Form.Label>
-                <Form.Control id="account-password"
+                <Form.Label htmlFor="account-password">
+                  {t('change-your-password')}
+                </Form.Label>
+                <Form.Control
+                  id="account-password"
                   type="password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
@@ -168,7 +203,9 @@ const Account: React.FC = () => {
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Label htmlFor="account-re-password">{c('repeat-password')}</Form.Label>
+                <Form.Label htmlFor="account-re-password">
+                  {c('repeat-password')}
+                </Form.Label>
                 <Form.Control
                   id="account-re-password"
                   type="password"
@@ -184,7 +221,7 @@ const Account: React.FC = () => {
               </CustomButton>
             </Form>
           </FormContainer>
-        </CustomContainer>
+        </FloatingContainer>
       </CustomBoxRow>
     </MainContainerComponent>
   )

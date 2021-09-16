@@ -75,7 +75,7 @@ export const CustomBoxRow = styled(Row)`
   flex-grow: 1;
 `
 
-export const CustomContainer = styled(Col)`
+export const PokemonListingContainer = styled(Col)`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -85,20 +85,22 @@ export const CustomContainer = styled(Col)`
       display: none !important;
     }
   }
-
- 
-  
   .container-name {
     width: 10%;
     
   }
-
   .container-name span {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   
+`
+export const FloatingContainer = styled(Col)`
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
 `
 
 export const CustomBox = styled.div`
