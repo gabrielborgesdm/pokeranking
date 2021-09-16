@@ -16,7 +16,10 @@ import { IPokemon, IPokemonMutate } from '../../configs/types/IPokemon'
 import { IUserResponse } from '../../configs/types/IUser'
 import { convertPokemonsToCSV } from '../../helpers/PokemonHelpers'
 import { AuthContext } from '../../models/AuthContext'
-import { checkIsAuthenticated, serverSideRedirection } from '../../services/AuthService'
+import {
+  checkIsAuthenticated,
+  serverSideRedirection
+} from '../../services/AuthService'
 import { useFetch } from '../../services/FetchService'
 import { CustomPokerankingNav } from '../../styles/pages/pokemons'
 import { colors } from '../../styles/theme'
@@ -52,7 +55,9 @@ const Pokemons: React.FC = () => {
   }
 
   const onUpdatePokemon = (pokemon: IPokemon, nextIndex: number) => {
-    const oldPokemon = userPokemons.filter((oldPokemon) => oldPokemon.id === pokemon.id)
+    const oldPokemon = userPokemons.filter(
+      oldPokemon => oldPokemon.id === pokemon.id
+    )
     if (!oldPokemon.length) return
     const oldIndex = userPokemons.indexOf(oldPokemon[0])
     const newPokemons = [...userPokemons]
@@ -106,55 +111,94 @@ const Pokemons: React.FC = () => {
     <div>
       <MainContainerComponent>
         <Row>
-          <Col xs={12} className=" mx-auto p-2 my-2">
+          <Col xs={12} className="mx-auto p-2 my-2">
             <CustomPokerankingNav>
               <Row>
-                <Col className="nav-title justify-content-center text-center mb-2 mb-md-0 justify-content-md-start" xs={12} md={6}>
-                  <h3>{t('ranking-of')} {user}</h3>
+                <Col
+                  className="nav-title justify-content-center text-center mb-2 mb-md-0 justify-content-md-start"
+                  xs={12}
+                  md={6}
+                >
+                  <h3>
+                    {t('ranking-of')} {user}
+                  </h3>
                 </Col>
-                <Col className="nav-buttons justify-content-center justify-content-md-end" xs={12} md={6}>
-                  <CustomButton color={colors.green} type="button" isDisabled={!userPokemons.length} isLoading={isLoading} onClick={downloadPokemonRanking} tooltip={c('download-ranking')}>
+                <Col
+                  className="nav-buttons justify-content-center justify-content-md-end"
+                  xs={12}
+                  md={6}
+                >
+                  <CustomButton
+                    color={colors.green}
+                    type="button"
+                    isDisabled={!userPokemons.length}
+                    isLoading={isLoading}
+                    onClick={downloadPokemonRanking}
+                    tooltip={c('download-ranking')}
+                  >
                     <FontAwesomeIcon icon={faFileCsv} />
                   </CustomButton>
-                  {isRankingFromAuthUser &&
-                    (
+                  {isRankingFromAuthUser && (
                     <>
-                      <PokemonAddModal userPokemons={userPokemons} onAddPokemon={onAddPokemon} isLoading={isLoading} />
-                      {hasChanges
-                        ? (
-                            <CustomButton color={colors.red} type="button" isLoading={isLoading} onClick={handleSaveChangesClick} className="ml-10px">
-                              <FontAwesomeIcon icon={faSave} />&nbsp;
-                                {c('save-changes')}
-                            </CustomButton>
-                          )
-                        : (
-                            <CustomButton color={colors.red} isDisabled={true} isLoading={isLoading} type="button" className="ml-10px">
-                              <FontAwesomeIcon icon={faSave} />&nbsp;
-                              {c('changes-saved')}
-                            </CustomButton>
-                          )
-                      }
+                      <PokemonAddModal
+                        userPokemons={userPokemons}
+                        onAddPokemon={onAddPokemon}
+                        isLoading={isLoading}
+                      />
+                      {hasChanges ? (
+                        <CustomButton
+                          color={colors.red}
+                          type="button"
+                          isLoading={isLoading}
+                          onClick={handleSaveChangesClick}
+                          className="ml-10px"
+                        >
+                          <FontAwesomeIcon icon={faSave} />
+                          &nbsp;
+                          {c('save-changes')}
+                        </CustomButton>
+                      ) : (
+                        <CustomButton
+                          color={colors.red}
+                          isDisabled={true}
+                          isLoading={isLoading}
+                          type="button"
+                          className="ml-10px"
+                        >
+                          <FontAwesomeIcon icon={faSave} />
+                          &nbsp;
+                          {c('changes-saved')}
+                        </CustomButton>
+                      )}
                     </>
-                    )}
-
+                  )}
                 </Col>
               </Row>
               <span></span>
-
             </CustomPokerankingNav>
           </Col>
         </Row>
-        {isLoading
-          ? (
-            <div className="text-center">
-              <FontAwesomeIcon icon={faSpinner} spin={true} size="3x" className="m-3" />&nbsp;
-              <h1 className="mb-0">{c('loading')}</h1>
-            </div>
-            )
-          : userPokemons.length
-            ? <PokemonBoxes userPokemons={userPokemons} onUpdatePokemon={onUpdatePokemon} isLoading={isLoading} isRankingFromAuthUser={isRankingFromAuthUser} />
-            : <h3 className="text-center mt-2">{t('no-pokemons-were-added')}</h3>
-        }
+        {isLoading ? (
+          <div className="text-center">
+            <FontAwesomeIcon
+              icon={faSpinner}
+              spin={true}
+              size="3x"
+              className="m-3"
+            />
+            &nbsp;
+            <h1 className="mb-0">{c('loading')}</h1>
+          </div>
+        ) : userPokemons.length ? (
+          <PokemonBoxes
+            userPokemons={userPokemons}
+            onUpdatePokemon={onUpdatePokemon}
+            isLoading={isLoading}
+            isRankingFromAuthUser={isRankingFromAuthUser}
+          />
+        ) : (
+          <h3 className="text-center mt-2">{t('no-pokemons-were-added')}</h3>
+        )}
       </MainContainerComponent>
     </div>
   )
@@ -162,7 +206,7 @@ const Pokemons: React.FC = () => {
 
 export default Pokemons
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   if (!checkIsAuthenticated(context)) return serverSideRedirection
   return { props: {} }
 }

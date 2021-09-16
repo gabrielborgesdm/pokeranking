@@ -33,7 +33,6 @@ export default createGlobalStyle`
     font-size: 1.2rem;
   }
 
-
   .ml-10px { 
     margin-left: 10px;
   }

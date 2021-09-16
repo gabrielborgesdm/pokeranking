@@ -1,6 +1,6 @@
 {
   "title": "Pokeranking",
-  "description": "Ranking pokemon",
+  "description": "Rankeie os seus pokémons favoritos e compartilhe com os seus amigos",
   "loading": "Carregando",
   "server-error": "Ocorreu um erro com o servidor",
   "we-will-not-share-your-email": "Nós não iremos compartilhar o seu e-mail com mais ninguém",
@@ -25,12 +25,13 @@
   "position": "Posição",
   "save-changes": "Salvar",
   "changes-saved": "Salvo",
-  "note": "Nota",
+  "note": "Anotação",
   "leave-a-note": "Deixe uma anotação",
   "download-ranking": "Baixar Ranking",
   "user-bio": "Biografia do usuário",
   "logout": "Sair",
   "both-passwords-must-be-the-same": "As duas senhas precisam ser iguais",
   "about": "Sobre",
-  "click-here-to-have-access-to-it": "Clique aqui para ter acesso"
+  "click-here-to-have-access-to-it": "Clique aqui para ter acesso",
+  "user-rankings": "Rankings dos usuários"
 }

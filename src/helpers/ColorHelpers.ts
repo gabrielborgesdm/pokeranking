@@ -1,24 +1,15 @@
 import { colors } from '../styles/theme'
 
-const pagesLastColorPosition = {}
+const { green, blue, white, orange, red } = colors
+const backgrounds = [green, blue, orange, red]
 
-export const getThemedColors = (pageName: string) => {
-  const { green, blue, white, orange } = colors
-  const backgrounds = [green, blue, orange]
-  let currentPosition = getPageLastColorPosition(pageName)
-  updatePageLastColorPosition(pageName, currentPosition + 1)
-  if (getPageLastColorPosition(pageName) === backgrounds.length) updatePageLastColorPosition(pageName, 0)
-  currentPosition = getPageLastColorPosition(pageName)
-  return { color: white, backgroundColor: backgrounds[currentPosition] }
+export const getThemedColors = (index: number) => {
+  return { color: white, backgroundColor: backgrounds[getBackgroundIndex(index)] }
 }
 
-const getPageLastColorPosition = (pageName: string): number => {
-  if (!pagesLastColorPosition[pageName]) {
-    pagesLastColorPosition[pageName] = 0
-  }
-  return pagesLastColorPosition[pageName]
-}
-
-const updatePageLastColorPosition = (pageName: string, newPosition: number) => {
-  pagesLastColorPosition[pageName] = newPosition
+const getBackgroundIndex = (index: number) => {
+  let backgroundIndex = index % backgrounds.length
+  backgroundIndex = backgroundIndex > backgrounds.length ? backgroundIndex - 1 : backgroundIndex
+  console.log(index, backgroundIndex)
+  return backgroundIndex
 }

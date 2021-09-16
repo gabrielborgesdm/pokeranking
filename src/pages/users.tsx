@@ -9,8 +9,12 @@ import MainContainerComponent from '../components/MainContainerComponent'
 import UserBoxes from '../components/UserBoxes'
 import { REQUEST_URL } from '../configs/AppConfig'
 import { IUsersResponse, IUserType } from '../configs/types/IUser'
-import { checkIsAuthenticated, serverSideRedirection } from '../services/AuthService'
+import {
+  checkIsAuthenticated,
+  serverSideRedirection
+} from '../services/AuthService'
 import { useFetch } from '../services/FetchService'
+import { CustomPokerankingNav } from '../styles/pages/pokemons'
 
 const Users: React.FC = () => {
   const { data } = useFetch<IUsersResponse>(REQUEST_URL.USERS)
@@ -19,6 +23,7 @@ const Users: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [users, setUsers] = useState([])
   const { t } = useTranslation('users')
+  const { t: c } = useTranslation('common')
 
   useEffect(() => {
     updateUser()
@@ -33,7 +38,9 @@ const Users: React.FC = () => {
   }
 
   const filterUsers = (users: Array<IUserType>) => {
-    const filteredUsers = users.filter((user) => user.username.includes(filteredUsername.toLowerCase()))
+    const filteredUsers = users.filter(user =>
+      user.username.includes(filteredUsername.toLowerCase())
+    )
     setFilteredUsers(filteredUsers)
   }
 
@@ -45,15 +52,37 @@ const Users: React.FC = () => {
   return (
     <div>
       <MainContainerComponent>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group as={Row} className="mt-4 ml-0">
-              <Col sm={12} className="d-flex">
-                <Form.Control type="text" value={filteredUsername} onChange={e => setFilteredUsername(e.target.value)} placeholder={t('search-for-a-trainer')} maxLength={70} />
-                <CustomButton className="py-2 ml-10px"><FontAwesomeIcon icon={faSearch} /></CustomButton>
-              </Col>
-            </Form.Group>
-          </Form>
-        <UserBoxes users={filteredUsers} isLoading={isLoading} />
+        <Row>
+          <Col className="d-flex flex-column justify-space-between p-2 my-2">
+            <CustomPokerankingNav>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group as={Row}>
+                  <Col
+                    sm={12}
+                    className="d-flex align-items-center justify-content-between"
+                  >
+                    <h3>{c('user-rankings')}</h3>
+                    <div className="d-flex align-items-center">
+                      <Form.Control
+                        type="text"
+                        value={filteredUsername}
+                        className="ml-10px"
+                        onChange={e => setFilteredUsername(e.target.value)}
+                        placeholder={t('search-for-a-trainer')}
+                        maxLength={70}
+                      />
+                      <CustomButton className="py-2 ml-10px">
+                        <FontAwesomeIcon icon={faSearch} />
+                      </CustomButton>
+                    </div>
+                  </Col>
+                </Form.Group>
+              </Form>
+            </CustomPokerankingNav>
+
+            <UserBoxes users={filteredUsers} isLoading={isLoading} />
+          </Col>
+        </Row>
       </MainContainerComponent>
     </div>
   )
@@ -61,7 +90,7 @@ const Users: React.FC = () => {
 
 export default Users
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   if (!checkIsAuthenticated(context)) return serverSideRedirection
   return { props: {} }
 }
