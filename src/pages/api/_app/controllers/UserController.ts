@@ -1,5 +1,5 @@
 import UserRepository from '../repositories/UserRepository'
-import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
+import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND, NUMBER_POKEMONS } from '../../../../configs/APIConfig'
 import { NextApiResponse } from 'next'
 import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/AuthenticationHelpers'
 import { IRequest } from '../../../../configs/types/IRequest'
@@ -72,7 +72,7 @@ export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   const { username, email } = userInfo
   if (await getUser({ $or: [{ username }, { email }] })) return sendResponse(req, res, USER_ALREADY_REGISTERED)
   userInfo.password = await hashPassword(userInfo.password)
-  if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * 898) + 1
+  if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * NUMBER_POKEMONS) + 1
   const response = await userRepository.store(userInfo)
   if (!response) return sendResponse(req, res, ERROR)
   const user: IUserResponse = formatUserDocument(response)
