@@ -31,10 +31,6 @@ export const AccountContainer = styled.div`
 `
 export const MainContainer = styled.div`
   width: 100%;
-  min-height: 100%;
-  background: ${colors.dark};
-  background-image: url("/images/background.png");
-  background-repeat: repeat;
   color: ${colors.white};
 `
 
@@ -100,7 +96,6 @@ export const FloatingContainer = styled(Col)`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: calc(100vh - 100px);
 `
 
 export const CustomBox = styled.div`
