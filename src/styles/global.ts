@@ -41,8 +41,6 @@ export default createGlobalStyle`
     margin-left: 0px;
   }
   
-  
-
   html,
   body,
   body > div:first-child,
@@ -88,11 +86,11 @@ export default createGlobalStyle`
   .modal-content {
     background-color: ${colors.blue};
     color: ${colors.white};
+    box-shadow: 0 1px 10px 1px ${colors.dark};
   }
 
   .modal-header {
     border: none;
-    box-shadow: 0 1px 4px 1px ${colors.dark};
   }
 
   .cursor-pointer {
