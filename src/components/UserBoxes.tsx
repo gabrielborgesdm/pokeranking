@@ -70,12 +70,11 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
               .map((user: IUserType, index: number) => (
                 <CustomContainer
                   xs={12}
-                  md={4}
-                  lg={3}
+                  md={3}
                   key={user.username + index}
                   onClick={() => navigateToPokemon(user.username)}
                 >
-                  <CustomBox style={getThemedColors('users')}>
+                  <CustomBox style={getThemedColors(index)}>
                     <Image
                       src={user.avatar}
                       width={80}

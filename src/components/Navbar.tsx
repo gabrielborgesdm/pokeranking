@@ -1,4 +1,11 @@
-import { faQuestionCircle, faSignOutAlt, faUserCircle, IconDefinition } from '@fortawesome/fontawesome-free-solid'
+import {
+  faQuestionCircle,
+  faSignOutAlt,
+  faTrophy,
+  faUserCircle,
+  faUsers,
+  IconDefinition
+} from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import Image from 'next/image'
@@ -20,30 +27,45 @@ const NavbarComponent: React.FC = () => {
   const getNavLink = (link: string, title: string, icon?: IconDefinition) => {
     return (
       <Nav.Link
-        className={`nav-link ${router.pathname.includes(link) ? 'active-nav-link' : ''}`}
+        className={`nav-link navbar-button ml-10px ${
+          router.pathname.includes(link) ? 'active-nav-link' : ''
+        }`}
         href=""
-        onClick={() => navigate(link)}>
-          { icon && (<><FontAwesomeIcon icon={icon} size="lg"/>&nbsp;</>)}
-          {title}
+        onClick={() => navigate(link)}
+      >
+        {icon && (
+          <>
+            <FontAwesomeIcon icon={icon} size="1x" />
+            &nbsp;
+          </>
+        )}
+        {title}
       </Nav.Link>
     )
   }
 
   return (
-    <CustomNavbar variant="dark" expand="lg" style={{ backgroundColor: colors.blue }}>
+    <CustomNavbar
+      variant="dark"
+      expand="lg"
+      style={{ backgroundColor: colors.blue }}
+    >
       <Container fluid={true}>
-        <Navbar.Brand href={PAGE_URL.USERS} className="d-flex align-items-center">
-          <Image src="/pokeball.svg" height={40} width={40}/>
-          <NavbarTitle >{t('title')}</NavbarTitle>
+        <Navbar.Brand
+          href={PAGE_URL.USERS}
+          className="d-flex align-items-center"
+        >
+          <Image src="/pokeball.svg" height={40} width={40} />
+          <NavbarTitle>{t('title')}</NavbarTitle>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {getNavLink(PAGE_URL.POKEMONS, t('ranking'))}
-            {getNavLink(PAGE_URL.USERS, t('users'))}
+            {getNavLink(PAGE_URL.POKEMONS, t('ranking'), faTrophy)}
+            {getNavLink(PAGE_URL.USERS, t('users'), faUsers)}
+            {getNavLink(PAGE_URL.ABOUT, t('about'), faQuestionCircle)}
           </Nav>
           <Nav>
-            {getNavLink(PAGE_URL.ABOUT, t('about'), faQuestionCircle)}
             {getNavLink(PAGE_URL.ACCOUNT, t('my-account'), faUserCircle)}
             {getNavLink(PAGE_URL.LOGIN, t('logout'), faSignOutAlt)}
           </Nav>

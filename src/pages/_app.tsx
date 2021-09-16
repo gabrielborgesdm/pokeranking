@@ -24,28 +24,38 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }: any) => {
   })
 
   return (
-  <AuthProvider>
-    <ThemeProvider theme={theme}>
-      <Head>
-        <meta name="description" content={t('description')} />
-        <title>{t('title')}</title>
-        <link
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <Head>
+          <meta name="description" content={t('description')} />
+
+          <meta
+            name="keywords"
+            content="Pokemons, Pokemon, Rank, Ranking, top pokemons"
+          />
+          <meta name="author" content="Gabriel Borges de Moraes" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <title>{t('title')}</title>
+          <link
             rel="preload"
             href="/fonts/roboto/Roboto-Regular.ttf"
             as="font"
             crossOrigin=""
           />
-        <link
-          rel="preload"
-          href="/fonts/roboto/Roboto-Medium.ttf"
-          as="font"
-          crossOrigin=""
-        />
-      </Head>
-      <Component {...pageProps} />
-      <GlobalStyle />
-    </ThemeProvider>
-  </AuthProvider>
+          <link
+            rel="preload"
+            href="/fonts/roboto/Roboto-Medium.ttf"
+            as="font"
+            crossOrigin=""
+          />
+        </Head>
+        <Component {...pageProps} />
+        <GlobalStyle />
+      </ThemeProvider>
+    </AuthProvider>
   )
 }
 

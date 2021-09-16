@@ -43,19 +43,6 @@ export default class MyDocument extends Document {
         <Head>
           <meta charSet="utf-8" />
           <link rel="icon" href="pokeball.svg" />
-          <meta
-            name="description"
-            content="Rank your favorite pokemons and share them with your friends"
-          />
-          <meta
-            name="keywords"
-            content="Pokemons, Pokemon, Rank, Ranking, top pokemons"
-          />
-          <meta name="author" content="Gabriel Borges de Moraes" />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-          />
         </Head>
         <body>
           <Main />

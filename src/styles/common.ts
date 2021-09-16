@@ -78,13 +78,15 @@ export const CustomBoxRow = styled(Row)`
 export const CustomContainer = styled(Col)`
   display: flex;
   flex-direction: column;
-  max-height: 75vh;
   overflow-y: auto;
+  max-height: calc(100vh - 260px);
   @media (min-width: 768px) and (max-width: 846px), (max-width: 346px) {
     img.pokemon-image {
       display: none !important;
     }
   }
+
+ 
   
   .container-name {
     width: 10%;

@@ -1,6 +1,6 @@
 {
   "title": "Pokeranking",
-  "description": "Pokemon ranking",
+  "description": "Rank your favorite pokemons and share them with your friends",
   "loading": "Loading",
   "server-error": "A server error occurred",
   "email": "E-mail Address",
@@ -32,5 +32,6 @@
   "logout": "Logout",
   "both-passwords-must-be-the-same": "Both passwords must be the same",
   "about": "About",
-  "click-here-to-have-access-to-it": "Click here to have access to it"
+  "click-here-to-have-access-to-it": "Click here to have access to it",
+  "user-rankings": "User Rankings"
 }
