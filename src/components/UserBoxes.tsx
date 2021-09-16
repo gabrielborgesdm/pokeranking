@@ -14,7 +14,7 @@ import { IUserBoxes } from '../configs/types/IUserBox'
 import { getThemedColors } from '../helpers/ColorHelpers'
 import {
   CustomBoxRow,
-  CustomContainer,
+  PokemonListingContainer,
   CustomBox,
   CustomBoxTitle
 } from '../styles/common'
@@ -58,7 +58,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
 
   return (
     <CustomBoxRow>
-      <CustomContainer
+      <PokemonListingContainer
         xs={12}
         className="users-container pb-5"
         onScroll={element => handleScrollAndLoadUsers(element)}
@@ -68,7 +68,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
             users
               .slice(0, numberOfUsersRendered)
               .map((user: IUserType, index: number) => (
-                <CustomContainer
+                <PokemonListingContainer
                   xs={12}
                   md={3}
                   key={user.username + index}
@@ -86,7 +86,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                       <FontAwesomeIcon icon={faExternalLinkAlt} />
                     </div>
                   </CustomBox>
-                </CustomContainer>
+                </PokemonListingContainer>
               ))
           ) : (
             <div className="d-flex justify-content-center align-items-center flex-grow-1">
@@ -107,7 +107,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
             </div>
           )}
         </Row>
-      </CustomContainer>
+      </PokemonListingContainer>
     </CustomBoxRow>
   )
 }
