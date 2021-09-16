@@ -82,7 +82,9 @@ export const PokemonsSelectList: React.FC<IPokemonsSelectList> = ({
             React.Children.toArray(children).filter(
               child =>
                 !pokemonFilter ||
-                child.props.children.toLowerCase().startsWith(pokemonFilter)
+                child.props.children
+                  .toLowerCase()
+                  .includes(pokemonFilter.toLowerCase())
             )}
         </ul>
       </div>
@@ -110,7 +112,7 @@ export const PokemonsSelectList: React.FC<IPokemonsSelectList> = ({
                 className="d-flex align-items-center"
                 active={pokemon.name === selectedPokemon?.name}
               >
-                {pokemon.name}
+                {`${pokemon.id} - ${pokemon.name}`}
               </Dropdown.Item>
             ))}
         </Dropdown.Menu>
