@@ -55,8 +55,10 @@ const NavbarComponent: React.FC = () => {
           href={PAGE_URL.USERS}
           className="d-flex align-items-center"
         >
-          <Image src="/pokeball.svg" height={40} width={40} />
-          <NavbarTitle>{t('title')}</NavbarTitle>
+          <img
+            src="/images/pokeranking.png"
+            style={{ width: '100%', maxHeight: '40px' }}
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">

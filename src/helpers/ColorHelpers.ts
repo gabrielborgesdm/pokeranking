@@ -10,6 +10,5 @@ export const getThemedColors = (index: number) => {
 const getBackgroundIndex = (index: number) => {
   let backgroundIndex = index % backgrounds.length
   backgroundIndex = backgroundIndex > backgrounds.length ? backgroundIndex - 1 : backgroundIndex
-  console.log(index, backgroundIndex)
   return backgroundIndex
 }
