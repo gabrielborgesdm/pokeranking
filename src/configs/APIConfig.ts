@@ -122,4 +122,4 @@ export const INVALID_CREDENTIALS: IResponse = {
   code: CODE.INVALID_CREDENTIALS
 }
 
-export const NUMBER_POKEMONS = 917
+export const NUMBER_POKEMONS = 929
