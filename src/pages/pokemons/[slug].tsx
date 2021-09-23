@@ -11,7 +11,8 @@ import CustomButton from '../../components/CustomButton'
 import MainContainerComponent from '../../components/MainContainerComponent'
 import PokemonAddModal from '../../components/PokemonAddModal'
 import PokemonBoxes from '../../components/PokemonBoxes'
-import { REQUEST_URL } from '../../configs/AppConfig'
+import { STATUS } from '../../configs/APIConfig'
+import { PAGE_URL, REQUEST_URL } from '../../configs/AppConfig'
 import { IPokemon, IPokemonMutate } from '../../configs/types/IPokemon'
 import { IUserResponse } from '../../configs/types/IUser'
 import { convertPokemonsToCSV } from '../../helpers/PokemonHelpers'
@@ -28,7 +29,6 @@ const Pokemons: React.FC = () => {
   const router = useRouter()
   const { getAxios, getCookies } = useContext(AuthContext)
   const { slug: user } = router.query
-  const { data } = useFetch<IUserResponse>(`${REQUEST_URL.USERS}/${user}`)
   const { t } = useTranslation('pokemons')
   const { t: c } = useTranslation('common')
   const [userPokemons, setUserPokemons] = useState<Array<IPokemon>>([])
@@ -37,14 +37,30 @@ const Pokemons: React.FC = () => {
   const [isRankingFromAuthUser] = useState(getCookies().username === user)
 
   useEffect(() => {
-    updatePokemons()
-  }, [data])
+    fetchPokemons()
+  }, [])
 
-  const updatePokemons = () => {
+  const fetchPokemons = async () => {
+    const data = await handleGetPokemons()
     if (data?.success) {
       setUserPokemons(data.user.pokemons)
-      setIsLoading(false)
+    } else if (data?.status === STATUS.NOT_FOUND) {
+      router.replace(PAGE_URL.USERS)
+    } else if (data?.status) {
+      alert(data.message)
     }
+    setIsLoading(false)
+  }
+
+  const handleGetPokemons = async () => {
+    let data: IUserResponse
+    try {
+      const response = await getAxios().get(`${REQUEST_URL.USERS}/${user}`)
+      data = response?.data
+    } catch (error) {
+      console.log(error)
+    }
+    return data
   }
 
   const onAddPokemon = (pokemon: IPokemon, pokemonIndex: number) => {
