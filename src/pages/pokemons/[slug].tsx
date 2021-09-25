@@ -21,7 +21,6 @@ import {
   checkIsAuthenticated,
   serverSideRedirection
 } from '../../services/AuthService'
-import { useFetch } from '../../services/FetchService'
 import { CustomPokerankingNav } from '../../styles/pages/pokemons'
 import { colors } from '../../styles/theme'
 
