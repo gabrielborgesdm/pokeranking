@@ -2,7 +2,7 @@ import { IModel } from './IModel'
 import { IPokemon } from './IPokemon'
 import { IResponse } from './IResponse'
 
-export type IUserType = {
+export type IUser = {
   _id?: string;
   username: string;
   avatar: string;
@@ -11,10 +11,6 @@ export type IUserType = {
   password?: string;
   pokemons?: Array<IPokemon>;
   role?: string;
-}
-
-export type IUsersType = {
-  users: Array<IUserType>
 }
 
 export type IUserAdd = {
@@ -33,10 +29,12 @@ export type IUserUpdate = {
   password?: string;
 }
 
-export interface IUserDocument extends IUserType, IModel {}
+export interface IUserDocument extends IUser, IModel {}
 
 export interface IUserResponse extends IResponse {
-  user: IUserType;
+  user: IUser;
 }
 
-export interface IUsersResponse extends IUsersType, IResponse {}
+export interface IUsersResponse extends IResponse {
+  users: IUser[];
+}
