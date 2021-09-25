@@ -1,8 +1,10 @@
 import MigrationRepository from '../repositories/MigrationRepository'
 import { addAdminUser } from './AddAdminUser'
+import { addPokemons } from './AddPokemons'
 
 const migrations = {
-  addAdminUser: addAdminUser
+  addAdminUser: addAdminUser,
+  addPokemons: addPokemons
 }
 
 class Migration {
