@@ -4,6 +4,7 @@ import { IResponse } from './IResponse'
 export interface IPokemon {
   name: String;
   image: String;
+  id?: number;
 }
 
 export interface IPokemonsResponse extends IResponse {

@@ -48,9 +48,9 @@ export const MESSAGES = {
     unauthorized: 'Unauthorized access',
     forbidden: 'Forbidden access',
     field_validation_error: 'There are invalid fields',
-    not_found: 'User was not found',
+    not_found: 'Resource was not found',
     image_not_found: 'Image not found',
-    already_registered: 'User is already registered',
+    already_registered: 'Resource was already registered',
     invalid_credentials: 'Invalid credentials'
   },
   pt: {
@@ -59,9 +59,9 @@ export const MESSAGES = {
     unauthorized: 'Acesso não autorizado',
     forbidden: 'Acesso proibido',
     field_validation_error: 'Há campos inválidos',
-    not_found: 'Usuário não encontrado',
+    not_found: 'Recurso não encontrado',
     image_not_found: 'Imagem não encontrada',
-    already_registered: 'Usuário já foi registrado',
+    already_registered: 'Recurso já foi registrado',
     invalid_credentials: 'Credenciais inválidas'
   }
 }
@@ -98,6 +98,12 @@ export const FIELD_VALIDATION_ERROR: IResponse = {
   code: CODE.FIELD_VALIDATION_ERROR
 }
 
+export const POKEMON_NOT_FOUND: IResponse = {
+  success: false,
+  status: STATUS.NOT_FOUND,
+  code: CODE.NOT_FOUND
+}
+
 export const USER_NOT_FOUND: IResponse = {
   success: false,
   status: STATUS.NOT_FOUND,
@@ -111,6 +117,12 @@ export const IMAGE_NOT_FOUND: IResponse = {
 }
 
 export const USER_ALREADY_REGISTERED: IResponse = {
+  success: false,
+  status: STATUS.ALREADY_REGISTERED,
+  code: CODE.ALREADY_REGISTERED
+}
+
+export const POKEMON_ALREADY_REGISTERED: IResponse = {
   success: false,
   status: STATUS.ALREADY_REGISTERED,
   code: CODE.ALREADY_REGISTERED

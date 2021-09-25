@@ -9,7 +9,9 @@ const PokemonModel = new mongoose.Schema<IPokemonDocument>({
   updatedAt: { type: Date, default: Date.now }
 })
 
-PokemonModel.plugin(AutoIncrement, { inc_field: 'id' })
+if (!mongoose.models.Pokemons) {
+  PokemonModel.plugin(AutoIncrement, { inc_field: 'id' })
+}
 
 const Pokemon = mongoose.models.Pokemons || mongoose.model<IPokemonDocument>('Pokemons', PokemonModel)
 export default Pokemon
