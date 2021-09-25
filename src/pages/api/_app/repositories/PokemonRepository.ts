@@ -12,10 +12,10 @@ export default class PokemonRepository {
     return pokemons
   }
 
-  async getById (_id: string): Promise<IPokemonDocument> {
+  async getById (id: number): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
-      pokemon = await Pokemon.findById(_id).exec()
+      pokemon = await Pokemon.findOne({ id }).exec()
     } catch (error) {
       console.log(error)
     }
@@ -32,10 +32,10 @@ export default class PokemonRepository {
     return pokemon
   }
 
-  async delete (_id: string): Promise<IPokemonDocument> {
+  async delete (id: number): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
-      pokemon = await Pokemon.findByIdAndDelete(_id).exec()
+      pokemon = await Pokemon.findOneAndDelete({ id }).exec()
     } catch (error) {
       console.log(error)
     }
@@ -52,10 +52,10 @@ export default class PokemonRepository {
     return pokemon
   }
 
-  async update (_id: string, pokemonInfo: IPokemon): Promise<IPokemonDocument> {
+  async update (id: number, pokemonInfo: IPokemon): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
-      pokemon = await Pokemon.findByIdAndUpdate(_id, pokemonInfo, { new: true })
+      pokemon = await Pokemon.findOneAndUpdate({ id }, pokemonInfo, { new: true })
     } catch (error) {
       console.log(error)
     }

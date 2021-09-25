@@ -29,6 +29,7 @@
     "next-compose-plugins": "^2.2.1",
     "next-images": "^1.8.1",
     "next-translate": "^1.0.7",
+    "node-mocks-http": "^1.11.0",
     "nookies": "^2.5.2",
     "react": "17.0.2",
     "react-bootstrap": "^2.0.0-beta.4",
