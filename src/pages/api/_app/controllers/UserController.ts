@@ -1,18 +1,18 @@
-import UserRepository from '../repositories/UserRepository'
-import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND, NUMBER_POKEMONS } from '../../../../configs/APIConfig'
 import { NextApiResponse } from 'next'
-import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/AuthenticationHelpers'
+import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, NUMBER_POKEMONS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
-import { abstractUserBasedOnAuthorizationLevel, formatUserDocument, isUserAuthorized } from '../helpers/UserAuthorizationHelpers'
 import { IResponse } from '../../../../configs/types/IResponse'
-import { IUserAdd, IUserDocument, IUserResponse } from '../../../../configs/types/IUser'
+import { IUser, IUserAdd, IUserDocument } from '../../../../configs/types/IUser'
+import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/AuthenticationHelpers'
 import { sendResponse } from '../helpers/ResponseHelpers'
+import { abstractUserBasedOnAuthorizationLevel, formatUserDocument, isUserAuthorized } from '../helpers/UserAuthorizationHelpers'
+import UserRepository from '../repositories/UserRepository'
 
 const userRepository = new UserRepository()
 
 export const getAllUsers = async (req: IRequest, res: NextApiResponse) => {
   const response = await userRepository.getAll()
-  let users: Array<IUserResponse> = []
+  let users: Array<IUser> = []
   if (response) {
     users = response.map((user) => abstractUserBasedOnAuthorizationLevel(req.user, user))
   }
@@ -27,11 +27,11 @@ export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => 
   const { slug: username } = req.query
   const response: IUserDocument = await userRepository.get({ username })
   if (!response) return sendResponse(req, res, USER_NOT_FOUND)
-  const user: IUserResponse = abstractUserBasedOnAuthorizationLevel(req.user, response)
+  const user: IUser = abstractUserBasedOnAuthorizationLevel(req.user, response)
   sendResponse(req, res, SUCCESS, { user })
 }
 
-const isOkayToExecuteMutation = (authenticatedUser: IUserResponse, response: IUserDocument) : IResponse => {
+const isOkayToExecuteMutation = (authenticatedUser: IUser, response: IUserDocument) : IResponse => {
   if (!response) {
     return USER_NOT_FOUND
   }
@@ -75,7 +75,7 @@ export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * NUMBER_POKEMONS) + 1
   const response = await userRepository.store(userInfo)
   if (!response) return sendResponse(req, res, ERROR)
-  const user: IUserResponse = formatUserDocument(response)
+  const user: IUser = formatUserDocument(response)
   sendResponse(req, res, SUCCESS, { user })
 }
 
