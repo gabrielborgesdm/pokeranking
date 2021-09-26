@@ -6,13 +6,16 @@ import AuthenticationMiddleware from './AuthenticationMiddleware'
 import ValidationMiddleware from './ValidationMiddleware'
 import { sendResponse } from '../helpers/ResponseHelpers'
 import { ERROR } from '../../../../configs/APIConfig'
+import AuthorizationMiddleware from './AuthorizationMiddleware'
 
 export const AUTHENTICATION = 'authentication'
+export const AUTHORIZATION = 'authorization'
 export const VALIDATION = 'validation'
 
 const callMiddleware = {
   authentication: AuthenticationMiddleware,
-  validation: ValidationMiddleware
+  validation: ValidationMiddleware,
+  authorization: AuthorizationMiddleware
 }
 
 const migration = new Migration()
