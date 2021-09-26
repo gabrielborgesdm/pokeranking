@@ -2,8 +2,8 @@ import { IModel } from './IModel'
 import { IResponse } from './IResponse'
 
 export interface IPokemon {
-  name: String;
-  image: String;
+  name: string;
+  image: string;
   id?: number;
 }
 

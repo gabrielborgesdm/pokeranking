@@ -15,3 +15,10 @@ export const AddPokemonSchema = Joi.object({
     image: Joi.string().base64().required()
   })
 })
+
+export const UpdatePokemonSchema = Joi.object({
+  pokemon: Joi.object({
+    name: Joi.string().max(100),
+    image: Joi.string().base64()
+  })
+})
