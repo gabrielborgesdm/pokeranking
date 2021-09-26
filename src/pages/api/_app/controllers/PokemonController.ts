@@ -48,7 +48,7 @@ export const updatePokemon = async (req: IRequest, res: NextApiResponse) => {
   const pokemonFound = await pokemonRepository.getById(pokemonId)
   if (!pokemonFound) return sendResponse(req, res, POKEMON_NOT_FOUND)
 
-  if (await pokemonRepository.get({ name: pokemonInfo.name })) {
+  if (pokemonInfo.name && await pokemonRepository.get({ name: pokemonInfo.name })) {
     return sendResponse(req, res, POKEMON_ALREADY_REGISTERED)
   }
 
@@ -72,5 +72,21 @@ export const updatePokemon = async (req: IRequest, res: NextApiResponse) => {
     removeImage(imageName)
     return sendResponse(req, res, ERROR)
   }
+  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(pokemon) })
+}
+
+export const deletePokemon = async (req: IRequest, res: NextApiResponse) => {
+  const { slug }: any = req.query
+  const pokemonId = parseInt(slug)
+  const pokemonFound = await pokemonRepository.getById(pokemonId)
+  if (!pokemonFound) return sendResponse(req, res, POKEMON_NOT_FOUND)
+  if (await userRepository.get({ pokemons: { $elemMatch: { pokemon: pokemonId } } })) {
+    return sendResponse(req, res, BEING_USED)
+  }
+  const pokemon = await pokemonRepository.delete(pokemonId)
+  if (!pokemon) {
+    return sendResponse(req, res, ERROR)
+  }
+  removeImage(pokemonFound.image)
   return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(pokemon) })
 }
