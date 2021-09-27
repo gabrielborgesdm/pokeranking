@@ -126,7 +126,7 @@ const Pokemons: React.FC = () => {
     <div>
       <MainContainerComponent>
         <Row>
-          <Col xs={12} className="mx-auto p-2 my-2">
+          <Col className="d-flex flex-column justify-space-between p-2 my-2">
             <CustomPokerankingNav>
               <Row>
                 <Col

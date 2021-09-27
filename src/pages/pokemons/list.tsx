@@ -8,8 +8,7 @@ import CustomButton from '../../components/CustomButton'
 import MainContainerComponent from '../../components/MainContainerComponent'
 import PokemonsListingBoxes from '../../components/PokemonsListingBoxes'
 import { REQUEST_URL } from '../../configs/AppConfig'
-import { IPokemon, IPokemonsResponse } from '../../configs/types/IPokemon'
-import { IUsersResponse } from '../../configs/types/IUser'
+import { IPokemonsResponse } from '../../configs/types/IPokemon'
 import {
   checkIsAuthenticated,
   serverSideRedirection
