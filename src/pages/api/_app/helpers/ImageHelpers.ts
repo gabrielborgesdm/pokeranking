@@ -1,7 +1,6 @@
 import fs from 'fs'
-import path, { join } from 'path'
 import getConfig from 'next/config'
-import { IRequest } from '../../../../configs/types/IRequest'
+import { join } from 'path'
 
 export const imagePath = join(getConfig().serverRuntimeConfig.PROJECT_ROOT, 'src/assets/images/pokemons')
 
