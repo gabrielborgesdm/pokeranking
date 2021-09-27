@@ -1,4 +1,5 @@
 import {
+  faGamepad,
   faQuestionCircle,
   faSignOutAlt,
   faTrophy,
@@ -65,6 +66,7 @@ const NavbarComponent: React.FC = () => {
             {getNavLink(PAGE_URL.POKEMONS, t('my-ranking'), faTrophy)}
             {getNavLink(PAGE_URL.USERS, t('users'), faUsers)}
             {getNavLink(PAGE_URL.ABOUT, t('about'), faQuestionCircle)}
+            {getNavLink(PAGE_URL.LIST_POKEMONS, t('pokemons'), faGamepad)}
           </Nav>
           <Nav>
             {getNavLink(PAGE_URL.ACCOUNT, t('my-account'), faUserCircle)}
