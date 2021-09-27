@@ -4,7 +4,6 @@ import {
 } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { memo, useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap'
@@ -13,10 +12,10 @@ import { IUserType } from '../configs/types/IUser'
 import { IUserBoxes } from '../configs/types/IUserBox'
 import { getThemedColors } from '../helpers/ColorHelpers'
 import {
-  CustomBoxRow,
-  PokemonListingContainer,
   CustomBox,
-  CustomBoxTitle
+  CustomBoxRow,
+  CustomBoxTitle,
+  PokemonListingContainer
 } from '../styles/common'
 
 const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
@@ -75,7 +74,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                   onClick={() => navigateToPokemon(user.username)}
                 >
                   <CustomBox style={getThemedColors(index)}>
-                    <Image
+                    <img
                       src={user.avatar}
                       width={80}
                       height={80}

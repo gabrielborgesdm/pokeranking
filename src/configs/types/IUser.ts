@@ -1,6 +1,6 @@
 import { IModel } from './IModel'
-import { IPokemon } from './IPokemon'
 import { IResponse } from './IResponse'
+import { IUserPokemonMutate } from './IUserPokemon'
 
 export type IUser = {
   _id?: string;
@@ -9,7 +9,7 @@ export type IUser = {
   email?: string;
   bio?: string;
   password?: string;
-  pokemons?: Array<IPokemon>;
+  pokemons?: Array<IUserPokemonMutate>;
   role?: string;
 }
 

@@ -1,4 +1,4 @@
-import { IUserAdd, IUserDocument, IUserUpdate } from '../../../../configs/types/IUser'
+import { IUserAdd, IUserDocument } from '../../../../configs/types/IUser'
 import User from '../models/UserModel'
 
 export default class UserRepository {
@@ -52,8 +52,8 @@ export default class UserRepository {
     return user
   }
 
-  async update (_id: string, userInfo: IUserUpdate): Promise<IUserDocument> {
-    let user: IUserDocument = null
+  async update (_id: string, userInfo: any): Promise<IUserDocument> {
+    let user: any = null
     try {
       user = await User.findByIdAndUpdate(_id, userInfo, { new: true })
     } catch (error) {
