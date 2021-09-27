@@ -58,9 +58,7 @@ const PokemonAddModal: React.FC<IPokemonAddModal> = ({
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex justify-content-center">
-            <PokemonAvatar
-              avatar={selectedPokemon?.image || '/pokemons/001.png'}
-            />
+            <PokemonAvatar avatar={selectedPokemon?.image} />
           </div>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
