@@ -1,12 +1,10 @@
-import fs from 'fs'
-import path from 'path'
 import { NextApiResponse } from 'next'
 import { BEING_USED, ERROR, POKEMON_ALREADY_REGISTERED, POKEMON_NOT_FOUND, SUCCESS } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
+import { removeImage, writeImage } from '../helpers/ImageHelpers'
 import { abstractPokemon } from '../helpers/PokemonHelpers'
 import { sendResponse } from '../helpers/ResponseHelpers'
 import PokemonRepository from '../repositories/PokemonRepository'
-import { removeImage, writeImage } from '../helpers/ImageHelpers'
 import UserRepository from '../repositories/UserRepository'
 
 const pokemonRepository = new PokemonRepository()
@@ -14,7 +12,7 @@ const userRepository = new UserRepository()
 
 export const getAllPokemons = async (req: IRequest, res: NextApiResponse) => {
   const pokemons = await pokemonRepository.getAll()
-  const formattedPokemons = pokemons.map(pokemon => abstractPokemon(pokemon))
+  const formattedPokemons = pokemons.map(pokemon => abstractPokemon(req, pokemon))
   return sendResponse(req, res, SUCCESS, { pokemons: formattedPokemons })
 }
 
@@ -23,7 +21,7 @@ export const getPokemon = async (req: IRequest, res: NextApiResponse) => {
   const pokemonId = parseInt(slug)
   const pokemon = await pokemonRepository.getById(pokemonId)
   if (!pokemon) return sendResponse(req, res, POKEMON_NOT_FOUND)
-  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(pokemon) })
+  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(req, pokemon) })
 }
 
 export const storePokemon = async (req: IRequest, res: NextApiResponse) => {
@@ -37,7 +35,7 @@ export const storePokemon = async (req: IRequest, res: NextApiResponse) => {
     removeImage(imageName)
     return sendResponse(req, res, ERROR)
   }
-  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(pokemon) })
+  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(req, pokemon) })
 }
 
 export const updatePokemon = async (req: IRequest, res: NextApiResponse) => {
@@ -72,7 +70,7 @@ export const updatePokemon = async (req: IRequest, res: NextApiResponse) => {
     removeImage(imageName)
     return sendResponse(req, res, ERROR)
   }
-  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(pokemon) })
+  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(req, pokemon) })
 }
 
 export const deletePokemon = async (req: IRequest, res: NextApiResponse) => {
@@ -88,5 +86,5 @@ export const deletePokemon = async (req: IRequest, res: NextApiResponse) => {
     return sendResponse(req, res, ERROR)
   }
   removeImage(pokemonFound.image)
-  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(pokemon) })
+  return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(req, pokemon) })
 }

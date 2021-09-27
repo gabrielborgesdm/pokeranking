@@ -1,14 +1,19 @@
-import { IPokemon } from '../configs/types/IPokemon'
+import { IPokemonDocument } from '../configs/types/IPokemon'
+import { IRequest } from '../configs/types/IRequest'
+import { IUser } from '../configs/types/IUser'
+import { IUserPokemonMutate } from '../configs/types/IUserPokemon'
+import { abstractPokemon } from '../pages/api/_app/helpers/PokemonHelpers'
+import { getImageURL } from './ServerHelpers'
 
-export const convertPokemonsToCSV = (pokemons: Array<IPokemon>, lang: string) => {
-  const separator = lang.includes('pt') ? ';' : ','
-  const headers = ['id', 'position', 'name', 'note']
-  let csvData = ''
-  headers.forEach(header => {
-    csvData += `${header}${separator}`
+export const populateUserWithPokemons = (req: IRequest, user: IUser, allPokemons: IPokemonDocument[]) => {
+  const userPokemons: IUserPokemonMutate[] = user.pokemons
+  user.pokemons = userPokemons.map(userPokemon => {
+    const filteredPokemons = allPokemons.filter(filteredPokemon => filteredPokemon.id === userPokemon.pokemon)
+    const populated = { ...abstractPokemon(req, filteredPokemons[0]) }
+    if (userPokemon.note) populated.note = userPokemon.note
+    return populated
   })
-  pokemons.forEach((pokemon, index) => {
-    csvData += `\n${pokemon.id};${index + 1};${pokemon.name};${pokemon.note || ''}`
-  })
-  return csvData
+
+  const image = allPokemons.filter((pokemon) => pokemon.id === parseInt(user.avatar))[0].image
+  user.avatar = getImageURL(req, image)
 }

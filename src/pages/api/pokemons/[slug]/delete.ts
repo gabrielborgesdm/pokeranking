@@ -1,7 +1,7 @@
 import { NextApiResponse } from 'next'
 import { USER_ROLES } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
-import { deletePokemon, updatePokemon } from '../../_app/controllers/PokemonController'
+import { deletePokemon } from '../../_app/controllers/PokemonController'
 import withMiddlewares, { AUTHENTICATION, AUTHORIZATION, VALIDATION } from '../../_app/middlewares/WithMiddlewares'
 import { PokemonIdSchema } from '../../_app/models/schemas/PokemonSchemas'
 

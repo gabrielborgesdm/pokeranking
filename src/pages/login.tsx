@@ -9,7 +9,11 @@ import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { ILoginResponse } from '../configs/types/ILogin'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
 import { AuthContext } from '../models/AuthContext'
-import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
+import {
+  AccountContainer,
+  FullScreenContainer,
+  YellowLink
+} from '../styles/common'
 
 const Login: React.FC = () => {
   const { t } = useTranslation('login')
@@ -18,7 +22,10 @@ const Login: React.FC = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [status, setStatus] = useState<IStatus>({ message: '', type: IStatusType.Success })
+  const [status, setStatus] = useState<IStatus>({
+    message: '',
+    type: IStatusType.Success
+  })
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -57,7 +64,13 @@ const Login: React.FC = () => {
     <div>
       <FullScreenContainer>
         <AccountContainer>
-          <Image src="/images/pokeranking.png" width="656" height="184" quality="100" layout="responsive" />
+          <Image
+            src="/images/pokeranking.png"
+            width="656"
+            height="184"
+            quality="100"
+            layout="responsive"
+          />
           <StatusBar message={status.message} type={status.type} />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
@@ -89,9 +102,7 @@ const Login: React.FC = () => {
                 <YellowLink>{t('no-account-create-one')}</YellowLink>
               </Link>
             </Form.Group>
-            <CustomButton isLoading={isLoading}>
-              {c('enter')}
-            </CustomButton>
+            <CustomButton isLoading={isLoading}>{c('enter')}</CustomButton>
           </Form>
         </AccountContainer>
       </FullScreenContainer>

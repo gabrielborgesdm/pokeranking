@@ -12,17 +12,3 @@ export interface IPokemonsResponse extends IResponse {
 }
 
 export interface IPokemonDocument extends IPokemon, IModel {}
-
-// lixo abaixo
-export interface IUserPokemons {
-  pokemons: Array<IPokemon>;
-}
-
-export interface IPokemonMutate {
-  pokemon: number;
-  note?: string;
-}
-
-export interface IUserPokemonsMutate {
-  pokemons: Array<IPokemonMutate>;
-}

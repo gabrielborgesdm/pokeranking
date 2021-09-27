@@ -10,6 +10,7 @@ const nextConfig = {
   serverRuntimeConfig: {
     PROJECT_ROOT: __dirname
   }
+
 }
 
 module.exports = withPlugins([nextTranslate], nextConfig)

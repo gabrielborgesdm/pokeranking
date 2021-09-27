@@ -1,6 +1,7 @@
 import fs from 'fs'
-import { join } from 'path'
+import path, { join } from 'path'
 import getConfig from 'next/config'
+import { IRequest } from '../../../../configs/types/IRequest'
 
 export const imagePath = join(getConfig().serverRuntimeConfig.PROJECT_ROOT, 'src/assets/images/pokemons')
 
@@ -31,4 +32,11 @@ export const removeImage = (imageRelativePath: string) : boolean => {
     return null
   }
   return true
+}
+
+export const getImage = (imageRelativePath: string) : Buffer | null => {
+  const fullImagePath = join(imagePath, imageRelativePath)
+  if (!fs.existsSync(fullImagePath)) return
+  const imageBuffer = fs.readFileSync(fullImagePath)
+  return imageBuffer
 }

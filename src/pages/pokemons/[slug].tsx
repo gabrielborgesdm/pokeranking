@@ -13,9 +13,9 @@ import PokemonAddModal from '../../components/PokemonAddModal'
 import PokemonBoxes from '../../components/PokemonBoxes'
 import { STATUS } from '../../configs/APIConfig'
 import { PAGE_URL, REQUEST_URL } from '../../configs/AppConfig'
-import { IPokemon, IPokemonMutate } from '../../configs/types/IPokemon'
+import { IPokemon } from '../../configs/types/IPokemon'
 import { IUserResponse } from '../../configs/types/IUser'
-import { convertPokemonsToCSV } from '../../helpers/PokemonHelpers'
+import { convertPokemonsToCSV } from '../../helpers/CsvHelpers'
 import { AuthContext } from '../../models/AuthContext'
 import {
   checkIsAuthenticated,
@@ -102,7 +102,7 @@ const Pokemons: React.FC = () => {
       const response = await axios.put(`${REQUEST_URL.USERS}/${user}/update`, {
         user: {
           pokemons: userPokemons.map(pokemon => {
-            const pokemonObject: IPokemonMutate = { pokemon: pokemon.id }
+            const pokemonObject = { pokemon: pokemon.id }
             if (pokemon.note) {
               pokemonObject.note = pokemon.note
             }

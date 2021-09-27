@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import React from 'react'
 import { Row } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
@@ -35,8 +34,8 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({
             id={`pokemon-${pokemon.id}-box`}
           >
             <CustomPokemonBox style={getThemedColors(index)}>
-              <Image
-                src={pokemon.image}
+              <img
+                src={`../${pokemon.image}`}
                 width={80}
                 height={80}
                 className="pokemon-image"
