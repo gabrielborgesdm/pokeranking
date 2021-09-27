@@ -37,16 +37,20 @@ const Users: React.FC = () => {
     }
   }
 
-  const filterUsers = (users: Array<IUserType>) => {
+  const filterUsers = () => {
+    if (!filteredUsername.length) {
+      setFilteredUsers(users)
+      return
+    }
     const filteredUsers = users.filter(user =>
-      user.username.includes(filteredUsername.toLowerCase())
+      user.username.toLowerCase().includes(filteredUsername.toLowerCase())
     )
     setFilteredUsers(filteredUsers)
   }
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
-    filterUsers(users)
+    filterUsers()
   }
 
   return (
