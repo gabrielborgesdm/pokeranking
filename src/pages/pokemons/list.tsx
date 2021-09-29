@@ -2,13 +2,17 @@ import { faSearch } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
 import CustomButton from '../../components/CustomButton'
 import MainContainerComponent from '../../components/MainContainerComponent'
+import PokemonAddModal from '../../components/PokemonAddModal'
 import PokemonsListingBoxes from '../../components/PokemonsListingBoxes'
+import { USER_ROLES } from '../../configs/APIConfig'
 import { REQUEST_URL } from '../../configs/AppConfig'
 import { IPokemonsResponse } from '../../configs/types/IPokemon'
+import { IUser } from '../../configs/types/IUser'
+import { AuthContext } from '../../models/AuthContext'
 import {
   checkIsAuthenticated,
   serverSideRedirection
@@ -18,19 +22,23 @@ import { CustomPokerankingNav } from '../../styles/pages/pokemons'
 
 const Pokemons: React.FC = () => {
   const { data } = useFetch<IPokemonsResponse>(REQUEST_URL.POKEMONS)
+  const { recoverUserInformation } = useContext(AuthContext)
   const [filteredPokemon, setFilteredPokemon] = useState('')
   const [filteredPokemons, setFilteredPokemons] = useState([])
+  const [user, setUser] = useState<IUser>()
   const [isLoading, setIsLoading] = useState(true)
   const [pokemons, setPokemons] = useState([])
+
   const { t } = useTranslation('pokemons')
-  const { t: c } = useTranslation('common')
 
   useEffect(() => {
     updatePokemons()
   }, [data])
 
-  const updatePokemons = () => {
+  const updatePokemons = async () => {
     if (data?.success) {
+      const user = await recoverUserInformation()
+      setUser(user)
       setPokemons(data.pokemons)
       setFilteredPokemons(data.pokemons)
       setIsLoading(false)
@@ -67,7 +75,9 @@ const Pokemons: React.FC = () => {
                     className="d-flex align-items-center justify-content-between"
                   >
                     <h3>{t('pokemons-list')}</h3>
+
                     <div className="d-flex align-items-center">
+                      {user?.role === USER_ROLES.ADMIN && <PokemonAddModal />}
                       <Form.Control
                         type="text"
                         value={filteredPokemon}
@@ -84,11 +94,10 @@ const Pokemons: React.FC = () => {
                 </Form.Group>
               </Form>
             </CustomPokerankingNav>
-
             <PokemonsListingBoxes
               isLoading={isLoading}
-              ActionButtons={<a>s</a>}
               pokemons={filteredPokemons}
+              user={user}
             />
           </Col>
         </Row>

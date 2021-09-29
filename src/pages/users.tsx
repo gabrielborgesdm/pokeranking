@@ -8,7 +8,7 @@ import CustomButton from '../components/CustomButton'
 import MainContainerComponent from '../components/MainContainerComponent'
 import UserBoxes from '../components/UserBoxes'
 import { REQUEST_URL } from '../configs/AppConfig'
-import { IUsersResponse, IUserType } from '../configs/types/IUser'
+import { IUsersResponse } from '../configs/types/IUser'
 import {
   checkIsAuthenticated,
   serverSideRedirection
