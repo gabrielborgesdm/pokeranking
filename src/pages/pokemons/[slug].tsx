@@ -9,7 +9,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import CustomButton from '../../components/CustomButton'
 import MainContainerComponent from '../../components/MainContainerComponent'
-import PokemonAddModal from '../../components/PokemonAddModal'
+import RankingAddModal from '../../components/RankingAddModal'
 import PokemonBoxes from '../../components/PokemonBoxes'
 import { STATUS } from '../../configs/APIConfig'
 import { PAGE_URL, REQUEST_URL } from '../../configs/AppConfig'
@@ -155,7 +155,7 @@ const Pokemons: React.FC = () => {
                   </CustomButton>
                   {isRankingFromAuthUser && (
                     <>
-                      <PokemonAddModal
+                      <RankingAddModal
                         userPokemons={userPokemons}
                         onAddPokemon={onAddPokemon}
                         isLoading={isLoading}

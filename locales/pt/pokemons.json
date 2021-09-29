@@ -8,5 +8,9 @@
   "do-you-want-to-remove-the-pokemon": "Você deseja remover o pokémon",
   "change-avatar": "Alterar avatar",
   "pokemons-list": "Lista de pokémons",
-  "search-for-a-pokemon": "Procurar por um pokémon"
+  "search-for-a-pokemon": "Procurar por um pokémon",
+  "pokemon-name": "Nome do pokémon",
+  "pokemon-image": "Imagem do pokémon",
+  "enter-pokemon-the-name": "Insira o nome do pokemon",
+  "pokemon-added-with-success": "Pokémon adicionado com sucesso"
 }

@@ -1,6 +1,9 @@
+import { faEye } from '@fortawesome/fontawesome-free-solid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { memo, useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
+import { IUserResponse } from '../configs/types/IUser'
 import { getThemedColors } from '../helpers/ColorHelpers'
 import {
   handleScrollAndGetNumberOfElementsToRender,
@@ -14,19 +17,23 @@ import {
   CustomPokemonContainer,
   CustomPokemonToolsBox
 } from '../styles/pages/pokemons'
+import { FullscreenImageModal } from './FullscreenImageModal'
 
 export interface IPokemonsListingBoxes {
   pokemons: Array<IPokemon>
-  ActionButtons: any
+  user: IUserResponse
   isLoading: boolean
 }
 
 const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
   pokemons,
-  ActionButtons,
+  user,
   isLoading
 }: IPokemonsListingBoxes) => {
   const [numberOfPokemonsRendered, setNumberOfPokemonsRendered] = useState(50)
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false)
+  const [fullscreenPokemonImageURL, setFullscreenPokemonImageURL] = useState('')
+  const [fullscreenPokemonName, setFullscreenPokemonName] = useState('')
 
   useEffect(() => resetListingAfterUsersChange(), [users])
 
@@ -42,6 +49,12 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
       pokemons.length
     )
     setNumberOfPokemonsRendered(newElementsAmount)
+  }
+
+  const handleViewClick = (pokemon: IPokemon) => {
+    setFullscreenPokemonImageURL(`../../${pokemon.image}`)
+    setFullscreenPokemonName(pokemon.name)
+    setIsImageModalVisible(true)
   }
 
   return (
@@ -76,16 +89,33 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                       </CustomPokemonBoxTitle>
                     </div>
                     <CustomPokemonToolsBox>
-                      <CustomPokemonBoxTitle className="px-2">
-                        {index + 1}º
-                      </CustomPokemonBoxTitle>
-                      {ActionButtons && ActionButtons}
+                      <>
+                        <div
+                          className="mx-3"
+                          onClick={() => {
+                            handleViewClick(pokemon)
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faEye} />
+                        </div>
+                        {/* {user?.role === USER_ROLES.ADMIN && (
+                          <div onClick={() => {}}>
+                            <FontAwesomeIcon icon={faEdit} />
+                          </div>
+                        )} */}
+                      </>
                     </CustomPokemonToolsBox>
                   </CustomPokemonBox>
                 </CustomPokemonContainer>
               ))}
         </Row>
       </PokemonListingContainer>
+      <FullscreenImageModal
+        imageURL={fullscreenPokemonImageURL}
+        modalTitle={fullscreenPokemonName}
+        isVisible={isImageModalVisible}
+        setIsVisible={setIsImageModalVisible}
+      />
     </CustomBoxRow>
   )
 }

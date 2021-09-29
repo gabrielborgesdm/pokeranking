@@ -2,10 +2,19 @@ import { AxiosInstance } from 'axios'
 import useTranslation from 'next-translate/useTranslation'
 import React, { createContext, useEffect } from 'react'
 import { REQUEST_URL } from '../configs/AppConfig'
-import { IAuthContextType, IAuthProvider, ICookiesType } from '../configs/types/IAuthContext'
-import { IUserResponse, IUserType } from '../configs/types/IUser'
+import {
+  IAuthContextType,
+  IAuthProvider,
+  ICookiesType
+} from '../configs/types/IAuthContext'
+import { IUserResponse, IUser } from '../configs/types/IUser'
 import { getAxiosInstance } from '../helpers/AxiosHelpers'
-import { addAccountCookies, addLanguageCookies, getAccountCookies, removeAccountCookies } from '../helpers/CookiesHelpers'
+import {
+  addAccountCookies,
+  addLanguageCookies,
+  getAccountCookies,
+  removeAccountCookies
+} from '../helpers/CookiesHelpers'
 
 export const AuthContext = createContext({} as IAuthContextType)
 
@@ -48,7 +57,7 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
     removeAccountCookies()
   }
 
-  const recoverUserInformation = async (): Promise<IUserType | null> => {
+  const recoverUserInformation = async (): Promise<IUser | null> => {
     let user = null
     const token = getCookies().token
     if (!token) return null
@@ -72,15 +81,17 @@ export const AuthProvider: React.FC = ({ children }: IAuthProvider) => {
   }
 
   return (
-    <AuthContext.Provider value={{
-      checkIsAuthenticated,
-      login,
-      logout,
-      recoverUserInformation,
-      getCookies,
-      setLang,
-      getAxios
-    }}>
+    <AuthContext.Provider
+      value={{
+        checkIsAuthenticated,
+        login,
+        logout,
+        recoverUserInformation,
+        getCookies,
+        setLang,
+        getAxios
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
