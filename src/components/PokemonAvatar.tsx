@@ -28,11 +28,7 @@ const PokemonAvatar: React.FC<IPokemonAvatar> = ({
         )}
       </div>
       {!isLoading ? (
-        <img
-          src={avatar ? `../${avatar}` : '/images/who.png'}
-          width={250}
-          height={250}
-        />
+        <img src={avatar || '/images/who.png'} width={250} height={250} />
       ) : (
         <FontAwesomeIcon icon={faSpinner} spin size="8x" />
       )}
