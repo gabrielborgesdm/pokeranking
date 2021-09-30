@@ -1,16 +1,15 @@
 import Joi from 'joi'
-import { NUMBER_POKEMONS } from '../../../../../configs/APIConfig'
 import { UsernameRegex } from '../../../../../configs/Regex'
 import { PokemonMutateSchema } from './PokemonSchemas'
 
 export const UserAddSchema = Joi.object({
   user: Joi.object({
     username: Joi.string().max(30).required().regex(UsernameRegex),
-    avatar: Joi.number().min(1).max(NUMBER_POKEMONS),
+    avatar: Joi.number().min(1),
     password: Joi.string().max(60).required(),
     email: Joi.string().email().max(70).required(),
     bio: Joi.string().max(250),
-    pokemons: Joi.array().items(PokemonMutateSchema).max(NUMBER_POKEMONS)
+    pokemons: Joi.array().items(PokemonMutateSchema)
   }).required()
 })
 
@@ -26,8 +25,8 @@ export const UserUsernameSchema = Joi.object({
 export const UserUpdateSchema = Joi.object({
   user: Joi.object({
     password: Joi.string().max(60),
-    avatar: Joi.number().min(1).max(NUMBER_POKEMONS),
+    avatar: Joi.number().min(1),
     bio: Joi.string().max(250),
-    pokemons: Joi.array().items(PokemonMutateSchema).max(NUMBER_POKEMONS)
+    pokemons: Joi.array().items(PokemonMutateSchema)
   })
 })

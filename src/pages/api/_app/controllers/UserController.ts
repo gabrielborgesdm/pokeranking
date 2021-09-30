@@ -1,5 +1,5 @@
 import { NextApiResponse } from 'next'
-import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, NUMBER_POKEMONS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
+import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
 import { IResponse } from '../../../../configs/types/IResponse'
 import { IUser, IUserAdd, IUserDocument } from '../../../../configs/types/IUser'
@@ -78,7 +78,7 @@ export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   const { username, email } = userInfo
   if (await getUser({ $or: [{ username }, { email }] })) return sendResponse(req, res, USER_ALREADY_REGISTERED)
   userInfo.password = await hashPassword(userInfo.password)
-  if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * NUMBER_POKEMONS) + 1
+  if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * 929) + 1
   const response = await userRepository.store(userInfo)
   if (!response) return sendResponse(req, res, ERROR)
   const allPokemons = await pokemonRepository.getAll()
