@@ -1,41 +1,63 @@
 import fs from 'fs'
 import getConfig from 'next/config'
 import { join } from 'path'
+import cloudinary from '../services/CloudinaryService'
 
 export const imagePath = join(getConfig().serverRuntimeConfig.PROJECT_ROOT, 'src/assets/images/pokemons')
 
 export const removeBase64Header = (base64: string): string => {
   const base64Array = base64.split(',')
-  return base64Array[base64Array.length - 1]
+  return `data:image/png;base64,${base64Array[base64Array.length - 1]}`
 }
 
-export const writeImage = (imageName: string, base64: string): boolean => {
-  const fullImagePath = join(imagePath, imageName)
+export const writeImage = async (base64: string): Promise<string> => {
   base64 = removeBase64Header(base64)
-  try {
-    fs.writeFileSync(fullImagePath, base64, { encoding: 'base64' })
-  } catch (error) {
-    console.log(error)
-    return
-  }
-  return true
+  return await uploadImage(base64)
 }
 
-export const removeImage = (imageRelativePath: string) : boolean => {
-  const fullImagePath = join(imagePath, imageRelativePath)
-  if (!fs.existsSync(fullImagePath)) return null
+export const removeImage = async (fileURL: string) : Promise<boolean> => {
+  const publicId = getPublicIdFromUrl(fileURL)
+  let isOkay = false
   try {
-    fs.unlinkSync(fullImagePath)
+    await new Promise<void>((resolve, reject) => {
+      cloudinary.uploader.destroy(publicId, function(error, result) {
+        if (result) {
+          resolve()
+          console.log(result)
+          isOkay = true
+        } else {
+          reject(error)
+        }
+      })
+    })
   } catch (error) {
     console.log(error)
-    return null
   }
-  return true
+  return isOkay
 }
 
-export const getImage = (imageRelativePath: string) : Buffer | null => {
-  const fullImagePath = join(imagePath, imageRelativePath)
-  if (!fs.existsSync(fullImagePath)) return
-  const imageBuffer = fs.readFileSync(fullImagePath)
-  return imageBuffer
+const getPublicIdFromUrl = (fileURL: string) => {
+  const splittedStringArray = fileURL.split('/')
+  let stringValue = splittedStringArray[splittedStringArray.length - 1]
+  stringValue = stringValue.split('.')[0]
+  console.log(fileURL, stringValue)
+  return stringValue
+}
+
+const uploadImage = async (file: string): Promise<string | null> => {
+  let url: string = null
+  try {
+    url = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(file, function(error, result) {
+        if (result?.url) {
+          resolve(result.url)
+        } else {
+          reject(error)
+        }
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+  return url
 }

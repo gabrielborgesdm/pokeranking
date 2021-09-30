@@ -27,12 +27,12 @@ export const getPokemon = async (req: IRequest, res: NextApiResponse) => {
 export const storePokemon = async (req: IRequest, res: NextApiResponse) => {
   const { pokemon: pokemonInfo } = req.body
   if (await pokemonRepository.get({ name: pokemonInfo.name })) return sendResponse(req, res, POKEMON_ALREADY_REGISTERED)
-  const imageName = `${pokemonInfo.name}-${new Date().getTime()}.png`
-  if (!writeImage(imageName, pokemonInfo.image)) return sendResponse(req, res, ERROR)
-  pokemonInfo.image = imageName
+  const imageURL = await writeImage(pokemonInfo.image)
+  if (!imageURL) return sendResponse(req, res, ERROR)
+  pokemonInfo.image = imageURL
   const pokemon = await pokemonRepository.store(pokemonInfo)
   if (!pokemon) {
-    removeImage(imageName)
+    removeImage(imageURL)
     return sendResponse(req, res, ERROR)
   }
   return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(req, pokemon) })
@@ -54,20 +54,19 @@ export const updatePokemon = async (req: IRequest, res: NextApiResponse) => {
     return sendResponse(req, res, BEING_USED)
   }
 
-  const imageName = `${pokemonInfo.name || pokemonFound.name}-${new Date().getTime()}.png`
   if (pokemonInfo.image) {
-    if (writeImage(imageName, pokemonInfo.image)) {
-      removeImage(pokemonFound.image)
+    removeImage(pokemonFound.image)
+    const imageUrl = await writeImage(pokemonInfo.image)
+    if (imageUrl) {
+      pokemonInfo.image = imageUrl
     } else {
       return sendResponse(req, res, ERROR)
     }
   }
 
-  pokemonInfo.image = imageName
-
   const pokemon = await pokemonRepository.update(pokemonId, pokemonInfo)
   if (!pokemon) {
-    removeImage(imageName)
+    removeImage(pokemonFound.image)
     return sendResponse(req, res, ERROR)
   }
   return sendResponse(req, res, SUCCESS, { pokemon: abstractPokemon(req, pokemon) })

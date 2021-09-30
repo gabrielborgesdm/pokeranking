@@ -1,6 +1,5 @@
 import { IPokemon, IPokemonDocument } from '../../../../configs/types/IPokemon'
 import { IRequest } from '../../../../configs/types/IRequest'
-import { getImageURL } from '../../../../helpers/ServerHelpers'
 
 export const shouldFilterPokemon = (filter: string, pokemon: IPokemon) => {
   return pokemon.name.toLowerCase().includes(filter.toLowerCase())
@@ -8,5 +7,5 @@ export const shouldFilterPokemon = (filter: string, pokemon: IPokemon) => {
 
 export const abstractPokemon = (req: IRequest, pokemon: IPokemonDocument): IPokemon => {
   const { id, name, image } = pokemon
-  return { id, name, image: getImageURL(req, image) }
+  return { id, name, image }
 }
