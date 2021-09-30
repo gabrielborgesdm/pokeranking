@@ -52,7 +52,7 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
   }
 
   const handleViewClick = (pokemon: IPokemon) => {
-    setFullscreenPokemonImageURL(`../../${pokemon.image}`)
+    setFullscreenPokemonImageURL(pokemon.image)
     setFullscreenPokemonName(pokemon.name)
     setIsImageModalVisible(true)
   }
