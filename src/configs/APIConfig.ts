@@ -143,5 +143,3 @@ export const INVALID_CREDENTIALS: IResponse = {
   status: STATUS.INVALID_CREDENTIALS,
   code: CODE.INVALID_CREDENTIALS
 }
-
-export const NUMBER_POKEMONS = 929
