@@ -1,31 +1,64 @@
-import { IPokemon, IPokemonMutate, IPokemonType } from '../../../../configs/types/IPokemon'
-import pokemons from '../../../../assets/pokemons.json'
-import { formatPokemons, shouldFilterPokemon } from '../helpers/PokemonHelpers'
-
-const formattedPokemons = formatPokemons(pokemons)
+import { IPokemon, IPokemonDocument } from '../../../../configs/types/IPokemon'
+import Pokemon from '../models/PokemonModel'
 
 export default class PokemonRepository {
-  getMany = (filter: string = null) : Array<IPokemonType> => {
-    return filter ? formattedPokemons.filter((pokemon) => shouldFilterPokemon(filter, pokemon)) : formattedPokemons
+  async getAll (): Promise<Array<IPokemonDocument>> {
+    let pokemons: Array<IPokemonDocument> = null
+    try {
+      pokemons = await Pokemon.find().exec()
+    } catch (error) {
+      console.log(error)
+    }
+    return pokemons
   }
 
-  getById = (id: number) : IPokemonType | null => {
-    const pokemons = formattedPokemons.filter((pokemon) => pokemon.id === id)
-    return pokemons.length ? pokemons[0] : null
+  async getById (id: number): Promise<IPokemonDocument> {
+    let pokemon: IPokemonDocument = null
+    try {
+      pokemon = await Pokemon.findOne({ id }).exec()
+    } catch (error) {
+      console.log(error)
+    }
+    return pokemon
   }
 
-  getAvatarImage = (avatarId: number): string => {
-    return this.getById(avatarId).image
+  async get (query: object): Promise<IPokemonDocument> {
+    let pokemon: IPokemonDocument = null
+    try {
+      pokemon = await Pokemon.findOne(query).exec()
+    } catch (error) {
+      console.log(error)
+    }
+    return pokemon
   }
 
-  populatePokemons = (pokemonMutateArray: Array<IPokemonMutate>) : Array<IPokemon> => {
-    const populatedPokemons = []
-    pokemonMutateArray.forEach((pokemonMutateObject: IPokemonMutate) => {
-      const pokemon = this.getById(pokemonMutateObject.pokemon)
-      if (pokemon) {
-        populatedPokemons.push({ ...pokemon, note: pokemonMutateObject.note })
-      }
-    })
-    return populatedPokemons
+  async delete (id: number): Promise<IPokemonDocument> {
+    let pokemon: IPokemonDocument = null
+    try {
+      pokemon = await Pokemon.findOneAndDelete({ id }).exec()
+    } catch (error) {
+      console.log(error)
+    }
+    return pokemon
+  }
+
+  async store (pokemonInfo: IPokemon): Promise<IPokemonDocument> {
+    let pokemon: IPokemonDocument = null
+    try {
+      pokemon = await Pokemon.create(pokemonInfo)
+    } catch (error) {
+      console.log(error)
+    }
+    return pokemon
+  }
+
+  async update (id: number, pokemonInfo: IPokemon): Promise<IPokemonDocument> {
+    let pokemon: IPokemonDocument = null
+    try {
+      pokemon = await Pokemon.findOneAndUpdate({ id }, pokemonInfo, { new: true })
+    } catch (error) {
+      console.log(error)
+    }
+    return pokemon
   }
 }

@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios'
 import React from 'react'
-import { IUserResponse } from './IUser'
+import { IUser } from './IUser'
 
 export type ICookiesType = {
   token?: string;
@@ -11,7 +11,7 @@ export type ICookiesType = {
 export type IAuthContextType = {
   login: (token: string, username: string) => void;
   checkIsAuthenticated: () => boolean
-  recoverUserInformation: () => Promise<IUserResponse | null>;
+  recoverUserInformation: () => Promise<IUser | null>;
   logout: () => void;
   getCookies: () => ICookiesType;
   setLang: (lang: string) => void;

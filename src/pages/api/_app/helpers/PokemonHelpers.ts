@@ -1,12 +1,11 @@
-import { IPokemonType } from '../../../../configs/types/IPokemon'
+import { IPokemon, IPokemonDocument } from '../../../../configs/types/IPokemon'
+import { IRequest } from '../../../../configs/types/IRequest'
 
-export const shouldFilterPokemon = (filter: string, pokemon: IPokemonType) => {
+export const shouldFilterPokemon = (filter: string, pokemon: IPokemon) => {
   return pokemon.name.toLowerCase().includes(filter.toLowerCase())
 }
 
-export const formatPokemons = (pokemons: Array<IPokemonType>) => {
-  return pokemons.map((pokemon) => {
-    pokemon.image = `/pokemons/${pokemon.image}`
-    return pokemon
-  })
+export const abstractPokemon = (req: IRequest, pokemon: IPokemonDocument): IPokemon => {
+  const { id, name, image } = pokemon
+  return { id, name, image }
 }

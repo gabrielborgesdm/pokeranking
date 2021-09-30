@@ -1,7 +1,6 @@
 import { faEdit, faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
-import Image from 'next/image'
 import React, { useState } from 'react'
 import { Form, Modal } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
@@ -48,7 +47,7 @@ const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({
           <Form onSubmit={e => e.preventDefault()}>
             <CustomPokemonAvatar className="mx-auto">
               {selectedPokemon || avatar ? (
-                <Image
+                <img
                   src={selectedPokemon?.image || avatar}
                   width={250}
                   height={250}

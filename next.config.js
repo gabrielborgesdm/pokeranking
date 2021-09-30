@@ -6,7 +6,11 @@ const nextConfig = {
   reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: true
+  },
+  serverRuntimeConfig: {
+    PROJECT_ROOT: __dirname
   }
+
 }
 
 module.exports = withPlugins([nextTranslate], nextConfig)

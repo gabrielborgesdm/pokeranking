@@ -8,7 +8,7 @@ import CustomButton from '../components/CustomButton'
 import MainContainerComponent from '../components/MainContainerComponent'
 import UserBoxes from '../components/UserBoxes'
 import { REQUEST_URL } from '../configs/AppConfig'
-import { IUsersResponse, IUserType } from '../configs/types/IUser'
+import { IUsersResponse } from '../configs/types/IUser'
 import {
   checkIsAuthenticated,
   serverSideRedirection
@@ -37,16 +37,20 @@ const Users: React.FC = () => {
     }
   }
 
-  const filterUsers = (users: Array<IUserType>) => {
+  const filterUsers = () => {
+    if (!filteredUsername.length) {
+      setFilteredUsers(users)
+      return
+    }
     const filteredUsers = users.filter(user =>
-      user.username.includes(filteredUsername.toLowerCase())
+      user.username.toLowerCase().includes(filteredUsername.toLowerCase())
     )
     setFilteredUsers(filteredUsers)
   }
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
-    filterUsers(users)
+    filterUsers()
   }
 
   return (

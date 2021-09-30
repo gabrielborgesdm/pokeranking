@@ -8,6 +8,7 @@ export const STATUS = {
   UNAUTHORIZED: 'unauthorized',
   FORBIDDEN: 'forbidden',
   ALREADY_REGISTERED: 'already_registered',
+  BEING_USED: 'being_used',
   FIELD_VALIDATION_ERROR: 'field_validation_error',
   INVALID_CREDENTIALS: 'invalid_credentials'
 }
@@ -20,6 +21,7 @@ export const CODE = {
   NOT_FOUND: 200,
   IMAGE_NOT_FOUND: 200,
   ALREADY_REGISTERED: 200,
+  BEING_USED: 200,
   FIELD_VALIDATION_ERROR: 200,
   INVALID_CREDENTIALS: 200
 }
@@ -48,9 +50,10 @@ export const MESSAGES = {
     unauthorized: 'Unauthorized access',
     forbidden: 'Forbidden access',
     field_validation_error: 'There are invalid fields',
-    not_found: 'User was not found',
+    not_found: 'Resource was not found',
     image_not_found: 'Image not found',
-    already_registered: 'User is already registered',
+    already_registered: 'Resource was already registered',
+    being_used: "Resource is being used and can't be modified",
     invalid_credentials: 'Invalid credentials'
   },
   pt: {
@@ -59,9 +62,10 @@ export const MESSAGES = {
     unauthorized: 'Acesso não autorizado',
     forbidden: 'Acesso proibido',
     field_validation_error: 'Há campos inválidos',
-    not_found: 'Usuário não encontrado',
+    not_found: 'Recurso não encontrado',
     image_not_found: 'Imagem não encontrada',
-    already_registered: 'Usuário já foi registrado',
+    already_registered: 'Recurso já foi registrado',
+    being_used: 'O recurso está sendo utilizado e não pode ser modificado',
     invalid_credentials: 'Credenciais inválidas'
   }
 }
@@ -98,6 +102,12 @@ export const FIELD_VALIDATION_ERROR: IResponse = {
   code: CODE.FIELD_VALIDATION_ERROR
 }
 
+export const POKEMON_NOT_FOUND: IResponse = {
+  success: false,
+  status: STATUS.NOT_FOUND,
+  code: CODE.NOT_FOUND
+}
+
 export const USER_NOT_FOUND: IResponse = {
   success: false,
   status: STATUS.NOT_FOUND,
@@ -114,6 +124,18 @@ export const USER_ALREADY_REGISTERED: IResponse = {
   success: false,
   status: STATUS.ALREADY_REGISTERED,
   code: CODE.ALREADY_REGISTERED
+}
+
+export const POKEMON_ALREADY_REGISTERED: IResponse = {
+  success: false,
+  status: STATUS.ALREADY_REGISTERED,
+  code: CODE.ALREADY_REGISTERED
+}
+
+export const BEING_USED: IResponse = {
+  success: false,
+  status: STATUS.BEING_USED,
+  code: CODE.BEING_USED
 }
 
 export const INVALID_CREDENTIALS: IResponse = {

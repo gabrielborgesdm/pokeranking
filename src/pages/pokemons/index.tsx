@@ -3,7 +3,10 @@ import { useRouter } from 'next/router'
 import { PAGE_URL } from '../../configs/AppConfig'
 import { AuthContext } from '../../models/AuthContext'
 import { GetServerSideProps } from 'next'
-import { checkIsAuthenticated, serverSideRedirection } from '../../services/AuthService'
+import {
+  checkIsAuthenticated,
+  serverSideRedirection
+} from '../../services/AuthService'
 
 const PokemonsHome: React.FC = () => {
   const router = useRouter()
@@ -23,7 +26,7 @@ const PokemonsHome: React.FC = () => {
 
 export default PokemonsHome
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   if (!checkIsAuthenticated(context)) return serverSideRedirection
   return { props: {} }
 }

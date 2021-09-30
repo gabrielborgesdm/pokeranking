@@ -1,20 +1,23 @@
-import UserRepository from '../repositories/UserRepository'
-import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND, NUMBER_POKEMONS } from '../../../../configs/APIConfig'
 import { NextApiResponse } from 'next'
-import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/AuthenticationHelpers'
+import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, NUMBER_POKEMONS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
-import { abstractUserBasedOnAuthorizationLevel, formatUserDocument, isUserAuthorized } from '../helpers/UserAuthorizationHelpers'
 import { IResponse } from '../../../../configs/types/IResponse'
-import { IUserAdd, IUserDocument, IUserResponse } from '../../../../configs/types/IUser'
+import { IUser, IUserAdd, IUserDocument } from '../../../../configs/types/IUser'
+import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/AuthenticationHelpers'
 import { sendResponse } from '../helpers/ResponseHelpers'
+import { abstractUserBasedOnAuthorizationLevel, formatUserDocument, isUserAuthorized } from '../helpers/UserAuthorizationHelpers'
+import PokemonRepository from '../repositories/PokemonRepository'
+import UserRepository from '../repositories/UserRepository'
 
 const userRepository = new UserRepository()
+const pokemonRepository = new PokemonRepository()
 
 export const getAllUsers = async (req: IRequest, res: NextApiResponse) => {
   const response = await userRepository.getAll()
-  let users: Array<IUserResponse> = []
+  let users: Array<IUser> = []
   if (response) {
-    users = response.map((user) => abstractUserBasedOnAuthorizationLevel(req.user, user))
+    const allPokemons = await pokemonRepository.getAll()
+    users = response.map(userResponse => abstractUserBasedOnAuthorizationLevel(req, req.user, userResponse, allPokemons))
   }
   sendResponse(req, res, SUCCESS, { users })
 }
@@ -27,11 +30,12 @@ export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => 
   const { slug: username } = req.query
   const response: IUserDocument = await userRepository.get({ username })
   if (!response) return sendResponse(req, res, USER_NOT_FOUND)
-  const user: IUserResponse = abstractUserBasedOnAuthorizationLevel(req.user, response)
+  const allPokemons = await pokemonRepository.getAll()
+  const user: IUser = abstractUserBasedOnAuthorizationLevel(req, req.user, response, allPokemons)
   sendResponse(req, res, SUCCESS, { user })
 }
 
-const isOkayToExecuteMutation = (authenticatedUser: IUserResponse, response: IUserDocument) : IResponse => {
+const isOkayToExecuteMutation = (authenticatedUser: IUser, response: IUserDocument) : IResponse => {
   if (!response) {
     return USER_NOT_FOUND
   }
@@ -52,7 +56,8 @@ export const updateUser = async (req: IRequest, res: NextApiResponse) => {
   if (!updateResponse) {
     return sendResponse(req, res, ERROR)
   }
-  const user = abstractUserBasedOnAuthorizationLevel(req.user, updateResponse)
+  const allPokemons = await pokemonRepository.getAll()
+  const user = abstractUserBasedOnAuthorizationLevel(req, req.user, updateResponse, allPokemons)
   sendResponse(req, res, SUCCESS, { user })
 }
 
@@ -63,7 +68,8 @@ export const deleteUser = async (req: IRequest, res: NextApiResponse) => {
   if (!message.success) return sendResponse(req, res, message)
   const deleteResponse = await userRepository.delete(response._id)
   if (!deleteResponse) return sendResponse(req, res, ERROR)
-  const user = abstractUserBasedOnAuthorizationLevel(req.user, deleteResponse)
+  const allPokemons = await pokemonRepository.getAll()
+  const user = abstractUserBasedOnAuthorizationLevel(req, req.user, deleteResponse, allPokemons)
   return sendResponse(req, res, SUCCESS, { user: user })
 }
 
@@ -75,7 +81,8 @@ export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * NUMBER_POKEMONS) + 1
   const response = await userRepository.store(userInfo)
   if (!response) return sendResponse(req, res, ERROR)
-  const user: IUserResponse = formatUserDocument(response)
+  const allPokemons = await pokemonRepository.getAll()
+  const user: IUser = formatUserDocument(req, response, allPokemons)
   sendResponse(req, res, SUCCESS, { user })
 }
 
@@ -87,5 +94,6 @@ export const login = async (req: IRequest, res: NextApiResponse) => {
     return sendResponse(req, res, INVALID_CREDENTIALS)
   }
   const token = generateAccessToken({ _id: response._id })
-  sendResponse(req, res, SUCCESS, { token, user: formatUserDocument(response) })
+  const allPokemons = await pokemonRepository.getAll()
+  sendResponse(req, res, SUCCESS, { token, user: formatUserDocument(req, response, allPokemons) })
 }
