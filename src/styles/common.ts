@@ -101,7 +101,7 @@ export const FloatingContainer = styled(Col)`
 export const CustomBox = styled.div`
   display: flex;
   align-items: center;
-  margin: 15px 0;
+  margin: 10px 0;
   font-size: 1.2rem;
   font-weight: bold;
   height: 110px;

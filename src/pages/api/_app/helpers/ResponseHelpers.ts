@@ -7,3 +7,8 @@ export const sendResponse = (req: IRequest, res: NextApiResponse, message: IResp
   const lang = req.headers['accept-language'] || 'en'
   return res.status(message.code).json({ ...message, ...additionalData, message: MESSAGES[lang][message.status] })
 }
+
+export const sendImage = (res: NextApiResponse, image: Buffer) => {
+  res.setHeader('Content-Type', 'image/png')
+  return res.send(image)
+}

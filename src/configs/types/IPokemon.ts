@@ -1,25 +1,14 @@
-import pokemons from '../../assets/pokemons.json'
+import { IModel } from './IModel'
 import { IResponse } from './IResponse'
 
-export type IPokemonType = typeof pokemons[0]
-
-export interface IPokemon extends IPokemonType {
-  note?: string;
-}
-
-export interface IPokemonMutate {
-  pokemon: number;
-  note?: string;
-}
-
-export interface IUserPokemons {
-  pokemons: Array<IPokemon>;
-}
-
-export interface IUserPokemonsMutate {
-  pokemons: Array<IPokemonMutate>;
+export interface IPokemon {
+  name: string;
+  image: string;
+  id?: number;
 }
 
 export interface IPokemonsResponse extends IResponse {
-  pokemons: Array<IPokemonType>;
+  pokemons: Array<IPokemon>;
 }
+
+export interface IPokemonDocument extends IPokemon, IModel {}

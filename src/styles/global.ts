@@ -97,4 +97,27 @@ export default createGlobalStyle`
   .cursor-pointer {
     cursor: pointer;
   }
+
+  .fullscreen-modal .modal-header {
+    background-color: ${colors.blue};
+  }
+
+  .fullscreen-modal .modal-body {
+    background-color: ${colors.dark};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .fullscreen-modal img {
+    margin: 0 auto;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .img-modal {
+    object-fit: contain;
+    width: 100%;
+    max-height: 300px;
+  }
 `
