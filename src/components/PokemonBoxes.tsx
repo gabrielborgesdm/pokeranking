@@ -38,7 +38,7 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({
               >
                 <CustomPokemonBox style={getThemedColors(index)}>
                   <img
-                    src={`../${pokemon.image}`}
+                    src={pokemon.image}
                     width={80}
                     height={80}
                     className="pokemon-image"
