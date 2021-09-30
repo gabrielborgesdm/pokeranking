@@ -1,4 +1,5 @@
 import fs from 'fs'
+
 import getConfig from 'next/config'
 import { join } from 'path'
 import cloudinary from '../services/CloudinaryService'
@@ -44,11 +45,19 @@ const getPublicIdFromUrl = (fileURL: string) => {
   return stringValue
 }
 
+export const getImage = (imageRelativePath: string) : Buffer | null => {
+  const fullImagePath = join(imagePath, imageRelativePath)
+  if (!fs.existsSync(fullImagePath)) return
+  const imageBuffer = fs.readFileSync(fullImagePath)
+  return imageBuffer
+}
+
 const uploadImage = async (file: string): Promise<string | null> => {
   let url: string = null
   try {
     url = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload(file, function(error, result) {
+        console.log(result.url)
         if (result?.url) {
           resolve(result.url)
         } else {
