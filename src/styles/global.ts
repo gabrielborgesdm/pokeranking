@@ -120,4 +120,8 @@ export default createGlobalStyle`
     width: 100%;
     max-height: 300px;
   }
+
+  .text-justify{
+    text-align: justify;
+  }
 `
