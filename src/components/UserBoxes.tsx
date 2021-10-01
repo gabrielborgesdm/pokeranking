@@ -75,6 +75,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                     />
                     <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center">
                       <CustomBoxTitle>{user.username}</CustomBoxTitle>
+                      {user.pokemons.length}
                       <FontAwesomeIcon icon={faExternalLinkAlt} />
                     </div>
                   </CustomBox>

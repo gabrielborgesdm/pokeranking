@@ -31,7 +31,10 @@ const Users: React.FC = () => {
 
   const updateUser = () => {
     if (data?.success) {
-      setUsers(data.users)
+      const users = data.users.sort((a, b) =>
+        a.pokemons.length > b.pokemons.length ? -1 : 1
+      )
+      setUsers(users)
       setFilteredUsers(data.users)
       setIsLoading(false)
     }
