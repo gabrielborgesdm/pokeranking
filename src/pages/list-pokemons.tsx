@@ -1,4 +1,4 @@
-import { faSearch } from '@fortawesome/fontawesome-free-solid'
+import { faSearch, faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
@@ -17,12 +17,11 @@ import {
   checkIsAuthenticated,
   serverSideRedirection
 } from '../services/AuthService'
-import { useFetch } from '../services/FetchService'
 import { CustomPokerankingNav } from '../styles/pages/pokemons'
 
 const Pokemons: React.FC = () => {
-  const { data } = useFetch<IPokemonsResponse>(REQUEST_URL.POKEMONS)
   const { recoverUserInformation } = useContext(AuthContext)
+  const { getAxios } = useContext(AuthContext)
   const [filteredPokemon, setFilteredPokemon] = useState('')
   const [filteredPokemons, setFilteredPokemons] = useState([])
   const [user, setUser] = useState<IUser>()
@@ -30,19 +29,32 @@ const Pokemons: React.FC = () => {
   const [pokemons, setPokemons] = useState([])
 
   const { t } = useTranslation('pokemons')
+  const { t: c } = useTranslation('common')
 
   useEffect(() => {
     updatePokemons()
-  }, [data])
+  }, [])
 
   const updatePokemons = async () => {
+    setIsLoading(true)
+    const data = await handleGetPokemons()
     if (data?.success) {
       const user = await recoverUserInformation()
       setUser(user)
       setPokemons(data.pokemons)
       setFilteredPokemons(data.pokemons)
-      setIsLoading(false)
     }
+    setIsLoading(false)
+  }
+  const handleGetPokemons = async () => {
+    let data: IPokemonsResponse
+    try {
+      const response = await getAxios().get(REQUEST_URL.POKEMONS)
+      data = response?.data
+    } catch (error) {
+      console.log(error)
+    }
+    return data
   }
 
   const filterPokemons = () => {
@@ -94,11 +106,29 @@ const Pokemons: React.FC = () => {
                 </Form.Group>
               </Form>
             </CustomPokerankingNav>
-            <PokemonsListingBoxes
-              isLoading={isLoading}
-              pokemons={filteredPokemons}
-              user={user}
-            />
+            {isLoading ? (
+              <div className="text-center">
+                <FontAwesomeIcon
+                  icon={faSpinner}
+                  spin={true}
+                  size="3x"
+                  className="m-3"
+                />
+                &nbsp;
+                <h1 className="mb-0">{c('loading')}</h1>
+              </div>
+            ) : filteredPokemons.length ? (
+              <PokemonsListingBoxes
+                isLoading={isLoading}
+                pokemons={filteredPokemons}
+                user={user}
+                reloadPokemons={updatePokemons}
+              />
+            ) : (
+              <h3 className="text-center mt-2">
+                {t('no-pokemons-were-added')}
+              </h3>
+            )}
           </Col>
         </Row>
       </MainContainerComponent>
