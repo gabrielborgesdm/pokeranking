@@ -1,9 +1,8 @@
-import { faEdit, faPlus } from '@fortawesome/fontawesome-free-solid'
+import { faEdit } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import React, { FormEvent, useContext, useState } from 'react'
 import { Col, Form, Modal, Row } from 'react-bootstrap'
-
 import { REQUEST_URL } from '../configs/AppConfig'
 import { IPokemon } from '../configs/types/IPokemon'
 import { IStatus, IStatusType } from '../configs/types/IStatus'

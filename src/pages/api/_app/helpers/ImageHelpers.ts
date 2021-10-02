@@ -41,7 +41,6 @@ const getPublicIdFromUrl = (fileURL: string) => {
   const splittedStringArray = fileURL.split('/')
   let stringValue = splittedStringArray[splittedStringArray.length - 1]
   stringValue = stringValue.split('.')[0]
-  console.log(fileURL, stringValue)
   return stringValue
 }
 
@@ -57,7 +56,6 @@ const uploadImage = async (file: string): Promise<string | null> => {
   try {
     url = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload(file, function(error, result) {
-        console.log(result.url)
         if (result?.url) {
           resolve(result.url)
         } else {
