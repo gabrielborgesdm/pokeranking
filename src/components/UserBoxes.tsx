@@ -21,6 +21,10 @@ import {
   CustomBoxTitle,
   PokemonListingContainer
 } from '../styles/common'
+import {
+  CustomPokemonBox,
+  CustomPokemonToolsBox
+} from '../styles/pages/pokemons'
 
 const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
   const router = useRouter()
@@ -48,6 +52,18 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
     setNumberOfUsersRendered(newElementsAmount)
   }
 
+  const checkIfHasAwards = (index: number, user: IUser) => {
+    let classes = ''
+    if (index === 0 || user.pokemons.length > 700) {
+      classes += 'bg-gold'
+    } else if (index === 1 || user.pokemons.length > 400) {
+      classes += 'bg-silver'
+    } else if (index === 2 || user.pokemons.length > 200) {
+      classes += 'bg-bronze'
+    }
+    return classes
+  }
+
   return (
     <CustomBoxRow>
       <PokemonListingContainer
@@ -66,7 +82,10 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                   key={user.username + index}
                   onClick={() => navigateToPokemon(user.username)}
                 >
-                  <CustomBox style={getThemedColors(index)}>
+                  <CustomBox
+                    style={getThemedColors(index)}
+                    className={`${checkIfHasAwards(index, user)}`}
+                  >
                     <img
                       src={user.avatar}
                       width={80}
@@ -75,8 +94,18 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                     />
                     <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center">
                       <CustomBoxTitle>{user.username}</CustomBoxTitle>
-                      {user.pokemons.length}
-                      <FontAwesomeIcon icon={faExternalLinkAlt} />
+                      <CustomPokemonToolsBox>
+                        {user.pokemons.length > 0 && (
+                          <div className="d-flex flex-row align-items-center">
+                            <span>{user.pokemons.length}</span>
+                            <img
+                              src="/images/pokeball.svg"
+                              className="ml-10px"
+                              width={25}
+                            />
+                          </div>
+                        )}
+                      </CustomPokemonToolsBox>
                     </div>
                   </CustomBox>
                 </PokemonListingContainer>
