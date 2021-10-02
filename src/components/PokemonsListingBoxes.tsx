@@ -1,7 +1,8 @@
-import { faEye } from '@fortawesome/fontawesome-free-solid'
+import { faEdit, faEye } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { memo, useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap'
+import { USER_ROLES } from '../configs/APIConfig'
 import { IPokemon } from '../configs/types/IPokemon'
 import { IUserResponse } from '../configs/types/IUser'
 import { getThemedColors } from '../helpers/ColorHelpers'
@@ -98,11 +99,11 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                         >
                           <FontAwesomeIcon icon={faEye} />
                         </div>
-                        {/* {user?.role === USER_ROLES.ADMIN && (
+                        {user?.role === USER_ROLES.ADMIN && (
                           <div onClick={() => {}}>
                             <FontAwesomeIcon icon={faEdit} />
                           </div>
-                        )} */}
+                        )}
                       </>
                     </CustomPokemonToolsBox>
                   </CustomPokemonBox>
