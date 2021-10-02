@@ -1,7 +1,4 @@
-import {
-  faExternalLinkAlt,
-  faSpinner
-} from '@fortawesome/fontawesome-free-solid'
+import { faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
@@ -21,10 +18,7 @@ import {
   CustomBoxTitle,
   PokemonListingContainer
 } from '../styles/common'
-import {
-  CustomPokemonBox,
-  CustomPokemonToolsBox
-} from '../styles/pages/pokemons'
+import { CustomPokemonToolsBox } from '../styles/pages/pokemons'
 
 const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
   const router = useRouter()
