@@ -4,21 +4,21 @@ import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useContext, useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
-import CustomButton from '../../components/CustomButton'
-import MainContainerComponent from '../../components/MainContainerComponent'
-import PokemonAddModal from '../../components/PokemonAddModal'
-import PokemonsListingBoxes from '../../components/PokemonsListingBoxes'
-import { USER_ROLES } from '../../configs/APIConfig'
-import { REQUEST_URL } from '../../configs/AppConfig'
-import { IPokemonsResponse } from '../../configs/types/IPokemon'
-import { IUser } from '../../configs/types/IUser'
-import { AuthContext } from '../../models/AuthContext'
+import CustomButton from '../components/CustomButton'
+import MainContainerComponent from '../components/MainContainerComponent'
+import PokemonAddModal from '../components/PokemonAddModal'
+import PokemonsListingBoxes from '../components/PokemonsListingBoxes'
+import { USER_ROLES } from '../configs/APIConfig'
+import { REQUEST_URL } from '../configs/AppConfig'
+import { IPokemonsResponse } from '../configs/types/IPokemon'
+import { IUser } from '../configs/types/IUser'
+import { AuthContext } from '../models/AuthContext'
 import {
   checkIsAuthenticated,
   serverSideRedirection
-} from '../../services/AuthService'
-import { useFetch } from '../../services/FetchService'
-import { CustomPokerankingNav } from '../../styles/pages/pokemons'
+} from '../services/AuthService'
+import { useFetch } from '../services/FetchService'
+import { CustomPokerankingNav } from '../styles/pages/pokemons'
 
 const Pokemons: React.FC = () => {
   const { data } = useFetch<IPokemonsResponse>(REQUEST_URL.POKEMONS)
