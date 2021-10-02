@@ -120,4 +120,24 @@ export default createGlobalStyle`
     width: 100%;
     max-height: 300px;
   }
+
+  .text-justify{
+    text-align: justify;
+  }
+
+  .bg-gold{
+    background:linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+  }
+
+  .bg-silver { 
+    background: linear-gradient(to right, #ADB5BD, #DEE2E6, #A4ADB6, #F3F5F6, #343A40);
+  }
+
+  .bg-bronze { 
+    background: linear-gradient(to right, #b9722d, #d28c47, #a46628, #d7995b, #905923);
+  }
+
+  .bg-silver span, .bg-gold span, .bg-bronze span  {
+    color: ${colors.lightGrey} !important;
+  }
 `

@@ -7,7 +7,6 @@ const config = {
   secure: true
 }
 
-console.log(config)
 cloudinary.config(config)
 
 export default cloudinary

@@ -107,6 +107,7 @@ export const CustomBox = styled.div`
   height: 110px;
   padding: 0 10px;
   border-radius: 3px;
+  position: relative;
   transition: all 0.3s;
   &:hover {
     cursor: pointer;
