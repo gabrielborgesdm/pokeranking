@@ -50,10 +50,6 @@ export const updatePokemon = async (req: IRequest, res: NextApiResponse) => {
     return sendResponse(req, res, POKEMON_ALREADY_REGISTERED)
   }
 
-  if (await userRepository.get({ pokemons: { $elemMatch: { pokemon: pokemonId } } })) {
-    return sendResponse(req, res, BEING_USED)
-  }
-
   if (pokemonInfo.image) {
     removeImage(pokemonFound.image)
     const imageUrl = await writeImage(pokemonInfo.image)

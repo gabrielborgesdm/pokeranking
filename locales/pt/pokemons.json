@@ -1,5 +1,6 @@
 {
   "add-pokemon": "Adicionar pokémon",
+  "update-pokemon": "Editar pokémon",
   "search-pokemon": "Pesquisar pokémon",
   "select-a-pokemon": "Selecione um pokémon",
   "pokemon-ranking": "Ranking pokémon",
@@ -12,5 +13,6 @@
   "pokemon-name": "Nome do pokémon",
   "pokemon-image": "Imagem do pokémon",
   "enter-pokemon-the-name": "Insira o nome do pokemon",
-  "pokemon-added-with-success": "Pokémon adicionado com sucesso"
+  "pokemon-added-with-success": "Pokémon adicionado com sucesso",
+  "pokemon-updated-with-success": "Pokémon atualizado com sucesso"
 }
