@@ -16,7 +16,7 @@ export const PAGE_URL = {
   CREATE_ACCOUNT: '/create-account',
   USERS: '/users',
   POKEMONS: '/pokemons',
-  LIST_POKEMONS: '/pokemons/list',
+  LIST_POKEMONS: '/list-pokemons',
   ACCOUNT: '/account',
   ABOUT: '/about'
 }

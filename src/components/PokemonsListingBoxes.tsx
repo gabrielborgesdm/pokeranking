@@ -1,7 +1,8 @@
-import { faEye } from '@fortawesome/fontawesome-free-solid'
+import { faEdit, faEye } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { memo, useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap'
+import { USER_ROLES } from '../configs/APIConfig'
 import { IPokemon } from '../configs/types/IPokemon'
 import { IUserResponse } from '../configs/types/IUser'
 import { getThemedColors } from '../helpers/ColorHelpers'
@@ -18,22 +19,25 @@ import {
   CustomPokemonToolsBox
 } from '../styles/pages/pokemons'
 import { FullscreenImageModal } from './FullscreenImageModal'
+import PokemonEditModal from './PokemonEditModal'
 
 export interface IPokemonsListingBoxes {
   pokemons: Array<IPokemon>
   user: IUserResponse
   isLoading: boolean
+  reloadPokemons: Function
 }
 
 const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
   pokemons,
   user,
-  isLoading
+  reloadPokemons
 }: IPokemonsListingBoxes) => {
   const [numberOfPokemonsRendered, setNumberOfPokemonsRendered] = useState(50)
   const [isImageModalVisible, setIsImageModalVisible] = useState(false)
   const [fullscreenPokemonImageURL, setFullscreenPokemonImageURL] = useState('')
   const [fullscreenPokemonName, setFullscreenPokemonName] = useState('')
+  const [pokemonToEdit, setPokemonToEdit] = useState(null)
 
   useEffect(() => resetListingAfterUsersChange(), [users])
 
@@ -55,6 +59,11 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
     setFullscreenPokemonImageURL(pokemon.image)
     setFullscreenPokemonName(pokemon.name)
     setIsImageModalVisible(true)
+  }
+
+  const updatePokemon = (pokemonToEdit: IPokemon | null) => {
+    setPokemonToEdit(pokemonToEdit)
+    reloadPokemons()
   }
 
   return (
@@ -98,11 +107,15 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                         >
                           <FontAwesomeIcon icon={faEye} />
                         </div>
-                        {/* {user?.role === USER_ROLES.ADMIN && (
-                          <div onClick={() => {}}>
+                        {user?.role === USER_ROLES.ADMIN && (
+                          <div
+                            onClick={() => {
+                              setPokemonToEdit(pokemon)
+                            }}
+                          >
                             <FontAwesomeIcon icon={faEdit} />
                           </div>
-                        )} */}
+                        )}
                       </>
                     </CustomPokemonToolsBox>
                   </CustomPokemonBox>
@@ -116,6 +129,12 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
         isVisible={isImageModalVisible}
         setIsVisible={setIsImageModalVisible}
       />
+      {pokemonToEdit && (
+        <PokemonEditModal
+          pokemonToEdit={pokemonToEdit}
+          setPokemonToEdit={updatePokemon}
+        />
+      )}
     </CustomBoxRow>
   )
 }
