@@ -48,11 +48,11 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
 
   const checkIfHasAwards = (index: number, user: IUser) => {
     let classes = ''
-    if (index === 0 || user.pokemons.length > 700) {
+    if (user.pokemons.length > 700) {
       classes += 'bg-gold'
-    } else if (index === 1 || user.pokemons.length > 400) {
+    } else if (user.pokemons.length > 500) {
       classes += 'bg-silver'
-    } else if (index === 2 || user.pokemons.length > 200) {
+    } else if (user.pokemons.length > 300) {
       classes += 'bg-bronze'
     }
     return classes
