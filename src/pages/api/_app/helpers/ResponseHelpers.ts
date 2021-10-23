@@ -10,13 +10,11 @@ export const sendResponse = (
   additionalData: object = {}
 ) => {
   const lang = req.headers["accept-language"] || "en";
-  return res
-    .status(message.code)
-    .json({
-      ...message,
-      ...additionalData,
-      message: MESSAGES[lang][message.status],
-    });
+  return res.status(message.code).json({
+    ...message,
+    ...additionalData,
+    message: MESSAGES[lang][message.status],
+  });
 };
 
 export const sendImage = (res: NextApiResponse, image: Buffer) => {
