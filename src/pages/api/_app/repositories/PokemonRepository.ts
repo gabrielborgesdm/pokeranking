@@ -2,7 +2,25 @@ import { IPokemon, IPokemonDocument } from '../../../../configs/types/IPokemon'
 import Pokemon from '../models/PokemonModel'
 
 export default class PokemonRepository {
-  async getAll (): Promise<Array<IPokemonDocument>> {
+  allPokemons = null
+
+  async getThenLoadAllPokemons (): Promise<Array<IPokemonDocument>> {
+    if (this.allPokemons === null) await this.loadAllPokemons()
+    else this.loadAllPokemons()
+    return this.allPokemons
+  }
+
+  async loadAllPokemons() {
+    let pokemons: Array<IPokemonDocument> = null
+    try {
+      pokemons = await Pokemon.find().exec()
+    } catch (error) {
+      console.log(error)
+    }
+    this.allPokemons = pokemons
+  }
+
+  async getAll() {
     let pokemons: Array<IPokemonDocument> = null
     try {
       pokemons = await Pokemon.find().exec()
@@ -12,7 +30,7 @@ export default class PokemonRepository {
     return pokemons
   }
 
-  async getById (id: number): Promise<IPokemonDocument> {
+  async getById(id: number): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
       pokemon = await Pokemon.findOne({ id }).exec()
@@ -22,7 +40,7 @@ export default class PokemonRepository {
     return pokemon
   }
 
-  async get (query: object): Promise<IPokemonDocument> {
+  async get(query: object): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
       pokemon = await Pokemon.findOne(query).exec()
@@ -32,7 +50,7 @@ export default class PokemonRepository {
     return pokemon
   }
 
-  async delete (id: number): Promise<IPokemonDocument> {
+  async delete(id: number): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
       pokemon = await Pokemon.findOneAndDelete({ id }).exec()
@@ -42,7 +60,7 @@ export default class PokemonRepository {
     return pokemon
   }
 
-  async store (pokemonInfo: IPokemon): Promise<IPokemonDocument> {
+  async store(pokemonInfo: IPokemon): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
       pokemon = await Pokemon.create(pokemonInfo)
@@ -52,7 +70,7 @@ export default class PokemonRepository {
     return pokemon
   }
 
-  async update (id: number, pokemonInfo: IPokemon): Promise<IPokemonDocument> {
+  async update(id: number, pokemonInfo: IPokemon): Promise<IPokemonDocument> {
     let pokemon: IPokemonDocument = null
     try {
       pokemon = await Pokemon.findOneAndUpdate({ id }, pokemonInfo, { new: true })

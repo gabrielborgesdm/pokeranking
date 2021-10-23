@@ -107,7 +107,8 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                         >
                           <FontAwesomeIcon icon={faEye} />
                         </div>
-                        {user?.role === USER_ROLES.ADMIN && (
+                        {/*
+                        user?.role === USER_ROLES.ADMIN && (
                           <div
                             onClick={() => {
                               setPokemonToEdit(pokemon)
@@ -115,7 +116,8 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                           >
                             <FontAwesomeIcon icon={faEdit} />
                           </div>
-                        )}
+                        )
+                        */}
                       </>
                     </CustomPokemonToolsBox>
                   </CustomPokemonBox>

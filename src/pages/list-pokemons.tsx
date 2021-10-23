@@ -89,7 +89,9 @@ const Pokemons: React.FC = () => {
                     <h3>{t('pokemons-list')}</h3>
 
                     <div className="d-flex align-items-center">
-                      {user?.role === USER_ROLES.ADMIN && <PokemonAddModal />}
+                      {/*
+                        {user?.role === USER_ROLES.ADMIN && <PokemonAddModal />}
+                      */}
                       <Form.Control
                         type="text"
                         value={filteredPokemon}
