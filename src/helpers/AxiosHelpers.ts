@@ -9,15 +9,18 @@ export const getAxiosInstance = (token: string, lang: string) => {
 }
 
 const addInterceptors = (axios: AxiosInstance) => {
-  axios.interceptors.response.use(function (response) {
-    return response
-  }, function (error) {
-    console.log(error)
-    if (error.response.status === 403 || error.response.status === 401) {
-      removeAccountCookies()
-    } else if (error.response.status !== 200) {
-      // Sentry.captureMessage(error)
+  axios.interceptors.response.use(
+    function (response) {
+      return response
+    },
+    function (error) {
+      console.log(error)
+      if (error.response.status === 403 || error.response.status === 401) {
+        removeAccountCookies()
+      } else if (error.response.status !== 200) {
+        // Sentry.captureMessage(error)
+      }
+      return Promise.reject(error)
     }
-    return Promise.reject(error)
-  })
+  )
 }

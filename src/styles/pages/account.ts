@@ -7,7 +7,6 @@ export const FormContainer = styled(Col)`
   padding: 20px;
   border-radius: 5px;
   margin: 35px 0;
-
 `
 
 export const CustomPokemonAvatar = styled.div`

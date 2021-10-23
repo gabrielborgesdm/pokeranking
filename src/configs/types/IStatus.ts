@@ -5,14 +5,14 @@ export enum IStatusType {
 }
 
 export interface IStatus {
-  message?: string;
-  type: IStatusType;
-  onClick?: Function;
+  message?: string
+  type: IStatusType
+  onClick?: Function
 }
 
 export interface IStatusStyle {
-  display?: string;
-  backgroundColor?: string;
-  color?: string;
-  cursor?: string;
+  display?: string
+  backgroundColor?: string
+  color?: string
+  cursor?: string
 }

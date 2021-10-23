@@ -1,6 +1,6 @@
 import { IUserType } from './IUser'
 
 export interface IUserBoxes {
-  users?: Array<IUserType>;
-  isLoading: boolean;
+  users?: Array<IUserType>
+  isLoading: boolean
 }

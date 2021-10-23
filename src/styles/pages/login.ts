@@ -9,5 +9,5 @@ export const LoginContainer = styled.div`
   border-radius: 5px;
   background: ${colors.dark};
   padding: 15px;
-  color: ${colors.white}
+  color: ${colors.white};
 `

@@ -1,5 +1,4 @@
-
 export interface IMiddleware {
-  name: string;
-  parameters?: Array<any>;
+  name: string
+  parameters?: Array<any>
 }

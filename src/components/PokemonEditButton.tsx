@@ -1,21 +1,35 @@
-import { faEdit, faEye, faTimesCircle, faTrash } from '@fortawesome/fontawesome-free-solid'
+import {
+  faEdit,
+  faEye,
+  faTimesCircle,
+  faTrash
+} from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import React, { FormEvent, useState } from 'react'
 import { FloatingLabel, Form, OverlayTrigger, Popover } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
-import { CustomPokemonPopover, CustomPokemonPopoverHeader } from '../styles/pages/pokemons'
+import {
+  CustomPokemonPopover,
+  CustomPokemonPopoverHeader
+} from '../styles/pages/pokemons'
 import CustomButton from './CustomButton'
 
 export interface IPokemonEditButton {
-  pokemon: IPokemon;
-  currentPosition: number;
-  pokemonsLength: number;
-  onUpdatePokemon: (pokemon: IPokemon, nextIndex: number) => void;
-  isRankingFromAuthUser: boolean;
+  pokemon: IPokemon
+  currentPosition: number
+  pokemonsLength: number
+  onUpdatePokemon: (pokemon: IPokemon, nextIndex: number) => void
+  isRankingFromAuthUser: boolean
 }
 
-const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosition, onUpdatePokemon, pokemonsLength, isRankingFromAuthUser }: IPokemonEditButton) => {
+const PokemonEditButton: React.FC<IPokemonEditButton> = ({
+  pokemon,
+  currentPosition,
+  onUpdatePokemon,
+  pokemonsLength,
+  isRankingFromAuthUser
+}: IPokemonEditButton) => {
   const [newPosition, setNewPosition] = useState(currentPosition)
   const [newNote, setNewNote] = useState(pokemon.note || '')
   const [isVisible, setIsVisible] = useState(false)
@@ -31,7 +45,11 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
   }
 
   const handleRemovePokemon = () => {
-    if (window.confirm(`${t('do-you-want-to-remove-the-pokemon')} ${pokemon.name}?`)) {
+    if (
+      window.confirm(
+        `${t('do-you-want-to-remove-the-pokemon')} ${pokemon.name}?`
+      )
+    ) {
       onUpdatePokemon(pokemon, -1)
       setIsVisible(false)
     }
@@ -41,7 +59,8 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
     const element: HTMLElement = document.querySelector(elementClass)
     let isNearEdge = false
     if (element) {
-      const edgePercentage = 100 * (element.offsetWidth + element.offsetLeft) / window.innerWidth
+      const edgePercentage =
+        (100 * (element.offsetWidth + element.offsetLeft)) / window.innerWidth
       isNearEdge = edgePercentage > 65
     }
     return isNearEdge ? 'left' : 'right'
@@ -55,13 +74,25 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
       placement={placement}
       show={isVisible}
       overlay={
-        <CustomPokemonPopover id={`popover-${pokemon.id}`} style={{ width: 400 }}>
+        <CustomPokemonPopover
+          id={`popover-${pokemon.id}`}
+          style={{ width: 400 }}
+        >
           <CustomPokemonPopoverHeader>
-              {isRankingFromAuthUser && (
-                <FontAwesomeIcon icon={faTrash} color="#fff" onClick={() => handleRemovePokemon()}/>
-              )}
-              <span>{pokemon.name}</span>
-              <FontAwesomeIcon icon={faTimesCircle} color="#fff" className="ml-10px" onClick={() => setIsVisible(false)}/>
+            {isRankingFromAuthUser && (
+              <FontAwesomeIcon
+                icon={faTrash}
+                color="#fff"
+                onClick={() => handleRemovePokemon()}
+              />
+            )}
+            <span>{pokemon.name}</span>
+            <FontAwesomeIcon
+              icon={faTimesCircle}
+              color="#fff"
+              className="ml-10px"
+              onClick={() => setIsVisible(false)}
+            />
           </CustomPokemonPopoverHeader>
           <Popover.Body>
             <Form onSubmit={handleSubmit}>
@@ -78,26 +109,23 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({ pokemon, currentPosit
                 />
               </Form.Group>
               <Form.Group className="mb-3">
-              <FloatingLabel label={c('note')}>
-                <Form.Control
-                  readOnly={!isRankingFromAuthUser}
-                  as="textarea"
-                  placeholder={c('leave-a-note')}
-                  maxLength={100}
-                  value={newNote}
-                  onChange={(e) => setNewNote(e.target.value)}
-                  style={{ height: '100px', resize: 'none' }}
-                />
-              </FloatingLabel>
+                <FloatingLabel label={c('note')}>
+                  <Form.Control
+                    readOnly={!isRankingFromAuthUser}
+                    as="textarea"
+                    placeholder={c('leave-a-note')}
+                    maxLength={100}
+                    value={newNote}
+                    onChange={e => setNewNote(e.target.value)}
+                    style={{ height: '100px', resize: 'none' }}
+                  />
+                </FloatingLabel>
               </Form.Group>
               {isRankingFromAuthUser && (
                 <Form.Group>
-                  <CustomButton className="w-100">
-                    {c('change')}
-                  </CustomButton>
+                  <CustomButton className="w-100">{c('change')}</CustomButton>
                 </Form.Group>
               )}
-
             </Form>
           </Popover.Body>
         </CustomPokemonPopover>

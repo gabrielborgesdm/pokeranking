@@ -1,7 +1,11 @@
 import React, { FormEvent, useState, useEffect, useContext } from 'react'
 import Link from 'next/link'
 import useTranslation from 'next-translate/useTranslation'
-import { AccountContainer, FullScreenContainer, YellowLink } from '../styles/common'
+import {
+  AccountContainer,
+  FullScreenContainer,
+  YellowLink
+} from '../styles/common'
 import Image from 'next/image'
 import { Form } from 'react-bootstrap'
 import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
@@ -21,7 +25,10 @@ const CreateAccount: React.FC = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [rePassword, setRePassword] = useState('')
-  const [status, setStatus] = useState<IStatus>({ message: '', type: IStatusType.Success })
+  const [status, setStatus] = useState<IStatus>({
+    message: '',
+    type: IStatusType.Success
+  })
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
@@ -34,7 +41,11 @@ const CreateAccount: React.FC = () => {
     if (isFormValid()) {
       const data = await submitRequest()
       if (data?.success) {
-        setStatus({ message: t('account-created-with-success-click-to-log-in'), type: IStatusType.Success, onClick: goToLoginPage })
+        setStatus({
+          message: t('account-created-with-success-click-to-log-in'),
+          type: IStatusType.Success,
+          onClick: goToLoginPage
+        })
         clearForm()
       } else if (data) {
         setStatus({ message: data.message, type: IStatusType.Warning })
@@ -60,7 +71,10 @@ const CreateAccount: React.FC = () => {
     if (password === rePassword) {
       return true
     } else {
-      setStatus({ message: c('both-passwords-must-be-the-same'), type: IStatusType.Warning })
+      setStatus({
+        message: c('both-passwords-must-be-the-same'),
+        type: IStatusType.Warning
+      })
       return false
     }
   }
@@ -69,7 +83,9 @@ const CreateAccount: React.FC = () => {
     let data = null
     setStatus({ ...status, message: '' })
     try {
-      const response = await getAxios().post(REQUEST_URL.CREATE_ACCOUNT, { user: { username, password, email } })
+      const response = await getAxios().post(REQUEST_URL.CREATE_ACCOUNT, {
+        user: { username, password, email }
+      })
       data = response?.data
     } catch (error) {
       console.log(error)
@@ -78,7 +94,9 @@ const CreateAccount: React.FC = () => {
   }
 
   const updateUsername = (value: string) => {
-    setUsername(oldUsername => value.match(UsernameRegex) || !value.length ? value : oldUsername)
+    setUsername(oldUsername =>
+      value.match(UsernameRegex) || !value.length ? value : oldUsername
+    )
   }
 
   const clearForm = () => {
@@ -96,12 +114,25 @@ const CreateAccount: React.FC = () => {
     <div>
       <FullScreenContainer>
         <AccountContainer>
-          <Image src="/images/pokeranking.png" width="656" height="184" quality="100" layout="responsive" />
-          <StatusBar message={status.message} type={status.type} onClick={status.onClick} />
+          <Image
+            src="/images/pokeranking.png"
+            width="656"
+            height="184"
+            quality="100"
+            layout="responsive"
+          />
+          <StatusBar
+            message={status.message}
+            type={status.type}
+            onClick={status.onClick}
+          />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="create-account-email">{c('email')}</Form.Label>
-              <Form.Control id="create-account-email"
+              <Form.Label htmlFor="create-account-email">
+                {c('email')}
+              </Form.Label>
+              <Form.Control
+                id="create-account-email"
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -114,8 +145,11 @@ const CreateAccount: React.FC = () => {
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="create-account-username">{c('username')}</Form.Label>
-              <Form.Control id="create-account-username"
+              <Form.Label htmlFor="create-account-username">
+                {c('username')}
+              </Form.Label>
+              <Form.Control
+                id="create-account-username"
                 type="text"
                 value={username}
                 onChange={e => updateUsername(e.target.value)}
@@ -128,8 +162,11 @@ const CreateAccount: React.FC = () => {
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="create-account-password">{c('password')}</Form.Label>
-              <Form.Control id="create-account-password"
+              <Form.Label htmlFor="create-account-password">
+                {c('password')}
+              </Form.Label>
+              <Form.Control
+                id="create-account-password"
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -142,8 +179,11 @@ const CreateAccount: React.FC = () => {
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="create-account-repeat">{c('repeat-password')}</Form.Label>
-              <Form.Control id="create-account-repeat"
+              <Form.Label htmlFor="create-account-repeat">
+                {c('repeat-password')}
+              </Form.Label>
+              <Form.Control
+                id="create-account-repeat"
                 type="password"
                 value={rePassword}
                 onChange={e => setRePassword(e.target.value)}
