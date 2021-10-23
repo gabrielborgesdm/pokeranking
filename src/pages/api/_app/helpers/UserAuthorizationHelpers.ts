@@ -55,5 +55,11 @@ export const formatUserDocument = (
     user.numberOfPokemons = user.pokemons.length;
     delete user.pokemons;
   }
+
+  const image = allPokemons.filter(
+    (pokemon) => pokemon.id === parseInt(user.avatar)
+  )[0].image;
+  user.avatar = image;
+
   return user;
 };
