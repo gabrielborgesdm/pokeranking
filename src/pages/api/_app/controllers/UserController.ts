@@ -16,8 +16,7 @@ export const getAllUsers = async (req: IRequest, res: NextApiResponse) => {
   const response = await userRepository.getAll()
   let users: Array<IUser> = []
   if (response) {
-    const allPokemons = await pokemonRepository.getAll()
-    users = response.map(userResponse => abstractUserBasedOnAuthorizationLevel(req, req.user, userResponse, allPokemons))
+    users = response.map(userResponse => abstractUserBasedOnAuthorizationLevel(req, req.user, userResponse))
   }
   sendResponse(req, res, SUCCESS, { users })
 }
