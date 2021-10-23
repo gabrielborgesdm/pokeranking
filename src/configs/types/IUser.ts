@@ -10,6 +10,7 @@ export type IUser = {
   bio?: string;
   password?: string;
   pokemons?: Array<IUserPokemonMutate>;
+  numberOfPokemons?: number;
   role?: string;
 }
 
