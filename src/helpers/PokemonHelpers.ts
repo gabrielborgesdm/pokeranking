@@ -4,15 +4,23 @@ import { IUser } from '../configs/types/IUser'
 import { IUserPokemonMutate } from '../configs/types/IUserPokemon'
 import { abstractPokemon } from '../pages/api/_app/helpers/PokemonHelpers'
 
-export const populateUserWithPokemons = (req: IRequest, user: IUser, allPokemons: IPokemonDocument[]) => {
+export const populateUserWithPokemons = (
+  req: IRequest,
+  user: IUser,
+  allPokemons: IPokemonDocument[]
+) => {
   const userPokemons: IUserPokemonMutate[] = user.pokemons
   user.pokemons = userPokemons.map(userPokemon => {
-    const filteredPokemons = allPokemons.filter(filteredPokemon => filteredPokemon.id === userPokemon.pokemon)
+    const filteredPokemons = allPokemons.filter(
+      filteredPokemon => filteredPokemon.id === userPokemon.pokemon
+    )
     const populated = { ...abstractPokemon(req, filteredPokemons[0]) }
     if (userPokemon.note) populated.note = userPokemon.note
     return populated
   })
 
-  const image = allPokemons.filter((pokemon) => pokemon.id === parseInt(user.avatar))[0].image
+  const image = allPokemons.filter(
+    pokemon => pokemon.id === parseInt(user.avatar)
+  )[0].image
   user.avatar = image
 }

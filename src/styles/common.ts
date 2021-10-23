@@ -5,7 +5,7 @@ import { colors } from './theme'
 export const FullScreenContainer = styled.div`
   height: 100%;
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
 `
 export const CustomButtonStyle = styled(Button)`
@@ -13,7 +13,7 @@ export const CustomButtonStyle = styled(Button)`
   border: ${colors.blue};
   min-width: 80px;
 
-  &:hover{
+  &:hover {
     filter: brightness(0.9);
   }
 `
@@ -47,7 +47,7 @@ export const StatusContainer = styled.div`
   padding: 2.5px 0;
   margin: 15px 0;
   border-radius: 3px;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   transition: all 0.5s;
 `
@@ -83,14 +83,12 @@ export const PokemonListingContainer = styled(Col)`
   }
   .container-name {
     width: 10%;
-    
   }
   .container-name span {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
 `
 export const FloatingContainer = styled(Col)`
   display: flex;
@@ -112,8 +110,10 @@ export const CustomBox = styled.div`
   &:hover {
     cursor: pointer;
     filter: brightness(0.9);
-    -webkit-box-shadow: 5px 5px 0px 0px #404040, 10px 10px 0px 0px #595959, 15px 15px 0px 0px #737373; 
-    box-shadow: 5px 5px 0px 0px #404040, 10px 10px 0px 0px #595959, 15px 15px 0px 0px #737373;
+    -webkit-box-shadow: 5px 5px 0px 0px #404040, 10px 10px 0px 0px #595959,
+      15px 15px 0px 0px #737373;
+    box-shadow: 5px 5px 0px 0px #404040, 10px 10px 0px 0px #595959,
+      15px 15px 0px 0px #737373;
   }
 `
 

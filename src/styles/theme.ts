@@ -1,4 +1,3 @@
-
 export const colors = {
   green: '#4dad5b',
   blue: '#30a7d7',

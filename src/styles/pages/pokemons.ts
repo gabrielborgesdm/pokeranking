@@ -9,10 +9,9 @@ export const CustomPokemonContainer = styled(Col)`
       display: none !important;
     }
   }
-  
+
   .container-name {
     width: 10%;
-    
   }
 
   .container-name span {
@@ -20,7 +19,6 @@ export const CustomPokemonContainer = styled(Col)`
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
 `
 
 export const CustomPokemonBox = styled.div`
@@ -60,7 +58,7 @@ export const CustomPokemonPopoverHeader = styled(Popover.Header)`
   justify-content: space-between;
   background-color: ${colors.blue};
   color: ${colors.white};
-  svg{
+  svg {
     cursor: pointer;
   }
 `
@@ -68,7 +66,7 @@ export const CustomPokemonPopoverHeader = styled(Popover.Header)`
 export const CustomPokerankingNav = styled.div`
   background-color: ${colors.dark};
   border-radius: 5px;
-  margin: 0 4px; 
+  margin: 0 4px;
   padding: 25px 15px;
   justify-content: space-between;
   font-size: 1.2rem;
@@ -80,7 +78,6 @@ export const CustomPokerankingNav = styled.div`
   .nav-title {
     display: flex;
     align-items: center;
-    
   }
 
   .nav-buttons {

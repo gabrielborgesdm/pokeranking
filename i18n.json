@@ -1,28 +1,12 @@
 {
-  "locales": [
-    "en",
-    "pt"
-  ],
+  "locales": ["en", "pt"],
   "defaultLocale": "en",
   "pages": {
-    "*": [
-      "common",
-      "pokemons"
-    ],
-    "/login": [
-      "login"
-    ],
-    "/users": [
-      "users"
-    ],
-    "/create-account": [
-      "create-account"
-    ],
-    "/account": [
-      "account"
-    ],
-    "/about": [
-      "about"
-    ]
+    "*": ["common", "pokemons"],
+    "/login": ["login"],
+    "/users": ["users"],
+    "/create-account": ["create-account"],
+    "/account": ["account"],
+    "/about": ["about"]
   }
 }
