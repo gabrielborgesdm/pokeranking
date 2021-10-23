@@ -3,9 +3,6 @@ import { IPokemonDocument } from '../../../../configs/types/IPokemon'
 import { IRequest } from '../../../../configs/types/IRequest'
 import { IUser, IUserDocument } from '../../../../configs/types/IUser'
 import { populateUserWithPokemons } from '../../../../helpers/PokemonHelpers'
-import PokemonRepository from './../repositories/PokemonRepository';
-
-const pokemonRepository = new PokemonRepository()
 
 export const isUserAuthorized = (authenticatedUser: IUser, targetUser: IUserDocument): boolean => {
   return authenticatedUser.role === USER_ROLES.ADMIN || authenticatedUser._id.toString() === targetUser._id.toString()

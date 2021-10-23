@@ -1,18 +1,28 @@
 import { NextApiResponse } from 'next'
-import { ERROR, FORBIDDEN, INVALID_CREDENTIALS, SUCCESS, USER_ALREADY_REGISTERED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
+
+import {
+  ERROR,
+  FORBIDDEN,
+  INVALID_CREDENTIALS,
+  SUCCESS,
+  USER_ALREADY_REGISTERED,
+  USER_NOT_FOUND
+} from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
 import { IResponse } from '../../../../configs/types/IResponse'
 import { IUser, IUserAdd, IUserDocument } from '../../../../configs/types/IUser'
 import { generateAccessToken, hashPassword, isPasswordValid } from '../helpers/AuthenticationHelpers'
 import { sendResponse } from '../helpers/ResponseHelpers'
-import { abstractUserBasedOnAuthorizationLevel, formatUserDocument, isUserAuthorized } from '../helpers/UserAuthorizationHelpers'
+import {
+  abstractUserBasedOnAuthorizationLevel,
+  formatUserDocument,
+  isUserAuthorized
+} from '../helpers/UserAuthorizationHelpers'
 import PokemonRepository from '../repositories/PokemonRepository'
 import UserRepository from '../repositories/UserRepository'
-import { getAllPokemons } from './PokemonController';
 
 const userRepository = new UserRepository()
 const pokemonRepository = new PokemonRepository()
-
 
 export const getAllUsers = async (req: IRequest, res: NextApiResponse) => {
   const response = await userRepository.getAll()
