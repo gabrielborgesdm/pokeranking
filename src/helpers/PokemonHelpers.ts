@@ -18,9 +18,4 @@ export const populateUserWithPokemons = (
     if (userPokemon.note) populated.note = userPokemon.note
     return populated
   })
-
-  const image = allPokemons.filter(
-    pokemon => pokemon.id === parseInt(user.avatar)
-  )[0].image
-  user.avatar = image
 }
