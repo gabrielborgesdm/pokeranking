@@ -1,15 +1,10 @@
-import { faEdit, faEye } from '@fortawesome/fontawesome-free-solid'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { memo, useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap'
-import { USER_ROLES } from '../configs/APIConfig'
+
 import { IPokemon } from '../configs/types/IPokemon'
 import { IUserResponse } from '../configs/types/IUser'
 import { getThemedColors } from '../helpers/ColorHelpers'
-import {
-  handleScrollAndGetNumberOfElementsToRender,
-  scrollBackToTop
-} from '../helpers/ScrollHelpers'
+import { handleScrollAndGetNumberOfElementsToRender, scrollBackToTop } from '../helpers/ScrollHelpers'
 import users from '../pages/users'
 import { CustomBoxRow, PokemonListingContainer } from '../styles/common'
 import {
@@ -90,7 +85,10 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                       src={pokemon.image}
                       width={80}
                       height={80}
-                      className="pokemon-image"
+                      className="pokemon-image cursor-zoom-in"
+                      onClick={() => {
+                        handleViewClick(pokemon)
+                      }}
                     />
                     <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center ">
                       <CustomPokemonBoxTitle>
@@ -99,15 +97,9 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                     </div>
                     <CustomPokemonToolsBox>
                       <>
-                        <div
-                          className="mx-3"
-                          onClick={() => {
-                            handleViewClick(pokemon)
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faEye} />
-                        </div>
-                        {user?.role === USER_ROLES.ADMIN && (
+
+                        {/*
+                        user?.role === USER_ROLES.ADMIN && (
                           <div
                             onClick={() => {
                               setPokemonToEdit(pokemon)
@@ -115,7 +107,8 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                           >
                             <FontAwesomeIcon icon={faEdit} />
                           </div>
-                        )}
+                        )
+                        */}
                       </>
                     </CustomPokemonToolsBox>
                   </CustomPokemonBox>
