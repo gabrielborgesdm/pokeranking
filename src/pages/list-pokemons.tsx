@@ -4,19 +4,15 @@ import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useContext, useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
+
 import CustomButton from '../components/CustomButton'
 import MainContainerComponent from '../components/MainContainerComponent'
-import PokemonAddModal from '../components/PokemonAddModal'
 import PokemonsListingBoxes from '../components/PokemonsListingBoxes'
-import { USER_ROLES } from '../configs/APIConfig'
 import { REQUEST_URL } from '../configs/AppConfig'
 import { IPokemonsResponse } from '../configs/types/IPokemon'
 import { IUser } from '../configs/types/IUser'
 import { AuthContext } from '../models/AuthContext'
-import {
-  checkIsAuthenticated,
-  serverSideRedirection
-} from '../services/AuthService'
+import { checkIsAuthenticated, serverSideRedirection } from '../services/AuthService'
 import { CustomPokerankingNav } from '../styles/pages/pokemons'
 
 const Pokemons: React.FC = () => {
@@ -89,7 +85,9 @@ const Pokemons: React.FC = () => {
                     <h3>{t('pokemons-list')}</h3>
 
                     <div className="d-flex align-items-center">
-                      {user?.role === USER_ROLES.ADMIN && <PokemonAddModal />}
+                      {/*
+                        {user?.role === USER_ROLES.ADMIN && <PokemonAddModal />}
+                      */}
                       <Form.Control
                         type="text"
                         value={filteredPokemon}

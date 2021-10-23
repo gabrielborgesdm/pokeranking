@@ -97,6 +97,9 @@ export default createGlobalStyle`
   .cursor-pointer {
     cursor: pointer;
   }
+  .cursor-zoom-in {
+    cursor: zoom-in;
+  }
 
   .fullscreen-modal .modal-header {
     background-color: ${colors.blue};

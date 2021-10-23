@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Row } from 'react-bootstrap'
+
 import { IPokemon } from '../configs/types/IPokemon'
 import { getThemedColors } from '../helpers/ColorHelpers'
 import { CustomBoxRow, PokemonListingContainer } from '../styles/common'
@@ -9,6 +10,7 @@ import {
   CustomPokemonContainer,
   CustomPokemonToolsBox
 } from '../styles/pages/pokemons'
+import { FullscreenImageModal } from './FullscreenImageModal'
 import PokemonEditButton from './PokemonEditButton'
 
 export interface IPokemonBoxes {
@@ -23,6 +25,16 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({
   onUpdatePokemon,
   isRankingFromAuthUser
 }: IPokemonBoxes) => {
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false)
+  const [fullscreenPokemonImageURL, setFullscreenPokemonImageURL] = useState('')
+  const [fullscreenPokemonName, setFullscreenPokemonName] = useState('')
+
+  const handleViewClick = (pokemon: IPokemon) => {
+    setFullscreenPokemonImageURL(pokemon.image)
+    setFullscreenPokemonName(pokemon.name)
+    setIsImageModalVisible(true)
+  }
+
   return (
     <CustomBoxRow>
       <PokemonListingContainer xs={12} className="container pb-5">
@@ -41,11 +53,14 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({
                     src={pokemon.image}
                     width={80}
                     height={80}
-                    className="pokemon-image"
+                    className="pokemon-image cursor-zoom-in"
+                    onClick={() => {
+                      handleViewClick(pokemon)
+                    }}
                   />
                   <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center ">
                     <CustomPokemonBoxTitle>
-                      {pokemon.name}
+                      <span title={pokemon.name} className="cursor-pointer">{pokemon.name}</span>
                     </CustomPokemonBoxTitle>
                   </div>
                   <CustomPokemonToolsBox>
@@ -63,6 +78,12 @@ const PokemonBoxes: React.FC<IPokemonBoxes> = ({
                 </CustomPokemonBox>
               </CustomPokemonContainer>
             ))}
+          <FullscreenImageModal
+            imageURL={fullscreenPokemonImageURL}
+            modalTitle={fullscreenPokemonName}
+            isVisible={isImageModalVisible}
+            setIsVisible={setIsImageModalVisible}
+          />
         </Row>
       </PokemonListingContainer>
     </CustomBoxRow>
