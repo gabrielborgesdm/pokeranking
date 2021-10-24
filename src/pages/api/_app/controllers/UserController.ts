@@ -2,6 +2,7 @@ import { NextApiResponse } from 'next'
 
 import {
   ERROR,
+  FIELD_VALIDATION_ERROR,
   FORBIDDEN,
   INVALID_CREDENTIALS,
   SUCCESS,
@@ -32,6 +33,29 @@ export const getAllUsers = async (req: IRequest, res: NextApiResponse) => {
     users = response.map(userResponse => abstractUserBasedOnAuthorizationLevel(req, req.user, userResponse, allPokemons, false))
   }
   sendResponse(req, res, SUCCESS, { users })
+}
+
+export const getUsersPaginated = async (req: IRequest, res: NextApiResponse) => {
+  const pagination = getPaginationQuery(req, res)
+  if (!pagination) return sendResponse(req, res, FIELD_VALIDATION_ERROR)
+  const response = await userRepository.getPaginated(pagination)
+  let users: Array<IUser> = []
+  if (response) {
+    const allPokemons = await pokemonRepository.getThenLoadAllPokemons()
+    users = response.map(userResponse => abstractUserBasedOnAuthorizationLevel(req, req.user, userResponse, allPokemons, false))
+  }
+  sendResponse(req, res, SUCCESS, { users })
+}
+
+const getPaginationQuery = (req: IRequest, res: NextApiResponse) => {
+  const { slug } = req.query
+  const skip = parseInt(slug[0])
+  const limit = parseInt(slug[1])
+  if (typeof skip !== 'number' || typeof limit !== 'number' || skip > limit) {
+    return null
+  } else {
+    return { skip, limit }
+  }
 }
 
 const getUser = async (query: object) => {

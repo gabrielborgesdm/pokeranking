@@ -31,7 +31,7 @@ export const abstractUserBasedOnAuthorizationLevel = (req: IRequest, authenticat
 export const formatUserDocument = (req: IRequest, response: IUserDocument, allPokemons?: IPokemonDocument[], shouldPopulatePokemons = true): IUser => {
   const user = response.toObject()
   deleteFromUser(user, USER_KEYS.PASSWORD, USER_KEYS.__V)
-  if (allPokemons) {
+  if (shouldPopulatePokemons) {
     populateUserWithPokemons(req, user, allPokemons)
   } else {
     user.numberOfPokemons = user.pokemons.length
