@@ -48,11 +48,11 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
 
   const checkIfHasAwards = (index: number, user: IUser) => {
     let classes = ''
-    if (user.pokemons.length > 700) {
+    if (user.numberOfPokemons > 700) {
       classes += 'bg-gold'
-    } else if (user.pokemons.length > 500) {
+    } else if (user.numberOfPokemons > 500) {
       classes += 'bg-silver'
-    } else if (user.pokemons.length > 300) {
+    } else if (user.numberOfPokemons > 300) {
       classes += 'bg-bronze'
     }
     return classes
@@ -89,9 +89,9 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                     <div className="container-name d-flex justify-content-between flex-grow-1 align-items-center">
                       <CustomBoxTitle>{user.username}</CustomBoxTitle>
                       <CustomPokemonToolsBox>
-                        {user.pokemons.length > 0 && (
+                        {user.numberOfPokemons > 0 && (
                           <div className="d-flex flex-row align-items-center">
-                            <span>{user.pokemons.length}</span>
+                            <span>{user.numberOfPokemons}</span>
                             <img
                               src="/images/pokeball.svg"
                               className="ml-10px"

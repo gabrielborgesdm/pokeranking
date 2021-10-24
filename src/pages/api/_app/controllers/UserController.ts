@@ -67,7 +67,7 @@ export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => 
   const response: IUserDocument = await userRepository.get({ username })
   if (!response) return sendResponse(req, res, USER_NOT_FOUND)
   const allPokemons = await pokemonRepository.getThenLoadAllPokemons()
-  const user: IUser = abstractUserBasedOnAuthorizationLevel(req, req.user, response, allPokemons, false)
+  const user: IUser = abstractUserBasedOnAuthorizationLevel(req, req.user, response, allPokemons)
   sendResponse(req, res, SUCCESS, { user })
 }
 
