@@ -3,6 +3,7 @@ import { IPokemonDocument } from '../../../../configs/types/IPokemon'
 import { IRequest } from '../../../../configs/types/IRequest'
 import { IUser, IUserDocument } from '../../../../configs/types/IUser'
 import { populateUserWithPokemons } from '../../../../helpers/PokemonHelpers'
+import Pokemon from './../models/PokemonModel';
 
 export const isUserAuthorized = (
   authenticatedUser: IUser,
@@ -37,8 +38,14 @@ export const formatUserDocument = (req: IRequest, response: IUserDocument, allPo
     user.numberOfPokemons = user.pokemons.length
     delete user.pokemons
   }
+  let image = null
+  try {
+    image = allPokemons.filter((pokemon) => pokemon.id === parseInt(user.avatar))[0].image
+  } catch (error) {
+    console.log(user)
+    image = allPokemons[0].image
+  }
 
-  const image = allPokemons.filter((pokemon) => pokemon.id === parseInt(user.avatar))[0].image
   user.avatar = image
   return user
 }
