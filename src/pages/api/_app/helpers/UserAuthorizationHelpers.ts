@@ -3,7 +3,6 @@ import { IPokemonDocument } from '../../../../configs/types/IPokemon'
 import { IRequest } from '../../../../configs/types/IRequest'
 import { IUser, IUserDocument } from '../../../../configs/types/IUser'
 import { populateUserWithPokemons } from '../../../../helpers/PokemonHelpers'
-import Pokemon from './../models/PokemonModel';
 
 export const isUserAuthorized = (
   authenticatedUser: IUser,
