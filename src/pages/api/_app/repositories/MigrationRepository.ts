@@ -1,21 +1,21 @@
-import { IMigration } from "../../../../configs/types/IMigration";
-import Migration from "../models/MigrationModel";
+import { IMigration } from '../../../../configs/types/IMigration'
+import Migration from '../models/MigrationModel'
 
 export default class MigrationRepository {
   async getExecutedMigrations(): Promise<Array<string>> {
-    let migrations = [];
+    let migrations = []
     const response: Array<IMigration> = await Migration.find({
-      executed: true,
-    }).exec();
+      executed: true
+    }).exec()
     if (response && response.length) {
-      migrations = response.map((migration: IMigration) => migration.name);
+      migrations = response.map((migration: IMigration) => migration.name)
     }
-    return migrations;
+    return migrations
   }
 
   async saveExecutedMigration(migrationInfo: IMigration): Promise<IMigration> {
-    let migration: IMigration = null;
-    migration = await Migration.create(migrationInfo);
-    return migration;
+    let migration: IMigration = null
+    migration = await Migration.create(migrationInfo)
+    return migration
   }
 }
