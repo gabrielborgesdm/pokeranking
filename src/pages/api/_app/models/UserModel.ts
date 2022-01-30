@@ -1,6 +1,6 @@
-import mongoose from "../../../../configs/DatabaseConfig";
-import { USER_ROLES } from "../../../../configs/APIConfig";
-import { IUserDocument } from "../../../../configs/types/IUser";
+import mongoose from '../../../../configs/DatabaseConfig'
+import { USER_ROLES } from '../../../../configs/APIConfig'
+import { IUserDocument } from '../../../../configs/types/IUser'
 
 const UserModel = new mongoose.Schema<IUserDocument>({
   username: { type: String, require: true },
@@ -12,9 +12,9 @@ const UserModel = new mongoose.Schema<IUserDocument>({
   role: { type: String, default: USER_ROLES.USER },
   createdAt: { type: Date, default: Date.now },
   pokemons: { type: Array, default: [] },
-  updatedAt: { type: Date, default: Date.now },
-});
+  updatedAt: { type: Date, default: Date.now }
+})
 
 const User =
-  mongoose.models.Users || mongoose.model<IUserDocument>("Users", UserModel);
-export default User;
+  mongoose.models.Users || mongoose.model<IUserDocument>('Users', UserModel)
+export default User
