@@ -4,6 +4,7 @@ import useTranslation from 'next-translate/useTranslation'
 import React, { useState } from 'react'
 import { Form, Modal } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
+import { getPokemonImagePath } from '../helpers/PokemonHelpers'
 import { CustomPokemonAvatar } from '../styles/pages/account'
 import { colors } from '../styles/theme'
 import CustomButton from './CustomButton'
@@ -48,7 +49,7 @@ const PokemonEditAvatarModal: React.FC<IPokemonEditAvatarModal> = ({
             <CustomPokemonAvatar className="mx-auto">
               {selectedPokemon || avatar ? (
                 <img
-                  src={selectedPokemon?.image || avatar}
+                  src={getPokemonImagePath(selectedPokemon?.image) || avatar}
                   width={250}
                   height={250}
                 />

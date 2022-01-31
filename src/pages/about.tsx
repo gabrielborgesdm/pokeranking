@@ -3,6 +3,7 @@ import React from 'react'
 import { Col, Row } from 'react-bootstrap'
 import MainContainerComponent from '../components/MainContainerComponent'
 import PokemonAvatar from '../components/PokemonAvatar'
+import { getPokemonImagePath } from '../helpers/PokemonHelpers'
 import { CustomBoxRow, FloatingContainer } from '../styles/common'
 import { FormContainer } from '../styles/pages/account'
 
@@ -18,13 +19,13 @@ export const About: React.FC = () => {
             <FormContainer className="mx-auto pb-5 text-justify" xs={12}>
               <Row>
                 <Col className="d-flex justify-content-center">
-                  <PokemonAvatar avatar="https://res.cloudinary.com/dzexzxngb/image/upload/v1632967244/p5wcirnqspkd9eoilzom.png" />
+                  <PokemonAvatar avatar={getPokemonImagePath('p5wcirnqspkd9eoilzom.png')} />
                 </Col>
                 <Col className="d-flex justify-content-center">
-                  <PokemonAvatar avatar="https://res.cloudinary.com/dzexzxngb/image/upload/v1632964766/gc3hby6hcmvqfbahybrr.png" />
+                  <PokemonAvatar avatar={getPokemonImagePath('gc3hby6hcmvqfbahybrr.png')} />
                 </Col>
                 <Col className="d-flex justify-content-center">
-                  <PokemonAvatar avatar="https://res.cloudinary.com/dzexzxngb/image/upload/v1632965324/otskrdnhetnm9xn7cthc.png" />
+                  <PokemonAvatar avatar={getPokemonImagePath('otskrdnhetnm9xn7cthc.png')} />
                 </Col>
               </Row>
 

@@ -1,6 +1,6 @@
 import PokemonRepository from '../repositories/PokemonRepository'
 import pokemons from '../../../../assets/pokemons.json'
-import { getImage, getRelativePath } from '../helpers/PokemonImageHelpers'
+import { getImage } from '../helpers/PokemonImageHelpers'
 
 export const addPokemons = async () => {
   const pokemonRepository = new PokemonRepository()
@@ -46,8 +46,7 @@ const checkPokemonIsDuplicated = (name: string, mappedPokemons: any, stats: any)
 }
 
 const addPokemon = async (name: string, image: string, pokemonRepository: PokemonRepository, mappedPokemons: any, stats: any) => {
-  console.log(getRelativePath(image))
-  await pokemonRepository.store({ name, image: getRelativePath(image) })
+  await pokemonRepository.store({ name, image })
   mappedPokemons[name] = true
   console.log(`Added: ${name} -> ${image}`)
   stats.added++
