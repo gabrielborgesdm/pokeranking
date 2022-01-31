@@ -4,6 +4,7 @@ import { Row } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
 import { IUserResponse } from '../configs/types/IUser'
 import { getThemedColors } from '../helpers/ColorHelpers'
+import { getPokemonImagePath } from '../helpers/PokemonHelpers'
 import { handleScrollAndGetNumberOfElementsToRender, scrollBackToTop } from '../helpers/ScrollHelpers'
 import users from '../pages/users'
 import { CustomBoxRow, PokemonListingContainer } from '../styles/common'
@@ -51,7 +52,7 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
   }
 
   const handleViewClick = (pokemon: IPokemon) => {
-    setFullscreenPokemonImageURL(pokemon.image)
+    setFullscreenPokemonImageURL(getPokemonImagePath(pokemon.image))
     setFullscreenPokemonName(pokemon.name)
     setIsImageModalVisible(true)
   }
@@ -82,7 +83,7 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                 >
                   <CustomPokemonBox style={getThemedColors(index)}>
                     <img
-                      src={pokemon.image}
+                      src={getPokemonImagePath(pokemon?.image)}
                       width={80}
                       height={80}
                       className="pokemon-image cursor-zoom-in"
@@ -95,22 +96,6 @@ const PokemonsListingBoxes: React.FC<IPokemonsListingBoxes> = ({
                         {pokemon.name}
                       </CustomPokemonBoxTitle>
                     </div>
-                    <CustomPokemonToolsBox>
-                      <>
-
-                        {/*
-                        user?.role === USER_ROLES.ADMIN && (
-                          <div
-                            onClick={() => {
-                              setPokemonToEdit(pokemon)
-                            }}
-                          >
-                            <FontAwesomeIcon icon={faEdit} />
-                          </div>
-                        )
-                        */}
-                      </>
-                    </CustomPokemonToolsBox>
                   </CustomPokemonBox>
                 </CustomPokemonContainer>
               ))}

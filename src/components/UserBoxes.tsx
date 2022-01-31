@@ -8,6 +8,7 @@ import { PAGE_URL } from '../configs/AppConfig'
 import { IUser } from '../configs/types/IUser'
 import { IUserBoxes } from '../configs/types/IUserBox'
 import { getThemedColors } from '../helpers/ColorHelpers'
+import { getPokemonImagePath } from '../helpers/PokemonHelpers'
 import {
   handleScrollAndGetNumberOfElementsToRender,
   scrollBackToTop
@@ -81,7 +82,7 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                     className={`${checkIfHasAwards(index, user)}`}
                   >
                     <img
-                      src={user.avatar}
+                      src={getPokemonImagePath(user.avatar)}
                       width={80}
                       height={80}
                       className="pokemon-image"

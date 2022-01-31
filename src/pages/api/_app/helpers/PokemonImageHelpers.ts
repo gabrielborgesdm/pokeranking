@@ -10,5 +10,3 @@ export const getImage = (imageName: string): Buffer | null => {
   const imageBuffer = fs.readFileSync(fullImagePath)
   return imageBuffer
 }
-
-export const getRelativePath = (image: string) => `/${relativePath}/${image}`

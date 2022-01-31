@@ -4,6 +4,7 @@ import useTranslation from 'next-translate/useTranslation'
 import React, { FormEvent, useEffect, useState } from 'react'
 import { Form, Modal } from 'react-bootstrap'
 import { IPokemon } from '../configs/types/IPokemon'
+import { getPokemonImagePath, getUnknownPokemonImage } from '../helpers/PokemonHelpers'
 import { colors } from '../styles/theme'
 import CustomButton from './CustomButton'
 import PokemonAvatar from './PokemonAvatar'
@@ -58,7 +59,7 @@ const RankingAddModal: React.FC<IRankingAddModal> = ({
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex justify-content-center">
-            <PokemonAvatar avatar={selectedPokemon?.image} />
+            <PokemonAvatar avatar={getPokemonImagePath(selectedPokemon?.image) || getUnknownPokemonImage()} />
           </div>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">

@@ -10,6 +10,7 @@ import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { IPokemonType } from '../configs/types/IPokemon'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
 import { IUserType } from '../configs/types/IUser'
+import { getPokemonImagePath } from '../helpers/PokemonHelpers'
 import { AuthContext } from '../models/AuthContext'
 import { CustomBoxRow, FloatingContainer } from '../styles/common'
 import { FormContainer } from '../styles/pages/account'
@@ -45,7 +46,7 @@ const Account: React.FC = () => {
     } else {
       setEmail(user.email)
       setUsername(user.username)
-      setAvatar(user.avatar)
+      setAvatar(getPokemonImagePath(user.avatar))
       setBio(user.bio)
     }
     setIsLoading(false)
@@ -138,7 +139,7 @@ const Account: React.FC = () => {
                 <div className="d-flex flex-column flex-sm-row">
                   <div className="d-flex flex-column flex-sm-row align-items-center">
                     <PokemonAvatar
-                      avatar={selectedPokemon ? selectedPokemon.image : avatar}
+                      avatar={getPokemonImagePath(selectedPokemon?.image) || avatar}
                       isLoading={isLoading}
                       onUpdateAvatar={onUpdateSelectedPokemon}
                     />
