@@ -1,7 +1,7 @@
 import { NextApiResponse } from 'next'
 import { IMAGE_NOT_FOUND } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
-import { getImage } from '../helpers/ImageHelpers'
+import { getImage } from '../helpers/PokemonImageHelpers'
 import { sendImage, sendResponse } from '../helpers/ResponseHelpers'
 
 export const loadImage = async (req: IRequest, res: NextApiResponse) => {

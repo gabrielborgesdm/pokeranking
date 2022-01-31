@@ -7,9 +7,13 @@ const migrations = {
   addPokemons: addPokemons
 }
 
+let isExecutingMigration = false
+
 class Migration {
   isMigrated: boolean = false;
   executeMigrations = async () => {
+    if (isExecutingMigration) return
+    isExecutingMigration = true
     const migration = new MigrationRepository()
     try {
       const executedMigrations: Array<string> =
@@ -27,6 +31,8 @@ class Migration {
     } catch (error) {
       console.log(error)
       this.isMigrated = false
+    } finally {
+      isExecutingMigration = false
     }
   };
 }
