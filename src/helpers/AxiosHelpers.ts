@@ -17,8 +17,6 @@ const addInterceptors = (axios: AxiosInstance) => {
       console.log(error)
       if (error.response.status === 403 || error.response.status === 401) {
         removeAccountCookies()
-      } else if (error.response.status !== 200) {
-        // Sentry.captureMessage(error)
       }
       return Promise.reject(error)
     }

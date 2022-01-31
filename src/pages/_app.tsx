@@ -8,20 +8,9 @@ import GlobalStyle from '../styles/global'
 import theme from '../styles/theme'
 import Head from 'next/head'
 import { AuthProvider } from '../models/AuthContext'
-import * as Sentry from '@sentry/react'
-import { Integrations } from '@sentry/tracing'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }: any) => {
   const { t } = useTranslation('common')
-
-  Sentry.init({
-    dsn: 'https://5b8989453b7c498ea9c62d0db7cc7c23@o1000498.ingest.sentry.io/5959845',
-    integrations: [new Integrations.BrowserTracing()],
-
-    // We recommend adjusting this value in production, or using tracesSampler
-    // for finer control
-    tracesSampleRate: 1.0
-  })
 
   return (
     <AuthProvider>
