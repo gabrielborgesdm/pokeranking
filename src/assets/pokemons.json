@@ -4462,5 +4462,89 @@
     {
         "name": "Rotom Pokédex",
         "image": "474rotomdex.png"
+    },
+    {
+        "name": "Origin Forme Palkia",
+        "image": "origin_palkia.png"
+    },
+    {
+        "name": "Origin Forme Dialga",
+        "image": "origin_dialga.png"
+    },
+    {
+        "name": "White-Striped Basculin",
+        "image": "basculin.png"
+    },
+    {
+        "name": "Therian Forme Enamorus",
+        "image": "therian_enamorus.png"
+    },
+    {
+        "name": "Enamorus",
+        "image": "enamorus.png"
+    },
+    {
+        "name": "Basculegion (♀)",
+        "image": "basculegion.png"
+    },
+    {
+        "name": "Ursaluna",
+        "image": "ursaluna.png"
+    },
+    {
+        "name": "Sneasler",
+        "image": "sneasler.png"
+    },
+    {
+        "name": "Hisuian Sneasel",
+        "image": "sneasel.png"
+    },
+    {
+        "name": "Overqil",
+        "image": "overqwil.png"
+    },
+    {
+        "name": "Hisuian Qwilfish",
+        "image": "qwilfish.png"
+    },
+    {
+        "name": "Hisuian Typhlosion",
+        "image": "typhlosion.png"
+    },
+    {
+        "name": "Hisuian Arcanine",
+        "image": "arcanine.png"
+    },
+    {
+        "name": "Hisuian Electrode",
+        "image": "electrode.png"
+    },
+    {
+        "name": "Hisuian Voltorb",
+        "image": "voltorb.png"
+    },
+    {
+        "name": "Hisuian Decidueye",
+        "image": "decidueye.png"
+    },
+    {
+        "name": "Hisuian Avalugg",
+        "image": "avalugg.png"
+    },
+    {
+        "name": "Hisuian Goodra",
+        "image": "goodra.png"
+    },
+    {
+        "name": "Hisuian Sliggoo",
+        "image": "sliggoo.png"
+    },
+    {
+        "name": "Hisuian Liligant",
+        "image": "liligant.png"
+    },
+    {
+        "name": "Hisuian Samurott",
+        "image": "samurott.png"
     }
 ]
