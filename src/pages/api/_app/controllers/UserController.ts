@@ -21,11 +21,14 @@ import {
 } from '../helpers/UserAuthorizationHelpers'
 import PokemonRepository from '../repositories/PokemonRepository'
 import UserRepository from '../repositories/UserRepository'
+import MailerService from '../services/MailerService'
 
 const userRepository = new UserRepository()
 const pokemonRepository = new PokemonRepository()
+const mailerService = new MailerService()
 
 export const getAllUsers = async (req: IRequest, res: NextApiResponse) => {
+  mailerService.sendAccountRecoveryEmail()
   const response = await userRepository.getAll()
   let users: Array<IUser> = []
   if (response) {
