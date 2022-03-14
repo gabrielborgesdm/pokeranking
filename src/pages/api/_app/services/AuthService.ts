@@ -1,29 +1,26 @@
-import { IResponse } from './../../../../configs/types/IResponse'
-import { SUCCESS } from './../../../../configs/APIConfig'
-import { NextApiResponse } from 'next'
 import { USER_NOT_FOUND } from '../../../../configs/APIConfig'
-import { IRequest } from '../../../../configs/types/IRequest'
 import UserRepository from '../repositories/UserRepository'
+import { SUCCESS } from './../../../../configs/APIConfig'
+import { IResponse } from './../../../../configs/types/IResponse'
 import PasswordRecoveryMailerService from './PasswordRecoveryMailerService'
 
 export default class AuthService {
     lang: string
-    req: IRequest
-    res: NextApiResponse
+    host: string
     userRepository: UserRepository
 
-    constructor(lang: string) {
+    constructor(lang: string, host: string) {
       this.userRepository = new UserRepository()
       this.lang = lang
+      this.host = host
     }
 
     recoverPassword = async (email: string): Promise<IResponse> => {
       const user = await this.userRepository.get({ email })
-      console.log(email, user)
       if (!user) {
         return USER_NOT_FOUND
       }
-      new PasswordRecoveryMailerService(this.lang, user.username, user.email).sendAccountRecoveryEmail()
+      new PasswordRecoveryMailerService(this.lang, this.host).sendAccountRecoveryEmail(user.username, user.email)
       return SUCCESS
     }
 }
