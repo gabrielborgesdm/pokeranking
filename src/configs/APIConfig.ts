@@ -54,7 +54,14 @@ export const MESSAGES = {
     image_not_found: 'Image not found',
     already_registered: 'Resource was already registered',
     being_used: "Resource is being used and can't be modified",
-    invalid_credentials: 'Invalid credentials'
+    invalid_credentials: 'Invalid credentials',
+    password_recovery: 'Password recovery',
+    change_password: 'Change Password',
+    recover_your_account_password: 'Recover your account password',
+    you_have_asked_for_a_password_recovery: `You have asked for a password recovery on your Pokeranking account.
+    Click in the button if you wanna recover it, if it wasn't you, just ignore this e-mail.`,
+    in_case_the_button_does_not_work_copy_and_paste_the_link: 'In case the button does not work, copy and paste the link in your browser.',
+    hello: 'Hello'
   },
   pt: {
     success: 'Operação executada com sucesso',
@@ -66,7 +73,14 @@ export const MESSAGES = {
     image_not_found: 'Imagem não encontrada',
     already_registered: 'Recurso já foi registrado',
     being_used: 'O recurso está sendo utilizado e não pode ser modificado',
-    invalid_credentials: 'Credenciais inválidas'
+    invalid_credentials: 'Credenciais inválidas',
+    password_recovery: 'Recuperação de senha',
+    change_password: 'Alterar senha',
+    recover_your_account_password: 'Recupere a senha da sua conta',
+    you_asked_to_recover_your_password: `Você pediu para recuperar a senha da sua conta no Pokeranking. 
+    Clique no botão se quiser recuperá-la. Se não foi você, apenas ignore este e-mail.`,
+    in_case_the_button_does_not_work_copy_and_paste_the_link: 'Caso o botão não funcione, copie e cole o link abaixo no seu navegador.',
+    hello: 'Olá'
   }
 }
 

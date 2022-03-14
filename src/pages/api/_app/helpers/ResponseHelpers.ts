@@ -1,3 +1,4 @@
+import { getLang } from './LanguageHelpers'
 import { NextApiResponse } from 'next'
 import { MESSAGES } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
@@ -9,7 +10,7 @@ export const sendResponse = (
   message: IResponse,
   additionalData: object = {}
 ) => {
-  const lang = req.headers['accept-language'] || 'en'
+  const lang = getLang(req)
   return res.status(message.code).json({
     ...message,
     ...additionalData,

@@ -30,3 +30,7 @@ export const UserUpdateSchema = Joi.object({
     pokemons: Joi.array().items(PokemonMutateSchema)
   })
 })
+
+export const AuthPasswordRecoverySchema = Joi.object({
+  email: Joi.string().email().max(70).required()
+})
