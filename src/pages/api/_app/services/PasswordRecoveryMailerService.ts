@@ -5,39 +5,37 @@ import MailerService from './MailerService'
 
 export default class PasswordRecoveryMailerService extends MailerService {
   lang: string
-  userName: string
-  userEmail: string
+  host: string
   link: string
 
-  constructor(lang: string, userName: string, userEmail: string) {
+  constructor(lang: string, host: string) {
     super()
     this.lang = lang
-    this.userName = userName
-    this.userEmail = userEmail
-    this.buildLink()
+    this.host = host
   }
 
-  private buildLink() {
-    const token = generateAccessToken({ email: this.userEmail })
-    this.link = `http://localhost:3000/confirmPassword/${token}`
-  }
-
-  public sendAccountRecoveryEmail() {
-    this.transporter.sendMail(this.getAccountRecoveryMailOptions(), (error) => {
+  public sendAccountRecoveryEmail(userName: string, userEmail: string) {
+    this.transporter.sendMail(this.getAccountRecoveryMailOptions(userName, userEmail), (error) => {
       if (error) {
-        return console.log(`Error sending e-mail to ${this.userEmail}: ${error.message}`, error)
+        return console.log(`Error sending e-mail to ${userEmail}: ${error.message}`, error)
       }
 
-      console.log('E-mail successfully sent to:', this.userEmail)
+      console.log('E-mail successfully sent to:', userEmail)
     })
   }
 
-  private getAccountRecoveryMailOptions() {
+  private getAccountRecoveryMailOptions(userName: string, userEmail: string) {
+    const link = this.getLink(userEmail)
     return {
       from: this.getMailerConfigs().user,
-      to: [this.userEmail],
+      to: [userEmail],
       subject: MESSAGES[this.lang].password_recovery,
-      html: buildPasswordRecoveryTemplate(this.lang, this.userName, this.link)
+      html: buildPasswordRecoveryTemplate(this.lang, userName, link)
     }
+  }
+
+  private getLink(userEmail: string) {
+    const token = generateAccessToken({ email: userEmail })
+    return `${this.host}/confirm-password-recovery/${token}`
   }
 }

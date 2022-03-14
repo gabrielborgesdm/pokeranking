@@ -130,12 +130,12 @@ export const buildPasswordRecoveryTemplate = (lang: string, userName: string, li
                         }
 
                         .btn-purple table td {
-                            background-color: #67425F;
+                            background-color: #30a7d7;
                         }
 
                         .btn-purple a {
-                            background-color: #67425F;
-                            border-color: #67425F;
+                            background-color: #30a7d7;
+                            border-color: #30a7d7;
                             color: #ffffff;
                         }
 
@@ -204,12 +204,12 @@ export const buildPasswordRecoveryTemplate = (lang: string, userName: string, li
 
                         @media all {
                             .btn-purple table td:hover {
-                                background-color: #3B3F55 !important;
+                                background-color: #6c757d !important;
                             }
 
                             .btn-purple a:hover {
-                                background-color: #3B3F55 !important;
-                                border-color: #3B3F55 !important;
+                                background-color: #6c757d !important;
+                                border-color: #6c757d !important;
                             }
                         }
                     </style>

@@ -8,6 +8,6 @@ import { sendResponse } from './../helpers/ResponseHelpers'
 export const recoverPassword = async (req: IRequest, res: NextApiResponse) => {
   const { email } = req.body
   const lang = getLang(req)
-  const response: IResponse = await new AuthService(lang).recoverPassword(email)
+  const response: IResponse = await new AuthService(lang, req.headers.host).recoverPassword(email)
   sendResponse(req, res, response)
 }

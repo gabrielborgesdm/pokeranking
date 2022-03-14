@@ -59,7 +59,7 @@ export const MESSAGES = {
     change_password: 'Change Password',
     recover_your_account_password: 'Recover your account password',
     you_have_asked_for_a_password_recovery: `You have asked for a password recovery on your Pokeranking account.
-    Click in the button if you wanna recover it, if it wasn't you, just ignore this e-mail.`,
+    Click on the button if you wanna continue, otherwise just ignore this e-mail.`,
     in_case_the_button_does_not_work_copy_and_paste_the_link: 'In case the button does not work, copy and paste the link in your browser.',
     hello: 'Hello'
   },
@@ -77,7 +77,7 @@ export const MESSAGES = {
     password_recovery: 'Recuperação de senha',
     change_password: 'Alterar senha',
     recover_your_account_password: 'Recupere a senha da sua conta',
-    you_asked_to_recover_your_password: `Você pediu para recuperar a senha da sua conta no Pokeranking. 
+    you_have_asked_for_a_password_recovery: `Você pediu para recuperar a senha da sua conta no Pokeranking. 
     Clique no botão se quiser recuperá-la. Se não foi você, apenas ignore este e-mail.`,
     in_case_the_button_does_not_work_copy_and_paste_the_link: 'Caso o botão não funcione, copie e cole o link abaixo no seu navegador.',
     hello: 'Olá'
