@@ -39,5 +39,8 @@
   "recover-password": "Recuperar senha",
   "lost-your-password-click-here": "Perdeu sua senha? Clique para recuperar sua conta",
   "enter-your-email-to-recovery-your-password": "Insira o seu e-mail para recuperar a sua senha",
-  "an-email-has-been-sent-to-you-recover-your-account": "Um e-mail foi enviado para você recuperar a sua senha"
+  "an-email-has-been-sent-to-you-recover-your-account": "Um e-mail foi enviado para você recuperar a sua senha",
+  "enter-the-new-accounts-password": "Insira a nova senha da sua conta",
+  "confirm-password-recovery": "Confirmar recuperação de senha",
+  "password-changed-with-success-log-in-your-account": "Senha alterada com sucesso, agora entre na sua conta!"
 }
