@@ -8,7 +8,9 @@ export const REQUEST_URL = {
   LOGIN: '/api/users/login',
   CREATE_ACCOUNT: '/api/users/create',
   USERS: '/api/users',
-  POKEMONS: '/api/pokemons'
+  POKEMONS: '/api/pokemons',
+  PASSWORD_RECOVERY: '/api/password-recovery',
+  CONFIRM_RECOVERY: '/api/confirm-password-recovery'
 }
 
 export const PAGE_URL = {
@@ -18,5 +20,7 @@ export const PAGE_URL = {
   POKEMONS: '/pokemons',
   LIST_POKEMONS: '/list-pokemons',
   ACCOUNT: '/account',
-  ABOUT: '/about'
+  ABOUT: '/about',
+  PASSWORD_RECOVERY: '/recover-password',
+  CONFIRM_RECOVERY: '/confirm-password-recovery'
 }

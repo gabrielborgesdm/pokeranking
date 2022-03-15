@@ -194,9 +194,10 @@ const CreateAccount: React.FC = () => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Link href={PAGE_URL.LOGIN}>
-                <YellowLink>{t('have-account-login')}</YellowLink>
+                <YellowLink className='small'>{t('have-account-login')}</YellowLink>
               </Link>
             </Form.Group>
+            <hr/>
             <CustomButton isLoading={isLoading}>
               {c('create-account')}
             </CustomButton>

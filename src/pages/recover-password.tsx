@@ -7,6 +7,7 @@ import CustomButton from '../components/CustomButton'
 import StatusBar from '../components/StatusBar'
 import { PAGE_URL, REQUEST_URL } from '../configs/AppConfig'
 import { ILoginResponse } from '../configs/types/ILogin'
+import { IResponse } from '../configs/types/IResponse'
 import { IStatus, IStatusType } from '../configs/types/IStatus'
 import { AuthContext } from '../models/AuthContext'
 import {
@@ -15,44 +16,37 @@ import {
   YellowLink
 } from '../styles/common'
 
-const Login: React.FC = () => {
-  const { t } = useTranslation('login')
-  const { t: c } = useTranslation('common')
-  const { login, logout, getAxios } = useContext(AuthContext)
+const RecoverPassword: React.FC = () => {
+  const { t } = useTranslation('common')
+  const { getAxios } = useContext(AuthContext)
 
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [status, setStatus] = useState<IStatus>({
     message: '',
     type: IStatusType.Success
   })
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    logout()
-  }, [])
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    const data: ILoginResponse = await submitRequest()
-    if (data?.token) {
-      login(data.token, data.user.username)
-      document.location.replace(PAGE_URL.USERS)
-    } else if (data) {
+    const data: IResponse = await submitRequest()
+    if (data?.success) {
+      setStatus({ message: t('an-email-has-been-sent-to-you-recover-your-account'), type: IStatusType.Success })
+    } else if (data?.message) {
       setStatus({ message: data.message, type: IStatusType.Warning })
     } else {
-      setStatus({ message: c('server-error'), type: IStatusType.Danger })
+      setStatus({ message: t('server-error'), type: IStatusType.Danger })
     }
     setIsLoading(false)
   }
 
-  const submitRequest = async (): Promise<ILoginResponse> => {
+  const submitRequest = async (): Promise<IResponse> => {
     let data = null
     const axios = getAxios()
     setStatus({ ...status, message: '' })
     try {
-      const response = await axios.post(REQUEST_URL.LOGIN, { email, password })
+      const response = await axios.post(REQUEST_URL.PASSWORD_RECOVERY, { email })
       data = response?.data
     } catch (error) {
       console.log(error)
@@ -74,43 +68,27 @@ const Login: React.FC = () => {
           <StatusBar message={status.message} type={status.type} />
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="login-email">{c('email')}</Form.Label>
+              <h4>{t('enter-your-email-to-recovery-your-password')}</h4>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="password-recovery-email">{t('email')}</Form.Label>
               <Form.Control
                 type="email"
-                id="login-email"
+                id="password-recovery-email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder={c('enter-your-email-address')}
+                placeholder={t('enter-your-email-address')}
                 maxLength={70}
                 required
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="login-password">{c('password')}</Form.Label>
-              <Form.Control
-                type="password"
-                id="login-password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder={c('enter-your-password')}
-                maxLength={60}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <p className='small'>
-              <Link href={PAGE_URL.CREATE_ACCOUNT}>
-                <YellowLink>{t('no-account-create-one')}</YellowLink>
+              <Link href={PAGE_URL.LOGIN}>
+                <YellowLink className='small'>{t('go-back-to-login-screen')}</YellowLink>
               </Link>
-              </p>
-              <p className='small'>
-              <Link href={PAGE_URL.PASSWORD_RECOVERY}>
-                <YellowLink>{c('lost-your-password-click-here')}</YellowLink>
-              </Link>
-              </p>
             </Form.Group>
-            <hr />
-            <CustomButton isLoading={isLoading}>{c('enter')}</CustomButton>
+            <hr/>
+            <CustomButton isLoading={isLoading}>{t('recover-password')}</CustomButton>
           </Form>
         </AccountContainer>
       </FullScreenContainer>
@@ -118,4 +96,4 @@ const Login: React.FC = () => {
   )
 }
 
-export default Login
+export default RecoverPassword

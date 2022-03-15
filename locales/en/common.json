@@ -34,5 +34,10 @@
   "both-passwords-must-be-the-same": "Both passwords must be the same",
   "about": "About",
   "click-here-to-have-access-to-it": "Click here to have access to it",
-  "user-rankings": "User Rankings"
+  "user-rankings": "User Rankings",
+  "go-back-to-login-screen": "Go back to login screen",
+  "recover-password": "Recover password",
+  "lost-your-password-click-here": "Lost your password? Click here to recover your account",
+  "enter-your-email-to-recovery-your-password": "Enter your e-mail to recover your password",
+  "an-email-has-been-sent-to-you-recover-your-account": "An e-mail has been sent to you to recover your account"
 }
