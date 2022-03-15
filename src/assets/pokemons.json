@@ -4546,5 +4546,21 @@
     {
         "name": "Hisuian Samurott",
         "image": "samurott.png"
+    },
+    {
+        "name": "Sprigatito",
+        "image": "sprigatito.png"
+    },
+    {
+        "name": "Fuecoco",
+        "image": "fuecoco.png"
+    },
+    {
+        "name": "Quaxly",
+        "image": "quaxly.png"
+    },
+    {
+        "name": "Origin Forme Palkia",
+        "image": "palkia.png"
     }
 ]

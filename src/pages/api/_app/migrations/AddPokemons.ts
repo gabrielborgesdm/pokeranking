@@ -3,17 +3,20 @@ import pokemons from '../../../../assets/pokemons.json'
 import { getImage } from '../helpers/PokemonImageHelpers'
 
 export const addPokemons = async () => {
-  const pokemonRepository = new PokemonRepository()
-  const mappedPokemons = await getMappedPokemons(pokemonRepository)
-  const stats = { duplicated: 0, imageNotFound: 0, added: 0 }
+  console.log('Waiting some time before adding new pokemons')
+  setTimeout(async () => {
+    const pokemonRepository = new PokemonRepository()
+    const mappedPokemons = await getMappedPokemons(pokemonRepository)
+    const stats = { duplicated: 0, imageNotFound: 0, added: 0 }
 
-  for (const { name, image } of pokemons) {
-    if (!checkImageExists(name, image, stats) || checkPokemonIsDuplicated(name, mappedPokemons, stats)) {
-      continue
+    for (const { name, image } of pokemons) {
+      if (!checkImageExists(name, image, stats) || checkPokemonIsDuplicated(name, mappedPokemons, stats)) {
+        continue
+      }
+      await addPokemon(name, image, pokemonRepository, mappedPokemons, stats)
     }
-    await addPokemon(name, image, pokemonRepository, mappedPokemons, stats)
-  }
-  logResults(stats)
+    logResults(stats)
+  }, 10000)
 }
 
 const getMappedPokemons = async (pokemonRepository: PokemonRepository) => {
