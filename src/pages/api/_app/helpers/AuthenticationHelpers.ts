@@ -30,11 +30,7 @@ export const verifyTokenAndGetUserId = (token: string): string => {
   return payload?._id ? payload._id : null
 }
 
-export const verifyTokenAndGetEmail = (token: string): jwt.JwtPayload => {
-  try {
-    const payload = jwt.verify(token, accessTokenSecret) as Payload
-    return payload.email
-  } catch (error) {
-    console.log(error)
-  }
+export const verifyTokenAndGetEmail = (token: string): string => {
+  const payload = jwt.verify(token, accessTokenSecret) as JwtPayload
+  return payload.email
 }
