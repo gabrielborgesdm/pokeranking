@@ -34,3 +34,8 @@ export const UserUpdateSchema = Joi.object({
 export const AuthPasswordRecoverySchema = Joi.object({
   email: Joi.string().email().max(70).required()
 })
+
+export const AuthConfirmPasswordRecoverySchema = Joi.object({
+  accessToken: Joi.string().max(400).required(),
+  password: Joi.string().max(60).required()
+})

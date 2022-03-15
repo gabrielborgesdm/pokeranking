@@ -1,7 +1,9 @@
-import { USER_NOT_FOUND } from '../../../../configs/APIConfig'
+import { ERROR, FORBIDDEN, USER_NOT_FOUND } from '../../../../configs/APIConfig'
+import { hashPassword } from '../helpers/AuthenticationHelpers'
 import UserRepository from '../repositories/UserRepository'
 import { SUCCESS } from './../../../../configs/APIConfig'
 import { IResponse } from './../../../../configs/types/IResponse'
+import { verifyTokenAndGetEmail } from './../helpers/AuthenticationHelpers'
 import PasswordRecoveryMailerService from './PasswordRecoveryMailerService'
 
 export default class AuthService {
@@ -22,5 +24,27 @@ export default class AuthService {
       }
       new PasswordRecoveryMailerService(this.lang, this.host).sendAccountRecoveryEmail(user.username, user.email)
       return SUCCESS
+    }
+
+    confirmPasswordRecovery = async (password: string, accessToken: string): Promise<IResponse> => {
+      const email = verifyTokenAndGetEmail(accessToken)
+      if (!email) {
+        return FORBIDDEN
+      }
+      const user = await this.userRepository.get({ email })
+      if (!user) {
+        return USER_NOT_FOUND
+      }
+
+      return await this.changeAccountPassword(user._id, password)
+    }
+
+    changeAccountPassword = async (id: string, password: string): Promise<IResponse> => {
+      if (!id) {
+        return USER_NOT_FOUND
+      }
+      const hash = await hashPassword(password)
+      const updatedUser = await this.userRepository.update(id, { password: hash })
+      return updatedUser ? SUCCESS : ERROR
     }
 }
