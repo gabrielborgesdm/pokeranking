@@ -41,7 +41,7 @@ export const formatUserDocument = (req: IRequest, response: IUserDocument, allPo
   try {
     image = allPokemons.filter((pokemon) => pokemon.id === parseInt(user.avatar))[0].image
   } catch (error) {
-    console.log(user)
+    console.log(`Error formatting document with user: ${user}`)
     image = allPokemons[0].image
   }
 
