@@ -1,4 +1,4 @@
-import { ERROR, FORBIDDEN, USER_NOT_FOUND } from '../../../../configs/APIConfig'
+import { ERROR, FORBIDDEN, UNAUTHORIZED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
 import { hashPassword } from '../helpers/AuthenticationHelpers'
 import UserRepository from '../repositories/UserRepository'
 import { SUCCESS } from './../../../../configs/APIConfig'
@@ -27,10 +27,16 @@ export default class AuthService {
     }
 
     confirmPasswordRecovery = async (password: string, accessToken: string): Promise<IResponse> => {
-      const email = verifyTokenAndGetEmail(accessToken)
-      if (!email) {
-        return FORBIDDEN
+      let email: string
+      try {
+        email = verifyTokenAndGetEmail(accessToken)
+        if (!email) {
+          return FORBIDDEN
+        }
+      } catch (error) {
+        return UNAUTHORIZED
       }
+
       const user = await this.userRepository.get({ email })
       if (!user) {
         return USER_NOT_FOUND
