@@ -1,6 +1,6 @@
 {
   "title": "Pokeranking",
-  "description": "Rankeie os seus pokémons favoritos e compartilhe com os seus amigos",
+  "description": "Rankeie os seus pokémon favoritos e compartilhe com os seus amigos",
   "loading": "Carregando",
   "server-error": "Ocorreu um erro com o servidor",
   "we-will-not-share-your-email": "Nós não iremos compartilhar o seu e-mail com mais ninguém",
@@ -20,7 +20,7 @@
   "my-account": "Minha Conta",
   "ranking": "Ranking",
   "my-ranking": "Meu ranking",
-  "pokemons": "Pokémons",
+  "pokemons": "Pokémon",
   "search": "Pesquisar",
   "change": "Alterar",
   "position": "Posição",
@@ -34,5 +34,10 @@
   "both-passwords-must-be-the-same": "As duas senhas precisam ser iguais",
   "about": "Sobre",
   "click-here-to-have-access-to-it": "Clique aqui para ter acesso",
-  "user-rankings": "Rankings dos usuários"
+  "user-rankings": "Rankings dos usuários",
+  "go-back-to-login-screen": "Voltar para a tela de login",
+  "recover-password": "Recuperar senha",
+  "lost-your-password-click-here": "Perdeu sua senha? Clique para recuperar sua conta",
+  "enter-your-email-to-recovery-your-password": "Insira o seu e-mail para recuperar a sua senha",
+  "an-email-has-been-sent-to-you-recover-your-account": "Um e-mail foi enviado para você recuperar a sua senha"
 }
