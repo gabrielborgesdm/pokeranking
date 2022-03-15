@@ -1,5 +1,5 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const accessTokenSecret = String(process.env.ACCESS_TOKEN_SECRET)
 
@@ -28,4 +28,13 @@ export const verifyTokenAndGetUserId = (token: string): string => {
     console.log(error)
   }
   return payload?._id ? payload._id : null
+}
+
+export const verifyTokenAndGetEmail = (token: string): jwt.JwtPayload => {
+  try {
+    const payload = jwt.verify(token, accessTokenSecret) as Payload
+    return payload.email
+  } catch (error) {
+    console.log(error)
+  }
 }
