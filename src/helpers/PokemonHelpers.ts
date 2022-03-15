@@ -23,7 +23,6 @@ export const populateUserWithPokemons = (
 
 export const getPokemonImagePath = (pokemonImage: string) => {
   if (!pokemonImage) return null
-  console.log(pokemonImage)
   return `/pokemons/${pokemonImage}`
 }
 
