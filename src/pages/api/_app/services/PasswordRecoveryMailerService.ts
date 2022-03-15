@@ -36,6 +36,6 @@ export default class PasswordRecoveryMailerService extends MailerService {
 
   private getLink(userEmail: string) {
     const token = generateAccessToken({ email: userEmail })
-    return `${this.host}/confirm-password-recovery/${token}`
+    return `${this.host}/${this.lang}/confirm-password-recovery/${token}`
   }
 }
