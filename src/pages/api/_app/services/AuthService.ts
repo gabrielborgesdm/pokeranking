@@ -22,7 +22,7 @@ export default class AuthService {
       if (!user) {
         return USER_NOT_FOUND
       }
-      new PasswordRecoveryMailerService(this.lang, this.host).sendAccountRecoveryEmail(user.username, user.email)
+      await new PasswordRecoveryMailerService(this.lang, this.host).sendAccountRecoveryEmail(user.username, user.email)
       return SUCCESS
     }
 

@@ -14,13 +14,17 @@ export default class PasswordRecoveryMailerService extends MailerService {
     this.host = host
   }
 
-  public sendAccountRecoveryEmail(userName: string, userEmail: string) {
-    this.transporter.sendMail(this.getAccountRecoveryMailOptions(userName, userEmail), (error) => {
-      if (error) {
-        return console.log(`Error sending e-mail to ${userEmail}: ${error.message}`, error)
-      }
+  public async sendAccountRecoveryEmail(userName: string, userEmail: string) {
+    await new Promise((resolve, reject) => {
+      this.transporter.sendMail(this.getAccountRecoveryMailOptions(userName, userEmail), (error, info) => {
+        if (error) {
+          console.log(`Error sending e-mail to ${userEmail}: ${error.message}`, error)
+          reject(error)
+        }
 
-      console.log('E-mail successfully sent to:', userEmail)
+        console.log('E-mail successfully sent to:', userEmail, info)
+        resolve(info)
+      })
     })
   }
 
