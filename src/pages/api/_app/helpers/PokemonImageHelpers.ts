@@ -1,5 +1,4 @@
 import fs from 'fs'
-import getConfig from 'next/config'
 
 const relativePath = 'pokemons'
 export const imagePath = `./public/${relativePath}`
