@@ -13,6 +13,6 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
 
 export default withMiddlewares(
   handler,
-  { name: AUTHENTICATION },
+  { name: AUTHENTICATION, parameters: [true] },
   { name: VALIDATION, parameters: [null, UserUsernameSchema] }
 )

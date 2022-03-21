@@ -42,5 +42,6 @@
   "an-email-has-been-sent-to-you-recover-your-account": "An e-mail has been sent to you to recover your account",
   "enter-the-new-accounts-password": "Enter the new account's password",
   "confirm-password-recovery": "Confirm password recovery",
-  "password-changed-with-success-log-in-your-account": "Password changed with success, now log into your account!"
+  "password-changed-with-success-log-in-your-account": "Password changed with success, now log into your account!",
+  "login": "Enter"
 }

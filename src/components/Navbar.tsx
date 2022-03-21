@@ -1,6 +1,7 @@
 import {
   faGamepad,
   faQuestionCircle,
+  faSignInAlt,
   faSignOutAlt,
   faTrophy,
   faUserCircle,
@@ -10,15 +11,17 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { PAGE_URL } from '../configs/AppConfig'
+import { AuthContext } from '../models/AuthContext'
 import { CustomNavbar } from '../styles/common'
 import { colors } from '../styles/theme'
 
 const NavbarComponent: React.FC = () => {
   const router = useRouter()
   const { t } = useTranslation('common')
+  const { checkIsAuthenticated } = useContext(AuthContext)
 
   const navigate = (link: string) => {
     router.push(link)
@@ -63,15 +66,20 @@ const NavbarComponent: React.FC = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            {getNavLink(PAGE_URL.POKEMONS, t('my-ranking'), faTrophy)}
+            {checkIsAuthenticated() && getNavLink(PAGE_URL.POKEMONS, t('my-ranking'), faTrophy)}
             {getNavLink(PAGE_URL.USERS, t('users'), faUsers)}
             {getNavLink(PAGE_URL.ABOUT, t('about'), faQuestionCircle)}
             {getNavLink(PAGE_URL.LIST_POKEMONS, t('pokemons'), faGamepad)}
           </Nav>
-          <Nav>
-            {getNavLink(PAGE_URL.ACCOUNT, t('my-account'), faUserCircle)}
-            {getNavLink(PAGE_URL.LOGIN, t('logout'), faSignOutAlt)}
-          </Nav>
+          {checkIsAuthenticated()
+            ? <Nav>
+                {getNavLink(PAGE_URL.ACCOUNT, t('my-account'), faUserCircle)}
+                {getNavLink(PAGE_URL.LOGIN, t('logout'), faSignOutAlt)}
+              </Nav>
+            : <Nav>
+                {getNavLink(PAGE_URL.LOGIN, t('login'), faSignInAlt)}
+              </Nav>
+          }
         </Navbar.Collapse>
       </Container>
     </CustomNavbar>

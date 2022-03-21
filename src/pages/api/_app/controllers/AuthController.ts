@@ -16,6 +16,5 @@ export const confirmPasswordRecovery = async (req: IRequest, res: NextApiRespons
   const { password, accessToken } = req.body
   const lang = getLang(req)
   const response: IResponse = await new AuthService(lang, req.headers.host).confirmPasswordRecovery(password, accessToken)
-  console.log(response)
   sendResponse(req, res, response)
 }

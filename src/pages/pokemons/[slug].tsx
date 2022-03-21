@@ -220,8 +220,3 @@ const Pokemons: React.FC = () => {
 }
 
 export default Pokemons
-
-export const getServerSideProps: GetServerSideProps = async context => {
-  if (!checkIsAuthenticated(context)) return serverSideRedirection
-  return { props: {} }
-}
