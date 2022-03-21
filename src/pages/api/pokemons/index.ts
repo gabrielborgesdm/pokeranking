@@ -9,4 +9,4 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
   return await getAllPokemons(req, res)
 }
 
-export default withMiddlewares(handler, { name: AUTHENTICATION })
+export default withMiddlewares(handler, { name: AUTHENTICATION, parameters: [true] })

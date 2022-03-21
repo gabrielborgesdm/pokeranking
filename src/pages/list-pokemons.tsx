@@ -1,10 +1,8 @@
 import { faSearch, faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useContext, useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
-
 import CustomButton from '../components/CustomButton'
 import MainContainerComponent from '../components/MainContainerComponent'
 import PokemonsListingBoxes from '../components/PokemonsListingBoxes'
@@ -12,7 +10,6 @@ import { REQUEST_URL } from '../configs/AppConfig'
 import { IPokemonsResponse } from '../configs/types/IPokemon'
 import { IUser } from '../configs/types/IUser'
 import { AuthContext } from '../models/AuthContext'
-import { checkIsAuthenticated, serverSideRedirection } from '../services/AuthService'
 import { CustomPokerankingNav } from '../styles/pages/pokemons'
 
 const Pokemons: React.FC = () => {
@@ -135,8 +132,3 @@ const Pokemons: React.FC = () => {
 }
 
 export default Pokemons
-
-export const getServerSideProps: GetServerSideProps = async context => {
-  if (!checkIsAuthenticated(context)) return serverSideRedirection
-  return { props: {} }
-}

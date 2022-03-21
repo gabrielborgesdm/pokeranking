@@ -1,6 +1,5 @@
 import { faSearch } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import React, { useEffect, useState } from 'react'
 import { Col, Form, Row } from 'react-bootstrap'
@@ -9,10 +8,6 @@ import MainContainerComponent from '../components/MainContainerComponent'
 import UserBoxes from '../components/UserBoxes'
 import { REQUEST_URL } from '../configs/AppConfig'
 import { IUsersResponse } from '../configs/types/IUser'
-import {
-  checkIsAuthenticated,
-  serverSideRedirection
-} from '../services/AuthService'
 import { useFetch } from '../services/FetchService'
 import { CustomPokerankingNav } from '../styles/pages/pokemons'
 
@@ -96,8 +91,3 @@ const Users: React.FC = () => {
 }
 
 export default Users
-
-export const getServerSideProps: GetServerSideProps = async context => {
-  if (!checkIsAuthenticated(context)) return serverSideRedirection
-  return { props: {} }
-}
