@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { NextApiResponse } from 'next'
 import { FORBIDDEN, UNAUTHORIZED } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
@@ -9,14 +10,16 @@ const userRepository = new UserRepository()
 
 const AuthenticationMiddleware = async (
   req: IRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
+  parameters: Array<Joi.ObjectSchema>
 ): Promise<boolean> => {
   let isOkay = true
+  const isPublic: any = parameters ? parameters[0] : false
   const token = getTokenFromRequest(req)
-  if (!token) {
+  if (!token && !isPublic) {
     sendResponse(req, res, UNAUTHORIZED)
     isOkay = false
-  } else {
+  } else if (token) {
     const _id = verifyTokenAndGetUserId(token)
     if (!_id || !(await validateAndAddUserToRequest(_id, req))) {
       sendResponse(req, res, FORBIDDEN)
