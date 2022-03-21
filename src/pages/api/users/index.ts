@@ -9,4 +9,4 @@ const handler = async (req: IRequest, res: NextApiResponse) => {
   await getAllUsers(req, res)
 }
 
-export default withMiddlewares(handler, { name: AUTHENTICATION })
+export default withMiddlewares(handler, { name: AUTHENTICATION, parameters: [true] })

@@ -22,7 +22,7 @@ export const abstractUserBasedOnAuthorizationLevel = (req: IRequest, authenticat
   shouldPopulatePokemons = true): IUser => {
   const user: IUser = formatUserDocument(req, response, allPokemons, shouldPopulatePokemons)
   const { _ID, ROLE, EMAIL, CREATED_AT, UPDATED_AT } = USER_KEYS
-  if (authenticatedUser.role !== USER_ROLES.ADMIN && authenticatedUser._id.toString() !== response._id.toString()) {
+  if (authenticatedUser?.role !== USER_ROLES.ADMIN && authenticatedUser?._id.toString() !== response._id.toString()) {
     deleteFromUser(user, _ID, ROLE, EMAIL, CREATED_AT, UPDATED_AT)
   }
   return user
