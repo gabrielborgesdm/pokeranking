@@ -2,7 +2,6 @@ import { faSave, faSpinner } from '@fortawesome/fontawesome-free-solid'
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import fileDownload from 'js-file-download'
-import { GetServerSideProps } from 'next'
 import useTranslation from 'next-translate/useTranslation'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
@@ -17,10 +16,6 @@ import { IPokemon } from '../../configs/types/IPokemon'
 import { IUserResponse } from '../../configs/types/IUser'
 import { convertPokemonsToCSV } from '../../helpers/CsvHelpers'
 import { AuthContext } from '../../models/AuthContext'
-import {
-  checkIsAuthenticated,
-  serverSideRedirection
-} from '../../services/AuthService'
 import { CustomPokerankingNav } from '../../styles/pages/pokemons'
 import { colors } from '../../styles/theme'
 
