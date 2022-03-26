@@ -20,13 +20,13 @@ export const About: React.FC = () => {
             <FormContainer className="mx-auto pb-5 text-justify" xs={12}>
               <Row>
                 <Col className="d-flex justify-content-center">
-                  <CustomPokemonImage avatar={getPokemonImagePath('ellie_soph.png')} />
+                  <CustomPokemonImage avatar={getPokemonImagePath('ellie_soph.png')} name="Ellie do crashlespaul" />
                 </Col>
                 <Col className="d-flex justify-content-center">
-                  <PokemonAvatar avatar={getPokemonImagePath('gc3hby6hcmvqfbahybrr.png')} />
+                  <CustomPokemonImage avatar={getPokemonImagePath('gc3hby6hcmvqfbahybrr.png')} name="Bixo feio mas simpático" />
                 </Col>
                 <Col className="d-flex justify-content-center">
-                  <CustomPokemonImage avatar={getPokemonImagePath('lola_soph.png')} />
+                  <CustomPokemonImage avatar={getPokemonImagePath('lola_soph.png')} name="Lola da kssi4" />
                 </Col>
               </Row>
 
