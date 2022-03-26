@@ -3,16 +3,17 @@ import { FullscreenImageModal } from './FullscreenImageModal'
 
 type ICustomPokemonImage = {
   avatar: string
+  name: string
 }
 
-const CustomPokemonImage = ({ avatar }: ICustomPokemonImage) => {
+const CustomPokemonImage = ({ avatar, name }: ICustomPokemonImage) => {
   const [isImageModalVisible, setIsImageModalVisible] = useState(false)
   const [fullscreenPokemonImageURL, setFullscreenPokemonImageURL] = useState('')
   const [fullscreenPokemonName, setFullscreenPokemonName] = useState('')
 
   const handleViewClick = (avatar: string) => {
     setFullscreenPokemonImageURL(avatar)
-    setFullscreenPokemonName(avatar)
+    setFullscreenPokemonName(name)
     setIsImageModalVisible(true)
   }
 
