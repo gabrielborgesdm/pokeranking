@@ -1,6 +1,7 @@
 import useTranslation from 'next-translate/useTranslation'
 import React from 'react'
 import { Col, Row } from 'react-bootstrap'
+import CustomPokemonImage from '../components/CustomPokemonImage'
 import MainContainerComponent from '../components/MainContainerComponent'
 import PokemonAvatar from '../components/PokemonAvatar'
 import { getPokemonImagePath } from '../helpers/PokemonHelpers'
@@ -19,13 +20,13 @@ export const About: React.FC = () => {
             <FormContainer className="mx-auto pb-5 text-justify" xs={12}>
               <Row>
                 <Col className="d-flex justify-content-center">
-                  <PokemonAvatar avatar={getPokemonImagePath('p5wcirnqspkd9eoilzom.png')} />
+                  <CustomPokemonImage avatar={getPokemonImagePath('ellie_soph.png')} />
                 </Col>
                 <Col className="d-flex justify-content-center">
                   <PokemonAvatar avatar={getPokemonImagePath('gc3hby6hcmvqfbahybrr.png')} />
                 </Col>
                 <Col className="d-flex justify-content-center">
-                  <PokemonAvatar avatar={getPokemonImagePath('otskrdnhetnm9xn7cthc.png')} />
+                  <CustomPokemonImage avatar={getPokemonImagePath('lola_soph.png')} />
                 </Col>
               </Row>
 
