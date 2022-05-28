@@ -1,7 +1,6 @@
 import {
-  faEdit,
-  faEye,
-  faTimesCircle,
+  faComment, faCommentDots,
+  faEdit, faTimesCircle,
   faTrash
 } from '@fortawesome/fontawesome-free-solid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -93,6 +92,7 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({
               className="ml-10px"
               onClick={() => setIsVisible(false)}
             />
+
           </CustomPokemonPopoverHeader>
           <Popover.Body>
             <Form onSubmit={handleSubmit}>
@@ -132,7 +132,10 @@ const PokemonEditButton: React.FC<IPokemonEditButton> = ({
       }
     >
       <div onClick={() => setIsVisible(!isVisible)}>
-        <FontAwesomeIcon icon={isRankingFromAuthUser ? faEdit : faEye} />
+        <FontAwesomeIcon
+          icon={isRankingFromAuthUser ? faEdit
+            : pokemon.note ? faCommentDots : faComment}
+        />
       </div>
     </OverlayTrigger>
   )

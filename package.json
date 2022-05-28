@@ -16,7 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "add": "^2.0.6",
     "axios": "^0.21.1",
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "5.0.2",
     "cloudinary": "^1.27.0",
     "joi": "^17.4.1",
@@ -39,7 +39,7 @@
     "yarn": "^1.22.11"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
+    "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.4.1",
     "@types/jsonwebtoken": "^8.5.4",
     "@types/node": "^16.3.3",
