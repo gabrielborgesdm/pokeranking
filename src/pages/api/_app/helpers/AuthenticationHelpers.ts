@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 const accessTokenSecret = String(process.env.ACCESS_TOKEN_SECRET)
