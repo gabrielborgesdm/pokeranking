@@ -4558,5 +4558,25 @@
     {
         "name": "Origin Forme Palkia",
         "image": "palkia.png"
+    },
+    {
+        "name": "Pawmi",
+        "image": "Pawmi.png"
+    },
+    {
+        "name": "Smoliv",
+        "image": "Smoliv.png"
+    },
+    {
+        "name": "Lechonk",
+        "image": "Lechonk.png"
+    },
+    {
+        "name": "Koraidon",
+        "image": "Koraidon.png"
+    },
+    {
+        "name": "Miraidon",
+        "image": "Miraidon.png"
     }
 ]
