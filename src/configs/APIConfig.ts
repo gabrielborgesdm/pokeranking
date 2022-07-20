@@ -4,7 +4,6 @@ export const STATUS = {
   SUCCESS: 'success',
   ERROR: 'error',
   NOT_FOUND: 'not_found',
-  IMAGE_NOT_FOUND: 'image_not_found',
   UNAUTHORIZED: 'unauthorized',
   FORBIDDEN: 'forbidden',
   ALREADY_REGISTERED: 'already_registered',
@@ -19,7 +18,6 @@ export const CODE = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 200,
-  IMAGE_NOT_FOUND: 200,
   ALREADY_REGISTERED: 200,
   BEING_USED: 200,
   FIELD_VALIDATION_ERROR: 200,
@@ -51,7 +49,6 @@ export const MESSAGES = {
     forbidden: 'Forbidden access',
     field_validation_error: 'There are invalid fields',
     not_found: 'Resource was not found',
-    image_not_found: 'Image not found',
     already_registered: 'Resource was already registered',
     being_used: "Resource is being used and can't be modified",
     invalid_credentials: 'Invalid credentials',
@@ -70,7 +67,6 @@ export const MESSAGES = {
     forbidden: 'Acesso proibido',
     field_validation_error: 'Há campos inválidos',
     not_found: 'Recurso não encontrado',
-    image_not_found: 'Imagem não encontrada',
     already_registered: 'Recurso já foi registrado',
     being_used: 'O recurso está sendo utilizado e não pode ser modificado',
     invalid_credentials: 'Credenciais inválidas',
@@ -116,31 +112,13 @@ export const FIELD_VALIDATION_ERROR: IResponse = {
   code: CODE.FIELD_VALIDATION_ERROR
 }
 
-export const POKEMON_NOT_FOUND: IResponse = {
+export const NOT_FOUND: IResponse = {
   success: false,
   status: STATUS.NOT_FOUND,
   code: CODE.NOT_FOUND
 }
 
-export const USER_NOT_FOUND: IResponse = {
-  success: false,
-  status: STATUS.NOT_FOUND,
-  code: CODE.NOT_FOUND
-}
-
-export const IMAGE_NOT_FOUND: IResponse = {
-  success: false,
-  status: STATUS.IMAGE_NOT_FOUND,
-  code: CODE.IMAGE_NOT_FOUND
-}
-
-export const USER_ALREADY_REGISTERED: IResponse = {
-  success: false,
-  status: STATUS.ALREADY_REGISTERED,
-  code: CODE.ALREADY_REGISTERED
-}
-
-export const POKEMON_ALREADY_REGISTERED: IResponse = {
+export const ALREADY_REGISTERED: IResponse = {
   success: false,
   status: STATUS.ALREADY_REGISTERED,
   code: CODE.ALREADY_REGISTERED

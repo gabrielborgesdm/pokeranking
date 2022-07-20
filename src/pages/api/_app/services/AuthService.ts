@@ -1,4 +1,4 @@
-import { ERROR, FORBIDDEN, UNAUTHORIZED, USER_NOT_FOUND } from '../../../../configs/APIConfig'
+import { ERROR, FORBIDDEN, UNAUTHORIZED, NOT_FOUND } from '../../../../configs/APIConfig'
 import { hashPassword } from '../helpers/AuthenticationHelpers'
 import UserRepository from '../repositories/UserRepository'
 import { SUCCESS } from './../../../../configs/APIConfig'
@@ -20,7 +20,7 @@ export default class AuthService {
     recoverPassword = async (email: string): Promise<IResponse> => {
       const user = await this.userRepository.get({ email })
       if (!user) {
-        return USER_NOT_FOUND
+        return NOT_FOUND
       }
       await new PasswordRecoveryMailerService(this.lang, this.host).sendAccountRecoveryEmail(user.username, user.email)
       return SUCCESS
@@ -39,7 +39,7 @@ export default class AuthService {
 
       const user = await this.userRepository.get({ email })
       if (!user) {
-        return USER_NOT_FOUND
+        return NOT_FOUND
       }
 
       return await this.changeAccountPassword(user._id, password)
@@ -47,7 +47,7 @@ export default class AuthService {
 
     changeAccountPassword = async (id: string, password: string): Promise<IResponse> => {
       if (!id) {
-        return USER_NOT_FOUND
+        return NOT_FOUND
       }
       const hash = await hashPassword(password)
       const updatedUser = await this.userRepository.update(id, { password: hash })

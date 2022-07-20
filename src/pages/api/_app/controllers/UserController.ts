@@ -5,8 +5,8 @@ import {
   FORBIDDEN,
   INVALID_CREDENTIALS,
   SUCCESS,
-  USER_ALREADY_REGISTERED,
-  USER_NOT_FOUND
+  ALREADY_REGISTERED,
+  NOT_FOUND
 } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
 import { IResponse } from '../../../../configs/types/IResponse'
@@ -64,7 +64,7 @@ const getUser = async (query: object) => {
 export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => {
   const { slug: username } = req.query
   const response: IUserDocument = await userRepository.get({ username })
-  if (!response) return sendResponse(req, res, USER_NOT_FOUND)
+  if (!response) return sendResponse(req, res, NOT_FOUND)
   const allPokemons = await pokemonRepository.getThenLoadAllPokemons()
   const user: IUser = abstractUserBasedOnAuthorizationLevel(req, req.user, response, allPokemons)
   sendResponse(req, res, SUCCESS, { user })
@@ -72,7 +72,7 @@ export const getUserByUsername = async (req: IRequest, res: NextApiResponse) => 
 
 const isOkayToExecuteMutation = (authenticatedUser: IUser, response: IUserDocument): IResponse => {
   if (!response) {
-    return USER_NOT_FOUND
+    return NOT_FOUND
   }
   if (!isUserAuthorized(authenticatedUser, response)) {
     return FORBIDDEN
@@ -111,7 +111,7 @@ export const deleteUser = async (req: IRequest, res: NextApiResponse) => {
 export const storeUser = async (req: IRequest, res: NextApiResponse) => {
   const userInfo: IUserAdd = req.body.user
   const { username, email } = userInfo
-  if (await getUser({ $or: [{ username }, { email }] })) return sendResponse(req, res, USER_ALREADY_REGISTERED)
+  if (await getUser({ $or: [{ username }, { email }] })) return sendResponse(req, res, ALREADY_REGISTERED)
   userInfo.password = await hashPassword(userInfo.password)
   if (!userInfo.avatar) userInfo.avatar = Math.floor(Math.random() * 929) + 1
   const response = await userRepository.store(userInfo)
@@ -124,7 +124,7 @@ export const storeUser = async (req: IRequest, res: NextApiResponse) => {
 export const login = async (req: IRequest, res: NextApiResponse) => {
   const { email, password } = req.body
   const response = await getUser({ email })
-  if (!response) return sendResponse(req, res, USER_NOT_FOUND)
+  if (!response) return sendResponse(req, res, NOT_FOUND)
   if (!(await isPasswordValid(password, response.password))) {
     return sendResponse(req, res, INVALID_CREDENTIALS)
   }

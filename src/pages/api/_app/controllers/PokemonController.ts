@@ -1,6 +1,6 @@
 import { NextApiResponse } from 'next'
 import {
-  POKEMON_NOT_FOUND,
+  NOT_FOUND,
   SUCCESS
 } from '../../../../configs/APIConfig'
 import { IRequest } from '../../../../configs/types/IRequest'
@@ -22,7 +22,7 @@ export const getPokemon = async (req: IRequest, res: NextApiResponse) => {
   const { slug }: any = req.query
   const pokemonId = parseInt(slug)
   const pokemon = await pokemonRepository.getById(pokemonId)
-  if (!pokemon) return sendResponse(req, res, POKEMON_NOT_FOUND)
+  if (!pokemon) return sendResponse(req, res, NOT_FOUND)
   return sendResponse(req, res, SUCCESS, {
     pokemon: abstractPokemon(req, pokemon)
   })

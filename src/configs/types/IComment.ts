@@ -8,7 +8,20 @@ export interface ICommentDocument extends IModel {
 }
 
 export interface ICommentResponse extends IModel {
-  postId: string
+  post: string
   username: string
   comment: string
+}
+
+export interface ICommentRequest extends IModel {
+  post: string
+  user: string
+  comment: string
+}
+
+export interface ICommentQuery extends IModel {
+  _id?: string
+  post?: string
+  user?: string
+  comment?: string
 }
