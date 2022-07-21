@@ -3,6 +3,7 @@ import BaseMapper from './BaseMapper'
 
 export default class CommentMapper extends BaseMapper {
   static toResponse = (input: any) => this.map({
+    _id: '_id',
     comment: 'comment',
     user: [
       {

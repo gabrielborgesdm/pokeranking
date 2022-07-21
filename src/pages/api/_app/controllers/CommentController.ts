@@ -24,7 +24,7 @@ export const getCommentsByPostId = async (req: IRequest, res: NextApiResponse) =
   post = post as string
   let response = await commentRepository.getMany({ post })
   response = CommentMapper.toResponse(response)
-  sendResponse(req, res, SUCCESS, { response })
+  sendResponse(req, res, SUCCESS, { comments: response })
 }
 
 export const storeComment = async (req: IRequest, res: NextApiResponse) => {
