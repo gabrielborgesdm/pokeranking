@@ -904,7 +904,7 @@
         "image": "jqjxkanqekfz3dimn4gp.png"
     },
     {
-        "name": "Hakamo",
+        "name": "Hakamo-o",
         "image": "hu15b4o2den5dlrn3yzh.png"
     },
     {
@@ -1672,7 +1672,7 @@
         "image": "bswbw0bo27wh7h81pubt.png"
     },
     {
-        "name": "Jangmo",
+        "name": "Jangmo-o",
         "image": "onofnpyrmoe4wo0b9mhm.png"
     },
     {
@@ -2652,7 +2652,7 @@
         "image": "ooa0sahau25dckswmyzg.png"
     },
     {
-        "name": "Kommo",
+        "name": "Kommo-o",
         "image": "tw29p1etijcx0tj5nkix.png"
     },
     {
@@ -4578,5 +4578,53 @@
     {
         "name": "Miraidon",
         "image": "Miraidon.png"
+    },
+    {
+        "name": "Paldean Wooper",
+        "image": "PaldeanWooper.png"
+    },
+    {
+        "name": "Porygon-Z",
+        "image": "PorygonZ.png"
+    },
+    {
+        "name": "Armarouge",
+        "image": "Armarouge.png"
+    },
+    {
+        "name": "Bellibolt",
+        "image": "Bellibolt.png"
+    },
+    {
+        "name": "Ceruledge",
+        "image": "Ceruledge.png"
+    },
+    {
+        "name": "Cetitan",
+        "image": "Cetitan.png"
+    },
+    {
+        "name": "Cyclizar",
+        "image": "Cyclizar.png"
+    },
+    {
+        "name": "Farigiraf",
+        "image": "Farigiraf.png"
+    },
+    {
+        "name": "Fidough",
+        "image": "Fidough.png"
+    },
+    {
+        "name": "Grafaiai",
+        "image": "Grafaiai.png"
+    },
+    {
+        "name": "Klawf",
+        "image": "Klawf.png"
+    },
+    {
+        "name": "Wiglett",
+        "image": "Wiglett.png"
     }
 ]
