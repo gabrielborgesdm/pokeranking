@@ -4626,5 +4626,365 @@
     {
         "name": "Wiglett",
         "image": "Wiglett.png"
+    },
+    {
+        "name": "Annihilape",
+        "image": "Annihilape.png"
+    },
+    {
+        "name": "Arboliva",
+        "image": "Arboliva.png"
+    },
+    {
+        "name": "Arctibax",
+        "image": "Arctibax.png"
+    },
+    {
+        "name": "Baxcalibur",
+        "image": "Baxcalibur.png"
+    },
+    {
+        "name": "Bombirdier",
+        "image": "Bombirdier.png"
+    },
+    {
+        "name": "Brambleghast",
+        "image": "Brambleghast.png"
+    },
+    {
+        "name": "Bramblin",
+        "image": "Bramblin.png"
+    },
+    {
+        "name": "Brute Bonnet",
+        "image": "Brute_Bonnet.png"
+    },
+    {
+        "name": "Capsakid",
+        "image": "Capsakid.png"
+    },
+    {
+        "name": "Cetoddle",
+        "image": "Cetoddle.png"
+    },
+    {
+        "name": "Charcadet",
+        "image": "Charcadet.png"
+    },
+    {
+        "name": "Chien-Pao",
+        "image": "Chien-Pao.png"
+    },
+    {
+        "name": "Chi-Yu",
+        "image": "Chi-Yu.png"
+    },
+    {
+        "name": "Clodsire",
+        "image": "Clodsire.png"
+    },
+    {
+        "name": "Crocalor",
+        "image": "Crocalor.png"
+    },
+    {
+        "name": "Dachsbun",
+        "image": "Dachsbun.png"
+    },
+    {
+        "name": "Dolliv",
+        "image": "Dolliv.png"
+    },
+    {
+        "name": "Dondozo",
+        "image": "Dondozo.png"
+    },
+    {
+        "name": "Dudunsparce",
+        "image": "Dudunsparce.png"
+    },
+    {
+        "name": "Espathra",
+        "image": "Espathra.png"
+    },
+    {
+        "name": "Finizen",
+        "image": "Finizen.png"
+    },
+    {
+        "name": "Flamigo",
+        "image": "Flamigo.png"
+    },
+    {
+        "name": "Flittle",
+        "image": "Flittle.png"
+    },
+    {
+        "name": "Floragato",
+        "image": "Floragato.png"
+    },
+    {
+        "name": "Flutter Mane",
+        "image": "Flutter_Mane.png"
+    },
+    {
+        "name": "Frigibax",
+        "image": "Frigibax.png"
+    },
+    {
+        "name": "Garganacl",
+        "image": "Garganacl.png"
+    },
+    {
+        "name": "Gholdengo",
+        "image": "Gholdengo.png"
+    },
+    {
+        "name": "Gimmighoul",
+        "image": "Gimmighoul.png"
+    },
+    {
+        "name": "Gimmighoul Roaming Form",
+        "image": "Gimmighoul-Roaming.png"
+    },
+    {
+        "name": "Glimmet",
+        "image": "Glimmet.png"
+    },
+    {
+        "name": "Glimmora",
+        "image": "Glimmora.png"
+    },
+    {
+        "name": "Great Tusk",
+        "image": "Great_Tusk.png"
+    },
+    {
+        "name": "Greavard",
+        "image": "Greavard.png"
+    },
+    {
+        "name": "Houndstone",
+        "image": "Houndstone.png"
+    },
+    {
+        "name": "Iron Bundle",
+        "image": "Iron_Bundle.png"
+    },
+    {
+        "name": "Iron Hands",
+        "image": "Iron_Hands.png"
+    },
+    {
+        "name": "Iron Jugulis",
+        "image": "Iron_Jugulis.png"
+    },
+    {
+        "name": "Iron Moth",
+        "image": "Iron_Moth.png"
+    },
+    {
+        "name": "Iron Thorns",
+        "image": "Iron_Thorns.png"
+    },
+    {
+        "name": "Iron Treads",
+        "image": "Iron_Treads.png"
+    },
+    {
+        "name": "Iron Valiant",
+        "image": "Iron_Valiant.png"
+    },
+    {
+        "name": "Kilowattrel",
+        "image": "Kilowattrel.png"
+    },
+    {
+        "name": "Kingambit",
+        "image": "Kingambit.png"
+    },
+    {
+        "name": "Lokix",
+        "image": "Lokix.png"
+    },
+    {
+        "name": "Mabosstiff",
+        "image": "Mabosstiff.png"
+    },
+    {
+        "name": "Maschiff",
+        "image": "Maschiff.png"
+    },
+    {
+        "name": "Maushold",
+        "image": "Maushold.png"
+    },
+    {
+        "name": "Meowscarada",
+        "image": "Meowscarada.png"
+    },
+    {
+        "name": "Nacli",
+        "image": "Nacli.png"
+    },
+    {
+        "name": "Naclstack",
+        "image": "Naclstack.png"
+    },
+    {
+        "name": "Nymble",
+        "image": "Nymble.png"
+    },
+    {
+        "name": "Oinkologne (♀)",
+        "image": "OinkologneFemea.png"
+    },
+    {
+        "name": "Oinkologne (♂)",
+        "image": "OinkologneMacho.png"
+    },
+    {
+        "name": "Orthworm",
+        "image": "Orthworm.png"
+    },
+    {
+        "name": "Palafin",
+        "image": "Palafin.png"
+    },
+    {
+        "name": "Palafin Hero Form",
+        "image": "Palafin-Hero.png"
+    },
+    {
+        "name": "Pawmo",
+        "image": "Pawmo.png"
+    },
+    {
+        "name": "Pawmot",
+        "image": "Pawmot.png"
+    },
+    {
+        "name": "Quaquaval",
+        "image": "Quaquaval.png"
+    },
+    {
+        "name": "Quaxwell",
+        "image": "Quaxwell.png"
+    },
+    {
+        "name": "Rabsca",
+        "image": "Rabsca.png"
+    },
+    {
+        "name": "Rellor",
+        "image": "Rellor.png"
+    },
+    {
+        "name": "Revavroom",
+        "image": "Revavroom.png"
+    },
+    {
+        "name": "Roaring Moon",
+        "image": "Roaring_Moon.png"
+    },
+    {
+        "name": "Sandy Shocks",
+        "image": "Sandy_Shocks.png"
+    },
+    {
+        "name": "Scovillain",
+        "image": "Scovillain.png"
+    },
+    {
+        "name": "Scream Tail",
+        "image": "Scream_Tail.png"
+    },
+    {
+        "name": "Shroodle",
+        "image": "Shroodle.png"
+    },
+    {
+        "name": "Skeledirge",
+        "image": "Skeledirge.png"
+    },
+    {
+        "name": "Slither Wing",
+        "image": "Slither_Wing.png"
+    },
+    {
+        "name": "Spidops",
+        "image": "Spidops.png"
+    },
+    {
+        "name": "Squawkabilly",
+        "image": "Squawkabilly.png"
+    },
+    {
+        "name": "Tadbulb",
+        "image": "Tadbulb.png"
+    },
+    {
+        "name": "Tandemaus",
+        "image": "Tandemaus.png"
+    },
+    {
+        "name": "Tarountula",
+        "image": "Tarountula.png"
+    },
+    {
+        "name": "Tatsugiri Curly Form",
+        "image": "Tatsugiri.png"
+    },
+    {
+        "name": "Tatsugiri Droopy Form",
+        "image": "Tatsugiri-Droopy.png"
+    },
+    {
+        "name": "Tatsugiri Stretchy Form",
+        "image": "Tatsugiri-Stretchy.png"
+    },
+    {
+        "name": "Ting-Lu",
+        "image": "Ting-Lu.png"
+    },
+    {
+        "name": "Tinkatink",
+        "image": "Tinkatink.png"
+    },
+    {
+        "name": "Tinkaton",
+        "image": "Tinkaton.png"
+    },
+    {
+        "name": "Tinkatuff",
+        "image": "Tinkatuff.png"
+    },
+    {
+        "name": "Toedscool",
+        "image": "Toedscool.png"
+    },
+    {
+        "name": "Toedscruel",
+        "image": "Toedscruel.png"
+    },
+    {
+        "name": "Varoom",
+        "image": "Varoom.png"
+    },
+    {
+        "name": "Veluza",
+        "image": "Veluza.png"
+    },
+    {
+        "name": "Wattrel",
+        "image": "Wattrel.png"
+    },
+    {
+        "name": "Wo-Chien",
+        "image": "Wo-Chien.png"
+    },
+    {
+        "name": "Wugtrio",
+        "image": "Wugtrio.png"
     }
 ]
