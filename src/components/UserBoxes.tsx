@@ -47,16 +47,17 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
     setNumberOfUsersRendered(newElementsAmount)
   }
 
-  const checkIfHasAwards = (index: number, user: IUser) => {
-    let classes = ''
-    if (user.numberOfPokemons > 700) {
-      classes += 'bg-gold'
+  const getAwardName = (index: number, user: IUser) => {
+    if (user.numberOfPokemons > 1150) {
+      return 'diamond'
+    } else if (user.numberOfPokemons > 1100) {
+      return 'gold'
+    } else if (user.numberOfPokemons > 800) {
+      return 'silver'
     } else if (user.numberOfPokemons > 500) {
-      classes += 'bg-silver'
-    } else if (user.numberOfPokemons > 300) {
-      classes += 'bg-bronze'
+      return 'bronze'
     }
-    return classes
+    return ''
   }
 
   return (
@@ -79,7 +80,6 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                 >
                   <CustomBox
                     style={getThemedColors(index)}
-                    className={`${checkIfHasAwards(index, user)}`}
                   >
                     <img
                       src={getPokemonImagePath(user.avatar)}
@@ -94,9 +94,10 @@ const UserBoxes: React.FC<IUserBoxes> = ({ users, isLoading }: IUserBoxes) => {
                           <div className="d-flex flex-row align-items-center">
                             <span>{user.numberOfPokemons}</span>
                             <img
-                              src="/images/pokeball.svg"
+                              src={`/images/pokeball-${getAwardName(index, user)}.png`}
                               className="ml-10px"
                               width={25}
+                              title={getAwardName(index, user)}
                             />
                           </div>
                         )}
