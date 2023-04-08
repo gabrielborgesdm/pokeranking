@@ -1,0 +1,31 @@
+{
+  "name": "pokeranking-api",
+  "version": "1.0.0",
+  "description": "Pokeranking API",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielborgesdm/pokeranking.git"
+  },
+  "keywords": [
+    "typescript",
+    "nodejs",
+    "mongo"
+  ],
+  "author": "Gabriel Borges",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielborgesdm/pokeranking/issues"
+  },
+  "homepage": "https://github.com/gabrielborgesdm/pokeranking#readme",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "tsx": "^3.12.6",
+    "typescript": "^5.0.4"
+  }
+}
