@@ -3,7 +3,7 @@ import { baseURL } from "../helpers/ApiHelper";
 
 const URL_PREFIX = "users"
 
-export function addUserRoutes(router: Router) {
+export function addUserRoutes (router: Router) {
     router.post(`${baseURL}/${URL_PREFIX}/login`, signIn)
 }
 

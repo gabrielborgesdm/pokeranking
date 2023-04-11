@@ -4,13 +4,19 @@ dotenv.config()
 import express from 'express'
 import Router from './Router'
 import { __dirname } from './helpers/ApiHelper'
+import { connect } from './configs/DatabaseConfig'
 
 const app = express()
-const port = process.env.API_PORT || 3000
+const port = process.env.API_PORT
 
-app.use(express.static(__dirname))
-app.use(express.json())
-app.use(Router)
-app.listen(port, () => {
-    console.log("Server started on port", port)
-})
+async function run () {
+    app.use(express.static(__dirname))
+    app.use(express.json())
+    app.use(Router)
+    await connect()
+    app.listen(port, () => {
+        console.log("[Server] Server started on port", port)
+    })
+}
+
+run()
