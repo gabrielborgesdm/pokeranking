@@ -1,5 +1,5 @@
 import path from 'path'
 
-export const baseURL = process.env.API_BASE_URL || ""
+export const baseURL = process.env.API_BASE_URL !== undefined ? process.env.API_BASE_URL : ''
 
-export const __dirname = path.resolve()
+export const _dirname = path.resolve()

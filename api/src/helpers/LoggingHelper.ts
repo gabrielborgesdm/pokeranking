@@ -1,3 +1,3 @@
-import debug from "debug"
+import debug, { type Debugger } from 'debug'
 
-export const Logger = ( moduleName: string = "main" ) => debug(`api:${moduleName}`)
+export const Logger = (moduleName: string = 'main'): Debugger => debug(`api:${moduleName}`)

@@ -1,11 +1,10 @@
-import mongoose from "mongoose"
-import { Logger } from "../helpers/LoggingHelper"
+import mongoose from 'mongoose'
 
-export async function connect() {
-    const databaseConnectionURL = process.env.DATABASE_CONNECTION_URL
-    if(!databaseConnectionURL) {
-        throw new Error("DATABASE_CONNECTION_URL environment variable is missing")
-    }
+export async function connect (): Promise<void> {
+  const databaseConnectionURL = process.env.DATABASE_CONNECTION_URL as string
+  if (databaseConnectionURL === undefined) {
+    throw new Error('DATABASE_CONNECTION_URL environment variable is missing')
+  }
 
-    await mongoose.connect(databaseConnectionURL)
+  await mongoose.connect(databaseConnectionURL)
 }
