@@ -8,7 +8,7 @@ import { Logger } from './helpers/LoggingHelper'
 dotenv.config()
 
 const app = express()
-const port = process.env.API_PORT
+const port = process.env.API_PORT !== undefined ? process.env.API_PORT : 3000
 const log = Logger('main')
 
 async function run (): Promise<void> {
