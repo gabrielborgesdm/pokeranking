@@ -8,11 +8,14 @@
     "start": "tsx src/index.ts",
     "dev": "DEBUG=* tsx watch src/index.ts",
     "build": "tsup src",
-    "test": "jest"
+    "lint": "eslint --ext .ts",
+    "test": "jest",
+    "prepare": "cd .. && husky install api/.husky",
+    "pipeline": "npm ci; npm lint; npm build; npm test" 
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm ci; npm run build; npm run test"
+      "pre-commit": "npm run lint; npm run build; npm run test"
     }
   },
   "repository": {
@@ -24,7 +27,6 @@
     "nodejs",
     "mongo"
   ],
-  
   "author": "Gabriel Borges",
   "license": "ISC",
   "bugs": {
