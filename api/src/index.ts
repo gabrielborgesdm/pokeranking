@@ -2,9 +2,9 @@ import * as dotenv from 'dotenv'
 
 import express from 'express'
 import Router from './Router'
-import { _dirname } from './helpers/ApiHelper'
-import { connect } from './configs/DatabaseConfig'
-import { Logger } from './helpers/LoggingHelper'
+import { Logger } from './helper/LoggingHelper'
+import { _dirname } from './helper/ApiHelper'
+import { connect } from './config/DatabaseConfig'
 dotenv.config()
 
 const app = express()

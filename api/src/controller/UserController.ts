@@ -1,5 +1,5 @@
 import { type Request, type Response, type Router } from 'express'
-import { baseURL } from '../helpers/ApiHelper'
+import { baseURL } from '../helper/ApiHelper'
 
 const URL_PREFIX = 'users'
 
