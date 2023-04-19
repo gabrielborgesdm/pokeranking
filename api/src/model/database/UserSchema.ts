@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema<User>({
   password: { type: String, require: true },
   bio: { type: String, require: false },
   role: { type: String, default: ROLES.USER },
-  pokemons: { type: Array, default: [] },
+  pokemon: { type: Array, default: [] },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 })

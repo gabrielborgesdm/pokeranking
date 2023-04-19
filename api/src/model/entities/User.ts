@@ -9,7 +9,7 @@ export default interface User extends Entities {
   email?: string
   bio?: string
   password?: string
-  pokemons?: UserPokemon[]
+  pokemon?: UserPokemon[]
   numberOfPokemons?: number
   role?: string
 }
