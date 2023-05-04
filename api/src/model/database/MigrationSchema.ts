@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import type Migration from '../entities/Migration'
+import { type Migration } from '../entities/Migration'
 import { MIGRATIONS_TABLE_NAME } from '../entities/Migration'
 
 const MigrationSchema = new mongoose.Schema<Migration>({

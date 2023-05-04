@@ -22,3 +22,4 @@ export const UserSchema = EntitiesSchema.extend({
 })
 
 export type User = z.infer<typeof UserSchema>
+export type UserPokemon = z.infer<typeof UserPokemonSchema>

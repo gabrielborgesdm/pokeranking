@@ -1,10 +1,17 @@
 import mongoose from 'mongoose'
 
-export async function connect (): Promise<void> {
-  const databaseConnectionURL = process.env.DATABASE_CONNECTION_URL as string
+function getDatabaseConnectionURL (): string {
+  const { ENVIRONMENT, DATABASE_CONNECTION_URL, TEST_DATABASE_CONNECTION_URL } = process.env
+
+  const databaseConnectionURL = ENVIRONMENT === 'test' ? TEST_DATABASE_CONNECTION_URL : DATABASE_CONNECTION_URL
+
   if (databaseConnectionURL === undefined) {
     throw new Error('DATABASE_CONNECTION_URL environment variable is missing')
   }
 
-  await mongoose.connect(databaseConnectionURL)
+  return databaseConnectionURL
+}
+
+export async function connect (): Promise<void> {
+  await mongoose.connect(getDatabaseConnectionURL())
 }

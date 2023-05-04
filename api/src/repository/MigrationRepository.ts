@@ -1,4 +1,4 @@
-import type Migration from '../model/entities/Migration'
+import { type Migration } from '../model/entities/Migration'
 import MigrationSchema from '../model/database/MigrationSchema'
 
 export default class MigrationRepository {
