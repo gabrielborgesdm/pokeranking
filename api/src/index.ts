@@ -11,7 +11,7 @@ const app = express()
 const port = process.env.API_PORT !== undefined ? process.env.API_PORT : 3000
 const log = Logger('main')
 
-async function run (): Promise<void> {
+export async function run (): Promise<void> {
   app.use(express.static(_dirname))
   app.use(express.json())
   app.use(Router)

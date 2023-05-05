@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
 function getDatabaseConnectionURL (): string {
@@ -13,5 +14,14 @@ function getDatabaseConnectionURL (): string {
 }
 
 export async function connect (): Promise<void> {
+  dotenv.config()
   await mongoose.connect(getDatabaseConnectionURL())
+}
+
+export async function dropDatabase (): Promise<void> {
+  await mongoose.connection.db.dropDatabase()
+}
+
+export async function closeConnection (): Promise<void> {
+  await mongoose.connection.close()
 }

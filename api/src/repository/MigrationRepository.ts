@@ -6,7 +6,6 @@ export default class MigrationRepository {
     let migrations: string[] = []
 
     const response: Migration[] = await MigrationSchema.find().exec()
-
     if (response?.length > 0) {
       migrations = response.map((migration: Migration) => migration.name)
     }

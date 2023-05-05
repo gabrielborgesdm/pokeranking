@@ -5,6 +5,6 @@ const config: Config.InitialOptions = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest'
   },
-  testPathIgnorePatterns: ['integration']
+  testRegex: '\\.integration.test\\.ts$'
 }
 export default config

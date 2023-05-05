@@ -9,7 +9,8 @@
     "dev": "DEBUG=* tsx watch src/index.ts",
     "build": "tsup src",
     "lint": "eslint --ext .ts",
-    "test": "ENVIRONMENT=development jest",
+    "test": "ENVIRONMENT=test jest",
+    "test:integration": "ENVIRONMENT=test jest -c jest.config.integration.ts",
     "prepare": "cd .. && husky install api/.husky",
     "pipeline": "npm ci; npm run lint; npm run build; npm test" 
   },
