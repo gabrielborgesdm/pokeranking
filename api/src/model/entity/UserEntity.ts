@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
-import { type User } from '../entities/User'
-import { USER_TABLE_NAME } from '../entities/User'
-import { POKEMON_TABLE_NAME } from '../entities/Pokemon'
-import { RolesEnum } from '../entities/Roles'
+import { type User } from '../domain/UserDomain'
+import { USER_TABLE_NAME } from '../domain/UserDomain'
+import { POKEMON_TABLE_NAME } from '../domain/PokemonDomain'
+import { RolesEnum } from '../domain/RoleDomain'
 
-const UserSchema = new mongoose.Schema<User>({
+const UserEntity = new mongoose.Schema<User>({
   username: { type: String, require: true },
   avatar: { type: mongoose.Schema.Types.ObjectId, ref: POKEMON_TABLE_NAME },
   email: { type: String, require: true },
@@ -16,4 +16,4 @@ const UserSchema = new mongoose.Schema<User>({
   updatedAt: { type: Date, default: Date.now }
 })
 
-export default mongoose.model<User>(USER_TABLE_NAME, UserSchema)
+export default mongoose.model<User>(USER_TABLE_NAME, UserEntity)

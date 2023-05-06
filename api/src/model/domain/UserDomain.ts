@@ -1,7 +1,7 @@
 import { z } from 'zod'
-import { PokemonSchema } from './Pokemon'
-import { EntitiesSchema } from './Entities'
-import { RolesSchema } from './Roles'
+import { PokemonSchema } from './PokemonDomain'
+import { BaseDomainSchema } from './BaseDomain'
+import { RolesSchema } from './RoleDomain'
 
 export const USER_TABLE_NAME = 'Users'
 
@@ -10,7 +10,7 @@ export const UserPokemonSchema = z.object({
   pokemon: z.string()
 })
 
-export const UserSchema = EntitiesSchema.extend({
+export const UserSchema = BaseDomainSchema.extend({
   username: z.string(),
   avatar: PokemonSchema,
   email: z.string().optional(),

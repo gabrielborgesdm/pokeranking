@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import type Pokemon from '../entities/Pokemon'
-import { POKEMON_TABLE_NAME } from '../entities/Pokemon'
+import { type Pokemon } from '../domain/PokemonDomain'
+import { POKEMON_TABLE_NAME } from '../domain/PokemonDomain'
 
 const PokemonSchema = new mongoose.Schema<Pokemon>({
   name: { type: String, require: true },

@@ -28,6 +28,7 @@ test('should create migration', async () => {
 test('should get a created migration', async () => {
   const migration = makeMigration()
   await migrationRepository.createMigration(migration)
+
   const response = await migrationRepository.getAllMigrations()
 
   expect(response).toHaveLength(1)

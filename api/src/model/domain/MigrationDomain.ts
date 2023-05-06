@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { EntitiesSchema } from './Entities'
+import { BaseDomainSchema } from './BaseDomain'
 
 export const MIGRATIONS_TABLE_NAME = 'Migrations'
 
-export const MigrationSchema = EntitiesSchema.extend({
+export const MigrationSchema = BaseDomainSchema.extend({
   name: z.string()
 })
 

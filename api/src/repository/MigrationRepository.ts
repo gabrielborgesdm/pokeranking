@@ -1,11 +1,11 @@
-import { type Migration } from '../model/entities/Migration'
-import MigrationSchema from '../model/database/MigrationSchema'
+import { type Migration } from '../model/domain/MigrationDomain'
+import MigrationEntity from '../model/entity/MigrationEntity'
 
 export default class MigrationRepository {
   async getAllMigrations (): Promise<string[]> {
     let migrations: string[] = []
 
-    const response: Migration[] = await MigrationSchema.find().exec()
+    const response: Migration[] = await MigrationEntity.find().exec()
     if (response?.length > 0) {
       migrations = response.map((migration: Migration) => migration.name)
     }
@@ -16,7 +16,7 @@ export default class MigrationRepository {
   async createMigration (payload: Migration): Promise<Migration | null> {
     let migration: Migration | null = null
 
-    migration = await MigrationSchema.create(payload)
+    migration = await MigrationEntity.create(payload)
 
     return migration
   }

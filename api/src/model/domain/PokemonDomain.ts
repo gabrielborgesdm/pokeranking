@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { EntitiesSchema } from './Entities'
+import { BaseDomainSchema } from './BaseDomain'
 
 export const POKEMON_TABLE_NAME = 'Pokemon'
 
-export const PokemonSchema = EntitiesSchema.extend({
+export const PokemonSchema = BaseDomainSchema.extend({
   name: z.string(),
   image: z.string()
 })
