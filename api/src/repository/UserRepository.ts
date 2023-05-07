@@ -10,7 +10,7 @@ export default class UserRepository {
     let users: User[] = []
 
     try {
-      users = await UserEntity.find().populate(POKEMON_TABLE_NAME).exec()
+      users = await UserEntity.find().exec()
     } catch (error) {
       log(error)
     }
@@ -29,15 +29,29 @@ export default class UserRepository {
     return user
   }
 
-  // async getById (_id: string): Promise<IUserDocument> {
-  //   let user: IUserDocument = null
-  //   try {
-  //     user = await User.findById(_id).exec()
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  //   return user
-  // }
+  async findById (_id: string): Promise<User | null> {
+    let user: User | null = null
+
+    try {
+      user = await UserEntity.findById(_id).exec()
+    } catch (error) {
+      log(error)
+    }
+
+    return user
+  }
+
+  async delete (_id: string): Promise<User | null> {
+    let user: User | null = null
+
+    try {
+      user = await UserEntity.findByIdAndDelete(_id).exec()
+    } catch (error) {
+      log(error)
+    }
+
+    return user
+  }
 }
 
 //   async get(query: object): Promise<IUserDocument> {
@@ -59,24 +73,3 @@ export default class UserRepository {
 //     }
 //     return users
 //   }
-
-//   async delete(_id: string): Promise<IUserDocument> {
-//     let user: IUserDocument = null
-//     try {
-//       user = await User.findByIdAndDelete(_id).exec()
-//     } catch (error) {
-//       console.log(error)
-//     }
-//     return user
-//   }
-
-//   async update(_id: string, userInfo: any): Promise<IUserDocument> {
-//     let user: any = null
-//     try {
-//       user = await User.findByIdAndUpdate(_id, userInfo, { new: true })
-//     } catch (error) {
-//       console.log(error)
-//     }
-//     return user
-//   }
-// }

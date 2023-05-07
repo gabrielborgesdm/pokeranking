@@ -5,7 +5,7 @@ import { POKEMON_TABLE_NAME } from '../domain/PokemonDomain'
 import { RolesEnum } from '../domain/RoleDomain'
 
 const UserEntity = new mongoose.Schema<User>({
-  username: { type: String, require: true },
+  username: { type: String, require: true, unique: true },
   avatar: { type: mongoose.Schema.Types.ObjectId, ref: POKEMON_TABLE_NAME },
   email: { type: String, require: true },
   password: { type: String, require: true },
