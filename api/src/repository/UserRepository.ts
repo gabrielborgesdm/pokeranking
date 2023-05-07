@@ -1,11 +1,34 @@
 import { Logger } from '../helper/LoggingHelper'
-import { POKEMON_TABLE_NAME } from '../model/domain/PokemonDomain'
 import { type User } from '../model/domain/UserDomain'
 import UserEntity from '../model/entity/UserEntity'
 
 const log = Logger('UserRepository')
 
 export default class UserRepository {
+  async findById (_id: string): Promise<User | null> {
+    let user: User | null = null
+
+    try {
+      user = await UserEntity.findById(_id).exec()
+    } catch (error) {
+      log(error)
+    }
+
+    return user
+  }
+
+  async findBy (query: Partial<User>): Promise<User | null> {
+    let user: User | null = null
+
+    try {
+      user = await UserEntity.findOne(query).exec()
+    } catch (error) {
+      log(error)
+    }
+
+    return user
+  }
+
   async getAll (): Promise<User[]> {
     let users: User[] = []
 
@@ -29,11 +52,11 @@ export default class UserRepository {
     return user
   }
 
-  async findById (_id: string): Promise<User | null> {
+  async update (_id: string, payload: Partial<User>): Promise<User | null> {
     let user: User | null = null
 
     try {
-      user = await UserEntity.findById(_id).exec()
+      user = await UserEntity.findByIdAndUpdate(_id, payload, { new: true })
     } catch (error) {
       log(error)
     }
@@ -53,23 +76,3 @@ export default class UserRepository {
     return user
   }
 }
-
-//   async get(query: object): Promise<IUserDocument> {
-//     let user: IUserDocument = null
-//     try {
-//       user = await User.findOne(query).exec()
-//     } catch (error) {
-//       console.log(error)
-//     }
-//     return user
-//   }
-
-//   async getPaginated(pagination: any): Promise<Array<IUserDocument>> {
-//     let users: Array<IUserDocument> = null
-//     try {
-//       users = await User.find().skip(pagination.skip).limit(pagination.limit).exec()
-//     } catch (error) {
-//       console.log(error)
-//     }
-//     return users
-//   }

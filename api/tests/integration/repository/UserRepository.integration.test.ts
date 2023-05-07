@@ -21,7 +21,7 @@ describe('User Repository', () => {
     expect(sut?.username).toBe(user.username)
   })
 
-  it('should get a created user', async () => {
+  it('should find a created user', async () => {
     const userPayload = makeUserCreationPayload()
 
     const createdUser = await userRepository.create(userPayload)
@@ -29,6 +29,28 @@ describe('User Repository', () => {
 
     expect(sut).not.toBeNull()
     expect(userPayload.username).toBe(userPayload.username)
+  })
+
+  it('should not find a user', async () => {
+    const sut = await userRepository.findById(makeUserCreationPayload()?._id as string)
+
+    expect(sut).toBeNull()
+  })
+
+  it('should find a user by its username', async () => {
+    const userPayload = makeUserCreationPayload()
+
+    const createdUser = await userRepository.create(userPayload)
+    const sut = await userRepository.findBy({ username: createdUser?.username })
+
+    expect(sut).not.toBeNull()
+    expect(sut?._id?.toString()).toBe(createdUser?._id?.toString())
+  })
+
+  it('should not find by username if it does not exist', async () => {
+    const sut = await userRepository.findBy({ username: 'John' })
+
+    expect(sut).toBeNull()
   })
 
   it('should get all users when 2 were created', async () => {
@@ -52,5 +74,28 @@ describe('User Repository', () => {
 
     expect(sut).not.toBeNull()
     expect(sut?._id?.toString()).toBe(createdUser?._id?.toString())
+  })
+
+  it('should not find a user to delete', async () => {
+    const sut = await userRepository.delete(makeUserCreationPayload()?._id as string)
+
+    expect(sut).toBeNull()
+  })
+
+  it('should update a user', async () => {
+    const userPayload = makeUserCreationPayload({ username: 'John' })
+    const newUsername = 'Doe'
+
+    const createdUser = await userRepository.create(userPayload)
+    const sut = await userRepository.update(createdUser?._id?.toString() as string, { username: newUsername })
+
+    expect(sut).not.toBeNull()
+    expect(sut?.username).toBe(newUsername)
+  })
+
+  it('should not find a user to update', async () => {
+    const sut = await userRepository.update(makeUserCreationPayload()?._id as string, { username: 'Doe' })
+
+    expect(sut).toBeNull()
   })
 })
