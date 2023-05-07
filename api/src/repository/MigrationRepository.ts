@@ -13,7 +13,7 @@ export default class MigrationRepository {
     return migrations
   }
 
-  async createMigration (payload: Migration): Promise<Migration | null> {
+  async create (payload: Migration): Promise<Migration | null> {
     let migration: Migration | null = null
 
     migration = await MigrationEntity.create(payload)
