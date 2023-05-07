@@ -1,36 +1,27 @@
 import MigrationRepository from '../../../src/repository/MigrationRepository'
-import { closeConnection, connect, dropDatabase } from '../../../src/config/DatabaseConfig'
 import { makeMigration } from '../../object-mother/Migration'
+import { setUpIntegrationTests } from '../../testsSetup'
 
-beforeAll(async () => {
-  await connect()
-})
+describe('Migration Repository', () => {
+  const migrationRepository = new MigrationRepository()
+  setUpIntegrationTests()
 
-afterEach(async () => {
-  await dropDatabase()
-})
+  it('should create migration', async () => {
+    const migration = makeMigration()
 
-afterAll(async () => {
-  await closeConnection()
-})
+    const response = await migrationRepository.createMigration(migration)
 
-const migrationRepository = new MigrationRepository()
+    expect(response).not.toBeNull()
+    expect(response?.name).toBe(migration.name)
+  })
 
-test('should create migration', async () => {
-  const migration = makeMigration()
+  it('should get a created migration', async () => {
+    const migration = makeMigration()
+    await migrationRepository.createMigration(migration)
 
-  const response = await migrationRepository.createMigration(migration)
+    const response = await migrationRepository.getAllMigrations()
 
-  expect(response).not.toBeNull()
-  expect(response?.name).toBe(migration.name)
-})
-
-test('should get a created migration', async () => {
-  const migration = makeMigration()
-  await migrationRepository.createMigration(migration)
-
-  const response = await migrationRepository.getAllMigrations()
-
-  expect(response).toHaveLength(1)
-  expect(response[0]).toBe(migration.name)
+    expect(response).toHaveLength(1)
+    expect(response[0]).toBe(migration.name)
+  })
 })
