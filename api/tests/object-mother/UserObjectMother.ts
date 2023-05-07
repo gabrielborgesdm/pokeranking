@@ -1,7 +1,7 @@
 import { RolesEnum } from '../../src/model/domain/RoleDomain'
 import { type User, type UserPokemon } from '../../src/model/domain/UserDomain'
 import { UserRequestDTOSchema } from '../../src/model/dto/UserDTO'
-import { makePokemon } from './Pokemon'
+import { makePokemon } from './PokemonObjectMother'
 
 export const makeUser = (): User => ({
   _id: '41224d776a326fb40f000002',

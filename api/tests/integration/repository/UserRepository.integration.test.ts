@@ -1,5 +1,5 @@
 import UserRepository from '../../../src/repository/UserRepository'
-import { makeUser, makeUserCreationPayload } from '../../object-mother/User'
+import { makeUserCreationPayload } from '../../object-mother/UserObjectMother'
 import { setUpIntegrationTests } from '../../testsSetup'
 
 describe('User Repository', () => {

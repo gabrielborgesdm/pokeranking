@@ -1,5 +1,5 @@
 import MigrationRepository from '../../../src/repository/MigrationRepository'
-import { makeMigration } from '../../object-mother/Migration'
+import { makeMigration } from '../../object-mother/MigrationObjectMother'
 import { setUpIntegrationTests } from '../../testsSetup'
 
 describe('Migration Repository', () => {
