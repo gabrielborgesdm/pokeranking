@@ -1,5 +1,5 @@
 import UserRepository from '../../../src/repository/UserRepository'
-import { makeUserCreationPayload } from '../../object-mother/UserObjectMother'
+import { makeUser, makeUserCreationPayload } from '../../object-mother/UserObjectMother'
 import { setUpIntegrationTests } from '../../testsSetup'
 
 describe('User Repository', () => {
@@ -32,7 +32,7 @@ describe('User Repository', () => {
   })
 
   it('should not find a user', async () => {
-    const sut = await userRepository.findById(makeUserCreationPayload()?._id as string)
+    const sut = await userRepository.findById(makeUser()._id as string)
 
     expect(sut).toBeNull()
   })
@@ -77,7 +77,7 @@ describe('User Repository', () => {
   })
 
   it('should not find a user to delete', async () => {
-    const sut = await userRepository.delete(makeUserCreationPayload()?._id as string)
+    const sut = await userRepository.delete(makeUser()?._id as string)
 
     expect(sut).toBeNull()
   })
@@ -94,7 +94,7 @@ describe('User Repository', () => {
   })
 
   it('should not find a user to update', async () => {
-    const sut = await userRepository.update(makeUserCreationPayload()?._id as string, { username: 'Doe' })
+    const sut = await userRepository.update(makeUser()?._id as string, { username: 'Doe' })
 
     expect(sut).toBeNull()
   })

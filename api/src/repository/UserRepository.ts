@@ -49,6 +49,7 @@ export default class UserRepository {
     } catch (error) {
       log(error)
     }
+
     return user
   }
 
