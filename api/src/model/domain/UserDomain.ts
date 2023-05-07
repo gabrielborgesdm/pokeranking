@@ -7,16 +7,16 @@ export const USER_TABLE_NAME = 'Users'
 
 export const UserPokemonSchema = z.object({
   note: z.string().optional(),
-  pokemon: z.string()
+  pokemon: z.string().or(PokemonSchema)
 })
 
 export const UserSchema = BaseDomainSchema.extend({
   username: z.string(),
-  avatar: PokemonSchema,
+  avatar: z.string().or(PokemonSchema),
   email: z.string().optional(),
   bio: z.string().optional(),
   password: z.string().optional(),
-  pokemon: UserPokemonSchema.array().optional(),
+  userPokemon: UserPokemonSchema.array().optional(),
   numberOfPokemons: z.number().optional(),
   role: RolesSchema.optional()
 })

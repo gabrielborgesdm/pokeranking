@@ -11,7 +11,10 @@ const UserEntity = new mongoose.Schema<User>({
   password: { type: String, require: true },
   bio: { type: String, require: false },
   role: { type: String, default: RolesEnum.user },
-  pokemon: { type: Array, default: [] },
+  userPokemon: [{
+    bio: { type: String, require: false },
+    pokemon: { type: mongoose.Schema.Types.ObjectId, ref: POKEMON_TABLE_NAME }
+  }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 })
