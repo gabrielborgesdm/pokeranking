@@ -1,5 +1,5 @@
 import { RolesEnum } from '../../src/model/domain/RoleDomain'
-import { type User, type UserPokemon } from '../../src/model/domain/UserDomain'
+import { UserSchema, type User, type UserPokemon } from '../../src/model/domain/UserDomain'
 import { UserRequestDTOSchema } from '../../src/model/dto/UserDTO'
 import { makePokemon } from './PokemonObjectMother'
 
@@ -31,5 +31,7 @@ export const makeUserCreationPayload = (payload: Partial<User> = {}): User => {
     user.avatar = makePokemon()._id as string
   }
 
-  return UserRequestDTOSchema.parse(user)
+  const parsedUser = UserRequestDTOSchema.parse(user)
+
+  return UserSchema.parse(parsedUser)
 }
