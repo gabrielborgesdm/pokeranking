@@ -1,9 +1,13 @@
+import { type Pokemon } from '../../../src/model/domain/PokemonDomain'
+import PokemonRepository from '../../../src/repository/PokemonRepository'
 import UserRepository from '../../../src/repository/UserRepository'
+import { makePokemonCreationPayload } from '../../object-mother/PokemonObjectMother'
 import { makeUser, makeUserCreationPayload } from '../../object-mother/UserObjectMother'
 import { setUpIntegrationTests } from '../../testsSetup'
 
 describe('User Repository', () => {
   const userRepository = new UserRepository()
+  const pokemonRepository = new PokemonRepository()
   setUpIntegrationTests()
 
   it('should get no user when the database is empty', async () => {
@@ -97,5 +101,26 @@ describe('User Repository', () => {
     const sut = await userRepository.update(makeUser()?._id as string, { username: 'Doe' })
 
     expect(sut).toBeNull()
+  })
+
+  it('should populate users with pokemon', async () => {
+    const pokemonPayload = makePokemonCreationPayload()
+    const createdPokemon = await pokemonRepository.create(pokemonPayload)
+    const userPayload = makeUserCreationPayload({
+      userPokemon: [
+        { pokemon: createdPokemon?._id?.toString() as string, note: 'A pokemon' }
+      ]
+    })
+
+    await userRepository.create(userPayload)
+    const sut = await userRepository.getAll()
+
+    if (sut[0] === undefined || sut[0].userPokemon === undefined || userPayload?.userPokemon === undefined) {
+      throw new Error('Object is undefined')
+    }
+
+    const populatedPokemon = sut[0].userPokemon[0].pokemon as Pokemon
+    expect(sut[0].userPokemon[0].note).toBe(userPayload?.userPokemon[0].note)
+    expect(populatedPokemon.name).toBe(pokemonPayload.name)
   })
 })

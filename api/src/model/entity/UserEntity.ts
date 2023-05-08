@@ -12,7 +12,7 @@ const UserEntity = new mongoose.Schema<User>({
   bio: { type: String, require: false },
   role: { type: String, default: RolesEnum.user },
   userPokemon: [{
-    bio: { type: String, require: false },
+    note: { type: String, require: false },
     pokemon: { type: mongoose.Schema.Types.ObjectId, ref: POKEMON_TABLE_NAME }
   }],
   createdAt: { type: Date, default: Date.now },
