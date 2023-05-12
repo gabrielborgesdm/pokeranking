@@ -1,4 +1,4 @@
-import { type Request, type Response, type Router } from 'express'
+import { type Router, type Request, type Response } from 'express'
 import { buildApiRoute } from '../helper/ApiHelper'
 
 const URL_PREFIX = 'users'
@@ -8,5 +8,5 @@ export function addUserRoutes (router: Router): void {
 }
 
 function signIn (request: Request, response: Response): void {
-  response.json()
+  response.json(request.__('test'))
 }

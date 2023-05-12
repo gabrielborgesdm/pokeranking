@@ -1,10 +1,12 @@
 import * as dotenv from 'dotenv'
 
 import express from 'express'
-import Router from './Router'
+import i18n from './config/I18nConfig'
+import router from './Router'
 import { Logger } from './helper/LoggingHelper'
 import { _dirname } from './helper/ApiHelper'
 import { connect } from './config/DatabaseConfig'
+
 dotenv.config()
 
 const app = express()
@@ -14,7 +16,8 @@ const log = Logger('main')
 export async function run (): Promise<void> {
   app.use(express.static(_dirname))
   app.use(express.json())
-  app.use(Router)
+  app.use(i18n.init)
+  app.use(router)
   await connect()
   app.listen(port, () => {
     log('Server started on port', port)
