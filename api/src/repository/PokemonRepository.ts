@@ -1,17 +1,17 @@
-import { Logger } from '../helper/LoggingHelper'
+import LoggerService from '../service/LoggingService'
 import { type Pokemon } from '../model/domain/PokemonDomain'
 import PokemonEntity from '../model/entity/PokemonEntity'
 
-const log = Logger('PokemonRepository')
-
 export default class PokemonRepository {
+  logger = new LoggerService('PokemonRepository')
+
   async findById (_id: string): Promise<Pokemon | null> {
     let pokemon: Pokemon | null = null
 
     try {
       pokemon = await PokemonEntity.findById(_id).exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return pokemon
@@ -23,7 +23,7 @@ export default class PokemonRepository {
     try {
       pokemon = await PokemonEntity.findOne(query).exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return pokemon
@@ -35,7 +35,7 @@ export default class PokemonRepository {
     try {
       pokemon = await PokemonEntity.find().exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return pokemon
@@ -47,7 +47,7 @@ export default class PokemonRepository {
     try {
       pokemon = await PokemonEntity.create(payload)
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return pokemon
@@ -59,7 +59,7 @@ export default class PokemonRepository {
     try {
       pokemon = await PokemonEntity.findByIdAndUpdate(_id, payload, { new: true })
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return pokemon
@@ -71,7 +71,7 @@ export default class PokemonRepository {
     try {
       pokemon = await PokemonEntity.findByIdAndDelete(_id).exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return pokemon

@@ -1,13 +1,14 @@
 import { type NextFunction, type Request, type Response, type Router } from 'express'
-import { Logger } from '../../helper/LoggingHelper'
+import LoggerService from '../../service/LoggingService'
 
-const log = Logger('requests')
+const logger = new LoggerService('requests')
 
 export default function addLoggingMiddlewares (router: Router): void {
   router.use(logRequests)
 }
 
 function logRequests (request: Request, response: Response, next: NextFunction): void {
-  log(request.query, `request at: ${new Date().toISOString()}`)
+  logger.log(request.query, `request at: ${new Date().toISOString()}`)
+
   next()
 }

@@ -1,6 +1,7 @@
 import path from 'path'
+import { getEnvVariable } from './EnvHelper'
 
-export const baseURL = process.env.API_BASE_URL !== undefined ? process.env.API_BASE_URL : ''
+export const baseURL = getEnvVariable('API_BASE_URL', '')
 
 export const _dirname = path.resolve()
 

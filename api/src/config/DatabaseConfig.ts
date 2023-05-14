@@ -1,20 +1,16 @@
-import * as dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import { getEnvVariable } from '../helper/EnvHelper'
 
 function getDatabaseConnectionURL (): string {
-  const { ENVIRONMENT, DATABASE_CONNECTION_URL, TEST_DATABASE_CONNECTION_URL } = process.env
-
-  const databaseConnectionURL = ENVIRONMENT === 'test' ? TEST_DATABASE_CONNECTION_URL : DATABASE_CONNECTION_URL
-
-  if (databaseConnectionURL === undefined) {
-    throw new Error('DATABASE_CONNECTION_URL environment variable is missing')
-  }
+  const databaseConnectionURL =
+    getEnvVariable('ENVIRONMENT', 'develop') === 'test'
+      ? getEnvVariable('TEST_DATABASE_CONNECTION_URL')
+      : getEnvVariable('DATABASE_CONNECTION_URL')
 
   return databaseConnectionURL
 }
 
 export async function connect (): Promise<void> {
-  dotenv.config()
   await mongoose.connect(getDatabaseConnectionURL())
 }
 

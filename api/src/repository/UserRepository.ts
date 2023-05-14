@@ -1,18 +1,18 @@
-import { Logger } from '../helper/LoggingHelper'
+import LoggerService from '../service/LoggingService'
 import { type User } from '../model/domain/UserDomain'
 import UserEntity from '../model/entity/UserEntity'
 
-const log = Logger('UserRepository')
-const pokemonPath = 'userPokemon.pokemon'
-
 export default class UserRepository {
+  pokemonPath = 'userPokemon.pokemon'
+  logger = new LoggerService('UserRepository')
+
   async findById (_id: string): Promise<User | null> {
     let user: User | null = null
 
     try {
-      user = await UserEntity.findById(_id).populate(pokemonPath).exec()
+      user = await UserEntity.findById(_id).populate(this.pokemonPath).exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return user
@@ -22,9 +22,9 @@ export default class UserRepository {
     let user: User | null = null
 
     try {
-      user = await UserEntity.findOne(query).populate(pokemonPath).exec()
+      user = await UserEntity.findOne(query).populate(this.pokemonPath).exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return user
@@ -34,9 +34,9 @@ export default class UserRepository {
     let users: User[] = []
 
     try {
-      users = await UserEntity.find().populate(pokemonPath).exec()
+      users = await UserEntity.find().populate(this.pokemonPath).exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return users
@@ -48,7 +48,7 @@ export default class UserRepository {
     try {
       user = await UserEntity.create(payload)
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return user
@@ -60,7 +60,7 @@ export default class UserRepository {
     try {
       user = await UserEntity.findByIdAndUpdate(_id, payload, { new: true })
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return user
@@ -72,7 +72,7 @@ export default class UserRepository {
     try {
       user = await UserEntity.findByIdAndDelete(_id).exec()
     } catch (error) {
-      log(error)
+      this.logger.log(error)
     }
 
     return user
