@@ -1,3 +1,19 @@
 {
-  "test": "isso é um teste"
+  "language": "pt",
+  "success": "Operação executada com sucesso",
+  "error": "Um erro inesperado ocorreu",
+  "unauthorized": "Acesso não autorizado",
+  "forbidden": "Acesso proibido",
+  "field_validation_error": "Há campos inválidos",
+  "not_found": "Recurso não encontrado",
+  "image_not_found": "Imagem não encontrada",
+  "already_registered": "Recurso já foi registrado",
+  "being_used": "O recurso está sendo utilizado e não pode ser modificado",
+  "invalid_credentials": "Credenciais inválidas",
+  "password_recovery": "Recuperação de senha",
+  "change_password": "Alterar senha",
+  "recover_your_account_password": "Recupere a senha da sua conta",
+  "you_have_asked_for_a_password_recovery": "Você pediu para recuperar a senha da sua conta no Pokeranking. Clique no botão se quiser recuperá-la. Se não foi você, apenas ignore este e-mail.",
+  "in_case_the_button_does_not_work_copy_and_paste_the_link": "Caso o botão não funcione, copie e cole o link abaixo no seu navegador.",
+  "hello": "Olá"
 }

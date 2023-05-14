@@ -1,3 +1,19 @@
 {
-  "test": "this is a test"
+  "language": "en",
+  "success": "Operation executed with success",
+  "error": "An unexpected error occurred",
+  "unauthorized": "Unauthorized access",
+  "forbidden": "Forbidden access",
+  "field_validation_error": "There are invalid fields",
+  "not_found": "Resource was not found",
+  "image_not_found": "Image not found",
+  "already_registered": "Resource was already registered",
+  "being_used": "Resource is being used and can't be modified",
+  "invalid_credentials": "Invalid credentials",
+  "password_recovery": "Password recovery",
+  "change_password": "Change Password",
+  "recover_your_account_password": "Recover your account password",
+  "you_have_asked_for_a_password_recovery": "You have asked for a password recovery on your Pokeranking account. Click on the button if you wanna continue, otherwise just ignore this e-mail.",
+  "in_case_the_button_does_not_work_copy_and_paste_the_link": "In case the button does not work, copy and paste the link in your browser.",
+  "hello": "Hello"
 }
