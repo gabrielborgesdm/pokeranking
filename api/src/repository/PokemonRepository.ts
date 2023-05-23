@@ -41,7 +41,7 @@ export default class PokemonRepository {
     return pokemon
   }
 
-  async create (payload: Pokemon): Promise<Pokemon | null> {
+  async create (payload: Partial<Pokemon>): Promise<Pokemon | null> {
     let pokemon: Pokemon | null = null
 
     try {
