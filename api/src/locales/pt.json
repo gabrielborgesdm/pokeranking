@@ -15,5 +15,8 @@
   "recover_your_account_password": "Recupere a senha da sua conta",
   "you_have_asked_for_a_password_recovery": "Você pediu para recuperar a senha da sua conta no Pokeranking. Clique no botão se quiser recuperá-la. Se não foi você, apenas ignore este e-mail.",
   "in_case_the_button_does_not_work_copy_and_paste_the_link": "Caso o botão não funcione, copie e cole o link abaixo no seu navegador.",
-  "hello": "Olá"
+  "hello": "Olá",
+  "invalid_image_format": "Formato de imagem inválido, envie arquivos png ou jpg",
+  "invalid_image_size": "Tamanho de imagem inválido, envie arquivos abaixo de 5 Megabytes",
+  "upload_error": "Ocorreu um erro ao enviar a imagem"
 }

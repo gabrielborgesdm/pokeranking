@@ -15,5 +15,8 @@
   "recover_your_account_password": "Recover your account password",
   "you_have_asked_for_a_password_recovery": "You have asked for a password recovery on your Pokeranking account. Click on the button if you wanna continue, otherwise just ignore this e-mail.",
   "in_case_the_button_does_not_work_copy_and_paste_the_link": "In case the button does not work, copy and paste the link in your browser.",
-  "hello": "Hello"
+  "hello": "Hello",
+  "invalid_image_format": "Invalid image format, send png or jpg files",
+  "invalid_image_size": "Invalid image size, send files smaller than 5 megabytes",
+  "upload_error": "An error occurred while uploading the image"
 }

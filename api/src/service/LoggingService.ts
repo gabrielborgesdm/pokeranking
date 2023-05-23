@@ -1,7 +1,7 @@
 import debug from 'debug'
 
 export default class LoggerService {
-  debug: debug.Debugger
+  private readonly debug: debug.Debugger
   constructor (module: string) {
     this.debug = debug(`api:${module}`)
   }
