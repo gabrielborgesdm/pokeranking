@@ -22,7 +22,7 @@
     "joi": "^17.4.1",
     "js-file-download": "^0.4.12",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.13.3",
+    "mongoose": "^6.13.6",
     "mongoose-sequence": "^5.3.1",
     "next": "11.0.1",
     "next-compose-plugins": "^2.2.1",
