@@ -18,7 +18,7 @@
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "bootstrap": "5.0.2",
-    "cloudinary": "^1.27.0",
+    "cloudinary": "^2.7.0",
     "joi": "^17.4.1",
     "js-file-download": "^0.4.12",
     "jsonwebtoken": "^8.5.1",
