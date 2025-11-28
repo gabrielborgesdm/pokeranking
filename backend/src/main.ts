@@ -41,15 +41,15 @@ async function bootstrap() {
   const port = process.env.PORT ?? 3000;
 
   // Only enable Swagger in development/staging
-  if (process.env.NODE_ENV !== 'production') {
-    SwaggerModule.setup('api/docs', app, document, {
-      customSiteTitle: 'Pokemon Ranking API Docs',
-      swaggerOptions: {
-        persistAuthorization: true,
-      },
-    });
-    console.log(`Swagger documentation: http://localhost:${port}/api/docs`);
-  }
+
+  SwaggerModule.setup('api/docs', app, document, {
+    customSiteTitle: 'Pokemon Ranking API Docs',
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
+  console.log(`Swagger documentation: http://localhost:${port}/api/docs`);
+
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
 }
