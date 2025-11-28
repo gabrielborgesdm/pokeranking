@@ -23,6 +23,8 @@ import { LoginResponseDto } from './dto/login-response.dto';
 import { RegisterResponseDto } from './dto/register-response.dto';
 import { UserResponseDto } from '../users/dto/user-response.dto';
 import { Public } from '../common/decorators/public.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from '../common/enums/user-role.enum';
 import { toDto } from '../common/utils/transform.util';
 import { UsersService } from '../users/users.service';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
@@ -66,13 +68,31 @@ export class AuthController {
     type: RegisterResponseDto,
   })
   @ApiResponse({ status: 409, description: 'User already exists' })
-  async register(
-    @Body() registerDto: RegisterDto,
-    @Request() req: Partial<AuthenticatedRequest>,
-  ) {
-    // Extract current user from request if authenticated (for admin delegation)
-    const currentUser = req.user || null;
-    const result = await this.authService.register(registerDto, currentUser);
+  async register(@Body() registerDto: RegisterDto) {
+    const result = await this.authService.register(registerDto);
+
+    return {
+      user: toDto(UserResponseDto, result.user),
+      access_token: result.access_token,
+    };
+  }
+
+  @Post('register-admin')
+  @Roles(UserRole.Admin)
+  @HttpCode(HttpStatus.CREATED)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Register a new admin user (admin only)' })
+  @ApiBody({ type: RegisterDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Admin user registered successfully',
+    type: RegisterResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
+  @ApiResponse({ status: 409, description: 'User already exists' })
+  async registerAdmin(@Body() registerDto: RegisterDto) {
+    const result = await this.authService.registerAdmin(registerDto);
 
     return {
       user: toDto(UserResponseDto, result.user),
