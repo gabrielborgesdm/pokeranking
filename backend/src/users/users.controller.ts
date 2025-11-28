@@ -34,18 +34,16 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Roles(UserRole.Admin)
-  @ApiOperation({ summary: 'Get all users (Admin only)' })
+  @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({
     status: 200,
     description: 'Users retrieved successfully',
-    type: [UserResponseDto],
+    type: [PublicUserResponseDto],
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async findAll() {
     const users = await this.usersService.findAll();
-    return toDto(UserResponseDto, users);
+    return toDto(PublicUserResponseDto, users);
   }
 
   @Get(':id')

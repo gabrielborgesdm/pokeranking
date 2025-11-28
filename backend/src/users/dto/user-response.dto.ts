@@ -1,15 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { UserRole } from '../../common/enums/user-role.enum';
-import {
-  transformObjectId,
-  transformObjectIdArray,
-} from '../../common/utils/transform.util';
 
 @Exclude()
 export class UserResponseDto {
   @Expose()
-  @Transform(transformObjectId)
+  @Transform(({ obj }) => {
+    const typedObj = obj as { _id?: { toString: () => string } };
+    return typedObj._id?.toString();
+  })
   @ApiProperty({ example: '507f1f77bcf86cd799439011' })
   _id: string;
 
@@ -26,7 +25,10 @@ export class UserResponseDto {
   profilePic?: string;
 
   @Expose()
-  @Transform(transformObjectIdArray)
+  @Transform(({ obj }) => {
+    const typedObj = obj as { pokemon?: Array<{ toString: () => string }> };
+    return typedObj.pokemon?.map((p) => p?.toString()) || [];
+  })
   @ApiProperty({ type: [String], example: ['507f1f77bcf86cd799439011'] })
   pokemon: string[];
 
