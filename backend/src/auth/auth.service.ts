@@ -3,6 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { UserRole } from '../common/enums/user-role.enum';
+import { AuthenticatedUser } from '../common/interfaces/authenticated-request.interface';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
+import { User } from '../users/schemas/user.schema';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { toDto } from '../common/utils/transform.util';
+import { UserResponseDto } from '../users/dto/user-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, password: string): Promise<User | null> {
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
@@ -27,14 +34,12 @@ export class AuthService {
       return null;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _, ...result } = user.toObject();
-    return result;
+    return user;
   }
 
-  async login(user: any) {
-    const payload = {
-      sub: user._id,
+  login(user: AuthenticatedUser): LoginResponseDto {
+    const payload: JwtPayload = {
+      sub: user.userId,
       username: user.username,
       email: user.email,
       role: user.role,
@@ -45,7 +50,7 @@ export class AuthService {
     };
   }
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<RegisterResponseDto> {
     // Count total users in database
     const userCount = await this.usersService.count();
 
@@ -58,40 +63,38 @@ export class AuthService {
       role,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user.toObject();
+    const payload: JwtPayload = {
+      sub: user._id.toString(),
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
 
     // Return access token for the new user
     return {
-      user: userWithoutPassword,
-      access_token: this.jwtService.sign({
-        sub: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      }),
+      user: toDto(UserResponseDto, user) as UserResponseDto,
+      access_token: this.jwtService.sign(payload),
     };
   }
 
-  async registerAdmin(registerDto: RegisterDto) {
+  async registerAdmin(registerDto: RegisterDto): Promise<RegisterResponseDto> {
     // Always create admin users via this endpoint
     const user = await this.usersService.create({
       ...registerDto,
       role: UserRole.Admin,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user.toObject();
+    const payload: JwtPayload = {
+      sub: user._id.toString(),
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
 
     // Return access token for the new user
     return {
-      user: userWithoutPassword,
-      access_token: this.jwtService.sign({
-        sub: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      }),
+      user: toDto(UserResponseDto, user) as UserResponseDto,
+      access_token: this.jwtService.sign(payload),
     };
   }
 }
