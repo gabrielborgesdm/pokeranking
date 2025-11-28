@@ -8,36 +8,89 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiBody,
+} from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
+import { UserResponseDto } from '../users/dto/user-response.dto';
 import { Public } from '../common/decorators/public.decorator';
+import { toDto } from '../common/utils/transform.util';
+import { UsersService } from '../users/users.service';
+import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private usersService: UsersService,
+  ) {}
 
   @Public()
   // LocalAuthGuard validates username/password and attaches user to request
   @UseGuards(AuthGuard('local'))
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() loginDto: LoginDto, @Request() req) {
+  @ApiOperation({ summary: 'User login' })
+  @ApiBody({ type: LoginDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful',
+    type: LoginResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  async login(
+    @Body() loginDto: LoginDto,
+    @Request() req: AuthenticatedRequest,
+  ) {
     return this.authService.login(req.user);
   }
 
   @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() registerDto: RegisterDto, @Request() req) {
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiBody({ type: RegisterDto })
+  @ApiResponse({
+    status: 201,
+    description: 'User registered successfully',
+    type: RegisterResponseDto,
+  })
+  @ApiResponse({ status: 409, description: 'User already exists' })
+  async register(
+    @Body() registerDto: RegisterDto,
+    @Request() req: Partial<AuthenticatedRequest>,
+  ) {
     // Extract current user from request if authenticated (for admin delegation)
     const currentUser = req.user || null;
-    return this.authService.register(registerDto, currentUser);
+    const result = await this.authService.register(registerDto, currentUser);
+
+    return {
+      user: toDto(UserResponseDto, result.user),
+      access_token: result.access_token,
+    };
   }
 
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({
+    status: 200,
+    description: 'Profile retrieved successfully',
+    type: UserResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getProfile(@Request() req: AuthenticatedRequest) {
+    const user = await this.usersService.findOne(req.user.userId);
+    return toDto(UserResponseDto, user);
   }
 }
