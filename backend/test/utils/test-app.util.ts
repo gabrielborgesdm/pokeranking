@@ -53,6 +53,9 @@ export async function createTestApp(): Promise<INestApplication> {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        exposeUnsetFields: false, // Do not expose fields that are not set, i.e., undefined;
+      },
     }),
   );
 
