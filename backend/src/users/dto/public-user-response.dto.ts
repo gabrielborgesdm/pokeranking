@@ -1,18 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { UserRole } from '../../common/enums/user-role.enum';
-import {
-  transformObjectId,
-  transformObjectIdArray,
-} from '../../common/utils/transform.util';
+import { transformObjectIdArray } from '../../common/utils/transform.util';
 
 @Exclude()
 export class PublicUserResponseDto {
-  @Expose()
-  @Transform(transformObjectId)
-  @ApiProperty({ example: '507f1f77bcf86cd799439011' })
-  _id: string;
-
   @Expose()
   @ApiProperty({ example: 'john_doe' })
   username: string;
@@ -25,20 +16,4 @@ export class PublicUserResponseDto {
   @Transform(transformObjectIdArray)
   @ApiProperty({ type: [String], example: ['507f1f77bcf86cd799439011'] })
   pokemon: string[];
-
-  @Expose()
-  @ApiProperty({ enum: UserRole, example: UserRole.Member })
-  role: UserRole;
-
-  @Expose()
-  @ApiProperty({ example: true })
-  isActive: boolean;
-
-  @Expose()
-  @ApiProperty({ example: '2024-01-15T10:30:00.000Z' })
-  createdAt: Date;
-
-  @Expose()
-  @ApiProperty({ example: '2024-01-20T15:45:00.000Z' })
-  updatedAt: Date;
 }
