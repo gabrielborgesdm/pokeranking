@@ -15,14 +15,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
-    // Always call super.canActivate to extract user from JWT if present
-    // This allows public routes to optionally access authenticated user context
-    const result = super.canActivate(context);
-
+    // If route is public, bypass JWT authentication entirely
     if (isPublic) {
       return true;
     }
 
-    return result;
+    // For protected routes, validate JWT
+    return super.canActivate(context);
   }
 }

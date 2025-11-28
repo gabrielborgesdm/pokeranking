@@ -1,6 +1,5 @@
 import {
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -9,7 +8,6 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { UserRole } from '../../common/enums/user-role.enum';
 
 export class RegisterDto {
   @ApiProperty({ example: 'john@example.com' })
@@ -35,9 +33,4 @@ export class RegisterDto {
   @IsOptional()
   @IsUrl()
   profilePic?: string;
-
-  @ApiPropertyOptional({ enum: UserRole, example: UserRole.Member })
-  @IsEnum(UserRole)
-  @IsOptional()
-  role?: UserRole;
 }

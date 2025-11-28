@@ -45,26 +45,39 @@ export class AuthService {
     };
   }
 
-  async register(registerDto: RegisterDto, currentUser?: any) {
+  async register(registerDto: RegisterDto) {
     // Count total users in database
     const userCount = await this.usersService.count();
 
-    let role = UserRole.Member; // Default role
-
-    // Determine final role based on business rules
-    if (userCount === 0) {
-      // First user becomes admin automatically
-      role = UserRole.Admin;
-    } else if (currentUser && currentUser.role === UserRole.Admin) {
-      // Authenticated admin can create users with requested role
-      role = registerDto.role || UserRole.Member;
-    }
-    // Otherwise, role remains Member (ignore requested role)
+    // First user becomes admin, all others become members
+    const role = userCount === 0 ? UserRole.Admin : UserRole.Member;
 
     // Create user with determined role
     const user = await this.usersService.create({
       ...registerDto,
       role,
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user.toObject();
+
+    // Return access token for the new user
+    return {
+      user: userWithoutPassword,
+      access_token: this.jwtService.sign({
+        sub: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      }),
+    };
+  }
+
+  async registerAdmin(registerDto: RegisterDto) {
+    // Always create admin users via this endpoint
+    const user = await this.usersService.create({
+      ...registerDto,
+      role: UserRole.Admin,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
