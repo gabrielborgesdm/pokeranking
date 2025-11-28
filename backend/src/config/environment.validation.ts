@@ -37,6 +37,10 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   JWT_EXPIRATION?: string;
+
+  @IsString()
+  @IsOptional()
+  ALLOWED_IMAGE_DOMAINS?: string;
 }
 
 export function validate(config: Record<string, unknown>) {
@@ -50,5 +54,11 @@ export function validate(config: Record<string, unknown>) {
   if (errors.length > 0) {
     throw new Error(errors.toString());
   }
+
+  // Set default for ALLOWED_IMAGE_DOMAINS
+  if (!validatedConfig.ALLOWED_IMAGE_DOMAINS) {
+    validatedConfig.ALLOWED_IMAGE_DOMAINS = 'res.cloudinary.com';
+  }
+
   return validatedConfig;
 }

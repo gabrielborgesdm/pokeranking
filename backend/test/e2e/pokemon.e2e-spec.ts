@@ -88,6 +88,173 @@ describe('Pokemon (e2e)', () => {
     });
   });
 
+  describe('POST /pokemon - Image Validation', () => {
+    beforeEach(async () => {
+      await clearDatabase(app);
+      await seedUsers(app, [ADMIN_USER]);
+    });
+
+    it('should accept public image with valid filename', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: 'test.png',
+        })
+        .expect(201);
+
+      expect(response.body.image).toBe('test.png');
+    });
+
+    it('should accept public image with different extensions', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+      for (const ext of extensions) {
+        const response = await request(app.getHttpServer())
+          .post('/pokemon')
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            name: `Test ${ext}`,
+            image: `test.${ext}`,
+          })
+          .expect(201);
+
+        expect(response.body.image).toBe(`test.${ext}`);
+      }
+    });
+
+    it('should reject public image with path traversal', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: '../../../etc/passwd.png',
+        })
+        .expect(400);
+    });
+
+    it('should reject public image with invalid extension', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: 'test.exe',
+        })
+        .expect(400);
+    });
+
+    it('should reject public image with forward slash', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: 'folder/image.png',
+        })
+        .expect(400);
+    });
+
+    it('should accept hosted image from whitelisted domain (HTTPS)', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: 'https://res.cloudinary.com/pokemon/test.png',
+        })
+        .expect(201);
+
+      expect(response.body.image).toContain('res.cloudinary.com');
+    });
+
+    it('should accept hosted image from whitelisted domain (HTTP)', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: 'http://res.cloudinary.com/pokemon/test.png',
+        })
+        .expect(201);
+
+      expect(response.body.image).toContain('res.cloudinary.com');
+    });
+
+    it('should reject hosted image from non-whitelisted domain', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: 'https://evil.com/pokemon/test.png',
+        })
+        .expect(400);
+    });
+
+    it('should accept hosted image without file extension', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test Pokemon',
+          image: 'https://res.cloudinary.com/pokemon/test',
+        })
+        .expect(201);
+
+      expect(response.body.image).toBe(
+        'https://res.cloudinary.com/pokemon/test',
+      );
+    });
+  });
+
   describe('GET /pokemon', () => {
     beforeEach(async () => {
       await clearDatabase(app);
@@ -195,7 +362,7 @@ describe('Pokemon (e2e)', () => {
 
       const updateData = {
         name: 'Updated Pikachu',
-        image: 'https://example.com/updated-pikachu.png'
+        image: 'updated-pikachu.png',
       };
 
       const response = await request(app.getHttpServer())
@@ -216,7 +383,7 @@ describe('Pokemon (e2e)', () => {
 
       const updateData = {
         name: 'Updated Pikachu',
-        image: 'https://example.com/updated-pikachu.png'
+        image: 'updated-pikachu.png',
       };
 
       await request(app.getHttpServer())
@@ -224,6 +391,39 @@ describe('Pokemon (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .send(updateData)
         .expect(403);
+    });
+
+    it('should update pokemon image with different format', async () => {
+      const token = await loginUser(app, {
+        username: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      // Update to hosted image format
+      const updateToHosted = {
+        image: 'https://res.cloudinary.com/pokemon/pikachu-new.png',
+      };
+
+      const response1 = await request(app.getHttpServer())
+        .patch(`/pokemon/${pokemonId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(updateToHosted)
+        .expect(200);
+
+      expect(response1.body.image).toBe(updateToHosted.image);
+
+      // Update back to public image format
+      const updateToPublic = {
+        image: 'pikachu-final.webp',
+      };
+
+      const response2 = await request(app.getHttpServer())
+        .patch(`/pokemon/${pokemonId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(updateToPublic)
+        .expect(200);
+
+      expect(response2.body.image).toBe(updateToPublic.image);
     });
 
     it('should return 404 when pokemon not found', async () => {
@@ -235,7 +435,7 @@ describe('Pokemon (e2e)', () => {
       const fakeId = '507f1f77bcf86cd799439011';
       const updateData = {
         name: 'Updated Pokemon',
-        image: 'https://example.com/updated-pokemon.png'
+        image: 'updated-pokemon.png',
       };
 
       await request(app.getHttpServer())
@@ -248,7 +448,7 @@ describe('Pokemon (e2e)', () => {
     it('should return 401 when not authenticated', async () => {
       const updateData = {
         name: 'Updated Pikachu',
-        image: 'https://example.com/updated-pikachu.png'
+        image: 'updated-pikachu.png',
       };
 
       await request(app.getHttpServer())

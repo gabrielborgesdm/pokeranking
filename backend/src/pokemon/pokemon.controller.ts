@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -29,7 +30,7 @@ import { toDto } from '../common/utils/transform.util';
 @ApiBearerAuth('JWT-auth')
 @Controller('pokemon')
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) {}
+  constructor(private readonly pokemonService: PokemonService) { }
 
   @Post()
   @Roles(UserRole.Admin)
@@ -102,6 +103,7 @@ export class PokemonController {
     @Param('id') id: string,
     @Body() updatePokemonDto: UpdatePokemonDto,
   ) {
+    Logger.log('Controller - Updating pokemon:', updatePokemonDto);
     const pokemon = await this.pokemonService.update(id, updatePokemonDto);
     return toDto(PokemonResponseDto, pokemon);
   }

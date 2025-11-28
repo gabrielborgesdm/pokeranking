@@ -9,12 +9,13 @@ import * as bcrypt from 'bcrypt';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { stripUndefined } from 'src/common/utils/transform.util';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
-  ) {}
+  ) { }
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
@@ -121,8 +122,8 @@ export class UsersService {
     if (updateUserDto.password) {
       updateUserDto.password = await this.hashPassword(updateUserDto.password);
     }
-
-    Object.assign(user, updateUserDto);
+    // Apply updates, ignoring undefined fields
+    Object.assign(user, stripUndefined(updateUserDto));
     return await user.save();
   }
 
