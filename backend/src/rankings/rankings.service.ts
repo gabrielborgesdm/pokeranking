@@ -75,7 +75,7 @@ export class RankingsService {
 
     // Validate zone intervals with new data
     if (newZones && newZones.length > 0) {
-      this.validateZoneIntervals(newZones as Zone[], newPokemon.length);
+      this.validateZoneIntervals(newZones, newPokemon.length);
     }
 
     // Apply updates
