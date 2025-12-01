@@ -39,7 +39,7 @@ export class AuthService {
 
   login(user: AuthenticatedUser): LoginResponseDto {
     const payload: JwtPayload = {
-      sub: user.userId,
+      sub: user._id,
       username: user.username,
       email: user.email,
       role: user.role,

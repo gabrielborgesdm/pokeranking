@@ -1,5 +1,6 @@
-import { IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsImageString } from '../../common/validators';
 
 export class UpdatePokemonDto {
   @ApiPropertyOptional({ example: 'Pikachu' })
@@ -7,9 +8,13 @@ export class UpdatePokemonDto {
   @IsOptional()
   name?: string;
 
-  @ApiPropertyOptional({ example: 'https://example.com/pokemon/pikachu.png' })
+  @ApiPropertyOptional({
+    example: 'pikachu.png',
+    description:
+      'Pokemon image - either a filename (e.g., "pikachu.png") or a URL from whitelisted domains',
+  })
   @IsString()
   @IsOptional()
-  @IsUrl()
+  @IsImageString()
   image?: string;
 }

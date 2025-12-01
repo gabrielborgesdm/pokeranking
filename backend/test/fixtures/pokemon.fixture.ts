@@ -4,27 +4,27 @@ export interface PokemonFixtureData {
 }
 
 /**
- * Sample Pikachu pokemon for testing
+ * Sample Pikachu pokemon for testing (public image format)
  */
 export const PIKACHU: PokemonFixtureData = {
   name: 'Pikachu',
-  image: 'https://example.com/pikachu.png',
+  image: 'pikachu.png',
 };
 
 /**
- * Sample Charizard pokemon for testing
+ * Sample Charizard pokemon for testing (hosted image format)
  */
 export const CHARIZARD: PokemonFixtureData = {
   name: 'Charizard',
-  image: 'https://example.com/charizard.png',
+  image: 'https://res.cloudinary.com/pokemon/charizard.png',
 };
 
 /**
- * Sample Bulbasaur pokemon for testing
+ * Sample Bulbasaur pokemon for testing (public image format)
  */
 export const BULBASAUR: PokemonFixtureData = {
   name: 'Bulbasaur',
-  image: 'https://example.com/bulbasaur.png',
+  image: 'bulbasaur.webp',
 };
 
 /**
@@ -41,6 +41,6 @@ export function createPokemonData(
 ): PokemonFixtureData {
   return {
     name: overrides.name || 'Test Pokemon',
-    image: overrides.image || 'https://example.com/test-pokemon.png',
+    image: overrides.image || 'test-pokemon.png',
   };
 }

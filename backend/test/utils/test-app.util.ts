@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from '../../src/auth/auth.module';
 import { UsersModule } from '../../src/users/users.module';
 import { PokemonModule } from '../../src/pokemon/pokemon.module';
+import { RankingsModule } from '../../src/rankings/rankings.module';
 import { JwtAuthGuard } from '../../src/common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../src/common/guards/roles.guard';
 
@@ -30,6 +31,7 @@ export async function createTestApp(): Promise<INestApplication> {
       AuthModule,
       UsersModule,
       PokemonModule,
+      RankingsModule,
     ],
     providers: [
       // Global authentication guard (same as production)
@@ -53,6 +55,9 @@ export async function createTestApp(): Promise<INestApplication> {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        exposeUnsetFields: false, // Do not expose fields that are not set, i.e., undefined;
+      },
     }),
   );
 

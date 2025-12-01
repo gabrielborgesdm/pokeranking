@@ -14,6 +14,7 @@ export async function startTestDatabase(): Promise<string> {
   mongoServer = await MongoMemoryServer.create({
     instance: {
       dbName: 'pokeranking-test',
+      port: 27018,
     },
   });
 
