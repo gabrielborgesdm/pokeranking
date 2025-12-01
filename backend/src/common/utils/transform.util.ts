@@ -7,6 +7,8 @@ import { Types } from 'mongoose';
  * @param plain The plain object or array of objects to transform
  * @returns Transformed DTO instance or array of instances
  */
+export function toDto<T>(cls: ClassConstructor<T>, plain: unknown[]): T[];
+export function toDto<T>(cls: ClassConstructor<T>, plain: unknown): T;
 export function toDto<T>(cls: ClassConstructor<T>, plain: unknown): T | T[] {
   return plainToInstance(cls, plain, { excludeExtraneousValues: true });
 }
