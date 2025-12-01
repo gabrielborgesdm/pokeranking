@@ -11,5 +11,9 @@ export default async function globalSetup() {
   process.env.JWT_EXPIRATION = '1h';
   process.env.NODE_ENV = 'test';
 
+  // Set mock Upstash credentials for in-memory Redis
+  process.env.UPSTASH_REDIS_URL = 'http://localhost:6379';
+  process.env.UPSTASH_REDIS_TOKEN = 'test-token';
+
   console.log('Test database started successfully\n');
 }

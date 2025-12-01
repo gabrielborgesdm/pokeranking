@@ -104,6 +104,37 @@ export class UsersService {
       .exec();
   }
 
+  async findByVerificationToken(token: string): Promise<User | null> {
+    return await this.userModel
+      .findOne({
+        emailVerificationToken: token,
+        emailVerificationExpires: { $gt: new Date() },
+      })
+      .exec();
+  }
+
+  async findByEmailAndVerificationCode(
+    email: string,
+    code: string,
+  ): Promise<User | null> {
+    return await this.userModel
+      .findOne({
+        email: email.toLowerCase(),
+        emailVerificationCode: code,
+        emailVerificationExpires: { $gt: new Date() },
+      })
+      .exec();
+  }
+
+  async findByPasswordResetToken(token: string): Promise<User | null> {
+    return await this.userModel
+      .findOne({
+        passwordResetToken: token,
+        passwordResetExpires: { $gt: new Date() },
+      })
+      .exec();
+  }
+
   async count(): Promise<number> {
     return await this.userModel.countDocuments().exec();
   }
