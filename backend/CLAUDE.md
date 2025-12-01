@@ -144,6 +144,16 @@ Use `AuthenticatedRequest` interface from `src/common/interfaces/authenticated-r
 
 Pre-commit hook runs `npm test` (e2e tests) before allowing commits. Configured in `.husky/pre-commit`.
 
+## Code Quality Workflow
+
+**IMPORTANT: Before running tests, ALWAYS run type check and lint check first:**
+
+1. **Type Check** - Run `npm run build` to ensure TypeScript compilation succeeds
+2. **Lint Check** - Run `npm run lint` to check for and auto-fix linting issues
+3. **Tests** - Only after type and lint checks pass, run tests
+
+This workflow prevents type errors and linting issues from appearing in test runs and ensures code quality before committing.
+
 # Using Gemini CLI for Large Codebase Analysis
 
 When analyzing large codebases or multiple files that might exceed context limits, use the Gemini CLI with its massive

@@ -7,6 +7,7 @@ import { AuthModule } from '../../src/auth/auth.module';
 import { UsersModule } from '../../src/users/users.module';
 import { PokemonModule } from '../../src/pokemon/pokemon.module';
 import { RankingsModule } from '../../src/rankings/rankings.module';
+import { BoxesModule } from '../../src/boxes/boxes.module';
 import { JwtAuthGuard } from '../../src/common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../src/common/guards/roles.guard';
 
@@ -32,6 +33,7 @@ export async function createTestApp(): Promise<INestApplication> {
       UsersModule,
       PokemonModule,
       RankingsModule,
+      BoxesModule,
     ],
     providers: [
       // Global authentication guard (same as production)

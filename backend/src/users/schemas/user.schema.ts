@@ -44,6 +44,12 @@ export class User extends Document {
   rankings: Types.ObjectId[];
 
   @Prop({
+    type: [{ type: Types.ObjectId, ref: 'Box' }],
+    default: [],
+  })
+  boxes: Types.ObjectId[];
+
+  @Prop({
     type: String,
     enum: UserRole,
     default: UserRole.Member,
