@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { stripUndefined } from 'src/common/utils/transform.util';
 
 @Injectable()
 export class UsersService {
@@ -32,7 +33,7 @@ export class UsersService {
     email: string,
     excludeId?: string,
   ): Promise<void> {
-    const query: any = { email };
+    const query: { email: string; _id?: { $ne: string } } = { email };
     if (excludeId) {
       query._id = { $ne: excludeId };
     }
@@ -47,7 +48,7 @@ export class UsersService {
     username: string,
     excludeId?: string,
   ): Promise<void> {
-    const query: any = { username };
+    const query: { username: string; _id?: { $ne: string } } = { username };
     if (excludeId) {
       query._id = { $ne: excludeId };
     }
@@ -75,11 +76,17 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userModel.find().populate('pokemon').exec();
+    return await this.userModel.find().exec();
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userModel.findById(id).populate('pokemon').exec();
+    const user = await this.userModel
+      .findById(id)
+      .populate({
+        path: 'rankings',
+        populate: { path: 'pokemon' },
+      })
+      .exec();
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
@@ -121,8 +128,8 @@ export class UsersService {
     if (updateUserDto.password) {
       updateUserDto.password = await this.hashPassword(updateUserDto.password);
     }
-
-    Object.assign(user, updateUserDto);
+    // Apply updates, ignoring undefined fields
+    Object.assign(user, stripUndefined(updateUserDto));
     return await user.save();
   }
 

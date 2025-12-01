@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -102,6 +103,7 @@ export class PokemonController {
     @Param('id') id: string,
     @Body() updatePokemonDto: UpdatePokemonDto,
   ) {
+    Logger.log('Controller - Updating pokemon:', updatePokemonDto);
     const pokemon = await this.pokemonService.update(id, updatePokemonDto);
     return toDto(PokemonResponseDto, pokemon);
   }

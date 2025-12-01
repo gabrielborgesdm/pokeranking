@@ -17,7 +17,7 @@ export async function loginUser(
     .send(credentials)
     .expect(200);
 
-  return response.body.access_token;
+  return response.body.access_token as string;
 }
 
 /**
@@ -45,8 +45,8 @@ export async function registerUser(
     .expect(201);
 
   return {
-    token: response.body.access_token,
-    userId: response.body.user.id,
+    token: response.body.access_token as string,
+    userId: response.body.user.id as string,
   };
 }
 
