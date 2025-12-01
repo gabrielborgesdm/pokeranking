@@ -57,9 +57,21 @@ export class User extends Document {
   role: UserRole;
 
   @Prop({
-    default: true,
+    default: false,
   })
   isActive: boolean;
+
+  @Prop()
+  emailVerificationCode?: string;
+
+  @Prop()
+  emailVerificationExpires?: Date;
+
+  @Prop()
+  passwordResetToken?: string;
+
+  @Prop()
+  passwordResetExpires?: Date;
 
   createdAt: Date;
   updatedAt: Date;

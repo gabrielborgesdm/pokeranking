@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { RankingsModule } from './rankings/rankings.module';
 import { BoxesModule } from './boxes/boxes.module';
+import { CommonModule } from './common/common.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { validate } from './config/environment.validation';
@@ -26,6 +27,8 @@ import { getDatabaseConfig } from './config/database.config';
       useFactory: getDatabaseConfig,
       inject: [ConfigService],
     }),
+    // Common module (global)
+    CommonModule,
     // Feature modules
     AuthModule,
     UsersModule,
