@@ -6,6 +6,7 @@ import {
   validateSync,
   IsOptional,
 } from 'class-validator';
+import type { StringValue } from 'ms';
 
 enum Environment {
   Development = 'development',
@@ -36,7 +37,7 @@ class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  JWT_EXPIRATION?: string;
+  JWT_EXPIRATION?: StringValue;
 
   @IsString()
   @IsOptional()

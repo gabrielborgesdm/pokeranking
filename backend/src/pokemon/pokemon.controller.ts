@@ -30,7 +30,7 @@ import { toDto } from '../common/utils/transform.util';
 @ApiBearerAuth('JWT-auth')
 @Controller('pokemon')
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) { }
+  constructor(private readonly pokemonService: PokemonService) {}
 
   @Post()
   @Roles(UserRole.Admin)

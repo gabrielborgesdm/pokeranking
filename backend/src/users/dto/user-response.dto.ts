@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Exclude, Expose, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { UserRole } from '../../common/enums/user-role.enum';
+import { RankingResponseDto } from '../../rankings/dto/ranking-response.dto';
 
 @Exclude()
 export class UserResponseDto {
@@ -25,12 +26,9 @@ export class UserResponseDto {
   profilePic?: string;
 
   @Expose()
-  @Transform(({ obj }) => {
-    const typedObj = obj as { pokemon?: Array<{ toString: () => string }> };
-    return typedObj.pokemon?.map((p) => p?.toString()) || [];
-  })
-  @ApiProperty({ type: [String], example: ['507f1f77bcf86cd799439011'] })
-  pokemon: string[];
+  @Type(() => RankingResponseDto)
+  @ApiProperty({ type: [RankingResponseDto] })
+  rankings: RankingResponseDto[];
 
   @Expose()
   @ApiProperty({ enum: UserRole, example: UserRole.Member })
