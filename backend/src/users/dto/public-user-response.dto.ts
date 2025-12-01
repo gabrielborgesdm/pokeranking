@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { transformObjectIdArray } from '../../common/utils/transform.util';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { RankingResponseDto } from '../../rankings/dto/ranking-response.dto';
 
 @Exclude()
 export class PublicUserResponseDto {
@@ -13,7 +13,7 @@ export class PublicUserResponseDto {
   profilePic?: string;
 
   @Expose()
-  @Transform(transformObjectIdArray)
-  @ApiProperty({ type: [String], example: ['507f1f77bcf86cd799439011'] })
-  pokemon: string[];
+  @Type(() => RankingResponseDto)
+  @ApiProperty({ type: [RankingResponseDto] })
+  rankings: RankingResponseDto[];
 }

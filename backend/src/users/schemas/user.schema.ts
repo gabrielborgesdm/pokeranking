@@ -38,10 +38,10 @@ export class User extends Document {
   profilePic?: string;
 
   @Prop({
-    type: [{ type: Types.ObjectId, ref: 'Pokemon' }],
+    type: [{ type: Types.ObjectId, ref: 'Ranking' }],
     default: [],
   })
-  pokemon: Types.ObjectId[];
+  rankings: Types.ObjectId[];
 
   @Prop({
     type: String,

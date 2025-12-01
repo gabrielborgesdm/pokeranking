@@ -65,7 +65,7 @@ export class UsersController {
 
     // Admin or viewing self - return full UserResponseDto with email
     const isAdmin = req.user.role === UserRole.Admin;
-    const isSelf = req.user.userId === id;
+    const isSelf = req.user._id === id;
 
     if (isAdmin || isSelf) {
       return toDto(UserResponseDto, user);
@@ -100,7 +100,7 @@ export class UsersController {
     @Request() req: AuthenticatedRequest,
   ) {
     // Only allow admins or the user themselves to update
-    if (req.user.role !== UserRole.Admin && req.user.userId !== id) {
+    if (req.user.role !== UserRole.Admin && req.user._id !== id) {
       throw new ForbiddenException('You can only update your own profile');
     }
 

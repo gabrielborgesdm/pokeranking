@@ -5,7 +5,7 @@ import {
 } from 'class-validator';
 
 const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
-const INVALID_CHARS = /[\/\\<>:"|?*]/; // Path traversal and special chars
+const INVALID_CHARS = /[/\\<>:"|?*]/; // Path traversal and special chars
 const PATH_TRAVERSAL = /\.\./;
 
 function isValidFilename(value: string): boolean {
@@ -41,7 +41,7 @@ function isValidWhitelistedUrl(value: string): boolean {
       (domain) =>
         url.hostname === domain || url.hostname.endsWith(`.${domain}`),
     );
-  } catch (e) {
+  } catch {
     return false; // Invalid URL format
   }
 }
@@ -54,7 +54,7 @@ export function IsImageString(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           if (typeof value !== 'string') {
             return false;
           }

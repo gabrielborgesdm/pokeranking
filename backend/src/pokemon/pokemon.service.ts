@@ -15,7 +15,7 @@ import { stripUndefined } from 'src/common/utils/transform.util';
 export class PokemonService {
   constructor(
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
-  ) { }
+  ) {}
 
   async create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
     const existing = await this.pokemonModel
