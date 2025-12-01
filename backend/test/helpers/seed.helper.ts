@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { UserFixtureData } from '../fixtures/user.fixture';
 import { PokemonFixtureData } from '../fixtures/pokemon.fixture';
 import { RankingFixtureData } from '../fixtures/ranking.fixture';
+import { BoxFixtureData } from '../fixtures/box.fixture';
 
 /**
  * Gets the mongoose connection from the NestJS app
@@ -110,6 +111,57 @@ export async function seedRankings(
   }
 
   return seededRankings;
+}
+
+/**
+ * Seeds boxes into the test database
+ * @param app - NestJS application instance
+ * @param boxes - Array of box fixture data
+ * @param userId - User ID to associate boxes with
+ * @returns Array of created box documents
+ */
+export async function seedBoxes(
+  app: INestApplication,
+  boxes: BoxFixtureData[],
+  userId: string,
+): Promise<any[]> {
+  const connection = getConnection(app);
+  const boxesCollection = connection.collection('boxes');
+  const usersCollection = connection.collection('users');
+
+  // Get user's username for denormalization
+  const user = await usersCollection.findOne({
+    _id: new Types.ObjectId(userId),
+  });
+  const defaultOwnerUsername = user?.username;
+
+  const boxesWithTimestamps = boxes.map((b, index) => {
+    // Add small delay to ensure different timestamps for sorting tests
+    const timestamp = new Date(Date.now() + index);
+    return {
+      ...b,
+      user: new Types.ObjectId(userId),
+      ownerUsername: b.ownerUsername || defaultOwnerUsername,
+      pokemon: b.pokemon || [],
+      favoriteCount: 0,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+  });
+
+  const result = await boxesCollection.insertMany(boxesWithTimestamps);
+  const seededBoxes = Object.values(result.insertedIds).map((id, index) => ({
+    _id: id,
+    ...boxesWithTimestamps[index],
+  }));
+
+  // Add box IDs to user's boxes array
+  await usersCollection.updateOne(
+    { _id: new Types.ObjectId(userId) },
+    { $push: { boxes: { $each: seededBoxes.map((b) => b._id) } } },
+  );
+
+  return seededBoxes;
 }
 
 /**

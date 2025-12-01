@@ -26,6 +26,7 @@ async function bootstrap() {
     .addTag('auth', 'Authentication endpoints')
     .addTag('users', 'User management endpoints')
     .addTag('pokemon', 'Pokemon management endpoints')
+    .addTag('boxes', 'Box management and community favoriting')
     .addBearerAuth(
       {
         type: 'http',
