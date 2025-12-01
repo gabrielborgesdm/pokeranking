@@ -5,6 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
+import { EmailModule } from '../email/email.module';
+import { CommonModule } from '../common/common.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import type { StringValue } from 'ms';
@@ -12,6 +14,8 @@ import type { StringValue } from 'ms';
 @Module({
   imports: [
     UsersModule,
+    EmailModule,
+    CommonModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

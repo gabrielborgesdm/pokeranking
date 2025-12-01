@@ -8,6 +8,7 @@ import { UsersModule } from '../../src/users/users.module';
 import { PokemonModule } from '../../src/pokemon/pokemon.module';
 import { RankingsModule } from '../../src/rankings/rankings.module';
 import { BoxesModule } from '../../src/boxes/boxes.module';
+import { CommonModule } from '../../src/common/common.module';
 import { JwtAuthGuard } from '../../src/common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../src/common/guards/roles.guard';
 
@@ -28,6 +29,8 @@ export async function createTestApp(): Promise<INestApplication> {
         retryAttempts: 3,
         retryDelay: 500,
       }),
+      // Common module (global)
+      CommonModule,
       // Feature modules
       AuthModule,
       UsersModule,
