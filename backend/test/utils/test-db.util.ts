@@ -28,9 +28,60 @@ export async function startTestDatabase(): Promise<string> {
  */
 export async function stopTestDatabase(): Promise<void> {
   if (mongoServer) {
-    await mongoose.disconnect();
-    await mongoServer.stop();
+    // Suppress ECONNRESET errors during teardown (common on Windows)
+    // The MongoDB driver logs these errors when the server stops while connections are closing
+    const originalStdoutWrite = process.stdout.write.bind(process.stdout);
+    const originalStderrWrite = process.stderr.write.bind(process.stderr);
+
+    const filterOutput = (
+      chunk: string | Uint8Array,
+      encoding?: BufferEncoding | ((err?: Error) => void),
+      callback?: (err?: Error) => void,
+    ): boolean => {
+      const text = chunk.toString();
+      if (
+        text.includes('ECONNRESET') ||
+        text.includes('MongoNetworkError') ||
+        text.includes('read ECONNRESET')
+      ) {
+        if (typeof callback === 'function') callback();
+        return true;
+      }
+      if (typeof encoding === 'function') {
+        return originalStderrWrite(chunk, encoding);
+      }
+      return originalStderrWrite(chunk, encoding, callback);
+    };
+
+    process.stderr.write = filterOutput as typeof process.stderr.write;
+
+    // Close all mongoose connections first
+    const connections = mongoose.connections;
+    for (const connection of connections) {
+      if (connection.readyState !== 0) {
+        try {
+          await connection.close();
+        } catch {
+          // Ignore errors during cleanup
+        }
+      }
+    }
+
+    // Disconnect mongoose default connection
+    try {
+      await mongoose.disconnect();
+    } catch {
+      // Ignore errors during cleanup
+    }
+
+    // Stop the server with force option to avoid hanging
+    await mongoServer.stop({ doCleanup: true, force: true });
     mongoServer = null;
+
+    // Restore stderr after a brief delay to catch any async errors
+    setTimeout(() => {
+      process.stderr.write = originalStderrWrite;
+    }, 500);
   }
 }
 
