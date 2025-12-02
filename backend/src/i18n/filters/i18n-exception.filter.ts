@@ -109,7 +109,7 @@ export class I18nExceptionFilter implements ExceptionFilter {
     args?: Record<string, string | number>,
   ): string {
     try {
-      const translated = i18n.t(key, { args });
+      const translated = i18n.t(key, { args }) as string;
       // If translation returns the key itself, it means translation wasn't found
       return translated !== key ? translated : key;
     } catch {
