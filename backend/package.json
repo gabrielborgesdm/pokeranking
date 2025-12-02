@@ -5,6 +5,10 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.0.0"
+  },
   "scripts": {
     "export:openapi": "ts-node -r tsconfig-paths/register scripts/export-openapi.ts",
     "build": "nest build",
