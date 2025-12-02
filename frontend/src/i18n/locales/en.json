@@ -1,1 +1,33 @@
-{}
+{
+  "nav": {
+    "leaderboard": "Leaderboard",
+    "about": "About",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "settings": "Settings",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "openMenu": "Open menu",
+    "userMenu": "User menu",
+    "toggleTheme": "Toggle theme"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "description": "Top ranked Pokemon trainers",
+    "noUsers": "No users found.",
+    "errorTitle": "Error loading users",
+    "errorDescription": "Please try again later.",
+    "searchPlaceholder": "Search by username...",
+    "sortBy": "Sort by",
+    "sortByScore": "Total Score",
+    "sortByUsername": "Username",
+    "sortByDate": "Joined Date",
+    "orderAsc": "Ascending",
+    "orderDesc": "Descending"
+  },
+  "pagination": {
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {{current}} of {{total}}"
+  }
+}

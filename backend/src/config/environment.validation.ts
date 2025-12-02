@@ -80,6 +80,10 @@ class EnvironmentVariables {
   @IsNumber()
   @IsOptional()
   RATE_LIMIT_WINDOW_SECONDS?: number;
+
+  @IsString()
+  @IsOptional()
+  CORS_ORIGIN?: string;
 }
 
 export function validate(config: Record<string, unknown>) {

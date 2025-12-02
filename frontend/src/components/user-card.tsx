@@ -57,7 +57,7 @@ export const UserCard = memo(function UserCard({
       {/* Avatar */}
       <div className="absolute top-4 right-4">
         <Avatar className="h-16 w-16 border-2 border-white/30 shadow-md">
-          <AvatarImage src={avatarUrl} alt={username} />
+          <AvatarImage src={`/pokemon/${avatarUrl}`} alt={username} />
         </Avatar>
       </div>
 
