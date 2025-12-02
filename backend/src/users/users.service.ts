@@ -10,7 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserQueryDto } from './dto/user-query.dto';
+import { RANKED_POKEMON_COUNT, UserQueryDto } from './dto/user-query.dto';
 import { stripUndefined } from 'src/common/utils/transform.util';
 import { SessionOptions } from 'src/common/utils/transaction.util';
 import { CacheService } from 'src/common/services/cache.service';
@@ -122,7 +122,7 @@ export class UsersService {
     const {
       page = 1,
       limit = 20,
-      sortBy = 'highestCountOfRankedPokemon',
+      sortBy = 'rankedPokemonCount',
       order = 'desc',
       username,
     } = query;
@@ -131,7 +131,7 @@ export class UsersService {
     const isDefaultQuery =
       page === 1 &&
       limit === 20 &&
-      sortBy === 'highestCountOfRankedPokemon' &&
+      sortBy === RANKED_POKEMON_COUNT &&
       order === 'desc' &&
       !username;
 
@@ -316,25 +316,25 @@ export class UsersService {
   }
 
   /**
-   * Updates the highestCountOfRankedPokemon for a user based on their rankings.
+   * Updates the rankedPokemonCount for a user based on their rankings.
    * Only updates if the value has changed.
    * @param user - The user with populated rankings
    */
-  async updateHighestRankedPokemonCount(
+  async updateRankedPokemonCount(
     user: UserWithPopulatedRankings,
   ): Promise<void> {
-    const highestCount =
-      user.rankings.length > 0
-        ? Math.max(...user.rankings.map((r) => r.pokemon.length))
-        : 0;
+    const totalCount = user.rankings.reduce(
+      (sum, r) => sum + r.pokemon.length,
+      0,
+    );
 
     // Only update if the value has changed
-    if (user.highestCountOfRankedPokemon === highestCount) {
+    if (user.rankedPokemonCount === totalCount) {
       return;
     }
 
     await this.userModel.findByIdAndUpdate(user._id, {
-      highestCountOfRankedPokemon: highestCount,
+      rankedPokemonCount: totalCount,
     });
 
     await this.invalidateUsersListCache();

@@ -18,6 +18,6 @@ export class PublicUserResponseDto {
   rankings: RankingResponseDto[];
 
   @Expose()
-  @ApiProperty({ example: 42, description: 'Highest count of ranked pokemon' })
-  highestCountOfRankedPokemon: number;
+  @ApiProperty({ example: 42, description: 'Total count of ranked pokemon' })
+  rankedPokemonCount: number;
 }
