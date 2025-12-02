@@ -58,7 +58,10 @@ export class InMemoryRedis {
     const item = this.store.get(key);
     const currentValue = item ? parseInt(item.value, 10) : 0;
     const newValue = currentValue + 1;
-    this.store.set(key, { value: String(newValue), expiresAt: item?.expiresAt });
+    this.store.set(key, {
+      value: String(newValue),
+      expiresAt: item?.expiresAt,
+    });
     return newValue;
   }
 
