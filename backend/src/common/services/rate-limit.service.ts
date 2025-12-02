@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
+import { CacheService } from './cache.service';
 
 @Injectable()
 export class RateLimitService {
   private verifyEmailRateLimit: Ratelimit;
   private resendVerificationRateLimit: Ratelimit;
 
-  constructor(private configService: ConfigService) {
-    const redis = new Redis({
-      url: this.configService.getOrThrow<string>('UPSTASH_REDIS_URL'),
-      token: this.configService.getOrThrow<string>('UPSTASH_REDIS_TOKEN'),
-    });
+  constructor(
+    private configService: ConfigService,
+    private cacheService: CacheService,
+  ) {
+    const redis = this.cacheService.getRedisClient();
 
     const verifyLimit = this.configService.get<number>(
       'RATE_LIMIT_VERIFY_EMAIL',

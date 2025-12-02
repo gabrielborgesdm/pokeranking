@@ -3,6 +3,7 @@ import { getConnectionToken } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import { getInMemoryRedis } from '../mocks/in-memory-redis';
 
 let mongoServer: MongoMemoryReplSet | null = null;
 
@@ -86,7 +87,7 @@ export async function stopTestDatabase(): Promise<void> {
 }
 
 /**
- * Clears all collections in the test database
+ * Clears all collections in the test database and the in-memory Redis cache
  * Call this before each test to ensure isolation
  * @param app - NestJS application instance
  */
@@ -101,6 +102,9 @@ export async function clearDatabase(app: INestApplication): Promise<void> {
   for (const key in collections) {
     await collections[key].deleteMany({});
   }
+
+  // Clear in-memory Redis cache to ensure test isolation
+  getInMemoryRedis().clearAll();
 }
 
 /**
