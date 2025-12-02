@@ -13,7 +13,6 @@ import { UpdateBoxDto } from './dto/update-box.dto';
 import { CommunityBoxQueryDto } from './dto/community-box-query.dto';
 import { BoxResponseDto } from './dto/box-response.dto';
 import { stripUndefined } from '../common/utils/transform.util';
-import { mapToPokemonResponseDto } from '../common/utils/pokemon.util';
 import { PokemonService } from '../pokemon/pokemon.service';
 import { withTransaction } from '../common/utils/transaction.util';
 
@@ -305,7 +304,7 @@ export class BoxesService {
       _id: 'default',
       name: 'All Pokemon',
       isPublic: false,
-      pokemon: mapToPokemonResponseDto(allPokemon),
+      pokemon: allPokemon,
       favoriteCount: 0,
       createdAt: new Date(),
       updatedAt: new Date(),

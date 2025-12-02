@@ -59,8 +59,7 @@ export class PokemonController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll() {
-    const pokemon = await this.pokemonService.findAll();
-    return toDto(PokemonResponseDto, pokemon);
+    return this.pokemonService.findAll();
   }
 
   @Get(':id')
