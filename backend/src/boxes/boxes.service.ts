@@ -4,6 +4,7 @@ import {
   ForbiddenException,
   ConflictException,
 } from '@nestjs/common';
+import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Model, Types, Connection, ClientSession } from 'mongoose';
 import { Box } from './schemas/box.schema';
@@ -41,7 +42,10 @@ export class BoxesService {
         .session(session)
         .exec();
       if (!user) {
-        throw new NotFoundException(`User with ID ${userId} not found`);
+        throw new NotFoundException({
+          key: TK.USERS.NOT_FOUND,
+          args: { id: userId },
+        });
       }
 
       const box = new this.boxModel({
@@ -135,7 +139,7 @@ export class BoxesService {
       .exec();
 
     if (!box) {
-      throw new NotFoundException(`Box with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.BOXES.NOT_FOUND, args: { id } });
     }
 
     // Validate access (owner OR isPublic)
@@ -152,7 +156,7 @@ export class BoxesService {
     const box = await this.boxModel.findById(id).exec();
 
     if (!box) {
-      throw new NotFoundException(`Box with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.BOXES.NOT_FOUND, args: { id } });
     }
 
     // Check ownership
@@ -174,7 +178,7 @@ export class BoxesService {
       const box = await this.boxModel.findById(id).session(session).exec();
 
       if (!box) {
-        throw new NotFoundException(`Box with ID ${id} not found`);
+        throw new NotFoundException({ key: TK.BOXES.NOT_FOUND, args: { id } });
       }
 
       // Check ownership
@@ -202,12 +206,15 @@ export class BoxesService {
         .exec();
 
       if (!originalBox || !originalBox.isPublic) {
-        throw new NotFoundException(`Box with ID ${boxId} not found`);
+        throw new NotFoundException({
+          key: TK.BOXES.NOT_FOUND,
+          args: { id: boxId },
+        });
       }
 
       // Validate: user doesn't own it
       if (originalBox.user.toString() === userId) {
-        throw new ForbiddenException('Cannot favorite your own box');
+        throw new ForbiddenException({ key: TK.BOXES.CANNOT_FAVORITE_OWN });
       }
 
       // Get user's username for denormalization
@@ -216,7 +223,10 @@ export class BoxesService {
         .session(session)
         .exec();
       if (!user) {
-        throw new NotFoundException(`User with ID ${userId} not found`);
+        throw new NotFoundException({
+          key: TK.USERS.NOT_FOUND,
+          args: { id: userId },
+        });
       }
 
       // Generate unique name for copy
@@ -258,7 +268,7 @@ export class BoxesService {
   // Helper: Validate ownership
   private validateOwnership(box: Box, userId: string): void {
     if (box.user.toString() !== userId) {
-      throw new ForbiddenException('You can only modify your own boxes');
+      throw new ForbiddenException({ key: TK.BOXES.CANNOT_MODIFY_OTHERS });
     }
   }
 
@@ -268,7 +278,10 @@ export class BoxesService {
     const isPublic = box.isPublic;
 
     if (!isOwner && !isPublic) {
-      throw new NotFoundException(`Box with ID ${box.id} not found`);
+      throw new NotFoundException({
+        key: TK.BOXES.NOT_FOUND,
+        args: { id: String(box.id) },
+      });
     }
   }
 
@@ -292,7 +305,10 @@ export class BoxesService {
     const existing = await this.boxModel.findOne(query).session(session).exec();
 
     if (existing) {
-      throw new ConflictException(`You already have a box with name "${name}"`);
+      throw new ConflictException({
+        key: TK.BOXES.NAME_EXISTS,
+        args: { name },
+      });
     }
   }
 
@@ -352,9 +368,7 @@ export class BoxesService {
 
       // Safety check to prevent infinite loop
       if (counter > 100) {
-        throw new ConflictException(
-          'Unable to generate unique name for favorited box',
-        );
+        throw new ConflictException({ key: TK.BOXES.UNABLE_TO_GENERATE_NAME });
       }
     }
   }

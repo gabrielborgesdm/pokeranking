@@ -5,6 +5,7 @@ import {
   BadRequestException,
   Logger,
 } from '@nestjs/common';
+import { TK } from '../i18n/constants/translation-keys';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectConnection } from '@nestjs/mongoose';
@@ -56,7 +57,7 @@ export class AuthService {
 
     if (!user.isActive) {
       this.logger.warn(`Login failed: email not verified - ${username}`);
-      throw new UnauthorizedException('Please verify your email to login.');
+      throw new UnauthorizedException({ key: TK.AUTH.EMAIL_NOT_VERIFIED });
     }
 
     return user;
@@ -134,7 +135,7 @@ export class AuthService {
       );
 
       if (!user) {
-        throw new NotFoundException('Invalid verification code or email.');
+        throw new NotFoundException({ key: TK.AUTH.INVALID_VERIFICATION_CODE });
       }
 
       // Clear verification fields and activate user
@@ -205,11 +206,11 @@ export class AuthService {
       const user = await this.usersService.findByEmail(email, { session });
 
       if (!user) {
-        throw new NotFoundException('User not found.');
+        throw new NotFoundException({ key: TK.USERS.NOT_FOUND });
       }
 
       if (user.isActive) {
-        throw new BadRequestException('Email is already verified.');
+        throw new BadRequestException({ key: TK.AUTH.EMAIL_ALREADY_VERIFIED });
       }
 
       // Generate new code

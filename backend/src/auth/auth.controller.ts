@@ -35,6 +35,7 @@ import { toDto } from '../common/utils/transform.util';
 import { getClientIp } from '../common/utils/request.util';
 import { UsersService } from '../users/users.service';
 import { RateLimitService } from '../common/services/rate-limit.service';
+import { TK } from '../i18n/constants/translation-keys';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
 
 @ApiTags('auth')
@@ -145,7 +146,7 @@ export class AuthController {
     const { success } = await this.rateLimitService.checkVerifyEmailLimit(ip);
     if (!success) {
       throw new HttpException(
-        'Too many verification attempts. Please try again later.',
+        { key: TK.COMMON.TOO_MANY_VERIFICATION_ATTEMPTS },
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
@@ -193,7 +194,7 @@ export class AuthController {
     const { success } = await this.rateLimitService.checkResendLimit(ip);
     if (!success) {
       throw new HttpException(
-        'Too many resend attempts. Please try again later.',
+        { key: TK.COMMON.TOO_MANY_RESEND_ATTEMPTS },
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }

@@ -36,6 +36,7 @@
     "class-validator": "^0.14.3",
     "handlebars": "^4.7.8",
     "mongoose": "^8.20.1",
+    "nestjs-i18n": "^10.6.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

@@ -2,7 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_FILTER } from '@nestjs/core';
+import { I18nModule, AcceptLanguageResolver, QueryResolver } from 'nestjs-i18n';
+import { join } from 'path';
 import { AuthModule } from '../../src/auth/auth.module';
 import { UsersModule } from '../../src/users/users.module';
 import { PokemonModule } from '../../src/pokemon/pokemon.module';
@@ -11,6 +13,7 @@ import { BoxesModule } from '../../src/boxes/boxes.module';
 import { CommonModule } from '../../src/common/common.module';
 import { JwtAuthGuard } from '../../src/common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../src/common/guards/roles.guard';
+import { I18nExceptionFilter } from '../../src/i18n/filters/i18n-exception.filter';
 
 /**
  * Creates a NestJS test application with test database configuration
@@ -31,6 +34,15 @@ export async function createTestApp(): Promise<INestApplication> {
       }),
       // Common module (global)
       CommonModule,
+      // I18n module for tests
+      I18nModule.forRoot({
+        fallbackLanguage: 'en',
+        loaderOptions: {
+          path: join(__dirname, '../../src/i18n/'),
+          watch: false,
+        },
+        resolvers: [AcceptLanguageResolver, new QueryResolver(['lang'])],
+      }),
       // Feature modules
       AuthModule,
       UsersModule,
@@ -48,6 +60,11 @@ export async function createTestApp(): Promise<INestApplication> {
       {
         provide: APP_GUARD,
         useClass: RolesGuard,
+      },
+      // Global i18n exception filter (same as production)
+      {
+        provide: APP_FILTER,
+        useClass: I18nExceptionFilter,
       },
     ],
   }).compile();

@@ -1,0 +1,4 @@
+{
+  "notFound": "Pokemon with ID {id} not found",
+  "nameExists": "Pokemon with name \"{name}\" already exists"
+}

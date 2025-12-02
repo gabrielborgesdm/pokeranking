@@ -29,6 +29,7 @@ import { PaginatedUsersResponseDto } from './dto/paginated-users-response.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 import { toDto } from '../common/utils/transform.util';
+import { TK } from '../i18n/constants/translation-keys';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
 
 @ApiTags('users')
@@ -117,7 +118,7 @@ export class UsersController {
   ) {
     // Only allow admins or the user themselves to update
     if (req.user.role !== UserRole.Admin && req.user._id !== id) {
-      throw new ForbiddenException('You can only update your own profile');
+      throw new ForbiddenException({ key: TK.USERS.CANNOT_UPDATE_OTHERS });
     }
 
     const user = await this.usersService.update(id, updateUserDto);

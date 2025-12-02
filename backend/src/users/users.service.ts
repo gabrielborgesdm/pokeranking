@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
+import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
@@ -66,7 +67,10 @@ export class UsersService {
       .session(options?.session ?? null)
       .exec();
     if (existing) {
-      throw new ConflictException(`User with email "${email}" already exists`);
+      throw new ConflictException({
+        key: TK.USERS.EMAIL_EXISTS,
+        args: { email },
+      });
     }
   }
 
@@ -85,9 +89,10 @@ export class UsersService {
       .session(options?.session ?? null)
       .exec();
     if (existing) {
-      throw new ConflictException(
-        `User with username "${username}" already exists`,
-      );
+      throw new ConflictException({
+        key: TK.USERS.USERNAME_EXISTS,
+        args: { username },
+      });
     }
   }
 
@@ -190,7 +195,7 @@ export class UsersService {
       .session(options?.session ?? null)
       .exec();
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.USERS.NOT_FOUND, args: { id } });
     }
     return user;
   }
@@ -275,7 +280,7 @@ export class UsersService {
       .session(options?.session ?? null)
       .exec();
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.USERS.NOT_FOUND, args: { id } });
     }
 
     // Check for email uniqueness if email is being updated
@@ -303,7 +308,7 @@ export class UsersService {
       .session(options?.session ?? null)
       .exec();
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.USERS.NOT_FOUND, args: { id } });
     }
 
     await user.deleteOne({ session: options?.session });
