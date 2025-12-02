@@ -41,75 +41,122 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Pokemon Color Registration */
+  --color-pokemon-red: var(--pokemon-red);
+  --color-pokemon-red-light: var(--pokemon-red-light);
+  --color-pokemon-red-dark: var(--pokemon-red-dark);
+  --color-pokemon-yellow: var(--pokemon-yellow);
+  --color-pokemon-yellow-light: var(--pokemon-yellow-light);
+  --color-pokemon-yellow-dark: var(--pokemon-yellow-dark);
+  --color-pokemon-blue: var(--pokemon-blue);
+  --color-pokemon-blue-light: var(--pokemon-blue-light);
+  --color-pokemon-blue-dark: var(--pokemon-blue-dark);
+  --color-pokemon-navy: var(--pokemon-navy);
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+
+  /* Pokemon Brand Colors */
+  --pokemon-red: oklch(0.50 0.205 27);
+  --pokemon-red-light: oklch(0.60 0.235 27);
+  --pokemon-red-dark: oklch(0.40 0.175 27);
+  --pokemon-yellow: oklch(0.87 0.185 90);
+  --pokemon-yellow-light: oklch(0.90 0.175 93);
+  --pokemon-yellow-dark: oklch(0.80 0.175 88);
+  --pokemon-blue: oklch(0.48 0.195 265);
+  --pokemon-blue-light: oklch(0.55 0.195 265);
+  --pokemon-blue-dark: oklch(0.40 0.175 265);
+  --pokemon-navy: oklch(0.20 0.02 280);
+
+  /* Semantic Colors - Pokemon Themed */
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.12 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.12 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.12 0 0);
+  --primary: oklch(0.48 0.195 265);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.92 0.01 90);
+  --secondary-foreground: oklch(0.20 0.02 280);
+  --muted: oklch(0.95 0.01 90);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.87 0.185 90);
+  --accent-foreground: oklch(0.12 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --border: oklch(0.90 0.01 90);
+  --input: oklch(0.90 0.01 90);
+  --ring: oklch(0.48 0.195 265);
+
+  /* Chart colors using Pokemon palette */
+  --chart-1: oklch(0.50 0.205 27);
+  --chart-2: oklch(0.48 0.195 265);
+  --chart-3: oklch(0.87 0.185 90);
+  --chart-4: oklch(0.40 0.175 27);
+  --chart-5: oklch(0.40 0.175 265);
+
+  /* Sidebar with Pokemon theme */
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.12 0 0);
+  --sidebar-primary: oklch(0.48 0.195 265);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.95 0.02 90);
+  --sidebar-accent-foreground: oklch(0.12 0 0);
+  --sidebar-border: oklch(0.90 0.01 90);
+  --sidebar-ring: oklch(0.48 0.195 265);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  /* Pokemon Brand Colors - Slightly brighter for dark mode */
+  --pokemon-red: oklch(0.55 0.205 27);
+  --pokemon-red-light: oklch(0.65 0.235 27);
+  --pokemon-red-dark: oklch(0.45 0.175 27);
+  --pokemon-yellow: oklch(0.87 0.185 90);
+  --pokemon-yellow-light: oklch(0.90 0.175 93);
+  --pokemon-yellow-dark: oklch(0.80 0.175 88);
+  --pokemon-blue: oklch(0.55 0.195 265);
+  --pokemon-blue-light: oklch(0.62 0.195 265);
+  --pokemon-blue-dark: oklch(0.45 0.175 265);
+  --pokemon-navy: oklch(0.15 0.02 280);
+
+  /* Dark mode semantic colors */
+  --background: oklch(0.15 0.02 280);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.20 0.02 280);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.20 0.02 280);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: oklch(0.55 0.195 265);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.28 0.02 280);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.25 0.02 280);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.87 0.185 90);
+  --accent-foreground: oklch(0.12 0 0);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --border: oklch(0.30 0.02 280);
+  --input: oklch(0.30 0.02 280);
+  --ring: oklch(0.55 0.195 265);
+
+  /* Chart colors for dark mode */
+  --chart-1: oklch(0.55 0.205 27);
+  --chart-2: oklch(0.55 0.195 265);
+  --chart-3: oklch(0.87 0.185 90);
+  --chart-4: oklch(0.65 0.175 27);
+  --chart-5: oklch(0.62 0.175 265);
+
+  /* Sidebar dark mode */
+  --sidebar: oklch(0.18 0.02 280);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-primary: oklch(0.55 0.195 265);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.25 0.02 280);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: oklch(0.30 0.02 280);
+  --sidebar-ring: oklch(0.55 0.195 265);
 }
 
 @layer base {
@@ -119,4 +166,90 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Pokemon Gradient Utilities */
+@layer utilities {
+  .gradient-pokemon-red {
+    background: linear-gradient(
+      135deg,
+      oklch(0.60 0.235 27) 0%,
+      oklch(0.50 0.205 27) 50%,
+      oklch(0.40 0.175 27) 100%
+    );
+  }
+
+  .gradient-pokemon-yellow {
+    background: linear-gradient(
+      135deg,
+      oklch(0.90 0.175 93) 0%,
+      oklch(0.87 0.185 90) 50%,
+      oklch(0.80 0.175 88) 100%
+    );
+  }
+
+  .gradient-pokemon-blue {
+    background: linear-gradient(
+      135deg,
+      oklch(0.55 0.195 265) 0%,
+      oklch(0.48 0.195 265) 50%,
+      oklch(0.40 0.175 265) 100%
+    );
+  }
+
+  .gradient-pokeball {
+    background: linear-gradient(
+      180deg,
+      oklch(0.50 0.205 27) 0%,
+      oklch(0.50 0.205 27) 45%,
+      oklch(0.12 0 0) 45%,
+      oklch(0.12 0 0) 55%,
+      oklch(0.98 0 0) 55%,
+      oklch(0.98 0 0) 100%
+    );
+  }
+
+  .gradient-pokemon-sunset {
+    background: linear-gradient(
+      135deg,
+      oklch(0.87 0.185 90) 0%,
+      oklch(0.60 0.235 27) 100%
+    );
+  }
+
+  .gradient-pokemon-ocean {
+    background: linear-gradient(
+      135deg,
+      oklch(0.55 0.195 265) 0%,
+      oklch(0.20 0.02 280) 100%
+    );
+  }
+
+}
+
+/* Pokemon Type Gradients - for ranking cards */
+/* Placed outside @layer for higher specificity */
+.gradient-type-grass {
+  background: linear-gradient(to bottom right, #10b981, #16a34a) !important;
+  color: white !important;
+}
+
+.gradient-type-water {
+  background: linear-gradient(to bottom right, #3b82f6, #06b6d4) !important;
+  color: white !important;
+}
+
+.gradient-type-fire {
+  background: linear-gradient(to bottom right, #f97316, #dc2626) !important;
+  color: white !important;
+}
+
+.gradient-type-electric {
+  background: linear-gradient(to bottom right, #facc15, #f59e0b) !important;
+  color: #1a1a2e !important;
+}
+
+.gradient-type-special {
+  background: linear-gradient(to bottom right, #ef4444, #db2777) !important;
+  color: white !important;
 }
