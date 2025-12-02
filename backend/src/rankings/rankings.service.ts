@@ -7,6 +7,7 @@ import {
   Inject,
   forwardRef,
 } from '@nestjs/common';
+import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Model, Types, Connection, ClientSession } from 'mongoose';
 import { Ranking } from './schemas/ranking.schema';
@@ -82,7 +83,7 @@ export class RankingsService {
     const ranking = await this.rankingModel.findById(id).exec();
 
     if (!ranking) {
-      throw new NotFoundException(`Ranking with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.RANKINGS.NOT_FOUND, args: { id } });
     }
 
     // Check ownership
@@ -131,7 +132,10 @@ export class RankingsService {
           .exec();
 
         if (!ranking) {
-          throw new NotFoundException(`Ranking with ID ${id} not found`);
+          throw new NotFoundException({
+            key: TK.RANKINGS.NOT_FOUND,
+            args: { id },
+          });
         }
 
         // Check ownership
@@ -160,7 +164,7 @@ export class RankingsService {
   // Helper: Validate ownership
   private validateOwnership(ranking: Ranking, userId: string): void {
     if (ranking.user.toString() !== userId) {
-      throw new ForbiddenException('You can only modify your own rankings');
+      throw new ForbiddenException({ key: TK.RANKINGS.CANNOT_MODIFY_OTHERS });
     }
   }
 
@@ -191,9 +195,10 @@ export class RankingsService {
       .exec();
 
     if (existing) {
-      throw new ConflictException(
-        `You already have a ranking with title "${title}"`,
-      );
+      throw new ConflictException({
+        key: TK.RANKINGS.TITLE_EXISTS,
+        args: { title },
+      });
     }
   }
 
@@ -203,9 +208,15 @@ export class RankingsService {
       const [, end] = zone.interval;
 
       if (end > pokemonCount) {
-        throw new BadRequestException(
-          `Zone "${zone.name}" interval [${zone.interval[0]}, ${end}] exceeds pokemon count (${pokemonCount})`,
-        );
+        throw new BadRequestException({
+          key: TK.RANKINGS.ZONE_EXCEEDS_POKEMON,
+          args: {
+            zoneName: zone.name,
+            start: zone.interval[0],
+            end,
+            count: pokemonCount,
+          },
+        });
       }
     }
   }

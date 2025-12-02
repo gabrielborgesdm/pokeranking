@@ -1,0 +1,6 @@
+{
+  "notFound": "Usuário com ID {id} não encontrado",
+  "emailExists": "Usuário com email \"{email}\" já existe",
+  "usernameExists": "Usuário com nome de usuário \"{username}\" já existe",
+  "cannotUpdateOthers": "Você só pode atualizar seu próprio perfil"
+}

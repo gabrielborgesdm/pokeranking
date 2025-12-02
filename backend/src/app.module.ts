@@ -1,16 +1,18 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { RankingsModule } from './rankings/rankings.module';
 import { BoxesModule } from './boxes/boxes.module';
 import { CommonModule } from './common/common.module';
+import { I18nConfigModule } from './i18n/i18n.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { I18nExceptionFilter } from './i18n/filters/i18n-exception.filter';
 import { validate } from './config/environment.validation';
 import { getDatabaseConfig } from './config/database.config';
 
@@ -30,6 +32,8 @@ import { getDatabaseConfig } from './config/database.config';
     }),
     // Common module (global)
     CommonModule,
+    // I18n module
+    I18nConfigModule,
     // Feature modules
     AuthModule,
     UsersModule,
@@ -53,6 +57,11 @@ import { getDatabaseConfig } from './config/database.config';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    // Global i18n exception filter
+    {
+      provide: APP_FILTER,
+      useClass: I18nExceptionFilter,
     },
   ],
 })

@@ -4,6 +4,7 @@ import {
   ConflictException,
   Logger,
 } from '@nestjs/common';
+import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Pokemon } from './schemas/pokemon.schema';
@@ -28,9 +29,10 @@ export class PokemonService {
       .exec();
 
     if (existing) {
-      throw new ConflictException(
-        `Pokemon with name "${createPokemonDto.name}" already exists`,
-      );
+      throw new ConflictException({
+        key: TK.POKEMON.NAME_EXISTS,
+        args: { name: createPokemonDto.name },
+      });
     }
 
     const pokemon = new this.pokemonModel(createPokemonDto);
@@ -71,7 +73,7 @@ export class PokemonService {
   async findOne(id: string): Promise<Pokemon> {
     const pokemon = await this.pokemonModel.findById(id).exec();
     if (!pokemon) {
-      throw new NotFoundException(`Pokemon with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
     }
     return pokemon;
   }
@@ -83,7 +85,7 @@ export class PokemonService {
     const pokemon = await this.pokemonModel.findById(id).exec();
     Logger.log('Updating pokemon:', updatePokemonDto);
     if (!pokemon) {
-      throw new NotFoundException(`Pokemon with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
     }
 
     // Remove undefined fields from the update DTO before applying the update
@@ -99,7 +101,7 @@ export class PokemonService {
   async remove(id: string): Promise<Pokemon> {
     const pokemon = await this.pokemonModel.findById(id).exec();
     if (!pokemon) {
-      throw new NotFoundException(`Pokemon with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
     }
 
     await pokemon.deleteOne();
