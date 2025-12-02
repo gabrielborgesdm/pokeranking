@@ -2,14 +2,13 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
-  ConflictException,
   BadRequestException,
   Inject,
   forwardRef,
 } from '@nestjs/common';
 import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
-import { Model, Types, Connection, ClientSession } from 'mongoose';
+import { Model, Types, Connection } from 'mongoose';
 import { Ranking } from './schemas/ranking.schema';
 import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
@@ -33,15 +32,26 @@ export class RankingsService {
     userId: string,
     createRankingDto: CreateRankingDto,
   ): Promise<Ranking> {
+    // Fetch user with populated rankings (only title needed)
+    const user = await this.userModel
+      .findById(userId)
+      .populate<{ rankings: Ranking[] }>('rankings', 'title')
+      .exec();
+
+    if (!user) {
+      throw new NotFoundException({
+        key: TK.USERS.NOT_FOUND,
+        args: { id: userId },
+      });
+    }
+
     const savedRanking = await withTransaction(
       this.connection,
       async (session) => {
-        // Validate unique title per user
-        await this.validateUniqueTitle(
-          userId,
+        // Generate unique title from existing rankings
+        const uniqueTitle = this.generateUniqueTitle(
+          user.rankings,
           createRankingDto.title,
-          undefined,
-          session,
         );
 
         // Validate zone intervals if zones provided
@@ -52,6 +62,7 @@ export class RankingsService {
 
         const ranking = new this.rankingModel({
           ...createRankingDto,
+          title: uniqueTitle,
           user: new Types.ObjectId(userId),
         });
 
@@ -69,8 +80,8 @@ export class RankingsService {
     );
 
     // Update user's highestCountOfRankedPokemon
-    const user = await this.usersService.findOne(userId);
-    await this.usersService.updateHighestRankedPokemonCount(user);
+    const fullUser = await this.usersService.findOne(userId);
+    await this.usersService.updateHighestRankedPokemonCount(fullUser);
 
     return savedRanking;
   }
@@ -89,9 +100,25 @@ export class RankingsService {
     // Check ownership
     this.validateOwnership(ranking, userId);
 
-    // Validate unique title if title is being updated
+    // Generate unique title if title is being updated
     if (updateRankingDto.title && updateRankingDto.title !== ranking.title) {
-      await this.validateUniqueTitle(userId, updateRankingDto.title, id);
+      const user = await this.userModel
+        .findById(userId)
+        .populate<{ rankings: Ranking[] }>('rankings', 'title')
+        .exec();
+
+      if (!user) {
+        throw new NotFoundException({
+          key: TK.USERS.NOT_FOUND,
+          args: { id: userId },
+        });
+      }
+
+      updateRankingDto.title = this.generateUniqueTitle(
+        user.rankings,
+        updateRankingDto.title,
+        id,
+      );
     }
 
     // Apply updates to get new values
@@ -168,38 +195,34 @@ export class RankingsService {
     }
   }
 
-  // Helper: Validate unique title per user
-  private async validateUniqueTitle(
-    userId: string,
+  // Helper: Generate unique title by iterating over existing rankings
+  private generateUniqueTitle(
+    existingRankings: { title: string; _id?: Types.ObjectId }[],
     title: string,
     excludeId?: string,
-    session: ClientSession | null = null,
-  ): Promise<void> {
-    const query: {
-      user: Types.ObjectId;
-      title: string;
-      _id?: { $ne: Types.ObjectId };
-    } = {
-      user: new Types.ObjectId(userId),
-      title: title,
-    };
+  ): string {
+    // Build a Set of existing titles for O(1) lookup
+    const existingTitles = new Set(
+      existingRankings
+        .filter((r) => !excludeId || r._id?.toString() !== excludeId)
+        .map((r) => r.title),
+    );
 
-    // Exclude current ranking when updating
-    if (excludeId) {
-      query._id = { $ne: new Types.ObjectId(excludeId) };
+    // If title doesn't exist, return as-is
+    if (!existingTitles.has(title)) {
+      return title;
     }
 
-    const existing = await this.rankingModel
-      .findOne(query)
-      .session(session)
-      .exec();
+    // Find next available suffix (2), (3), etc.
+    let counter = 2;
+    let candidateTitle = `${title} (${counter})`;
 
-    if (existing) {
-      throw new ConflictException({
-        key: TK.RANKINGS.TITLE_EXISTS,
-        args: { title },
-      });
+    while (existingTitles.has(candidateTitle)) {
+      counter++;
+      candidateTitle = `${title} (${counter})`;
     }
+
+    return candidateTitle;
   }
 
   // Helper: Validate zone intervals don't exceed pokemon count
