@@ -1,0 +1,1880 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        },
+        "summary": "User login",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        },
+        "summary": "Register a new user",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/register-admin": {
+      "post": {
+        "operationId": "AuthController_registerAdmin",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Admin user registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          },
+          "409": {
+            "description": "User already exists"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Register a new admin user (admin only)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "operationId": "AuthController_getProfile",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get current user profile",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/verify-email": {
+      "post": {
+        "operationId": "AuthController_verifyEmail",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyEmailDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyEmailResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invalid verification code or email"
+          },
+          "429": {
+            "description": "Too many verification attempts"
+          }
+        },
+        "summary": "Verify email address with 6-digit code",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/resend-verification": {
+      "post": {
+        "operationId": "AuthController_resendVerification",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendVerificationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification code sent successfully"
+          },
+          "400": {
+            "description": "Email is already verified"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "429": {
+            "description": "Too many resend attempts"
+          }
+        },
+        "summary": "Resend verification code",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "operationId": "AuthController_forgotPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent if user exists"
+          },
+          "400": {
+            "description": "Invalid email format"
+          }
+        },
+        "summary": "Request password reset email",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "operationId": "AuthController_resetPassword",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          },
+          "400": {
+            "description": "Invalid or expired token"
+          },
+          "404": {
+            "description": "Token not found"
+          }
+        },
+        "summary": "Reset password with token",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "operationId": "UsersController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "maximum": 100,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Field to sort by",
+            "schema": {
+              "enum": [
+                "username",
+                "rankedPokemonCount",
+                "createdAt"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "username",
+            "required": false,
+            "in": "query",
+            "description": "Filter users by username (partial match, case-insensitive)",
+            "schema": {
+              "example": "john",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedUsersResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all active users with pagination",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get user by ID",
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Can only update own profile"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update user (Admin or self only)",
+        "tags": [
+          "users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "User ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete user (Admin only)",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/pokemon": {
+      "post": {
+        "operationId": "PokemonController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePokemonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pokemon created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PokemonResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          },
+          "409": {
+            "description": "Pokemon already exists"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a new pokemon (Admin only)",
+        "tags": [
+          "pokemon"
+        ]
+      },
+      "get": {
+        "operationId": "PokemonController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Pokemon retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PokemonResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all pokemon",
+        "tags": [
+          "pokemon"
+        ]
+      }
+    },
+    "/pokemon/{id}": {
+      "get": {
+        "operationId": "PokemonController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Pokemon ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pokemon retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PokemonResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Pokemon not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get pokemon by ID",
+        "tags": [
+          "pokemon"
+        ]
+      },
+      "patch": {
+        "operationId": "PokemonController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Pokemon ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePokemonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pokemon updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PokemonResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          },
+          "404": {
+            "description": "Pokemon not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update pokemon (Admin only)",
+        "tags": [
+          "pokemon"
+        ]
+      },
+      "delete": {
+        "operationId": "PokemonController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Pokemon ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Pokemon deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          },
+          "404": {
+            "description": "Pokemon not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete pokemon (Admin only)",
+        "tags": [
+          "pokemon"
+        ]
+      }
+    },
+    "/rankings": {
+      "post": {
+        "operationId": "RankingsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRankingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ranking created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data or validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict - Ranking with this title already exists for user"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a new ranking",
+        "tags": [
+          "rankings"
+        ]
+      }
+    },
+    "/rankings/{id}": {
+      "patch": {
+        "operationId": "RankingsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Ranking ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRankingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ranking updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data or validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Owner only"
+          },
+          "404": {
+            "description": "Ranking not found"
+          },
+          "409": {
+            "description": "Conflict - Ranking with this title already exists for user"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update ranking (owner only)",
+        "tags": [
+          "rankings"
+        ]
+      },
+      "delete": {
+        "operationId": "RankingsController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Ranking ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ranking deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Owner only"
+          },
+          "404": {
+            "description": "Ranking not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete ranking (owner only)",
+        "tags": [
+          "rankings"
+        ]
+      }
+    },
+    "/boxes": {
+      "post": {
+        "operationId": "BoxesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBoxDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Box created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoxResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Box name already exists"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a new box",
+        "tags": [
+          "boxes"
+        ]
+      },
+      "get": {
+        "operationId": "BoxesController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Boxes retrieved successfully (includes default box)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoxResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all boxes for the authenticated user",
+        "tags": [
+          "boxes"
+        ]
+      }
+    },
+    "/boxes/community": {
+      "get": {
+        "operationId": "BoxesController_findCommunity",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "maximum": 100,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Field to sort by",
+            "schema": {
+              "enum": [
+                "createdAt",
+                "favoriteCount"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Filter boxes by name (case-insensitive)",
+            "schema": {
+              "example": "water",
+              "type": "string"
+            }
+          },
+          {
+            "name": "ownerUsername",
+            "required": false,
+            "in": "query",
+            "description": "Filter boxes by creator username",
+            "schema": {
+              "example": "john_doe",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Community boxes retrieved successfully"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get all public boxes from the community",
+        "tags": [
+          "boxes"
+        ]
+      }
+    },
+    "/boxes/{id}": {
+      "get": {
+        "operationId": "BoxesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Box ID or \"default\"",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Box retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoxResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Box not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get a single box by ID",
+        "tags": [
+          "boxes"
+        ]
+      },
+      "patch": {
+        "operationId": "BoxesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Box ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBoxDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Box updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoxResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Box not found"
+          },
+          "409": {
+            "description": "Box name already exists"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Update box (owner only)",
+        "tags": [
+          "boxes"
+        ]
+      },
+      "delete": {
+        "operationId": "BoxesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Box ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Box deleted successfully"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Box not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Delete box (owner only)",
+        "tags": [
+          "boxes"
+        ]
+      }
+    },
+    "/boxes/{id}/favorite": {
+      "post": {
+        "operationId": "BoxesController_favoriteBox",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Box ID to favorite",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Box favorited successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoxResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Cannot favorite own box or private box"
+          },
+          "404": {
+            "description": "Box not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Favorite a public box (creates a copy)",
+        "tags": [
+          "boxes"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Pokemon Ranking API",
+    "description": "API for managing Pokemon and user rankings",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Authentication endpoints"
+    },
+    {
+      "name": "users",
+      "description": "User management endpoints"
+    },
+    {
+      "name": "pokemon",
+      "description": "Pokemon management endpoints"
+    },
+    {
+      "name": "boxes",
+      "description": "Box management and community favoriting"
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "JWT",
+        "description": "Enter JWT token",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "john_doe",
+            "minLength": 3,
+            "maxLength": 30
+          },
+          "password": {
+            "type": "string",
+            "example": "strongPassword123",
+            "minLength": 6
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "JWT access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "access_token"
+        ]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "john_doe",
+            "minLength": 3,
+            "maxLength": 30
+          },
+          "password": {
+            "type": "string",
+            "example": "strongPassword123",
+            "minLength": 6
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          }
+        },
+        "required": [
+          "email",
+          "username",
+          "password"
+        ]
+      },
+      "PokemonResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pikachu"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://example.com/pokemon/pikachu.png"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-20T15:45:00.000Z"
+          }
+        },
+        "required": [
+          "_id",
+          "name",
+          "image",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ZoneDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "S-Tier"
+          },
+          "interval": {
+            "example": [
+              1,
+              5
+            ],
+            "description": "Position interval [start, end] where start >= 1",
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "color": {
+            "type": "string",
+            "example": "#FF5733",
+            "description": "Hex color code"
+          }
+        },
+        "required": [
+          "name",
+          "interval",
+          "color"
+        ]
+      },
+      "RankingResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "title": {
+            "type": "string",
+            "example": "My Gen 1 Favorites"
+          },
+          "pokemon": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PokemonResponseDto"
+            }
+          },
+          "zones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZoneDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-20T15:45:00.000Z"
+          }
+        },
+        "required": [
+          "_id",
+          "title",
+          "pokemon",
+          "zones",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "john_doe"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          },
+          "rankings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankingResponseDto"
+            }
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "member"
+            ],
+            "example": "member"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "rankedPokemonCount": {
+            "type": "number",
+            "example": 42,
+            "description": "Total count of ranked pokemon"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-20T15:45:00.000Z"
+          }
+        },
+        "required": [
+          "_id",
+          "email",
+          "username",
+          "rankings",
+          "role",
+          "isActive",
+          "rankedPokemonCount",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "RegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          }
+        },
+        "required": [
+          "user"
+        ]
+      },
+      "VerifyEmailDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "User email address"
+          },
+          "code": {
+            "type": "string",
+            "example": "123456",
+            "description": "6-digit verification code"
+          }
+        },
+        "required": [
+          "email",
+          "code"
+        ]
+      },
+      "VerifyEmailResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Email verified successfully"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "message",
+          "user",
+          "access_token"
+        ]
+      },
+      "ResendVerificationDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "User email address"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "Email address to send password reset link"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "abc123def456...",
+            "description": "Password reset token from email"
+          },
+          "password": {
+            "type": "string",
+            "example": "newSecurePassword123",
+            "description": "New password (min 6 characters)"
+          }
+        },
+        "required": [
+          "token",
+          "password"
+        ]
+      },
+      "PublicUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "john_doe"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          },
+          "rankings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankingResponseDto"
+            }
+          },
+          "rankedPokemonCount": {
+            "type": "number",
+            "example": 42,
+            "description": "Total count of ranked pokemon"
+          }
+        },
+        "required": [
+          "username",
+          "rankings",
+          "rankedPokemonCount"
+        ]
+      },
+      "PaginatedUsersResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicUserResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "example": 100,
+            "description": "Total number of users"
+          },
+          "page": {
+            "type": "number",
+            "example": 1,
+            "description": "Current page number"
+          },
+          "limit": {
+            "type": "number",
+            "example": 20,
+            "description": "Number of items per page"
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "john_doe",
+            "minLength": 3,
+            "maxLength": 30
+          },
+          "password": {
+            "type": "string",
+            "example": "newPassword123",
+            "minLength": 6
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          },
+          "pokemon": {
+            "example": [
+              "507f1f77bcf86cd799439011"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "member"
+            ],
+            "example": "member"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "CreatePokemonDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Pikachu"
+          },
+          "image": {
+            "type": "string",
+            "example": "pikachu.png",
+            "description": "Pokemon image - either a filename (e.g., \"pikachu.png\") or a URL from whitelisted domains"
+          }
+        },
+        "required": [
+          "name",
+          "image"
+        ]
+      },
+      "UpdatePokemonDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Pikachu"
+          },
+          "image": {
+            "type": "string",
+            "example": "pikachu.png",
+            "description": "Pokemon image - either a filename (e.g., \"pikachu.png\") or a URL from whitelisted domains"
+          }
+        }
+      },
+      "CreateRankingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "My Gen 1 Favorites",
+            "description": "Title of the ranking list"
+          },
+          "pokemon": {
+            "example": [
+              "507f1f77bcf86cd799439011",
+              "507f1f77bcf86cd799439012"
+            ],
+            "description": "Ordered array of Pokemon IDs (position = rank)",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "zones": {
+            "description": "Customizable zones with intervals and colors",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZoneDto"
+            }
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "UpdateRankingDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "My Gen 1 Favorites",
+            "description": "Title of the ranking list"
+          },
+          "pokemon": {
+            "example": [
+              "507f1f77bcf86cd799439011",
+              "507f1f77bcf86cd799439012"
+            ],
+            "description": "Ordered array of Pokemon IDs (position = rank)",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "zones": {
+            "description": "Customizable zones with intervals and colors",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ZoneDto"
+            }
+          }
+        }
+      },
+      "CreateBoxDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My Favorite Water Types",
+            "description": "Name of the box"
+          },
+          "isPublic": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the box is visible to other users",
+            "default": false
+          },
+          "pokemon": {
+            "example": [
+              "507f1f77bcf86cd799439011",
+              "507f1f77bcf86cd799439012"
+            ],
+            "description": "Array of Pokemon IDs in this box",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "BoxResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "name": {
+            "type": "string",
+            "example": "My Favorite Water Types"
+          },
+          "isPublic": {
+            "type": "boolean",
+            "example": false
+          },
+          "pokemon": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PokemonResponseDto"
+            }
+          },
+          "favoriteCount": {
+            "type": "number",
+            "example": 5
+          },
+          "ownerUsername": {
+            "type": "string",
+            "example": "john_doe",
+            "description": "Username of box creator"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-20T15:45:00.000Z"
+          }
+        },
+        "required": [
+          "_id",
+          "name",
+          "isPublic",
+          "pokemon",
+          "favoriteCount",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateBoxDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "My Favorite Water Types",
+            "description": "Name of the box"
+          },
+          "isPublic": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the box is visible to other users",
+            "default": false
+          },
+          "pokemon": {
+            "example": [
+              "507f1f77bcf86cd799439011",
+              "507f1f77bcf86cd799439012"
+            ],
+            "description": "Array of Pokemon IDs in this box",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

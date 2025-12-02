@@ -73,8 +73,16 @@ export class User extends Document {
   @Prop()
   passwordResetExpires?: Date;
 
+  @Prop({ default: 0 })
+  rankedPokemonCount: number;
+
   createdAt: Date;
   updatedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+// Compound indexes for paginated users query (leaderboard)
+UserSchema.index({ isActive: 1, rankedPokemonCount: -1 });
+UserSchema.index({ isActive: 1, username: 1 });
+UserSchema.index({ isActive: 1, createdAt: -1 });

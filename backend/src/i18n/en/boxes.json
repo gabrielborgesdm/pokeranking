@@ -1,0 +1,7 @@
+{
+  "notFound": "Box with ID {id} not found",
+  "nameExists": "You already have a box with name \"{name}\"",
+  "cannotFavoriteOwn": "Cannot favorite your own box",
+  "cannotModifyOthers": "You can only modify your own boxes",
+  "unableToGenerateName": "Unable to generate unique name for favorited box"
+}

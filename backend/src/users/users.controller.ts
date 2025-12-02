@@ -5,6 +5,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   HttpCode,
   HttpStatus,
   Request,
@@ -17,14 +18,18 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserQueryDto, USER_SORTABLE_FIELDS } from './dto/user-query.dto';
 import { UserResponseDto } from './dto/user-response.dto';
 import { PublicUserResponseDto } from './dto/public-user-response.dto';
+import { PaginatedUsersResponseDto } from './dto/paginated-users-response.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 import { toDto } from '../common/utils/transform.util';
+import { TK } from '../i18n/constants/translation-keys';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
 
 @ApiTags('users')
@@ -34,16 +39,28 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Get all active users with pagination' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'sortBy', required: false, enum: USER_SORTABLE_FIELDS })
+  @ApiQuery({ name: 'order', required: false, enum: ['asc', 'desc'] })
+  @ApiQuery({ name: 'username', required: false, type: String })
   @ApiResponse({
     status: 200,
     description: 'Users retrieved successfully',
-    type: [PublicUserResponseDto],
+    type: PaginatedUsersResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async findAll() {
-    const users = await this.usersService.findAll();
-    return toDto(PublicUserResponseDto, users);
+  async findAll(
+    @Query() query: UserQueryDto,
+  ): Promise<PaginatedUsersResponseDto> {
+    const { users, total } = await this.usersService.findAll(query);
+    return {
+      data: toDto(PublicUserResponseDto, users),
+      total,
+      page: query.page || 1,
+      limit: query.limit || 20,
+    };
   }
 
   @Get(':id')
@@ -101,7 +118,7 @@ export class UsersController {
   ) {
     // Only allow admins or the user themselves to update
     if (req.user.role !== UserRole.Admin && req.user._id !== id) {
-      throw new ForbiddenException('You can only update your own profile');
+      throw new ForbiddenException({ key: TK.USERS.CANNOT_UPDATE_OTHERS });
     }
 
     const user = await this.usersService.update(id, updateUserDto);

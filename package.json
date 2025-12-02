@@ -1,0 +1,14 @@
+{
+  "name": "pokeranking",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "packages/*"
+  ],
+  "scripts": {
+    "api:export": "npm run export:openapi -w backend",
+    "api:generate": "npm run generate -w @pokeranking/api-client",
+    "api:build": "npm run build -w @pokeranking/api-client",
+    "api:full": "npm run api:export && npm run api:build"
+  }
+}

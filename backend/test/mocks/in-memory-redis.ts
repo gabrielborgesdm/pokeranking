@@ -1,11 +1,14 @@
 /**
  * In-memory Redis mock using Node.js globals for testing
- * Implements the subset of @upstash/redis interface needed by RateLimitService
+ * Implements the subset of @upstash/redis interface needed by RateLimitService and CacheService
+ *
+ * Note: @upstash/redis automatically handles JSON serialization/deserialization,
+ * so this mock stores raw values (not JSON strings) to match that behavior.
  */
 
 // Global store for in-memory Redis data
 const globalStore = global as typeof globalThis & {
-  __TEST_REDIS_STORE__?: Map<string, { value: string; expiresAt?: number }>;
+  __TEST_REDIS_STORE__?: Map<string, { value: unknown; expiresAt?: number }>;
 };
 
 if (!globalStore.__TEST_REDIS_STORE__) {
@@ -15,7 +18,7 @@ if (!globalStore.__TEST_REDIS_STORE__) {
 export class InMemoryRedis {
   private store = globalStore.__TEST_REDIS_STORE__!;
 
-  async get(key: string): Promise<string | null> {
+  async get<T = unknown>(key: string): Promise<T | null> {
     const item = this.store.get(key);
     if (!item) return null;
 
@@ -25,12 +28,12 @@ export class InMemoryRedis {
       return null;
     }
 
-    return item.value;
+    return item.value as T;
   }
 
   async set(
     key: string,
-    value: string,
+    value: unknown,
     options?: { ex?: number; px?: number; exat?: number; pxat?: number },
   ): Promise<'OK'> {
     let expiresAt: number | undefined;
@@ -56,9 +59,12 @@ export class InMemoryRedis {
 
   async incr(key: string): Promise<number> {
     const item = this.store.get(key);
-    const currentValue = item ? parseInt(item.value, 10) : 0;
+    const currentValue = item ? Number(item.value) : 0;
     const newValue = currentValue + 1;
-    this.store.set(key, { value: String(newValue), expiresAt: item?.expiresAt });
+    this.store.set(key, {
+      value: newValue,
+      expiresAt: item?.expiresAt,
+    });
     return newValue;
   }
 
@@ -105,6 +111,16 @@ export class InMemoryRedis {
    */
   async scriptLoad(_script: string): Promise<string> {
     return 'fake-sha-hash';
+  }
+
+  /**
+   * Returns all keys matching the given pattern
+   * Supports basic glob patterns with * wildcard
+   */
+  async keys(pattern: string): Promise<string[]> {
+    const allKeys = Array.from(this.store.keys());
+    const regex = new RegExp('^' + pattern.replace(/\*/g, '.*') + '$');
+    return allKeys.filter((key) => regex.test(key));
   }
 
   /**

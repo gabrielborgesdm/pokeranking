@@ -1,0 +1,90 @@
+{
+  "name": "@pokeranking/api-client",
+  "version": "0.1.0",
+  "description": "Typed API client for Pokemon Ranking API",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./models": {
+      "import": {
+        "types": "./dist/models/index.d.mts",
+        "default": "./dist/models/index.mjs"
+      },
+      "require": {
+        "types": "./dist/models/index.d.ts",
+        "default": "./dist/models/index.js"
+      }
+    },
+    "./hooks": {
+      "import": {
+        "types": "./dist/hooks/index.d.mts",
+        "default": "./dist/hooks/index.mjs"
+      },
+      "require": {
+        "types": "./dist/hooks/index.d.ts",
+        "default": "./dist/hooks/index.js"
+      }
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "generate": "orval",
+    "build": "npm run generate && tsup",
+    "clean": "rimraf dist generated",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "@tanstack/react-query": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.60.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.0",
+    "orval": "^7.3.0",
+    "prettier": "^3.4.0",
+    "react": "^18.3.0",
+    "rimraf": "^6.0.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.7.0"
+  },
+  "keywords": [
+    "pokemon",
+    "ranking",
+    "api-client",
+    "typescript",
+    "react-query"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/pokeranking.git",
+    "directory": "packages/api-client"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "MIT"
+}

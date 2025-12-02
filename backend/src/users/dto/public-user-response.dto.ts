@@ -16,4 +16,8 @@ export class PublicUserResponseDto {
   @Type(() => RankingResponseDto)
   @ApiProperty({ type: [RankingResponseDto] })
   rankings: RankingResponseDto[];
+
+  @Expose()
+  @ApiProperty({ example: 42, description: 'Total count of ranked pokemon' })
+  rankedPokemonCount: number;
 }
