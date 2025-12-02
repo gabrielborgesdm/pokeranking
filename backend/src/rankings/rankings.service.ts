@@ -4,6 +4,8 @@ import {
   ForbiddenException,
   ConflictException,
   BadRequestException,
+  Inject,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
 import { Model, Types, Connection, ClientSession } from 'mongoose';
@@ -14,6 +16,7 @@ import { stripUndefined } from '../common/utils/transform.util';
 import { Zone } from './schemas/ranking.schema';
 import { User } from '../users/schemas/user.schema';
 import { withTransaction } from '../common/utils/transaction.util';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class RankingsService {
@@ -21,43 +24,54 @@ export class RankingsService {
     @InjectConnection() private connection: Connection,
     @InjectModel(Ranking.name) private readonly rankingModel: Model<Ranking>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService,
   ) {}
 
   async create(
     userId: string,
     createRankingDto: CreateRankingDto,
   ): Promise<Ranking> {
-    return withTransaction(this.connection, async (session) => {
-      // Validate unique title per user
-      await this.validateUniqueTitle(
-        userId,
-        createRankingDto.title,
-        undefined,
-        session,
-      );
+    const savedRanking = await withTransaction(
+      this.connection,
+      async (session) => {
+        // Validate unique title per user
+        await this.validateUniqueTitle(
+          userId,
+          createRankingDto.title,
+          undefined,
+          session,
+        );
 
-      // Validate zone intervals if zones provided
-      if (createRankingDto.zones && createRankingDto.zones.length > 0) {
-        const pokemonCount = createRankingDto.pokemon?.length || 0;
-        this.validateZoneIntervals(createRankingDto.zones, pokemonCount);
-      }
+        // Validate zone intervals if zones provided
+        if (createRankingDto.zones && createRankingDto.zones.length > 0) {
+          const pokemonCount = createRankingDto.pokemon?.length || 0;
+          this.validateZoneIntervals(createRankingDto.zones, pokemonCount);
+        }
 
-      const ranking = new this.rankingModel({
-        ...createRankingDto,
-        user: new Types.ObjectId(userId),
-      });
+        const ranking = new this.rankingModel({
+          ...createRankingDto,
+          user: new Types.ObjectId(userId),
+        });
 
-      const savedRanking = await ranking.save({ session });
+        const saved = await ranking.save({ session });
 
-      // Add ranking to user's rankings array
-      await this.userModel.findByIdAndUpdate(
-        userId,
-        { $push: { rankings: savedRanking._id } },
-        { session },
-      );
+        // Add ranking to user's rankings array
+        await this.userModel.findByIdAndUpdate(
+          userId,
+          { $push: { rankings: saved._id } },
+          { session },
+        );
 
-      return savedRanking;
-    });
+        return saved;
+      },
+    );
+
+    // Update user's highestCountOfRankedPokemon
+    const user = await this.usersService.findOne(userId);
+    await this.usersService.updateHighestRankedPokemonCount(user);
+
+    return savedRanking;
   }
 
   async update(
@@ -84,6 +98,11 @@ export class RankingsService {
     const newZones = updatedData.zones || ranking.zones;
     const newPokemon = updatedData.pokemon || ranking.pokemon;
 
+    // Check if pokemon count changed
+    const pokemonCountChanged =
+      updateRankingDto.pokemon !== undefined &&
+      ranking.pokemon.length !== newPokemon.length;
+
     // Validate zone intervals with new data
     if (newZones && newZones.length > 0) {
       this.validateZoneIntervals(newZones, newPokemon.length);
@@ -91,34 +110,51 @@ export class RankingsService {
 
     // Apply updates
     Object.assign(ranking, updatedData);
-    return await ranking.save();
+    const savedRanking = await ranking.save();
+
+    // Update user's highestCountOfRankedPokemon if pokemon count changed
+    if (pokemonCountChanged) {
+      const user = await this.usersService.findOne(userId);
+      await this.usersService.updateHighestRankedPokemonCount(user);
+    }
+
+    return savedRanking;
   }
 
   async remove(id: string, userId: string): Promise<Ranking> {
-    return withTransaction(this.connection, async (session) => {
-      const ranking = await this.rankingModel
-        .findById(id)
-        .session(session)
-        .exec();
+    const deletedRanking = await withTransaction(
+      this.connection,
+      async (session) => {
+        const ranking = await this.rankingModel
+          .findById(id)
+          .session(session)
+          .exec();
 
-      if (!ranking) {
-        throw new NotFoundException(`Ranking with ID ${id} not found`);
-      }
+        if (!ranking) {
+          throw new NotFoundException(`Ranking with ID ${id} not found`);
+        }
 
-      // Check ownership
-      this.validateOwnership(ranking, userId);
+        // Check ownership
+        this.validateOwnership(ranking, userId);
 
-      await ranking.deleteOne({ session });
+        await ranking.deleteOne({ session });
 
-      // Remove ranking from user's rankings array
-      await this.userModel.findByIdAndUpdate(
-        userId,
-        { $pull: { rankings: ranking._id } },
-        { session },
-      );
+        // Remove ranking from user's rankings array
+        await this.userModel.findByIdAndUpdate(
+          userId,
+          { $pull: { rankings: ranking._id } },
+          { session },
+        );
 
-      return ranking;
-    });
+        return ranking;
+      },
+    );
+
+    // Update user's highestCountOfRankedPokemon
+    const user = await this.usersService.findOne(userId);
+    await this.usersService.updateHighestRankedPokemonCount(user);
+
+    return deletedRanking;
   }
 
   // Helper: Validate ownership

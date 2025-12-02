@@ -39,6 +39,10 @@ export class UserResponseDto {
   isActive: boolean;
 
   @Expose()
+  @ApiProperty({ example: 42, description: 'Highest count of ranked pokemon' })
+  highestCountOfRankedPokemon: number;
+
+  @Expose()
   @ApiProperty({ example: '2024-01-15T10:30:00.000Z' })
   createdAt: Date;
 

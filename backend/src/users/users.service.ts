@@ -9,13 +9,34 @@ import * as bcrypt from 'bcrypt';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserQueryDto } from './dto/user-query.dto';
 import { stripUndefined } from 'src/common/utils/transform.util';
 import { SessionOptions } from 'src/common/utils/transaction.util';
+import { CacheService } from 'src/common/services/cache.service';
+import { Ranking } from 'src/rankings/schemas/ranking.schema';
+
+import { Pokemon } from 'src/pokemon/schemas/pokemon.schema';
+
+/** Ranking with populated pokemon (after .populate('pokemon')) */
+type RankingWithPopulatedPokemon = Omit<Ranking, 'pokemon'> & {
+  pokemon: Pokemon[];
+};
+
+/** User with populated rankings and pokemon */
+export type UserWithPopulatedRankings = Omit<User, 'rankings'> & {
+  rankings: RankingWithPopulatedPokemon[];
+};
+
+// 15-minute TTL to minimize Upstash free tier quota usage.
+// User rankings update infrequently; slight staleness is acceptable.
+const USERS_LIST_DEFAULT_CACHE_KEY = 'users:list:default';
+const USERS_LIST_CACHE_TTL_SECONDS = 15 * 60;
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly cacheService: CacheService,
   ) {}
 
   async hashPassword(password: string): Promise<string> {
@@ -90,14 +111,79 @@ export class UsersService {
     return await user.save({ session: options?.session });
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.userModel.find().exec();
+  async findAll(
+    query: UserQueryDto,
+  ): Promise<{ users: User[]; total: number }> {
+    const {
+      page = 1,
+      limit = 20,
+      sortBy = 'highestCountOfRankedPokemon',
+      order = 'desc',
+      username,
+    } = query;
+
+    // Check if this is the default query (cacheable)
+    const isDefaultQuery =
+      page === 1 &&
+      limit === 20 &&
+      sortBy === 'highestCountOfRankedPokemon' &&
+      order === 'desc' &&
+      !username;
+
+    // Try cache for default query
+    if (isDefaultQuery) {
+      const cached = await this.cacheService.get<{
+        users: User[];
+        total: number;
+      }>(USERS_LIST_DEFAULT_CACHE_KEY);
+      if (cached) {
+        return cached;
+      }
+    }
+
+    // Build query: only active users
+    const baseQuery: Record<string, unknown> = {
+      isActive: true,
+    };
+
+    // Apply username filter (partial match, case-insensitive)
+    if (username) {
+      baseQuery.username = { $regex: username, $options: 'i' };
+    }
+
+    // Get total count
+    const total = await this.userModel.countDocuments(baseQuery).exec();
+
+    // Get paginated results
+    const users = await this.userModel
+      .find(baseQuery)
+      .sort({ [sortBy]: order === 'asc' ? 1 : -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .lean<User[]>()
+      .exec();
+
+    const result = { users, total };
+
+    // Cache default query results
+    if (isDefaultQuery) {
+      await this.cacheService.set(
+        USERS_LIST_DEFAULT_CACHE_KEY,
+        result,
+        USERS_LIST_CACHE_TTL_SECONDS,
+      );
+    }
+
+    return result;
   }
 
-  async findOne(id: string, options?: SessionOptions): Promise<User> {
+  async findOne(
+    id: string,
+    options?: SessionOptions,
+  ): Promise<UserWithPopulatedRankings> {
     const user = await this.userModel
       .findById(id)
-      .populate({
+      .populate<{ rankings: RankingWithPopulatedPokemon[] }>({
         path: 'rankings',
         populate: { path: 'pokemon' },
       })
@@ -222,5 +308,37 @@ export class UsersService {
 
     await user.deleteOne({ session: options?.session });
     return user;
+  }
+
+  /**
+   * Updates the highestCountOfRankedPokemon for a user based on their rankings.
+   * Only updates if the value has changed.
+   * @param user - The user with populated rankings
+   */
+  async updateHighestRankedPokemonCount(
+    user: UserWithPopulatedRankings,
+  ): Promise<void> {
+    const highestCount =
+      user.rankings.length > 0
+        ? Math.max(...user.rankings.map((r) => r.pokemon.length))
+        : 0;
+
+    // Only update if the value has changed
+    if (user.highestCountOfRankedPokemon === highestCount) {
+      return;
+    }
+
+    await this.userModel.findByIdAndUpdate(user._id, {
+      highestCountOfRankedPokemon: highestCount,
+    });
+
+    await this.invalidateUsersListCache();
+  }
+
+  /**
+   * Invalidates the users list cache.
+   */
+  async invalidateUsersListCache(): Promise<void> {
+    await this.cacheService.del(USERS_LIST_DEFAULT_CACHE_KEY);
   }
 }
