@@ -1,20 +1,21 @@
 import { INestApplication } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
-let mongoServer: MongoMemoryServer | null = null;
+let mongoServer: MongoMemoryReplSet | null = null;
 
 /**
- * Starts an in-memory MongoDB server for testing
+ * Starts an in-memory MongoDB replica set for testing (supports transactions)
  * @returns The connection URI for the test database
  */
 export async function startTestDatabase(): Promise<string> {
-  mongoServer = await MongoMemoryServer.create({
-    instance: {
+  mongoServer = await MongoMemoryReplSet.create({
+    replSet: {
+      count: 1,
+      storageEngine: 'wiredTiger',
       dbName: 'pokeranking-test',
-      port: 27018,
     },
   });
 

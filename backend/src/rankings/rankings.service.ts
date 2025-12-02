@@ -5,18 +5,20 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+import { Model, Types, Connection, ClientSession } from 'mongoose';
 import { Ranking } from './schemas/ranking.schema';
 import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
 import { stripUndefined } from '../common/utils/transform.util';
 import { Zone } from './schemas/ranking.schema';
 import { User } from '../users/schemas/user.schema';
+import { withTransaction } from '../common/utils/transaction.util';
 
 @Injectable()
 export class RankingsService {
   constructor(
+    @InjectConnection() private connection: Connection,
     @InjectModel(Ranking.name) private readonly rankingModel: Model<Ranking>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
@@ -25,28 +27,37 @@ export class RankingsService {
     userId: string,
     createRankingDto: CreateRankingDto,
   ): Promise<Ranking> {
-    // Validate unique title per user
-    await this.validateUniqueTitle(userId, createRankingDto.title);
+    return withTransaction(this.connection, async (session) => {
+      // Validate unique title per user
+      await this.validateUniqueTitle(
+        userId,
+        createRankingDto.title,
+        undefined,
+        session,
+      );
 
-    // Validate zone intervals if zones provided
-    if (createRankingDto.zones && createRankingDto.zones.length > 0) {
-      const pokemonCount = createRankingDto.pokemon?.length || 0;
-      this.validateZoneIntervals(createRankingDto.zones, pokemonCount);
-    }
+      // Validate zone intervals if zones provided
+      if (createRankingDto.zones && createRankingDto.zones.length > 0) {
+        const pokemonCount = createRankingDto.pokemon?.length || 0;
+        this.validateZoneIntervals(createRankingDto.zones, pokemonCount);
+      }
 
-    const ranking = new this.rankingModel({
-      ...createRankingDto,
-      user: new Types.ObjectId(userId),
+      const ranking = new this.rankingModel({
+        ...createRankingDto,
+        user: new Types.ObjectId(userId),
+      });
+
+      const savedRanking = await ranking.save({ session });
+
+      // Add ranking to user's rankings array
+      await this.userModel.findByIdAndUpdate(
+        userId,
+        { $push: { rankings: savedRanking._id } },
+        { session },
+      );
+
+      return savedRanking;
     });
-
-    const savedRanking = await ranking.save();
-
-    // Add ranking to user's rankings array
-    await this.userModel.findByIdAndUpdate(userId, {
-      $push: { rankings: savedRanking._id },
-    });
-
-    return savedRanking;
   }
 
   async update(
@@ -84,23 +95,30 @@ export class RankingsService {
   }
 
   async remove(id: string, userId: string): Promise<Ranking> {
-    const ranking = await this.rankingModel.findById(id).exec();
+    return withTransaction(this.connection, async (session) => {
+      const ranking = await this.rankingModel
+        .findById(id)
+        .session(session)
+        .exec();
 
-    if (!ranking) {
-      throw new NotFoundException(`Ranking with ID ${id} not found`);
-    }
+      if (!ranking) {
+        throw new NotFoundException(`Ranking with ID ${id} not found`);
+      }
 
-    // Check ownership
-    this.validateOwnership(ranking, userId);
+      // Check ownership
+      this.validateOwnership(ranking, userId);
 
-    await ranking.deleteOne();
+      await ranking.deleteOne({ session });
 
-    // Remove ranking from user's rankings array
-    await this.userModel.findByIdAndUpdate(userId, {
-      $pull: { rankings: ranking._id },
+      // Remove ranking from user's rankings array
+      await this.userModel.findByIdAndUpdate(
+        userId,
+        { $pull: { rankings: ranking._id } },
+        { session },
+      );
+
+      return ranking;
     });
-
-    return ranking;
   }
 
   // Helper: Validate ownership
@@ -115,6 +133,7 @@ export class RankingsService {
     userId: string,
     title: string,
     excludeId?: string,
+    session: ClientSession | null = null,
   ): Promise<void> {
     const query: {
       user: Types.ObjectId;
@@ -130,7 +149,10 @@ export class RankingsService {
       query._id = { $ne: new Types.ObjectId(excludeId) };
     }
 
-    const existing = await this.rankingModel.findOne(query).exec();
+    const existing = await this.rankingModel
+      .findOne(query)
+      .session(session)
+      .exec();
 
     if (existing) {
       throw new ConflictException(
