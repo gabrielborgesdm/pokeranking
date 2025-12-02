@@ -6,12 +6,5 @@ services:
       - "27018:27017"
     volumes:
       - mongodb_data:/data/db
-    command: ["--replSet", "rs0", "--bind_ip_all"]
-    healthcheck:
-      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]}) }" | mongosh --quiet
-      interval: 5s
-      timeout: 30s
-      start_period: 0s
-      retries: 30
 volumes:
   mongodb_data:
