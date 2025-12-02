@@ -2,9 +2,11 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsOptional, IsInt, Min, Max, IsIn, IsString } from 'class-validator';
 
+export const RANKED_POKEMON_COUNT = 'rankedPokemonCount' as const;
+
 export const USER_SORTABLE_FIELDS = [
   'username',
-  'highestCountOfRankedPokemon',
+  RANKED_POKEMON_COUNT,
   'createdAt',
 ] as const;
 
@@ -36,14 +38,14 @@ export class UserQueryDto {
   limit?: number = 20;
 
   @ApiPropertyOptional({
-    example: 'highestCountOfRankedPokemon',
+    example: RANKED_POKEMON_COUNT,
     description: 'Field to sort by',
     enum: USER_SORTABLE_FIELDS,
-    default: 'highestCountOfRankedPokemon',
+    default: RANKED_POKEMON_COUNT,
   })
   @IsIn(USER_SORTABLE_FIELDS)
   @IsOptional()
-  sortBy?: UserSortableField = 'highestCountOfRankedPokemon';
+  sortBy?: UserSortableField = RANKED_POKEMON_COUNT;
 
   @ApiPropertyOptional({
     example: 'desc',

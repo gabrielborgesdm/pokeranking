@@ -79,9 +79,9 @@ export class RankingsService {
       },
     );
 
-    // Update user's highestCountOfRankedPokemon
+    // Update user's rankedPokemonCount
     const fullUser = await this.usersService.findOne(userId);
-    await this.usersService.updateHighestRankedPokemonCount(fullUser);
+    await this.usersService.updateRankedPokemonCount(fullUser);
 
     return savedRanking;
   }
@@ -140,10 +140,10 @@ export class RankingsService {
     Object.assign(ranking, updatedData);
     const savedRanking = await ranking.save();
 
-    // Update user's highestCountOfRankedPokemon if pokemon count changed
+    // Update user's rankedPokemonCount if pokemon count changed
     if (pokemonCountChanged) {
       const user = await this.usersService.findOne(userId);
-      await this.usersService.updateHighestRankedPokemonCount(user);
+      await this.usersService.updateRankedPokemonCount(user);
     }
 
     return savedRanking;
@@ -181,9 +181,9 @@ export class RankingsService {
       },
     );
 
-    // Update user's highestCountOfRankedPokemon
+    // Update user's rankedPokemonCount
     const user = await this.usersService.findOne(userId);
-    await this.usersService.updateHighestRankedPokemonCount(user);
+    await this.usersService.updateRankedPokemonCount(user);
 
     return deletedRanking;
   }

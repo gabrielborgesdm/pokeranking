@@ -159,7 +159,7 @@ describe('Users (e2e)', () => {
       expect(response.body.page).toBe(2);
     });
 
-    it('should sort by highestCountOfRankedPokemon descending by default', async () => {
+    it('should sort by rankedPokemonCount descending by default', async () => {
       const lowRanker = createUserData({
         email: 'low@test.com',
         username: 'low_ranker',
@@ -172,19 +172,19 @@ describe('Users (e2e)', () => {
       });
       const users = await seedUsers(app, [lowRanker, highRanker]);
 
-      // Update highestCountOfRankedPokemon directly
+      // Update rankedPokemonCount directly
       const connection = app.get(getConnectionToken());
       await connection
         .collection('users')
         .updateOne(
           { _id: users[0]._id },
-          { $set: { highestCountOfRankedPokemon: 5 } },
+          { $set: { rankedPokemonCount: 5 } },
         );
       await connection
         .collection('users')
         .updateOne(
           { _id: users[1]._id },
-          { $set: { highestCountOfRankedPokemon: 50 } },
+          { $set: { rankedPokemonCount: 50 } },
         );
 
       const token = await loginUser(app, {
@@ -199,9 +199,9 @@ describe('Users (e2e)', () => {
 
       // High ranker should be first (desc order)
       expect(response.body.data[0].username).toBe('high_ranker');
-      expect(response.body.data[0].highestCountOfRankedPokemon).toBe(50);
+      expect(response.body.data[0].rankedPokemonCount).toBe(50);
       expect(response.body.data[1].username).toBe('low_ranker');
-      expect(response.body.data[1].highestCountOfRankedPokemon).toBe(5);
+      expect(response.body.data[1].rankedPokemonCount).toBe(5);
     });
 
     it('should sort by username ascending', async () => {
@@ -437,16 +437,16 @@ describe('Users (e2e)', () => {
       expect(response.body.data).toHaveLength(3);
     });
 
-    it('should include highestCountOfRankedPokemon in response', async () => {
+    it('should include rankedPokemonCount in response', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
 
-      // Update highestCountOfRankedPokemon
+      // Update rankedPokemonCount
       const connection = app.get(getConnectionToken());
       await connection
         .collection('users')
         .updateOne(
           { _id: users[0]._id },
-          { $set: { highestCountOfRankedPokemon: 42 } },
+          { $set: { rankedPokemonCount: 42 } },
         );
 
       const token = await loginUser(app, {
@@ -460,7 +460,7 @@ describe('Users (e2e)', () => {
         .expect(200);
 
       expect(response.body.data[0]).toHaveProperty(
-        'highestCountOfRankedPokemon',
+        'rankedPokemonCount',
         42,
       );
     });
@@ -520,7 +520,7 @@ describe('Users (e2e)', () => {
         username: 'new_user',
         password: 'hashed',
         isActive: true,
-        highestCountOfRankedPokemon: 0,
+        rankedPokemonCount: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -593,7 +593,7 @@ describe('Users (e2e)', () => {
       expect(cached).toBeNull();
     });
 
-    it('should invalidate cache when highestCountOfRankedPokemon is updated', async () => {
+    it('should invalidate cache when rankedPokemonCount is updated', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
@@ -629,12 +629,12 @@ describe('Users (e2e)', () => {
     });
   });
 
-  describe('highestCountOfRankedPokemon updates', () => {
+  describe('rankedPokemonCount updates', () => {
     beforeEach(async () => {
       await clearDatabase(app);
     });
 
-    it('should update highestCountOfRankedPokemon when creating a ranking', async () => {
+    it('should update rankedPokemonCount when creating a ranking', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
@@ -648,7 +648,7 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(0);
+      expect(userResponse.body.rankedPokemonCount).toBe(0);
 
       // Create a ranking with 3 pokemon
       await request(app.getHttpServer())
@@ -665,10 +665,10 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(3);
+      expect(userResponse.body.rankedPokemonCount).toBe(3);
     });
 
-    it('should update highestCountOfRankedPokemon when updating a ranking with more pokemon', async () => {
+    it('should update rankedPokemonCount when updating a ranking with more pokemon', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
@@ -692,7 +692,7 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(1);
+      expect(userResponse.body.rankedPokemonCount).toBe(1);
 
       // Update ranking with 3 pokemon
       await request(app.getHttpServer())
@@ -708,10 +708,10 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(3);
+      expect(userResponse.body.rankedPokemonCount).toBe(3);
     });
 
-    it('should update highestCountOfRankedPokemon when deleting a ranking', async () => {
+    it('should update rankedPokemonCount when deleting a ranking', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
@@ -740,12 +740,12 @@ describe('Users (e2e)', () => {
         })
         .expect(201);
 
-      // Verify count is 3 (max of both)
+      // Verify count is 4 (sum of both: 3 + 1)
       let userResponse = await request(app.getHttpServer())
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(3);
+      expect(userResponse.body.rankedPokemonCount).toBe(4);
 
       // Delete the big ranking
       await request(app.getHttpServer())
@@ -758,10 +758,10 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(1);
+      expect(userResponse.body.rankedPokemonCount).toBe(1);
     });
 
-    it('should set highestCountOfRankedPokemon to 0 when all rankings are deleted', async () => {
+    it('should set rankedPokemonCount to 0 when all rankings are deleted', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU]);
 
@@ -785,7 +785,7 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(1);
+      expect(userResponse.body.rankedPokemonCount).toBe(1);
 
       // Delete the ranking
       await request(app.getHttpServer())
@@ -798,10 +798,10 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(0);
+      expect(userResponse.body.rankedPokemonCount).toBe(0);
     });
 
-    it('should not update highestCountOfRankedPokemon when updating ranking without changing pokemon count', async () => {
+    it('should not update rankedPokemonCount when updating ranking without changing pokemon count', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
 
@@ -834,10 +834,10 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(2);
+      expect(userResponse.body.rankedPokemonCount).toBe(2);
     });
 
-    it('should track the highest count across multiple rankings', async () => {
+    it('should sum the count across multiple rankings', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
@@ -861,7 +861,7 @@ describe('Users (e2e)', () => {
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(1);
+      expect(userResponse.body.rankedPokemonCount).toBe(1);
 
       // Create second ranking with 3 pokemon
       await request(app.getHttpServer())
@@ -873,12 +873,12 @@ describe('Users (e2e)', () => {
         })
         .expect(201);
 
-      // Verify count is now 3 (highest)
+      // Verify count is now 4 (sum: 1 + 3)
       userResponse = await request(app.getHttpServer())
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(3);
+      expect(userResponse.body.rankedPokemonCount).toBe(4);
 
       // Create third ranking with 2 pokemon
       await request(app.getHttpServer())
@@ -890,12 +890,12 @@ describe('Users (e2e)', () => {
         })
         .expect(201);
 
-      // Verify count is still 3 (highest doesn't change)
+      // Verify count is now 6 (sum: 1 + 3 + 2)
       userResponse = await request(app.getHttpServer())
         .get(`/users/${users[0]._id}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
-      expect(userResponse.body.highestCountOfRankedPokemon).toBe(3);
+      expect(userResponse.body.rankedPokemonCount).toBe(6);
     });
   });
 });
