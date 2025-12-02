@@ -99,7 +99,7 @@ describe('Rankings (e2e)', () => {
         .expect(400);
     });
 
-    it('should reject duplicate title for same user', async () => {
+    it('should auto-generate unique title with (2) suffix for same user', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
         username: REGULAR_USER.username,
@@ -109,18 +109,64 @@ describe('Rankings (e2e)', () => {
       const rankingData = createRankingData({ title: 'My Favorites' });
 
       // Create first ranking
-      await request(app.getHttpServer())
+      const response1 = await request(app.getHttpServer())
         .post('/rankings')
         .set('Authorization', `Bearer ${token}`)
         .send(rankingData)
         .expect(201);
 
-      // Try to create second ranking with same title
-      await request(app.getHttpServer())
+      expect(response1.body.title).toBe('My Favorites');
+
+      // Create second ranking with same title - should get (2) suffix
+      const response2 = await request(app.getHttpServer())
         .post('/rankings')
         .set('Authorization', `Bearer ${token}`)
         .send(rankingData)
-        .expect(409);
+        .expect(201);
+
+      expect(response2.body.title).toBe('My Favorites (2)');
+    });
+
+    it('should generate sequential suffixes (2), (3), (4) for duplicate titles', async () => {
+      await seedUsers(app, [REGULAR_USER]);
+      const token = await loginUser(app, {
+        username: REGULAR_USER.username,
+        password: REGULAR_USER.password,
+      });
+
+      const rankingData = createRankingData({ title: 'Test' });
+
+      // Create first ranking
+      const response1 = await request(app.getHttpServer())
+        .post('/rankings')
+        .set('Authorization', `Bearer ${token}`)
+        .send(rankingData)
+        .expect(201);
+      expect(response1.body.title).toBe('Test');
+
+      // Create second - should get (2)
+      const response2 = await request(app.getHttpServer())
+        .post('/rankings')
+        .set('Authorization', `Bearer ${token}`)
+        .send(rankingData)
+        .expect(201);
+      expect(response2.body.title).toBe('Test (2)');
+
+      // Create third - should get (3)
+      const response3 = await request(app.getHttpServer())
+        .post('/rankings')
+        .set('Authorization', `Bearer ${token}`)
+        .send(rankingData)
+        .expect(201);
+      expect(response3.body.title).toBe('Test (3)');
+
+      // Create fourth - should get (4)
+      const response4 = await request(app.getHttpServer())
+        .post('/rankings')
+        .set('Authorization', `Bearer ${token}`)
+        .send(rankingData)
+        .expect(201);
+      expect(response4.body.title).toBe('Test (4)');
     });
 
     it('should allow same title for different users', async () => {
@@ -208,6 +254,31 @@ describe('Rankings (e2e)', () => {
         .expect(200);
 
       expect(response.body.title).toBe('Updated Title');
+    });
+
+    it('should auto-generate unique title on update when title conflicts', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const rankings = await seedRankings(
+        app,
+        [
+          createRankingData({ title: 'Foo' }),
+          createRankingData({ title: 'Bar' }),
+        ],
+        users[0]._id.toString(),
+      );
+      const token = await loginUser(app, {
+        username: REGULAR_USER.username,
+        password: REGULAR_USER.password,
+      });
+
+      // Update "Bar" to "Foo" - should become "Foo (2)"
+      const response = await request(app.getHttpServer())
+        .patch(`/rankings/${rankings[1]._id.toString()}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ title: 'Foo' })
+        .expect(200);
+
+      expect(response.body.title).toBe('Foo (2)');
     });
 
     it('should return 403 when admin tries to update (not owner)', async () => {
