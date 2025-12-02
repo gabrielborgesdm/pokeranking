@@ -28,6 +28,9 @@ export class CacheService {
   async get<T>(key: string): Promise<T | null> {
     try {
       const value = await this.redis.get<T>(key);
+      if (value === null) {
+        this.logger.debug(`Cache miss: ${key}`);
+      }
       return value;
     } catch (error) {
       this.logger.error(`Cache get error for key "${key}":`, error);

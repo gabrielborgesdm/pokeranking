@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -25,6 +26,8 @@ import ms from 'ms';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @InjectConnection() private connection: Connection,
     private usersService: UsersService,
@@ -37,6 +40,7 @@ export class AuthService {
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
+      this.logger.warn(`Login failed: user not found - ${username}`);
       return null;
     }
 
@@ -46,10 +50,12 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
+      this.logger.warn(`Login failed: invalid password - ${username}`);
       return null;
     }
 
     if (!user.isActive) {
+      this.logger.warn(`Login failed: email not verified - ${username}`);
       throw new UnauthorizedException('Please verify your email to login.');
     }
 
@@ -63,6 +69,8 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
+
+    this.logger.log(`User logged in: ${user.username}`);
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -110,6 +118,8 @@ export class AuthService {
       return newUser;
     });
 
+    this.logger.log(`New user registered: ${user.username}`);
+
     return {
       user: toDto(UserResponseDto, user),
     };
@@ -132,6 +142,8 @@ export class AuthService {
       user.emailVerificationCode = undefined;
       user.emailVerificationExpires = undefined;
       await user.save({ session });
+
+      this.logger.log(`Email verified: ${user.username}`);
 
       return user;
     });
@@ -156,6 +168,8 @@ export class AuthService {
 
       // Send email within transaction - if it fails, token is rolled back
       await this.emailService.sendPasswordResetEmail(user, token);
+
+      this.logger.log(`Password reset requested: ${user.username}`);
     });
   }
 
@@ -181,6 +195,8 @@ export class AuthService {
       user.passwordResetExpires = undefined;
 
       await user.save({ session });
+
+      this.logger.log(`Password reset completed: ${user.username}`);
     });
   }
 
