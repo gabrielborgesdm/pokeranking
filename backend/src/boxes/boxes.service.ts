@@ -4,8 +4,9 @@ import {
   ForbiddenException,
   ConflictException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { TK } from '../i18n/constants/translation-keys';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+import { Model, Types, Connection, ClientSession } from 'mongoose';
 import { Box } from './schemas/box.schema';
 import { User } from '../users/schemas/user.schema';
 import { CreateBoxDto } from './dto/create-box.dto';
@@ -13,41 +14,57 @@ import { UpdateBoxDto } from './dto/update-box.dto';
 import { CommunityBoxQueryDto } from './dto/community-box-query.dto';
 import { BoxResponseDto } from './dto/box-response.dto';
 import { stripUndefined } from '../common/utils/transform.util';
-import { mapToPokemonResponseDto } from '../common/utils/pokemon.util';
 import { PokemonService } from '../pokemon/pokemon.service';
+import { withTransaction } from '../common/utils/transaction.util';
 
 @Injectable()
 export class BoxesService {
   constructor(
+    @InjectConnection() private connection: Connection,
     @InjectModel(Box.name) private readonly boxModel: Model<Box>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly pokemonService: PokemonService,
   ) {}
 
   async create(userId: string, createBoxDto: CreateBoxDto): Promise<Box> {
-    // Validate unique box name per user
-    await this.validateUniqueNamePerUser(userId, createBoxDto.name);
+    return withTransaction(this.connection, async (session) => {
+      // Validate unique box name per user
+      await this.validateUniqueNamePerUser(
+        userId,
+        createBoxDto.name,
+        undefined,
+        session,
+      );
 
-    // Get user's username for denormalization
-    const user = await this.userModel.findById(userId).exec();
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found`);
-    }
+      // Get user's username for denormalization
+      const user = await this.userModel
+        .findById(userId)
+        .session(session)
+        .exec();
+      if (!user) {
+        throw new NotFoundException({
+          key: TK.USERS.NOT_FOUND,
+          args: { id: userId },
+        });
+      }
 
-    const box = new this.boxModel({
-      ...createBoxDto,
-      user: new Types.ObjectId(userId),
-      ownerUsername: user.username,
+      const box = new this.boxModel({
+        ...createBoxDto,
+        user: new Types.ObjectId(userId),
+        ownerUsername: user.username,
+      });
+
+      const savedBox = await box.save({ session });
+
+      // Add box to user's boxes array
+      await this.userModel.findByIdAndUpdate(
+        userId,
+        { $push: { boxes: savedBox._id } },
+        { session },
+      );
+
+      return savedBox;
     });
-
-    const savedBox = await box.save();
-
-    // Add box to user's boxes array
-    await this.userModel.findByIdAndUpdate(userId, {
-      $push: { boxes: savedBox._id },
-    });
-
-    return savedBox;
   }
 
   async findAllByUser(userId: string): Promise<(Box | BoxResponseDto)[]> {
@@ -122,7 +139,7 @@ export class BoxesService {
       .exec();
 
     if (!box) {
-      throw new NotFoundException(`Box with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.BOXES.NOT_FOUND, args: { id } });
     }
 
     // Validate access (owner OR isPublic)
@@ -139,7 +156,7 @@ export class BoxesService {
     const box = await this.boxModel.findById(id).exec();
 
     if (!box) {
-      throw new NotFoundException(`Box with ID ${id} not found`);
+      throw new NotFoundException({ key: TK.BOXES.NOT_FOUND, args: { id } });
     }
 
     // Check ownership
@@ -157,75 +174,101 @@ export class BoxesService {
   }
 
   async remove(id: string, userId: string): Promise<Box> {
-    const box = await this.boxModel.findById(id).exec();
+    return withTransaction(this.connection, async (session) => {
+      const box = await this.boxModel.findById(id).session(session).exec();
 
-    if (!box) {
-      throw new NotFoundException(`Box with ID ${id} not found`);
-    }
+      if (!box) {
+        throw new NotFoundException({ key: TK.BOXES.NOT_FOUND, args: { id } });
+      }
 
-    // Check ownership
-    this.validateOwnership(box, userId);
+      // Check ownership
+      this.validateOwnership(box, userId);
 
-    await box.deleteOne();
+      await box.deleteOne({ session });
 
-    // Remove box from user's boxes array
-    await this.userModel.findByIdAndUpdate(userId, {
-      $pull: { boxes: box._id },
+      // Remove box from user's boxes array
+      await this.userModel.findByIdAndUpdate(
+        userId,
+        { $pull: { boxes: box._id } },
+        { session },
+      );
+
+      return box;
     });
-
-    return box;
   }
 
   async favoriteBox(boxId: string, userId: string): Promise<Box> {
-    // Fetch original box
-    const originalBox = await this.boxModel.findById(boxId).exec();
+    return withTransaction(this.connection, async (session) => {
+      // Fetch original box
+      const originalBox = await this.boxModel
+        .findById(boxId)
+        .session(session)
+        .exec();
 
-    if (!originalBox || !originalBox.isPublic) {
-      throw new NotFoundException(`Box with ID ${boxId} not found`);
-    }
+      if (!originalBox || !originalBox.isPublic) {
+        throw new NotFoundException({
+          key: TK.BOXES.NOT_FOUND,
+          args: { id: boxId },
+        });
+      }
 
-    // Validate: user doesn't own it
-    if (originalBox.user.toString() === userId) {
-      throw new ForbiddenException('Cannot favorite your own box');
-    }
+      // Validate: user doesn't own it
+      if (originalBox.user.toString() === userId) {
+        throw new ForbiddenException({ key: TK.BOXES.CANNOT_FAVORITE_OWN });
+      }
 
-    // Get user's username for denormalization
-    const user = await this.userModel.findById(userId).exec();
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found`);
-    }
+      // Get user's username for denormalization
+      const user = await this.userModel
+        .findById(userId)
+        .session(session)
+        .exec();
+      if (!user) {
+        throw new NotFoundException({
+          key: TK.USERS.NOT_FOUND,
+          args: { id: userId },
+        });
+      }
 
-    // Generate unique name for copy
-    const uniqueName = await this.generateUniqueName(userId, originalBox.name);
+      // Generate unique name for copy
+      const uniqueName = await this.generateUniqueName(
+        userId,
+        originalBox.name,
+        session,
+      );
 
-    // Create NEW box document (copy)
-    const copiedBox = new this.boxModel({
-      name: uniqueName,
-      pokemon: originalBox.pokemon, // Clone pokemon array
-      user: new Types.ObjectId(userId),
-      ownerUsername: user.username,
-      isPublic: false, // User's private copy by default
+      // Create NEW box document (copy)
+      const copiedBox = new this.boxModel({
+        name: uniqueName,
+        pokemon: originalBox.pokemon, // Clone pokemon array
+        user: new Types.ObjectId(userId),
+        ownerUsername: user.username,
+        isPublic: false, // User's private copy by default
+      });
+
+      const savedBox = await copiedBox.save({ session });
+
+      // Add new box to user's boxes array
+      await this.userModel.findByIdAndUpdate(
+        userId,
+        { $push: { boxes: savedBox._id } },
+        { session },
+      );
+
+      // Increment original box's favoriteCount
+      await this.boxModel.findByIdAndUpdate(
+        boxId,
+        { $inc: { favoriteCount: 1 } },
+        { session },
+      );
+
+      return savedBox;
     });
-
-    const savedBox = await copiedBox.save();
-
-    // Add new box to user's boxes array
-    await this.userModel.findByIdAndUpdate(userId, {
-      $push: { boxes: savedBox._id },
-    });
-
-    // Increment original box's favoriteCount
-    await this.boxModel.findByIdAndUpdate(boxId, {
-      $inc: { favoriteCount: 1 },
-    });
-
-    return savedBox;
   }
 
   // Helper: Validate ownership
   private validateOwnership(box: Box, userId: string): void {
     if (box.user.toString() !== userId) {
-      throw new ForbiddenException('You can only modify your own boxes');
+      throw new ForbiddenException({ key: TK.BOXES.CANNOT_MODIFY_OTHERS });
     }
   }
 
@@ -235,7 +278,10 @@ export class BoxesService {
     const isPublic = box.isPublic;
 
     if (!isOwner && !isPublic) {
-      throw new NotFoundException(`Box with ID ${box.id} not found`);
+      throw new NotFoundException({
+        key: TK.BOXES.NOT_FOUND,
+        args: { id: String(box.id) },
+      });
     }
   }
 
@@ -244,6 +290,7 @@ export class BoxesService {
     userId: string,
     name: string,
     excludeId?: string,
+    session: ClientSession | null = null,
   ): Promise<void> {
     const query: Record<string, unknown> = {
       user: new Types.ObjectId(userId),
@@ -255,10 +302,13 @@ export class BoxesService {
       query._id = { $ne: new Types.ObjectId(excludeId) };
     }
 
-    const existing = await this.boxModel.findOne(query).exec();
+    const existing = await this.boxModel.findOne(query).session(session).exec();
 
     if (existing) {
-      throw new ConflictException(`You already have a box with name "${name}"`);
+      throw new ConflictException({
+        key: TK.BOXES.NAME_EXISTS,
+        args: { name },
+      });
     }
   }
 
@@ -270,7 +320,7 @@ export class BoxesService {
       _id: 'default',
       name: 'All Pokemon',
       isPublic: false,
-      pokemon: mapToPokemonResponseDto(allPokemon),
+      pokemon: allPokemon,
       favoriteCount: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -283,6 +333,7 @@ export class BoxesService {
   private async generateUniqueName(
     userId: string,
     baseName: string,
+    session: ClientSession | null = null,
   ): Promise<string> {
     // Check if base name is available
     const baseExists = await this.boxModel
@@ -290,6 +341,7 @@ export class BoxesService {
         user: new Types.ObjectId(userId),
         name: baseName,
       })
+      .session(session)
       .exec();
 
     if (!baseExists) {
@@ -305,6 +357,7 @@ export class BoxesService {
           user: new Types.ObjectId(userId),
           name: candidateName,
         })
+        .session(session)
         .exec();
 
       if (!exists) {
@@ -315,9 +368,7 @@ export class BoxesService {
 
       // Safety check to prevent infinite loop
       if (counter > 100) {
-        throw new ConflictException(
-          'Unable to generate unique name for favorited box',
-        );
+        throw new ConflictException({ key: TK.BOXES.UNABLE_TO_GENERATE_NAME });
       }
     }
   }

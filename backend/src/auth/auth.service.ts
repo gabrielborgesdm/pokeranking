@@ -3,9 +3,13 @@ import {
   UnauthorizedException,
   NotFoundException,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
+import { TK } from '../i18n/constants/translation-keys';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { InjectConnection } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { UserRole } from '../common/enums/user-role.enum';
@@ -17,12 +21,16 @@ import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { toDto } from '../common/utils/transform.util';
 import { UserResponseDto } from '../users/dto/user-response.dto';
 import { EmailService } from '../email/email.service';
+import { withTransaction } from '../common/utils/transaction.util';
 import * as crypto from 'crypto';
 import ms from 'ms';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
+    @InjectConnection() private connection: Connection,
     private usersService: UsersService,
     private jwtService: JwtService,
     private emailService: EmailService,
@@ -33,6 +41,7 @@ export class AuthService {
     const user = await this.usersService.findByUsername(username);
 
     if (!user) {
+      this.logger.warn(`Login failed: user not found - ${username}`);
       return null;
     }
 
@@ -42,11 +51,13 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
+      this.logger.warn(`Login failed: invalid password - ${username}`);
       return null;
     }
 
     if (!user.isActive) {
-      throw new UnauthorizedException('Please verify your email to login.');
+      this.logger.warn(`Login failed: email not verified - ${username}`);
+      throw new UnauthorizedException({ key: TK.AUTH.EMAIL_NOT_VERIFIED });
     }
 
     return user;
@@ -60,6 +71,8 @@ export class AuthService {
       role: user.role,
     };
 
+    this.logger.log(`User logged in: ${user.username}`);
+
     return {
       access_token: this.jwtService.sign(payload),
     };
@@ -69,42 +82,44 @@ export class AuthService {
     registerDto: RegisterDto,
     requestedRole?: UserRole,
   ): Promise<RegisterResponseDto> {
-    const userCount = await this.usersService.count();
-
     const emailVerificationRequired = this.configService.get<boolean>(
       'EMAIL_VERIFICATION_REQUIRED',
-
       true,
     );
 
-    // Use requested role if provided, otherwise default based on user count
-    const role = requestedRole
-      ? requestedRole
-      : userCount === 0
-        ? UserRole.Admin
-        : UserRole.Member;
+    const user = await withTransaction(this.connection, async (session) => {
+      const userCount = await this.usersService.count({ session });
 
-    const user = await this.usersService.create({
-      ...registerDto,
+      // Use requested role if provided, otherwise default based on user count
+      const role = requestedRole
+        ? requestedRole
+        : userCount === 0
+          ? UserRole.Admin
+          : UserRole.Member;
 
-      role,
+      const newUser = await this.usersService.create(
+        { ...registerDto, role },
+        { session },
+      );
+
+      newUser.isActive = !emailVerificationRequired;
+
+      if (emailVerificationRequired) {
+        const code = this.generateVerificationCode();
+        const tokenExpiration = Date.now() + ms('1d');
+
+        newUser.emailVerificationCode = code;
+        newUser.emailVerificationExpires = new Date(tokenExpiration);
+
+        // Send email within transaction - if it fails, user creation is rolled back
+        await this.emailService.sendVerificationEmail(newUser, code);
+      }
+
+      await newUser.save({ session });
+      return newUser;
     });
 
-    user.isActive = !emailVerificationRequired; // Set isActive after user creation
-
-    if (emailVerificationRequired) {
-      const code = this.generateVerificationCode();
-
-      const tokenExpiration = Date.now() + ms('1d');
-
-      user.emailVerificationCode = code;
-
-      user.emailVerificationExpires = new Date(tokenExpiration);
-
-      await this.emailService.sendVerificationEmail(user, code);
-    }
-
-    await user.save(); // Save after setting isActive and potentially email verification token/expires
+    this.logger.log(`New user registered: ${user.username}`);
 
     return {
       user: toDto(UserResponseDto, user),
@@ -112,88 +127,103 @@ export class AuthService {
   }
 
   async verifyEmail(email: string, code: string): Promise<User> {
-    const user = await this.usersService.findByEmailAndVerificationCode(
-      email,
-      code,
-    );
+    return withTransaction(this.connection, async (session) => {
+      const user = await this.usersService.findByEmailAndVerificationCode(
+        email,
+        code,
+        { session },
+      );
 
-    if (!user) {
-      throw new NotFoundException('Invalid verification code or email.');
-    }
+      if (!user) {
+        throw new NotFoundException({ key: TK.AUTH.INVALID_VERIFICATION_CODE });
+      }
 
-    // Clear verification fields and activate user
-    user.isActive = true;
-    user.emailVerificationCode = undefined;
-    user.emailVerificationExpires = undefined;
-    await user.save();
+      // Clear verification fields and activate user
+      user.isActive = true;
+      user.emailVerificationCode = undefined;
+      user.emailVerificationExpires = undefined;
+      await user.save({ session });
 
-    return user;
+      this.logger.log(`Email verified: ${user.username}`);
+
+      return user;
+    });
   }
 
   async forgotPassword(email: string): Promise<void> {
-    const user = await this.usersService.findByEmail(email);
+    await withTransaction(this.connection, async (session) => {
+      const user = await this.usersService.findByEmail(email, { session });
 
-    if (!user) {
-      // To prevent user enumeration, we don't throw an error here
+      if (!user) {
+        // To prevent user enumeration, we don't throw an error here
+        return;
+      }
 
-      return;
-    }
+      const token = this.generateToken();
+      const tokenExpiration = Date.now() + ms('1h');
 
-    const token = this.generateToken();
+      user.passwordResetToken = token;
+      user.passwordResetExpires = new Date(tokenExpiration);
 
-    const tokenExpiration = Date.now() + ms('1h');
+      await user.save({ session });
 
-    user.passwordResetToken = token;
+      // Send email within transaction - if it fails, token is rolled back
+      await this.emailService.sendPasswordResetEmail(user, token);
 
-    user.passwordResetExpires = new Date(tokenExpiration);
-
-    await user.save();
-
-    await this.emailService.sendPasswordResetEmail(user, token);
+      this.logger.log(`Password reset requested: ${user.username}`);
+    });
   }
 
   async resetPassword(token: string, password: string): Promise<void> {
-    const user = await this.usersService.findByPasswordResetToken(token);
+    await withTransaction(this.connection, async (session) => {
+      const user = await this.usersService.findByPasswordResetToken(token, {
+        session,
+      });
 
-    if (!user) {
-      return; // To prevent user enumeration, we don't throw an error here
-    }
+      if (!user) {
+        return; // To prevent user enumeration, we don't throw an error here
+      }
 
-    if (user.passwordResetExpires && user.passwordResetExpires < new Date()) {
-      return; // To prevent user enumeration, we don't throw an error here
-    }
+      if (user.passwordResetExpires && user.passwordResetExpires < new Date()) {
+        return; // To prevent user enumeration, we don't throw an error here
+      }
 
-    // Hash the new password before saving
-    const hashedPassword = await this.usersService.hashPassword(password);
-    user.password = hashedPassword;
+      // Hash the new password before saving
+      const hashedPassword = await this.usersService.hashPassword(password);
+      user.password = hashedPassword;
 
-    user.passwordResetToken = undefined;
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
 
-    user.passwordResetExpires = undefined;
+      await user.save({ session });
 
-    await user.save();
+      this.logger.log(`Password reset completed: ${user.username}`);
+    });
   }
 
   async resendVerificationCode(email: string): Promise<void> {
-    const user = await this.usersService.findByEmail(email);
+    await withTransaction(this.connection, async (session) => {
+      const user = await this.usersService.findByEmail(email, { session });
 
-    if (!user) {
-      throw new NotFoundException('User not found.');
-    }
+      if (!user) {
+        throw new NotFoundException({ key: TK.USERS.NOT_FOUND });
+      }
 
-    if (user.isActive) {
-      throw new BadRequestException('Email is already verified.');
-    }
+      if (user.isActive) {
+        throw new BadRequestException({ key: TK.AUTH.EMAIL_ALREADY_VERIFIED });
+      }
 
-    // Generate new code
-    const code = this.generateVerificationCode();
-    const tokenExpiration = Date.now() + ms('1d');
+      // Generate new code
+      const code = this.generateVerificationCode();
+      const tokenExpiration = Date.now() + ms('1d');
 
-    user.emailVerificationCode = code;
-    user.emailVerificationExpires = new Date(tokenExpiration);
-    await user.save();
+      user.emailVerificationCode = code;
+      user.emailVerificationExpires = new Date(tokenExpiration);
+      await user.save({ session });
 
-    await this.emailService.sendVerificationEmail(user, code);
+      // Send email within transaction - if it fails, code update is rolled back
+      await this.emailService.sendVerificationEmail(user, code);
+    });
   }
 
   private generateToken(): string {
