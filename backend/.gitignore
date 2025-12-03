@@ -5,6 +5,7 @@
 
 **/.env 
 
+**/seed/**.json
 # Logs
 logs
 *.log

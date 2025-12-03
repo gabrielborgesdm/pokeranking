@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "leaderboard": "Ranking",
+    "about": "Sobre",
+    "signIn": "Entrar",
+    "signOut": "Sair",
+    "settings": "Configurações",
+    "lightMode": "Modo claro",
+    "darkMode": "Modo escuro",
+    "openMenu": "Abrir menu",
+    "userMenu": "Menu do usuário",
+    "toggleTheme": "Alternar tema"
+  },
+  "leaderboard": {
+    "title": "Ranking",
+    "description": "Treinadores Pokemon mais bem classificados",
+    "noUsers": "Nenhum usuário encontrado.",
+    "errorTitle": "Erro ao carregar usuários",
+    "errorDescription": "Por favor, tente novamente mais tarde.",
+    "searchPlaceholder": "Buscar por nome de usuário...",
+    "sortBy": "Ordenar por",
+    "sortByScore": "Pontuação Total",
+    "sortByUsername": "Nome de usuário",
+    "sortByDate": "Data de entrada",
+    "orderAsc": "Crescente",
+    "orderDesc": "Decrescente"
+  },
+  "pagination": {
+    "previous": "Página anterior",
+    "next": "Próxima página",
+    "page": "Página {{current}} de {{total}}"
+  }
+}
