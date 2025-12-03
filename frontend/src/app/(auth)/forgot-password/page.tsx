@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
         )}
       </CardContent>
       <CardFooter className="justify-center">
-        <Link href="/signin" className="text-sm text-primary hover:underline">
+        <Link href="/signin" className="link text-sm">
           {t("auth.backToSignIn")}
         </Link>
       </CardFooter>

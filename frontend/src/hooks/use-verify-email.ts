@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -24,9 +24,11 @@ export function useVerifyEmail() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") ?? "";
+  const codeFromUrl = searchParams.get("code") ?? "";
 
   const [error, setError] = useState<string | null>(null);
   const [resendSuccess, setResendSuccess] = useState(false);
+  const hasAutoSubmitted = useRef(false);
 
   const verifyMutation = useAuthControllerVerifyEmail();
   const resendMutation = useAuthControllerResendVerification();
@@ -34,9 +36,17 @@ export function useVerifyEmail() {
   const form = useForm<VerifyEmailFormData>({
     resolver: zodResolver(verifyEmailSchema),
     defaultValues: {
-      code: "",
+      code: codeFromUrl,
     },
   });
+
+  // Auto-submit when a valid 6-digit code is present in the URL
+  useEffect(() => {
+    if (codeFromUrl.length === 6 && email && !hasAutoSubmitted.current) {
+      hasAutoSubmitted.current = true;
+      form.handleSubmit(onSubmit)();
+    }
+  }, [codeFromUrl, email]);
 
   async function onSubmit(data: VerifyEmailFormData) {
     setError(null);
@@ -46,11 +56,16 @@ export function useVerifyEmail() {
       {
         onSuccess: async (response) => {
           if (response.status === 200 && response.data.access_token) {
-            await signIn("credentials", {
+            const result = await signIn("credentials", {
+              token: response.data.access_token,
               redirect: false,
             });
-            router.push("/");
-            router.refresh();
+            if (result?.ok) {
+              router.push("/");
+              router.refresh();
+            } else {
+              setError(t("auth.verificationFailed"));
+            }
           }
         },
         onError: (err) => {

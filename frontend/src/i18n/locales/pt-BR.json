@@ -1,4 +1,7 @@
 {
+  "common": {
+    "or": "ou"
+  },
   "pokemonTypes": {
     "Bug": "Inseto",
     "Dark": "Sombrio",
@@ -64,6 +67,7 @@
     "sending": "Enviando...",
     "resetEmailSent": "Se a conta existir, você receberá um email de redefinição",
     "backToSignIn": "Voltar para entrar",
+    "goToHomepage": "Ir para a página inicial",
     "resetPassword": "Redefinir senha",
     "resetPasswordDescription": "Digite sua nova senha",
     "newPassword": "Nova senha",
