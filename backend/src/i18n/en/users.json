@@ -1,5 +1,5 @@
 {
-  "notFound": "User with ID {id} not found",
+  "notFound": "User not found",
   "emailExists": "User with email \"{email}\" already exists",
   "usernameExists": "User with username \"{username}\" already exists",
   "cannotUpdateOthers": "You can only update your own profile"

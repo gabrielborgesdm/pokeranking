@@ -34,7 +34,7 @@ describe('Boxes (e2e)', () => {
     it('should create box successfully with minimal data (name only)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -59,7 +59,7 @@ describe('Boxes (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -83,7 +83,7 @@ describe('Boxes (e2e)', () => {
     it('should create public box (isPublic: true)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -105,7 +105,7 @@ describe('Boxes (e2e)', () => {
     it('should create private box (isPublic: false, default)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -127,7 +127,7 @@ describe('Boxes (e2e)', () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const userId = users[0]._id.toString();
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -153,7 +153,7 @@ describe('Boxes (e2e)', () => {
     it('should return 409 when box name already exists for user', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -186,7 +186,7 @@ describe('Boxes (e2e)', () => {
 
       // User 2 creates box with same name - should succeed
       const token2 = await loginUser(app, {
-        username: ANOTHER_USER.username,
+        identifier: ANOTHER_USER.username,
         password: ANOTHER_USER.password,
       });
 
@@ -213,7 +213,7 @@ describe('Boxes (e2e)', () => {
     it('should return 400 for invalid name (empty string)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -227,7 +227,7 @@ describe('Boxes (e2e)', () => {
     it('should return 400 for name too long (>100 chars)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -243,7 +243,7 @@ describe('Boxes (e2e)', () => {
     it('should return 400 for invalid pokemon ID format (not valid MongoDB ObjectId)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -262,7 +262,7 @@ describe('Boxes (e2e)', () => {
     it('should return 400 for pokemon as non-array value', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -290,7 +290,7 @@ describe('Boxes (e2e)', () => {
 
     it('should return default box when no boxes exist', async () => {
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -308,7 +308,7 @@ describe('Boxes (e2e)', () => {
       await seedBoxes(app, [BOX_PRIVATE, BOX_WITH_POKEMON], userId);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -325,7 +325,7 @@ describe('Boxes (e2e)', () => {
       await seedBoxes(app, [BOX_PRIVATE], userId);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -339,7 +339,7 @@ describe('Boxes (e2e)', () => {
 
     it('should verify default box has ID "default"', async () => {
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -355,7 +355,7 @@ describe('Boxes (e2e)', () => {
       await seedPokemon(app, ALL_POKEMON);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -378,7 +378,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -405,7 +405,7 @@ describe('Boxes (e2e)', () => {
     it('should return empty array when no public boxes exist', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -434,7 +434,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -475,7 +475,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -505,7 +505,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -529,7 +529,7 @@ describe('Boxes (e2e)', () => {
       await seedBoxes(app, boxes, users[1]._id.toString());
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -560,7 +560,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -591,7 +591,7 @@ describe('Boxes (e2e)', () => {
       await seedBoxes(app, boxes, users[1]._id.toString());
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -632,7 +632,7 @@ describe('Boxes (e2e)', () => {
         );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -654,7 +654,7 @@ describe('Boxes (e2e)', () => {
       await seedBoxes(app, boxes, users[1]._id.toString());
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -686,7 +686,7 @@ describe('Boxes (e2e)', () => {
       await seedBoxes(app, boxes, users[1]._id.toString());
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -738,7 +738,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -762,7 +762,7 @@ describe('Boxes (e2e)', () => {
       await seedBoxes(app, boxes, users[1]._id.toString());
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -796,7 +796,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -823,7 +823,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -851,7 +851,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -884,7 +884,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -912,7 +912,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -925,7 +925,7 @@ describe('Boxes (e2e)', () => {
     it('should return 404 for non-existent box ID', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -940,7 +940,7 @@ describe('Boxes (e2e)', () => {
     it('should return default box with ID "default"', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -958,7 +958,7 @@ describe('Boxes (e2e)', () => {
       await seedPokemon(app, ALL_POKEMON);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -998,7 +998,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1022,7 +1022,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1047,7 +1047,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1073,7 +1073,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1104,7 +1104,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1127,7 +1127,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1157,7 +1157,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1173,7 +1173,7 @@ describe('Boxes (e2e)', () => {
     it('should return 404 for non-existent box ID', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1212,7 +1212,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1234,7 +1234,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1264,7 +1264,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1283,7 +1283,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1309,7 +1309,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1344,7 +1344,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1357,7 +1357,7 @@ describe('Boxes (e2e)', () => {
     it('should return 404 for non-existent box ID', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1402,7 +1402,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1428,7 +1428,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1454,7 +1454,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1465,7 +1465,7 @@ describe('Boxes (e2e)', () => {
 
       // Login as another user and check original box
       const token2 = await loginUser(app, {
-        username: ANOTHER_USER.username,
+        identifier: ANOTHER_USER.username,
         password: ANOTHER_USER.password,
       });
 
@@ -1491,7 +1491,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1521,7 +1521,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1561,7 +1561,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1600,7 +1600,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1626,7 +1626,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1659,7 +1659,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1683,7 +1683,7 @@ describe('Boxes (e2e)', () => {
       );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -1696,7 +1696,7 @@ describe('Boxes (e2e)', () => {
     it('should return 404 for non-existent box ID', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 

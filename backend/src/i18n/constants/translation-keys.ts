@@ -4,6 +4,7 @@ export const TK = {
     EMAIL_NOT_VERIFIED: 'auth.emailNotVerified',
     INVALID_VERIFICATION_CODE: 'auth.invalidVerificationCode',
     EMAIL_ALREADY_VERIFIED: 'auth.emailAlreadyVerified',
+    VERIFICATION_EMAIL_RESENT: 'auth.verificationEmailResent',
   },
   USERS: {
     NOT_FOUND: 'users.notFound',
@@ -31,5 +32,7 @@ export const TK = {
   COMMON: {
     TOO_MANY_VERIFICATION_ATTEMPTS: 'common.tooManyVerificationAttempts',
     TOO_MANY_RESEND_ATTEMPTS: 'common.tooManyResendAttempts',
+    EMAIL_SEND_FAILED: 'common.emailSendFailed',
+    INTERNAL_ERROR: 'common.internalError',
   },
 } as const;

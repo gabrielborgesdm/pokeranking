@@ -14,6 +14,8 @@ interface I18nExceptionPayload {
   args?: Record<string, string | number>;
 }
 
+type ExceptionResponseObject = Record<string, unknown>;
+
 function isI18nPayload(value: unknown): value is I18nExceptionPayload {
   return (
     typeof value === 'object' &&
@@ -21,6 +23,10 @@ function isI18nPayload(value: unknown): value is I18nExceptionPayload {
     'key' in value &&
     typeof (value as I18nExceptionPayload).key === 'string'
   );
+}
+
+function isObject(value: unknown): value is ExceptionResponseObject {
+  return typeof value === 'object' && value !== null;
 }
 
 @Catch(HttpException)
@@ -32,69 +38,9 @@ export class I18nExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
-
     const i18n = I18nContext.current(host);
 
-    let message: string | string[];
-
-    if (typeof exceptionResponse === 'string') {
-      message = exceptionResponse;
-    } else if (
-      typeof exceptionResponse === 'object' &&
-      exceptionResponse !== null
-    ) {
-      const responseObj = exceptionResponse as Record<string, unknown>;
-
-      if (responseObj.message) {
-        if (Array.isArray(responseObj.message)) {
-          // Validation errors - translate each if it's an i18n payload
-          message = responseObj.message.map((msg) => {
-            if (isI18nPayload(msg) && i18n) {
-              return this.translate(i18n, msg.key, msg.args);
-            }
-            return String(msg);
-          });
-        } else if (isI18nPayload(responseObj.message)) {
-          // Single i18n payload in message
-          message = i18n
-            ? this.translate(
-                i18n,
-                responseObj.message.key,
-                responseObj.message.args,
-              )
-            : responseObj.message.key;
-        } else if (isI18nPayload(responseObj)) {
-          // The response object itself is an i18n payload
-          message = i18n
-            ? this.translate(
-                i18n,
-                responseObj.key,
-                responseObj.args as Record<string, string | number>,
-              )
-            : responseObj.key;
-        } else if (
-          typeof responseObj.message === 'string' ||
-          typeof responseObj.message === 'number'
-        ) {
-          message = String(responseObj.message);
-        } else {
-          message = 'An error occurred';
-        }
-      } else if (isI18nPayload(responseObj)) {
-        // Response object is directly an i18n payload
-        message = i18n
-          ? this.translate(
-              i18n,
-              responseObj.key,
-              responseObj.args as Record<string, string | number>,
-            )
-          : responseObj.key;
-      } else {
-        message = 'An error occurred';
-      }
-    } else {
-      message = 'An error occurred';
-    }
+    const message = this.extractMessage(exceptionResponse, i18n);
 
     response.status(status).json({
       statusCode: status,
@@ -103,15 +49,91 @@ export class I18nExceptionFilter implements ExceptionFilter {
     });
   }
 
+  private extractMessage(
+    exceptionResponse: string | object,
+    i18n: I18nContext | undefined,
+  ): string | string[] {
+    if (typeof exceptionResponse === 'string') {
+      return this.translateIfKey(exceptionResponse, i18n);
+    }
+
+    if (!isObject(exceptionResponse)) {
+      return this.translateIfKey('common.internalError', i18n);
+    }
+
+    // Check if root object is an i18n payload first (e.g., { key: "common.error" })
+    if (isI18nPayload(exceptionResponse)) {
+      return this.translatePayload(exceptionResponse, i18n);
+    }
+
+    return this.extractFromMessageField(exceptionResponse, i18n);
+  }
+
+  private extractFromMessageField(
+    responseObj: ExceptionResponseObject,
+    i18n: I18nContext | undefined,
+  ): string | string[] {
+    const { message } = responseObj;
+
+    if (Array.isArray(message)) {
+      return this.translateMessageArray(message, i18n);
+    }
+
+    if (isI18nPayload(message)) {
+      return this.translatePayload(message, i18n);
+    }
+
+    if (typeof message === 'string') {
+      return this.translateIfKey(message, i18n);
+    }
+
+    if (typeof message === 'number') {
+      return String(message);
+    }
+
+    return this.translateIfKey('common.internalError', i18n);
+  }
+
+  private translateMessageArray(
+    messages: unknown[],
+    i18n: I18nContext | undefined,
+  ): string[] {
+    return messages.map((msg) => {
+      if (isI18nPayload(msg)) {
+        return this.translatePayload(msg, i18n);
+      }
+      if (typeof msg === 'string') {
+        return this.translateIfKey(msg, i18n);
+      }
+      return String(msg);
+    });
+  }
+
+  private translatePayload(
+    payload: I18nExceptionPayload,
+    i18n: I18nContext | undefined,
+  ): string {
+    if (!i18n) {
+      return payload.key;
+    }
+    return this.translate(i18n, payload.key, payload.args);
+  }
+
+  private translateIfKey(value: string, i18n: I18nContext | undefined): string {
+    // Check if value looks like an i18n key (contains a dot, e.g., "common.error")
+    if (!i18n || !value.includes('.')) {
+      return value;
+    }
+    return this.translate(i18n, value);
+  }
+
   private translate(
     i18n: I18nContext,
     key: string,
     args?: Record<string, string | number>,
   ): string {
     try {
-      const translated = i18n.t(key, { args }) as any as string;
-      // If translation returns the key itself, it means translation wasn't found
-      return translated !== key ? translated : key;
+      return String(i18n.t(key, { args }));
     } catch {
       this.logger.warn(`Translation failed for key: ${key}`);
       return key;

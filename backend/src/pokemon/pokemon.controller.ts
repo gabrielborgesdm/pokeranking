@@ -10,6 +10,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+import { Public } from '../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -63,6 +64,7 @@ export class PokemonController {
   }
 
   @Get(':id')
+  @Public()
   @ApiOperation({ summary: 'Get pokemon by ID' })
   @ApiParam({
     name: 'id',

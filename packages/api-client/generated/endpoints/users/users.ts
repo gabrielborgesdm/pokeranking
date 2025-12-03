@@ -42,23 +42,12 @@ export type usersControllerFindAllResponse200 = {
   status: 200;
 };
 
-export type usersControllerFindAllResponse401 = {
-  data: void;
-  status: 401;
-};
-
 export type usersControllerFindAllResponseSuccess =
   usersControllerFindAllResponse200 & {
     headers: Headers;
   };
-export type usersControllerFindAllResponseError =
-  usersControllerFindAllResponse401 & {
-    headers: Headers;
-  };
-
 export type usersControllerFindAllResponse =
-  | usersControllerFindAllResponseSuccess
-  | usersControllerFindAllResponseError;
+  usersControllerFindAllResponseSuccess;
 
 export const getUsersControllerFindAllUrl = (
   params?: UsersControllerFindAllParams,
@@ -99,7 +88,7 @@ export const getUsersControllerFindAllQueryKey = (
 
 export const getUsersControllerFindAllQueryOptions = <
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -133,11 +122,11 @@ export const getUsersControllerFindAllQueryOptions = <
 export type UsersControllerFindAllQueryResult = NonNullable<
   Awaited<ReturnType<typeof usersControllerFindAll>>
 >;
-export type UsersControllerFindAllQueryError = void;
+export type UsersControllerFindAllQueryError = unknown;
 
 export function useUsersControllerFindAll<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params: undefined | UsersControllerFindAllParams,
   options: {
@@ -164,7 +153,7 @@ export function useUsersControllerFindAll<
 };
 export function useUsersControllerFindAll<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -189,7 +178,7 @@ export function useUsersControllerFindAll<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 export function useUsersControllerFindAll<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -210,7 +199,7 @@ export function useUsersControllerFindAll<
 
 export function useUsersControllerFindAll<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -239,7 +228,7 @@ export function useUsersControllerFindAll<
 
 export const getUsersControllerFindAllSuspenseQueryOptions = <
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -273,11 +262,11 @@ export const getUsersControllerFindAllSuspenseQueryOptions = <
 export type UsersControllerFindAllSuspenseQueryResult = NonNullable<
   Awaited<ReturnType<typeof usersControllerFindAll>>
 >;
-export type UsersControllerFindAllSuspenseQueryError = void;
+export type UsersControllerFindAllSuspenseQueryError = unknown;
 
 export function useUsersControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params: undefined | UsersControllerFindAllParams,
   options: {
@@ -296,7 +285,7 @@ export function useUsersControllerFindAllSuspense<
 };
 export function useUsersControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -315,7 +304,7 @@ export function useUsersControllerFindAllSuspense<
 };
 export function useUsersControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -338,7 +327,7 @@ export function useUsersControllerFindAllSuspense<
 
 export function useUsersControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof usersControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   params?: UsersControllerFindAllParams,
   options?: {
@@ -380,11 +369,6 @@ export type usersControllerFindOneResponse200 = {
   status: 200;
 };
 
-export type usersControllerFindOneResponse401 = {
-  data: void;
-  status: 401;
-};
-
 export type usersControllerFindOneResponse404 = {
   data: void;
   status: 404;
@@ -394,12 +378,10 @@ export type usersControllerFindOneResponseSuccess =
   usersControllerFindOneResponse200 & {
     headers: Headers;
   };
-export type usersControllerFindOneResponseError = (
-  | usersControllerFindOneResponse401
-  | usersControllerFindOneResponse404
-) & {
-  headers: Headers;
-};
+export type usersControllerFindOneResponseError =
+  usersControllerFindOneResponse404 & {
+    headers: Headers;
+  };
 
 export type usersControllerFindOneResponse =
   | usersControllerFindOneResponseSuccess

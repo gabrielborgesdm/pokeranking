@@ -1,5 +1,11 @@
 # Pokeranking
 
+If you find this project useful, please consider giving it a ⭐ on GitHub!
+
+![Sign In](frontend/public/screenshots/sign-in.png)
+
+![Leaderboard](frontend/public/screenshots/leaderboard.png)
+
 ## Introduction
 
 Pokeranking is a project that started as a hobby five years ago to help a Brazilian streamer rank his favorite Pokemon while also interacting with his community.
@@ -66,16 +72,16 @@ The backend is built with NestJS 11 and follows a modular architecture with clea
 
 ### Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| NestJS 11 | Backend framework |
-| MongoDB 7 + Mongoose 8 | Database and ODM |
-| Upstash Redis | Distributed caching and rate limiting |
-| Passport.js + JWT | Authentication |
-| Resend | Transactional emails |
-| nestjs-i18n | Internationalization |
-| Swagger/OpenAPI | API documentation |
-| Jest + Supertest | Testing |
+| Technology             | Purpose                               |
+| ---------------------- | ------------------------------------- |
+| NestJS 11              | Backend framework                     |
+| MongoDB 7 + Mongoose 8 | Database and ODM                      |
+| Upstash Redis          | Distributed caching and rate limiting |
+| Passport.js + JWT      | Authentication                        |
+| Resend                 | Transactional emails                  |
+| nestjs-i18n            | Internationalization                  |
+| Swagger/OpenAPI        | API documentation                     |
+| Jest + Supertest       | Testing                               |
 
 ### Project Structure
 
@@ -101,6 +107,7 @@ backend/
 ### Core Modules
 
 #### Auth Module
+
 Handles user authentication with multiple flows:
 
 - **Login/Register**: Local strategy with email/password
@@ -110,6 +117,7 @@ Handles user authentication with multiple flows:
 - **Role-Based Access**: Admin and Member roles
 
 #### Users Module
+
 User management and leaderboard:
 
 - Paginated user listing (leaderboard)
@@ -117,12 +125,14 @@ User management and leaderboard:
 - Ranked Pokemon count tracking
 
 #### Pokemon Module
+
 Pokemon resource management (admin-only for mutations):
 
 - CRUD operations for Pokemon
 - Image URL validation (Cloudinary domain)
 
 #### Rankings Module
+
 User tier list management:
 
 - Zone-based ranking with custom colors
@@ -131,6 +141,7 @@ User tier list management:
 - Owner-only modifications
 
 #### Boxes Module
+
 Pokemon collections with community features:
 
 - Default box per user
@@ -139,6 +150,7 @@ Pokemon collections with community features:
 - Full-text search on box names
 
 #### Email Module
+
 Transactional emails via Resend:
 
 - Handlebars templating
@@ -164,10 +176,12 @@ Caching is implemented using Upstash Redis:
 ### Internationalization
 
 Supported languages:
+
 - English (`en`)
 - Portuguese Brazil (`pt-BR`)
 
 Language is resolved via:
+
 - `Accept-Language` header
 - Query parameter (`?lang=pt-BR`)
 
@@ -182,16 +196,18 @@ docker-compose up -d
 ```
 
 This starts:
+
 - MongoDB 7 with replica set (`rs0`)
 - Redis 7 for local caching
 
 ### Environment Variables
 
 Required:
+
 ```env
 NODE_ENV=development
 PORT=3000
-MONGODB_URI=mongodb://localhost:27017/pokeranking?replicaSet=rs0
+MONGODB_URI=mongodb://localhost:27018/pokeranking
 JWT_SECRET=your-secret-key
 RESEND_API_KEY=your-resend-key
 RESEND_FROM_EMAIL=noreply@yourdomain.com
@@ -200,10 +216,11 @@ UPSTASH_REDIS_TOKEN=your-redis-token
 ```
 
 Optional:
+
 ```env
 JWT_EXPIRATION=1h
 EMAIL_VERIFICATION_REQUIRED=true
-FRONTEND_URL=http://localhost:3001
+FRONTEND_URL=http://localhost:3000
 ALLOWED_IMAGE_DOMAINS=res.cloudinary.com
 RATE_LIMIT_VERIFY_EMAIL=10
 RATE_LIMIT_RESEND_EMAIL=2
@@ -270,4 +287,87 @@ The backend is configured for Vercel serverless deployment via `vercel.json`. Sw
 
 ## Frontend
 
-*Documentation coming soon.*
+The frontend is built with Next.js 16 using the App Router and follows a feature-based architecture.
+
+### Tech Stack
+
+| Technology            | Purpose                         |
+| --------------------- | ------------------------------- |
+| Next.js 16            | React framework with App Router |
+| React 19              | UI library                      |
+| TailwindCSS 4         | Utility-first styling           |
+| NextAuth              | Authentication (JWT sessions)   |
+| TanStack Query        | Data fetching and caching       |
+| i18next               | Internationalization            |
+| Radix UI + shadcn/ui  | Accessible component library    |
+| Zod + react-hook-form | Form validation and handling    |
+
+### Project Structure
+
+```
+frontend/
+├── src/
+│   ├── app/              # Next.js App Router pages
+│   │   ├── (auth)/       # Auth pages (signin, signup, verify-email, etc.)
+│   │   ├── design/       # Design system showcase
+│   │   └── api/          # API routes (NextAuth)
+│   ├── components/       # Shared components (ui/, navbar, logo)
+│   ├── features/         # Feature modules (users/, pokemon/)
+│   ├── hooks/            # Custom hooks (auth, forms)
+│   ├── i18n/             # i18n configuration
+│   ├── lib/              # Utilities (auth, config, routes)
+│   ├── providers/        # React context providers
+│   └── middleware.ts     # Next.js middleware (auth protection)
+└── public/               # Static assets
+```
+
+### Core Features
+
+#### Authentication
+
+Full authentication flow integrated with the backend:
+
+- Sign in / Sign up with email verification
+- Password reset flow
+- Protected routes via middleware
+- Session management with NextAuth
+
+#### User Features
+
+- Leaderboard with pagination and filters
+- User cards with ranking stats
+
+#### Pokemon Features
+
+- Pokemon cards with type icons
+- Type-based styling
+
+### Environment Variables
+
+Required:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXTAUTH_SECRET=your-secret-key
+NEXTAUTH_URL=http://localhost:3000
+```
+
+### Development Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Lint code
+npm run lint
+```
+
+### API Integration
+
+The frontend uses the `@pokeranking/api-client` package for type-safe API calls. This package is auto-generated from the backend's OpenAPI spec using Orval, providing TanStack Query hooks for data fetching.

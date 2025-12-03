@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Menu, Settings, LogOut, User, Trophy, Info, LucideIcon } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import { Menu, Settings, LogOut, User, Trophy, Info, Palette, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,6 +17,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useThemeContext } from "@/providers/theme-provider";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
+import { routes } from "@/lib/routes";
 
 interface NavLink {
   href: string;
@@ -56,16 +58,19 @@ function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
   );
 }
 
+const checkIsAuthenticated = (status: string) => status === "authenticated";
+
 export function Navbar() {
   const { t } = useTranslation();
   const { isDark, ThemeIcon, toggleTheme } = useThemeContext();
   const pathname = usePathname();
-  // TODO: Replace with actual auth state
-  const isAuthenticated = false;
+  const { status } = useSession();
+  const isAuthenticated = checkIsAuthenticated(status);
 
   const navLinks: NavLink[] = [
-    { href: "/", label: t("nav.leaderboard"), icon: Trophy },
-    { href: "/about", label: t("nav.about"), icon: Info },
+    { href: routes.home, label: t("nav.leaderboard"), icon: Trophy },
+    { href: routes.about, label: t("nav.about"), icon: Info },
+    { href: routes.design, label: t("nav.design"), icon: Palette },
   ];
 
   return (
@@ -94,13 +99,13 @@ export function Navbar() {
                   {isDark ? t("nav.lightMode") : t("nav.darkMode")}
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/settings">
+                  <Link href={routes.settings}>
                     <Settings className="mr-2 h-4 w-4" />
                     {t("nav.settings")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
+                <DropdownMenuItem variant="destructive" onClick={() => signOut()}>
                   <LogOut className="mr-2 h-4 w-4" />
                   {t("nav.signOut")}
                 </DropdownMenuItem>
@@ -112,9 +117,11 @@ export function Navbar() {
                 <ThemeIcon className="h-5 w-5" />
                 <span className="sr-only">{t("nav.toggleTheme")}</span>
               </Button>
-              <Button variant="outline">
-                <User className="mr-2 h-5 w-5" />
-                <Link href="/signin">{t("nav.signIn")}</Link>
+              <Button variant="outline" asChild>
+                <Link href={routes.signin}>
+                  <User className="mr-2 h-5 w-5" />
+                  {t("nav.signIn")}
+                </Link>
               </Button>
             </>
           )}
@@ -146,20 +153,23 @@ export function Navbar() {
                 {isAuthenticated ? (
                   <>
                     <Link
-                      href="/settings"
+                      href={routes.settings}
                       className="flex items-center gap-2 text-lg font-medium text-foreground transition-colors hover:text-primary"
                     >
                       <Settings className="h-5 w-5" />
                       {t("nav.settings")}
                     </Link>
-                    <button className="flex items-center gap-2 text-lg font-medium text-destructive transition-colors hover:text-destructive/80">
+                    <button
+                      onClick={() => signOut()}
+                      className="flex items-center gap-2 text-lg font-medium text-destructive transition-colors hover:text-destructive/80"
+                    >
                       <LogOut className="h-5 w-5" />
                       {t("nav.signOut")}
                     </button>
                   </>
                 ) : (
                   <Button asChild className="w-full">
-                    <Link href="/signin">{t("nav.signIn")}</Link>
+                    <Link href={routes.signin}>{t("nav.signIn")}</Link>
                   </Button>
                 )}
               </nav>

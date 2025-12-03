@@ -31,7 +31,7 @@ describe('Pokemon (e2e)', () => {
     it('should create pokemon when user is admin', async () => {
       await seedUsers(app, [ADMIN_USER]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -51,7 +51,7 @@ describe('Pokemon (e2e)', () => {
     it('should return 403 when user is not admin', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -76,7 +76,7 @@ describe('Pokemon (e2e)', () => {
     it('should return 400 when data is invalid', async () => {
       await seedUsers(app, [ADMIN_USER]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -96,7 +96,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should accept public image with valid filename', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -114,7 +114,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should accept public image with different extensions', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -136,7 +136,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should reject public image with path traversal', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -152,7 +152,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should reject public image with invalid extension', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -168,7 +168,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should reject public image with forward slash', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -184,7 +184,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should accept hosted image from whitelisted domain (HTTPS)', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -202,7 +202,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should accept hosted image from whitelisted domain (HTTP)', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -220,7 +220,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should reject hosted image from non-whitelisted domain', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -236,7 +236,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should accept hosted image without file extension', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -263,7 +263,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should return empty array when no pokemon exist', async () => {
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -278,7 +278,7 @@ describe('Pokemon (e2e)', () => {
     it('should return all pokemon when they exist', async () => {
       await seedPokemon(app, ALL_POKEMON);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -310,7 +310,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should return pokemon by id', async () => {
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -325,7 +325,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should return 404 when pokemon not found', async () => {
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -356,7 +356,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should update pokemon when user is admin', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -377,7 +377,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should return 403 when user is not admin', async () => {
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -395,7 +395,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should update pokemon image with different format', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -428,7 +428,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should return 404 when pokemon not found', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -470,7 +470,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should delete pokemon when user is admin', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -488,7 +488,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should return 403 when user is not admin', async () => {
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -500,7 +500,7 @@ describe('Pokemon (e2e)', () => {
 
     it('should return 404 when pokemon not found', async () => {
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 

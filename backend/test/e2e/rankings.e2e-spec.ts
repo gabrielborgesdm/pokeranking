@@ -31,7 +31,7 @@ describe('Rankings (e2e)', () => {
     it('should create ranking with auto-set owner from JWT', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -53,7 +53,7 @@ describe('Rankings (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -80,7 +80,7 @@ describe('Rankings (e2e)', () => {
     it('should reject overlapping zone intervals', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -102,7 +102,7 @@ describe('Rankings (e2e)', () => {
     it('should auto-generate unique title with (2) suffix for same user', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -130,7 +130,7 @@ describe('Rankings (e2e)', () => {
     it('should generate sequential suffixes (2), (3), (4) for duplicate titles', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -172,11 +172,11 @@ describe('Rankings (e2e)', () => {
     it('should allow same title for different users', async () => {
       const users = await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
       const user1Token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
       const user2Token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -201,7 +201,7 @@ describe('Rankings (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]); // Only 2 pokemon
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -243,7 +243,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(),
       );
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -267,7 +267,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(),
       );
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -289,7 +289,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(), // Owned by REGULAR_USER
       );
       const adminToken = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -308,7 +308,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(), // Owned by REGULAR_USER
       );
       const otherUserToken = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -332,7 +332,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(),
       );
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -348,7 +348,7 @@ describe('Rankings (e2e)', () => {
     it('should return 404 when ranking not found', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -375,7 +375,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(),
       );
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -393,7 +393,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(), // Owned by REGULAR_USER
       );
       const adminToken = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -406,7 +406,7 @@ describe('Rankings (e2e)', () => {
     it('should return 404 when ranking not found', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -439,7 +439,7 @@ describe('Rankings (e2e)', () => {
         users[0]._id.toString(),
       );
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 

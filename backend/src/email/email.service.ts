@@ -1,7 +1,12 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 import { User } from '../users/schemas/user.schema';
+import { TK } from '../i18n/constants/translation-keys';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as Handlebars from 'handlebars';
@@ -84,7 +89,9 @@ export class EmailService {
         `Failed to send verification email to ${user.email}`,
         error instanceof Error ? error.stack : String(error),
       );
-      throw new Error('Failed to send verification email');
+      throw new ServiceUnavailableException({
+        key: TK.COMMON.EMAIL_SEND_FAILED,
+      });
     }
   }
 
@@ -119,7 +126,9 @@ export class EmailService {
         `Failed to send password reset email to ${user.email}`,
         error instanceof Error ? error.stack : String(error),
       );
-      throw new Error('Failed to send password reset email');
+      throw new ServiceUnavailableException({
+        key: TK.COMMON.EMAIL_SEND_FAILED,
+      });
     }
   }
 }

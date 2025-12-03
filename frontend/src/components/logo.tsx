@@ -4,18 +4,22 @@ import { cn } from "@/lib/utils";
 
 interface LogoProps {
   className?: string;
+  size?: "default" | "large";
 }
 
-export function Logo({ className }: LogoProps) {
+export function Logo({ className, size = "default" }: LogoProps) {
+  const height = size === "large" ? 56 : 40;
+  const width = size === "large" ? 199 : 142;
+
   return (
     <Link href="/" className={cn("flex items-center", className)}>
       <Image
         src="/images/pokeranking.png"
         alt="Pokeranking"
-        width={142}
-        height={40}
+        width={width}
+        height={height}
         priority
-        style={{ width: "auto", height: "40px" }}
+        style={{ width: "auto", height: `${height}px` }}
         className="translate-y-[2px]"
       />
     </Link>

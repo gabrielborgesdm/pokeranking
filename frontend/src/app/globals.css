@@ -173,6 +173,29 @@
   font-family: 'Pokemon Solid', sans-serif;
 }
 
+/* Auth Background with subtle Pokeball pattern */
+.auth-bg {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 20%, var(--background) 70%),
+    var(--background);
+}
+
+.auth-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='%23ffffff' stroke-width='1' opacity='0.03'/%3E%3Cline x1='10' y1='30' x2='50' y2='30' stroke='%23ffffff' stroke-width='1' opacity='0.03'/%3E%3Ccircle cx='30' cy='30' r='6' fill='none' stroke='%23ffffff' stroke-width='1' opacity='0.03'/%3E%3C/svg%3E");
+  background-size: 60px 60px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.dark .auth-bg::before {
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='20' fill='none' stroke='%23ffffff' stroke-width='1' opacity='0.04'/%3E%3Cline x1='10' y1='30' x2='50' y2='30' stroke='%23ffffff' stroke-width='1' opacity='0.04'/%3E%3Ccircle cx='30' cy='30' r='6' fill='none' stroke='%23ffffff' stroke-width='1' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
 /* Hover animation utility */
 .hover-scale {
   transition: transform 200ms ease-out;
@@ -181,6 +204,17 @@
 }
 .hover-scale:hover {
   transform: scale(1.02) translateZ(0);
+}
+
+/* Link utility */
+@layer utilities {
+  .link {
+    @apply text-muted-foreground underline-offset-4 hover:underline hover:text-foreground transition-colors;
+  }
+
+  .link-primary {
+    @apply text-primary underline-offset-4 hover:underline transition-colors;
+  }
 }
 
 /* Pokemon Gradient Utilities */
@@ -288,5 +322,50 @@
 
 .gradient-type-special {
   background: linear-gradient(to bottom right, #ef4444, #db2777) !important;
+  color: white !important;
+}
+
+.gradient-type-bug {
+  background: linear-gradient(to bottom right, #A8B820, #6D7815) !important;
+  color: white !important;
+}
+
+.gradient-type-dark {
+  background: linear-gradient(to bottom right, #705848, #49392F) !important;
+  color: white !important;
+}
+
+.gradient-type-dragon {
+  background: linear-gradient(to bottom right, #7038F8, #4C08EF) !important;
+  color: white !important;
+}
+
+.gradient-type-flying {
+  background: linear-gradient(to bottom right, #A890F0, #6D5E9C) !important;
+  color: white !important;
+}
+
+.gradient-type-ghost {
+  background: linear-gradient(to bottom right, #705898, #493963) !important;
+  color: white !important;
+}
+
+.gradient-type-normal {
+  background: linear-gradient(to bottom right, #A8A878, #6D6D4E) !important;
+  color: white !important;
+}
+
+.gradient-type-poison {
+  background: linear-gradient(to bottom right, #A040A0, #682A68) !important;
+  color: white !important;
+}
+
+.gradient-type-psychic {
+  background: linear-gradient(to bottom right, #F85888, #A13959) !important;
+  color: white !important;
+}
+
+.gradient-type-rock {
+  background: linear-gradient(to bottom right, #B8A038, #786824) !important;
   color: white !important;
 }
