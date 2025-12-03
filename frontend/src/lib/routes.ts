@@ -1,0 +1,30 @@
+export const routes = {
+  home: "/",
+  about: "/about",
+  design: "/design",
+  signin: "/signin",
+  signup: "/signup",
+  verifyEmail: "/verify-email",
+  forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password",
+  settings: "/settings",
+} as const;
+
+export const publicPaths = [
+  routes.home,
+  routes.signin,
+  routes.signup,
+  routes.verifyEmail,
+  routes.forgotPassword,
+  routes.resetPassword,
+  routes.about,
+  routes.design,
+];
+
+export const authPaths = [
+  routes.signin,
+  routes.signup,
+  routes.verifyEmail,
+  routes.forgotPassword,
+  routes.resetPassword,
+];
