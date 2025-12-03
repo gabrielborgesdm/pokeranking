@@ -211,12 +211,42 @@ export class UsersService {
       .exec();
   }
 
+  async findInactiveByEmailOrUsername(
+    email: string,
+    username: string,
+    options?: SessionOptions,
+  ): Promise<User | null> {
+    return await this.userModel
+      .findOne({
+        $or: [{ email }, { username }],
+        isActive: false,
+      })
+      .session(options?.session ?? null)
+      .exec();
+  }
+
   async findByUsername(
     username: string,
     options?: SessionOptions,
   ): Promise<User | null> {
     return await this.userModel
       .findOne({ username })
+      .select('+password')
+      .session(options?.session ?? null)
+      .exec();
+  }
+
+  async findByUsernameOrEmail(
+    identifier: string,
+    options?: SessionOptions,
+  ): Promise<User | null> {
+    const isEmail = identifier.includes('@');
+    const query = isEmail
+      ? { email: identifier.toLowerCase() }
+      : { username: identifier };
+
+    return await this.userModel
+      .findOne(query)
       .select('+password')
       .session(options?.session ?? null)
       .exec();

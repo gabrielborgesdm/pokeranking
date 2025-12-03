@@ -1,4 +1,6 @@
 {
   "tooManyVerificationAttempts": "Too many verification attempts. Please try again later.",
-  "tooManyResendAttempts": "Too many resend attempts. Please try again later."
+  "tooManyResendAttempts": "Too many resend attempts. Please try again later.",
+  "emailSendFailed": "Unable to send email. Please try again later.",
+  "internalError": "An unexpected error occurred. Please try again later."
 }

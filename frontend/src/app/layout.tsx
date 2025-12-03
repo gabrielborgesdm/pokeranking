@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/providers";
 import { Toaster } from "@/components/ui/sonner";
-import { Navbar } from "@/components/navbar";
+import { ConditionalNavbar } from "@/components/conditional-navbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -41,24 +41,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Pokeranking",
-    title: "Pokeranking - R",
+    title: "Pokeranking - Rank your Pokemon",
     description:
       "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
     images: [
       {
-        url: "/ranking-logo.png",
-        width: 630,
+        url: "/screenshots/leaderboard.png",
+        width: 1200,
         height: 630,
-        alt: "Pokeranking Logo",
+        alt: "Pokeranking Leaderboard",
       },
     ],
   },
   twitter: {
-    card: "summary",
-    title: "Pokeranking - R",
+    card: "summary_large_image",
+    title: "Pokeranking - Rank your Pokemon",
     description:
       "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
-    images: ["/ranking-logo.png"],
+    images: ["/screenshots/leaderboard.png"],
   },
   robots: {
     index: true,
@@ -83,7 +83,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <Navbar />
+          <ConditionalNavbar />
           {children}
         </Providers>
         <Toaster richColors position="top-right" />

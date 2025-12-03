@@ -61,34 +61,44 @@ export const isApiError = (error: unknown): error is ApiError => {
   return error instanceof ApiError;
 };
 
+export type CustomFetchOptions = RequestInit & {
+  baseUrl?: string;
+  token?: string;
+};
+
 /**
  * Custom fetch function for Orval
  * This is the mutator function that Orval will use for all API calls
- * Signature: customFetch(url, options) to match Orval's fetch client
+ * Accepts optional baseUrl and token for server-side usage (e.g., NextAuth)
+ * Falls back to module-level values when not provided
  */
 export const customFetch = async <T>(
   url: string,
-  options?: RequestInit,
+  options?: CustomFetchOptions,
 ): Promise<T> => {
-  // Build full URL
-  const fullUrl = url.startsWith('http') ? url : `${baseURL}${url}`;
+  const { baseUrl, token, ...fetchOptions } = options ?? {};
+
+  // Build full URL - use provided baseUrl or fall back to module-level
+  const resolvedBaseUrl = baseUrl ?? baseURL;
+  const fullUrl = url.startsWith('http') ? url : `${resolvedBaseUrl}${url}`;
 
   // Build headers
-  const headers = new Headers(options?.headers);
+  const headers = new Headers(fetchOptions?.headers);
 
   // Set default content type if not set and we have a body
-  if (options?.body && !headers.has('Content-Type')) {
+  if (fetchOptions?.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
   }
 
-  // Add auth token if available
-  if (authToken) {
-    headers.set('Authorization', `Bearer ${authToken}`);
+  // Add auth token - use provided token or fall back to module-level
+  const resolvedToken = token ?? authToken;
+  if (resolvedToken) {
+    headers.set('Authorization', `Bearer ${resolvedToken}`);
   }
 
   // Make the request
   const response = await fetch(fullUrl, {
-    ...options,
+    ...fetchOptions,
     headers,
   });
 

@@ -1,61 +1,34 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useUsersControllerFindAll } from "@pokeranking/api-client";
-import { UserCard } from "@/components/user-card";
-import { UserCardSkeleton } from "@/components/user-card-skeleton";
+import {
+  UserCard,
+  UserCardSkeleton,
+  LeaderboardFilters,
+  useLeaderboard,
+} from "@/features/users";
 import { Pagination } from "@/components/pagination";
 import { getVariantByIndex } from "@/lib/utils";
-import { useThrottle } from "@/hooks/use-throttle";
 import { AnimatedList } from "@/components/animated-list";
-import {
-  LeaderboardFilters,
-  SortByOption,
-  OrderOption,
-} from "@/components/leaderboard-filters";
-
-const ITEMS_PER_PAGE = 12;
 
 export default function Home() {
   const { t } = useTranslation();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchUsername, setSearchUsername] = useState("");
-  const [sortBy, setSortBy] = useState<SortByOption>("rankedPokemonCount");
-  const [order, setOrder] = useState<OrderOption>("desc");
-
-  const { data, isLoading: isLoadingOG, error } = useUsersControllerFindAll({
-    page: currentPage,
-    limit: ITEMS_PER_PAGE,
+  const {
+    currentPage,
+    searchUsername,
     sortBy,
     order,
-    username: searchUsername || undefined,
-  });
-  const isLoading = useThrottle(isLoadingOG, 500);
-
-  const users = useMemo(() => data?.data?.data ?? [], [data]);
-  const total = useMemo(() => data?.data?.total ?? 0, [data]);
-  const totalPages = useMemo(() => Math.ceil(total / ITEMS_PER_PAGE), [total]);
-
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
-
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchUsername(value);
-    setCurrentPage(1);
-  }, []);
-
-  const handleSortByChange = useCallback((value: SortByOption) => {
-    setSortBy(value);
-    setCurrentPage(1);
-  }, []);
-
-  const handleOrderChange = useCallback((value: OrderOption) => {
-    setOrder(value);
-    setCurrentPage(1);
-  }, []);
+    users,
+    totalPages,
+    isLoading,
+    error,
+    handlePageChange,
+    handleSearchChange,
+    handleSortByChange,
+    handleOrderChange,
+    ITEMS_PER_PAGE,
+  } = useLeaderboard();
 
   const userCards = useMemo(
     () =>
@@ -72,7 +45,7 @@ export default function Home() {
           />
         );
       }),
-    [users, currentPage]
+    [users, currentPage, ITEMS_PER_PAGE]
   );
 
   if (error) {

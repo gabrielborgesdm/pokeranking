@@ -5,12 +5,12 @@ import { RegisterDto } from '../../src/auth/dto/register.dto';
 /**
  * Logs in a user and returns the JWT access token
  * @param app - NestJS application instance
- * @param credentials - Username and password credentials
+ * @param credentials - Identifier (username or email) and password credentials
  * @returns JWT access token
  */
 export async function loginUser(
   app: INestApplication,
-  credentials: { username: string; password: string },
+  credentials: { identifier: string; password: string },
 ): Promise<string> {
   const response = await request(app.getHttpServer())
     .post('/auth/login')

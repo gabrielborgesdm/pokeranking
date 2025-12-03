@@ -1,9 +1,9 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import type { PokemonTypeVariant } from "@/components/user-card"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import type { PokemonTypeVariant } from "@/features/users/components/user-card";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function getInitials(name: string, maxLength = 2): string {
@@ -12,18 +12,18 @@ export function getInitials(name: string, maxLength = 2): string {
     .map((n) => n[0])
     .join("")
     .toUpperCase()
-    .slice(0, maxLength)
+    .slice(0, maxLength);
 }
 
-const CARD_VARIANTS: PokemonTypeVariant[] = ["grass", "water", "fire"]
+const CARD_VARIANTS: PokemonTypeVariant[] = ["grass", "water", "fire"];
 
-const variantCache = new Map<number, PokemonTypeVariant>()
+const variantCache = new Map<number, PokemonTypeVariant>();
 
 export function getVariantByIndex(index: number): PokemonTypeVariant {
-  const cached = variantCache.get(index)
-  if (cached) return cached
+  const cached = variantCache.get(index);
+  if (cached) return cached;
 
-  const variant = CARD_VARIANTS[index % CARD_VARIANTS.length]
-  variantCache.set(index, variant)
-  return variant
+  const variant = CARD_VARIANTS[index % CARD_VARIANTS.length];
+  variantCache.set(index, variant);
+  return variant;
 }
