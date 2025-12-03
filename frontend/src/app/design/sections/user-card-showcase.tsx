@@ -1,6 +1,6 @@
 "use client";
 
-import { UserCard, PokemonTypeVariant } from "@/components/user-card";
+import { UserCard, PokemonTypeVariant } from "@/features/users";
 
 const mockUsers: {
   rank: number;
