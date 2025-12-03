@@ -116,11 +116,24 @@ describe('Auth (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
     });
 
-    it('should login successfully with valid credentials', async () => {
+    it('should login successfully with valid credentials (username)', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: REGULAR_USER.username,
+          identifier: REGULAR_USER.username,
+          password: REGULAR_USER.password,
+        })
+        .expect(200);
+
+      expect(response.body).toHaveProperty('access_token');
+      expect(typeof response.body.access_token).toBe('string');
+    });
+
+    it('should login successfully with valid credentials (email)', async () => {
+      const response = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send({
+          identifier: REGULAR_USER.email,
           password: REGULAR_USER.password,
         })
         .expect(200);
@@ -133,7 +146,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: REGULAR_USER.username,
+          identifier: REGULAR_USER.username,
           password: 'wrongpassword',
         })
         .expect(401);
@@ -143,7 +156,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: 'nonexistent',
+          identifier: 'nonexistent',
           password: 'password123',
         })
         .expect(401);
@@ -158,7 +171,7 @@ describe('Auth (e2e)', () => {
     it('should register admin when authenticated as admin', async () => {
       await seedUsers(app, [ADMIN_USER]);
       const adminToken = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -182,7 +195,7 @@ describe('Auth (e2e)', () => {
     it('should return 403 when authenticated as regular user', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const userToken = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -222,7 +235,7 @@ describe('Auth (e2e)', () => {
       // Seed a verified user and login
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -640,7 +653,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: 'logintest',
+          identifier: 'logintest',
           password: 'newpassword123',
         })
         .expect(200);
@@ -677,7 +690,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: 'preventold',
+          identifier: 'preventold',
           password: 'oldpassword',
         })
         .expect(401);
@@ -770,7 +783,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: 'reuseuser',
+          identifier: 'reuseuser',
           password: 'newpassword123', // Should work
         })
         .expect(200);
@@ -778,7 +791,7 @@ describe('Auth (e2e)', () => {
       await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: 'reuseuser',
+          identifier: 'reuseuser',
           password: 'anotherpassword', // Should NOT work
         })
         .expect(401);
