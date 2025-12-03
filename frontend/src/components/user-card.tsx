@@ -44,7 +44,7 @@ export const UserCard = memo(function UserCard({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105",
+        "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105 hover:cursor-pointer",
         variantClasses[variant],
         className
       )}
