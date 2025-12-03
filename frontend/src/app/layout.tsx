@@ -16,8 +16,54 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pokeranking",
-  description: "Create your own Pokemon tier lists",
+  title: {
+    default: "Pokeranking - Rank your Pokemon",
+    template: "%s | Pokeranking",
+  },
+  description:
+    "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+  keywords: [
+    "Pokemon",
+    "tier list",
+    "ranking",
+    "Pokemon ranking",
+    "tier maker",
+    "Pokemon collection",
+  ],
+  authors: [{ name: "Gabriel Borges", url: "https://github.com/gabrielborgesdm" }],
+  creator: "Gabriel Borges",
+  icons: {
+    icon: "/ranking-logo.png",
+    shortcut: "/ranking-logo.png",
+    apple: "/ranking-logo.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Pokeranking",
+    title: "Pokeranking - R",
+    description:
+      "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+    images: [
+      {
+        url: "/ranking-logo.png",
+        width: 630,
+        height: 630,
+        alt: "Pokeranking Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Pokeranking - R",
+    description:
+      "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+    images: ["/ranking-logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
