@@ -4,14 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Pokeranking is a Pokemon tier list ranking application with a NestJS backend and (planned) Next.js frontend. Users create personalized tier lists, manage Pokemon collections through "boxes," and participate in community features.
+Pokeranking is a Pokemon tier list ranking application with a NestJS backend and Next.js frontend. Users create personalized tier lists, manage Pokemon collections through "boxes," and participate in community features.
 
 ## Repository Structure
 
 This is an npm workspace monorepo:
 - `backend/` - NestJS 11 API server
+- `frontend/` - Next.js 16 frontend (React 19, TailwindCSS 4, NextAuth)
 - `packages/api-client/` - Generated TypeScript API client (Orval + TanStack Query)
-- `frontend_old/` - Legacy Next.js frontend (being replaced)
+- `frontend_old/` - Legacy Next.js frontend (deprecated)
 
 ## Common Commands
 
@@ -43,6 +44,13 @@ docker-compose up -d    # Start MongoDB (replica set) + Redis
 ```bash
 npm run generate        # Generate from OpenAPI spec via Orval
 npm run build           # Generate + compile with tsup
+```
+
+### Frontend (`cd frontend`)
+```bash
+npm run dev             # Development server
+npm run build           # Build for production
+npm run lint            # ESLint
 ```
 
 ## Architecture
@@ -79,6 +87,13 @@ RESEND_API_KEY=<key>
 RESEND_FROM_EMAIL=noreply@domain.com
 UPSTASH_REDIS_URL=<url>
 UPSTASH_REDIS_TOKEN=<token>
+```
+
+Required for frontend development:
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXTAUTH_SECRET=<secret>
+NEXTAUTH_URL=http://localhost:3000
 ```
 
 ## Database Notes
