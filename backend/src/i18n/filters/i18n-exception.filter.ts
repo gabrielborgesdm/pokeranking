@@ -58,7 +58,7 @@ export class I18nExceptionFilter implements ExceptionFilter {
     }
 
     if (!isObject(exceptionResponse)) {
-      return 'An error occurred';
+      return this.translateIfKey('common.internalError', i18n);
     }
 
     // Check if root object is an i18n payload first (e.g., { key: "common.error" })
@@ -91,7 +91,7 @@ export class I18nExceptionFilter implements ExceptionFilter {
       return String(message);
     }
 
-    return 'An error occurred';
+    return this.translateIfKey('common.internalError', i18n);
   }
 
   private translateMessageArray(
