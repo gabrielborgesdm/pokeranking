@@ -30,7 +30,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return English error for invalid credentials (default)', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ username: 'nonexistent', password: 'wrongpassword' })
+        .send({ identifier: 'nonexistent', password: 'wrongpassword' })
         .expect(401);
 
       expect(response.body.message).toBe('Invalid username or password');
@@ -39,7 +39,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return Portuguese error for invalid credentials with Accept-Language: pt-BR', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ username: 'nonexistent', password: 'wrongpassword' })
+        .send({ identifier: 'nonexistent', password: 'wrongpassword' })
         .set('Accept-Language', 'pt-BR')
         .expect(401);
 
@@ -49,7 +49,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return Portuguese error using ?lang=pt-BR query parameter', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login?lang=pt-BR')
-        .send({ username: 'nonexistent', password: 'wrongpassword' })
+        .send({ identifier: 'nonexistent', password: 'wrongpassword' })
         .expect(401);
 
       expect(response.body.message).toBe('Nome de usuário ou senha inválidos');
@@ -62,7 +62,7 @@ describe('I18n - Internationalization (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: REGULAR_USER.username,
+          identifier: REGULAR_USER.username,
           password: REGULAR_USER.password,
         })
         .expect(401);
@@ -76,7 +76,7 @@ describe('I18n - Internationalization (e2e)', () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
         .send({
-          username: REGULAR_USER.username,
+          identifier: REGULAR_USER.username,
           password: REGULAR_USER.password,
         })
         .set('Accept-Language', 'pt-BR')
@@ -96,7 +96,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return English error for user not found (default)', async () => {
       await seedUsers(app, [ADMIN_USER]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -105,15 +105,13 @@ describe('I18n - Internationalization (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(404);
 
-      expect(response.body.message).toBe(
-        'User with ID 507f1f77bcf86cd799439011 not found',
-      );
+      expect(response.body.message).toBe('User not found');
     });
 
     it('should return Portuguese error for user not found with Accept-Language: pt-BR', async () => {
       await seedUsers(app, [ADMIN_USER]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -123,15 +121,13 @@ describe('I18n - Internationalization (e2e)', () => {
         .set('Accept-Language', 'pt-BR')
         .expect(404);
 
-      expect(response.body.message).toBe(
-        'Usuário com ID 507f1f77bcf86cd799439011 não encontrado',
-      );
+      expect(response.body.message).toBe('Usuário não encontrado');
     });
 
     it('should return English error for duplicate email (default)', async () => {
       await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -170,7 +166,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return English error for cannot update others profile (default)', async () => {
       const users = await seedUsers(app, [REGULAR_USER, ANOTHER_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -190,7 +186,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return Portuguese error for cannot update others profile with Accept-Language: pt-BR', async () => {
       const users = await seedUsers(app, [REGULAR_USER, ANOTHER_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -217,7 +213,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return English error for pokemon not found (default)', async () => {
       await seedUsers(app, [ADMIN_USER]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -234,7 +230,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return Portuguese error for pokemon not found with Accept-Language: pt-BR', async () => {
       await seedUsers(app, [ADMIN_USER]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -253,7 +249,7 @@ describe('I18n - Internationalization (e2e)', () => {
       await seedUsers(app, [ADMIN_USER]);
       await seedPokemon(app, [PIKACHU]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -272,7 +268,7 @@ describe('I18n - Internationalization (e2e)', () => {
       await seedUsers(app, [ADMIN_USER]);
       await seedPokemon(app, [PIKACHU]);
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -297,7 +293,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return English error for ranking not found (default)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -315,7 +311,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return Portuguese error for ranking not found with Accept-Language: pt-BR', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -340,7 +336,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return English error for box not found (default)', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -357,7 +353,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should return Portuguese error for box not found with Accept-Language: pt-BR', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -381,7 +377,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should fallback to English for unsupported language', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ username: 'nonexistent', password: 'wrongpassword' })
+        .send({ identifier: 'nonexistent', password: 'wrongpassword' })
         .set('Accept-Language', 'fr-FR') // French - not supported
         .expect(401);
 
@@ -392,7 +388,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should use pt-BR for Accept-Language: pt', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ username: 'nonexistent', password: 'wrongpassword' })
+        .send({ identifier: 'nonexistent', password: 'wrongpassword' })
         .set('Accept-Language', 'pt')
         .expect(401);
 
@@ -403,7 +399,7 @@ describe('I18n - Internationalization (e2e)', () => {
     it('should handle complex Accept-Language header with quality values', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/login')
-        .send({ username: 'nonexistent', password: 'wrongpassword' })
+        .send({ identifier: 'nonexistent', password: 'wrongpassword' })
         .set('Accept-Language', 'fr-FR, pt-BR;q=0.9, en;q=0.8')
         .expect(401);
 
