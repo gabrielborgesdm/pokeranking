@@ -290,3 +290,48 @@
   background: linear-gradient(to bottom right, #ef4444, #db2777) !important;
   color: white !important;
 }
+
+.gradient-type-bug {
+  background: linear-gradient(to bottom right, #A8B820, #6D7815) !important;
+  color: white !important;
+}
+
+.gradient-type-dark {
+  background: linear-gradient(to bottom right, #705848, #49392F) !important;
+  color: white !important;
+}
+
+.gradient-type-dragon {
+  background: linear-gradient(to bottom right, #7038F8, #4C08EF) !important;
+  color: white !important;
+}
+
+.gradient-type-flying {
+  background: linear-gradient(to bottom right, #A890F0, #6D5E9C) !important;
+  color: white !important;
+}
+
+.gradient-type-ghost {
+  background: linear-gradient(to bottom right, #705898, #493963) !important;
+  color: white !important;
+}
+
+.gradient-type-normal {
+  background: linear-gradient(to bottom right, #A8A878, #6D6D4E) !important;
+  color: white !important;
+}
+
+.gradient-type-poison {
+  background: linear-gradient(to bottom right, #A040A0, #682A68) !important;
+  color: white !important;
+}
+
+.gradient-type-psychic {
+  background: linear-gradient(to bottom right, #F85888, #A13959) !important;
+  color: white !important;
+}
+
+.gradient-type-rock {
+  background: linear-gradient(to bottom right, #B8A038, #786824) !important;
+  color: white !important;
+}

@@ -8,6 +8,7 @@ import { NavigationShowcase } from "./sections/navigation-showcase";
 import { DataDisplayShowcase } from "./sections/data-display-showcase";
 import { LayoutShowcase } from "./sections/layout-showcase";
 import { UserCardShowcase } from "./sections/user-card-showcase";
+import { PokemonCardShowcase } from "./sections/pokemon-card-showcase";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function DesignPage() {
       </header>
 
       <UserCardShowcase />
+      <PokemonCardShowcase />
       <ColorPalette />
       <GradientShowcase />
       <ButtonShowcase />
