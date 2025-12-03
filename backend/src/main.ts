@@ -1,12 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { getCorsConfig } from './config/app.config';
 
 const logger = new Logger('Bootstrap');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const configService = app.get(ConfigService);
+
+  // Enable CORS
+  app.enableCors(getCorsConfig(configService));
 
   // Global validation pipe for DTOs
   app.useGlobalPipes(

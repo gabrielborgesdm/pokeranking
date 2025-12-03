@@ -80,23 +80,35 @@ class EnvironmentVariables {
   @IsNumber()
   @IsOptional()
   RATE_LIMIT_WINDOW_SECONDS?: number;
+
+  @IsString()
+  @IsOptional()
+  CORS_ORIGIN?: string;
 }
 
 export function validate(config: Record<string, unknown>) {
-  const validatedConfig = plainToInstance(EnvironmentVariables, config, {
-    enableImplicitConversion: true,
-  });
+  const defaultValues = {
+    ALLOWED_IMAGE_DOMAINS: 'res.cloudinary.com',
+    CORS_ORIGIN: 'http://localhost:3000',
+    PORT: 8000,
+    RATE_LIMIT_VERIFY_EMAIL: 5,
+    RATE_LIMIT_RESEND_EMAIL: 5,
+    RATE_LIMIT_WINDOW_SECONDS: 60,
+  };
+
+  const validatedConfig = plainToInstance(
+    EnvironmentVariables,
+    { ...defaultValues, ...config },
+    {
+      enableImplicitConversion: true,
+    },
+  );
   const errors = validateSync(validatedConfig, {
     skipMissingProperties: false,
   });
 
   if (errors.length > 0) {
     throw new Error(errors.toString());
-  }
-
-  // Set default for ALLOWED_IMAGE_DOMAINS
-  if (!validatedConfig.ALLOWED_IMAGE_DOMAINS) {
-    validatedConfig.ALLOWED_IMAGE_DOMAINS = 'res.cloudinary.com';
   }
 
   return validatedConfig;

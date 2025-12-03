@@ -27,6 +27,7 @@ import { UserResponseDto } from './dto/user-response.dto';
 import { PublicUserResponseDto } from './dto/public-user-response.dto';
 import { PaginatedUsersResponseDto } from './dto/paginated-users-response.dto';
 import { Roles } from '../common/decorators/roles.decorator';
+import { Public } from '../common/decorators/public.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 import { toDto } from '../common/utils/transform.util';
 import { TK } from '../i18n/constants/translation-keys';
@@ -39,6 +40,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Get all active users with pagination' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
@@ -50,7 +52,6 @@ export class UsersController {
     description: 'Users retrieved successfully',
     type: PaginatedUsersResponseDto,
   })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll(
     @Query() query: UserQueryDto,
   ): Promise<PaginatedUsersResponseDto> {
@@ -64,6 +65,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Public()
   @ApiOperation({ summary: 'Get user by ID' })
   @ApiParam({
     name: 'id',
@@ -75,20 +77,19 @@ export class UsersController {
     description: 'User retrieved successfully',
     type: UserResponseDto,
   })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findOne(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
     const user = await this.usersService.findOne(id);
 
     // Admin or viewing self - return full UserResponseDto with email
-    const isAdmin = req.user.role === UserRole.Admin;
-    const isSelf = req.user._id === id;
+    const isAdmin = req.user?.role === UserRole.Admin;
+    const isSelf = req.user?._id === id;
 
     if (isAdmin || isSelf) {
       return toDto(UserResponseDto, user);
     }
 
-    // Viewing someone else - return PublicUserResponseDto without email
+    // Viewing someone else or unauthenticated - return PublicUserResponseDto without email
     return toDto(PublicUserResponseDto, user);
   }
 
