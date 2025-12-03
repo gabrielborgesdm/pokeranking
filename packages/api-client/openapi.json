@@ -353,9 +353,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           }
         },
         "security": [
@@ -394,9 +391,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "404": {
             "description": "User not found"
@@ -1243,11 +1237,12 @@
       "LoginDto": {
         "type": "object",
         "properties": {
-          "username": {
+          "identifier": {
             "type": "string",
-            "example": "john_doe",
+            "example": "john_doe or john@example.com",
+            "description": "Username or email address",
             "minLength": 3,
-            "maxLength": 30
+            "maxLength": 255
           },
           "password": {
             "type": "string",
@@ -1256,7 +1251,7 @@
           }
         },
         "required": [
-          "username",
+          "identifier",
           "password"
         ]
       },

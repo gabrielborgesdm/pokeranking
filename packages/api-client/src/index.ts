@@ -8,6 +8,7 @@ export {
   isApiError,
   ApiError,
   type ApiErrorResponse,
+  type CustomFetchOptions,
 } from './client';
 
 // Re-export all generated types
