@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -88,6 +90,11 @@ function VerifyEmailForm() {
           </Button>
         </div>
       </CardContent>
+      <CardFooter className="justify-center">
+        <Link href="/signin" className="link text-sm">
+          {t("auth.backToSignIn")}
+        </Link>
+      </CardFooter>
     </Card>
   );
 }

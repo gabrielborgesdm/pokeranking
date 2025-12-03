@@ -76,10 +76,7 @@ export default function SignInPage() {
               )}
             />
             <div className="text-right">
-              <Link
-                href="/forgot-password"
-                className="text-sm text-muted-foreground hover:text-primary"
-              >
+              <Link href="/forgot-password" className="link text-sm">
                 {t("auth.forgotPassword")}
               </Link>
             </div>
@@ -89,11 +86,16 @@ export default function SignInPage() {
           </form>
         </Form>
       </CardContent>
-      <CardFooter className="justify-center">
+      <CardFooter className="flex-col gap-2">
         <p className="text-sm text-muted-foreground">
           {t("auth.noAccount")}{" "}
-          <Link href="/signup" className="text-primary hover:underline">
+          <Link href="/signup" className="link">
             {t("auth.signUp")}
+          </Link>
+        </p>
+        <p className="text-sm text-muted-foreground">
+          <Link href="/" className="link">
+            {t("auth.goToHomepage")}
           </Link>
         </p>
       </CardFooter>

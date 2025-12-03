@@ -96,13 +96,16 @@ export default function SignUpPage() {
           </form>
         </Form>
       </CardContent>
-      <CardFooter className="justify-center">
+      <CardFooter className="flex-col gap-2">
         <p className="text-sm text-muted-foreground">
           {t("auth.hasAccount")}{" "}
-          <Link href="/signin" className="text-primary hover:underline">
+          <Link href="/signin" className="link">
             {t("auth.signIn")}
           </Link>
         </p>
+        <Link href="/signin" className="link text-sm">
+          {t("auth.backToSignIn")}
+        </Link>
       </CardFooter>
     </Card>
   );

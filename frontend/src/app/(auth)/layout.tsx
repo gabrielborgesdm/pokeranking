@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   const { ThemeIcon, toggleTheme } = useThemeContext();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
+    <div className="flex min-h-screen flex-col items-center justify-center p-4 auth-bg">
       <Button
         variant="ghost"
         size="icon"
@@ -19,9 +19,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <ThemeIcon className="h-5 w-5" />
       </Button>
       <div className="mb-8">
-        <Logo />
+        <Logo size="large" />
       </div>
-      <div className="w-full max-w-md">{children}</div>
+      <div className="relative z-10 w-full max-w-md">{children}</div>
     </div>
   );
 }

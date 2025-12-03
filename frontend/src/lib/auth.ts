@@ -48,28 +48,39 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         email: { type: "email" },
         password: { type: "password" },
+        token: { type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        const config = getConfig();
+        let accessToken: string;
+
+        // If token is provided directly (e.g., after email verification), use it
+        if (credentials?.token) {
+          accessToken = credentials.token;
+        } else if (credentials?.email && credentials?.password) {
+          // Standard login flow
+          try {
+            const loginResponse = await authControllerLogin(
+              {
+                identifier: credentials.email,
+                password: credentials.password,
+              },
+              { baseUrl: config.apiUrl } as CustomFetchOptions
+            );
+
+            if (loginResponse.status !== 200) {
+              return null;
+            }
+
+            accessToken = loginResponse.data.access_token;
+          } catch {
+            return null;
+          }
+        } else {
           return null;
         }
 
-        const config = getConfig();
-
         try {
-          const loginResponse = await authControllerLogin(
-            {
-              identifier: credentials.email,
-              password: credentials.password,
-            },
-            { baseUrl: config.apiUrl } as CustomFetchOptions
-          );
-
-          if (loginResponse.status !== 200) {
-            return null;
-          }
-
-          const accessToken = loginResponse.data.access_token;
 
           const profileResponse = await authControllerGetProfile({
             baseUrl: config.apiUrl,
