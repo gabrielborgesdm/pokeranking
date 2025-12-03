@@ -83,7 +83,7 @@ describe('Auth (e2e)', () => {
         .expect(400);
     });
 
-    it('should return 409 when user with email already exists', async () => {
+    it('should return 409 when user with email already exists (active user)', async () => {
       await seedUsers(app, [REGULAR_USER]);
 
       await request(app.getHttpServer())
@@ -96,7 +96,7 @@ describe('Auth (e2e)', () => {
         .expect(409);
     });
 
-    it('should return 409 when user with username already exists', async () => {
+    it('should return 409 when user with username already exists (active user)', async () => {
       await seedUsers(app, [REGULAR_USER]);
 
       await request(app.getHttpServer())
@@ -107,6 +107,76 @@ describe('Auth (e2e)', () => {
           password: 'password123',
         })
         .expect(409);
+    });
+
+    it('should resend verification email and return 409 when inactive user with same email exists', async () => {
+      const connection = app.get('DatabaseConnection');
+      const usersCollection = connection.collection('users');
+      const hashedPassword = await hashPassword('password123');
+
+      const oldCode = '111111';
+      await usersCollection.insertOne({
+        email: 'inactive@test.com',
+        username: 'inactiveuser',
+        password: hashedPassword,
+        role: 'member',
+        isActive: false,
+        emailVerificationCode: oldCode,
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/register')
+        .send({
+          email: 'inactive@test.com',
+          username: 'different_username',
+          password: 'password123',
+        })
+        .expect(409);
+
+      expect(response.body.message).toContain('verification email has been sent');
+
+      // Verify the verification code was updated
+      const user = await usersCollection.findOne({ email: 'inactive@test.com' });
+      expect(user.emailVerificationCode).toBeDefined();
+      expect(user.emailVerificationCode).not.toBe(oldCode);
+    });
+
+    it('should resend verification email and return 409 when inactive user with same username exists', async () => {
+      const connection = app.get('DatabaseConnection');
+      const usersCollection = connection.collection('users');
+      const hashedPassword = await hashPassword('password123');
+
+      const oldCode = '222222';
+      await usersCollection.insertOne({
+        email: 'inactive2@test.com',
+        username: 'inactiveuser2',
+        password: hashedPassword,
+        role: 'member',
+        isActive: false,
+        emailVerificationCode: oldCode,
+        emailVerificationExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/auth/register')
+        .send({
+          email: 'different@test.com',
+          username: 'inactiveuser2',
+          password: 'password123',
+        })
+        .expect(409);
+
+      expect(response.body.message).toContain('verification email has been sent');
+
+      // Verify the verification code was updated
+      const user = await usersCollection.findOne({ username: 'inactiveuser2' });
+      expect(user.emailVerificationCode).toBeDefined();
+      expect(user.emailVerificationCode).not.toBe(oldCode);
     });
   });
 

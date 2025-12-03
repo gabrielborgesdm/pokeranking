@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   NotFoundException,
   BadRequestException,
+  ConflictException,
   Logger,
 } from '@nestjs/common';
 import { TK } from '../i18n/constants/translation-keys';
@@ -90,7 +91,29 @@ export class AuthService {
       true,
     );
 
-    const user = await withTransaction(this.connection, async (session) => {
+    const result = await withTransaction(this.connection, async (session) => {
+      // Check if there's an inactive account with the same email or username
+      const inactiveUser =
+        await this.usersService.findInactiveByEmailOrUsername(
+          registerDto.email,
+          registerDto.username,
+          { session },
+        );
+
+      if (inactiveUser) {
+        // Resend verification email for existing inactive account
+        await this.generateAndSendVerificationCode(
+          inactiveUser,
+          session ?? undefined,
+        );
+
+        this.logger.log(
+          `Verification email resent to inactive user: ${inactiveUser.username}`,
+        );
+
+        return { user: inactiveUser, wasInactive: true };
+      }
+
       const userCount = await this.usersService.count({ session });
 
       // Use requested role if provided, otherwise default based on user count
@@ -108,24 +131,27 @@ export class AuthService {
       newUser.isActive = !emailVerificationRequired;
 
       if (emailVerificationRequired) {
-        const code = this.generateVerificationCode();
-        const tokenExpiration = Date.now() + ms('1d');
-
-        newUser.emailVerificationCode = code;
-        newUser.emailVerificationExpires = new Date(tokenExpiration);
-
-        // Send email within transaction - if it fails, user creation is rolled back
-        await this.emailService.sendVerificationEmail(newUser, code);
+        await this.generateAndSendVerificationCode(
+          newUser,
+          session ?? undefined,
+        );
+      } else {
+        await newUser.save({ session });
       }
 
-      await newUser.save({ session });
-      return newUser;
+      return { user: newUser, wasInactive: false };
     });
 
-    this.logger.log(`New user registered: ${user.username}`);
+    if (result.wasInactive) {
+      throw new ConflictException({
+        key: TK.AUTH.VERIFICATION_EMAIL_RESENT,
+      });
+    }
+
+    this.logger.log(`New user registered: ${result.user.username}`);
 
     return {
-      user: toDto(UserResponseDto, user),
+      user: toDto(UserResponseDto, result.user),
     };
   }
 
@@ -216,17 +242,22 @@ export class AuthService {
         throw new BadRequestException({ key: TK.AUTH.EMAIL_ALREADY_VERIFIED });
       }
 
-      // Generate new code
-      const code = this.generateVerificationCode();
-      const tokenExpiration = Date.now() + ms('1d');
-
-      user.emailVerificationCode = code;
-      user.emailVerificationExpires = new Date(tokenExpiration);
-      await user.save({ session });
-
-      // Send email within transaction - if it fails, code update is rolled back
-      await this.emailService.sendVerificationEmail(user, code);
+      await this.generateAndSendVerificationCode(user, session ?? undefined);
     });
+  }
+
+  private async generateAndSendVerificationCode(
+    user: User,
+    session?: import('mongoose').ClientSession,
+  ): Promise<void> {
+    const code = this.generateVerificationCode();
+    const tokenExpiration = Date.now() + ms('1d');
+
+    user.emailVerificationCode = code;
+    user.emailVerificationExpires = new Date(tokenExpiration);
+    await user.save({ session });
+
+    await this.emailService.sendVerificationEmail(user, code);
   }
 
   private generateToken(): string {
