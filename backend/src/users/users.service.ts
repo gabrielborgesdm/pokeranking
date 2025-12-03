@@ -211,6 +211,27 @@ export class UsersService {
       .exec();
   }
 
+  async findInactiveByEmailOrUsername(
+    email: string,
+    username: string,
+    options?: SessionOptions,
+  ): Promise<User | null> {
+    return await this.userModel
+      .findOne({
+        $or: [{ email }, { username }],
+        isActive: false,
+      })
+      .session(options?.session ?? null)
+      .exec();
+  }
+
+  async removeById(id: string, options?: SessionOptions): Promise<void> {
+    await this.userModel
+      .deleteOne({ _id: id })
+      .session(options?.session ?? null)
+      .exec();
+  }
+
   async findByUsername(
     username: string,
     options?: SessionOptions,

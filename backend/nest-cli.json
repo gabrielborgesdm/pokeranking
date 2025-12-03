@@ -9,6 +9,11 @@
         "include": "**/*.hbs",
         "outDir": "dist/src",
         "watchAssets": true
+      },
+      {
+        "include": "i18n/**/*.json",
+        "outDir": "dist/src",
+        "watchAssets": true
       }
     ],
     "plugins": [
