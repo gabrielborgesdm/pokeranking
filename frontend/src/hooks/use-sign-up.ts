@@ -39,16 +39,14 @@ export function useSignUp() {
       {
         onSuccess: (response) => {
           if (response.status === 201) {
-            router.push(`/verify-email?email=${encodeURIComponent(data.email)}`);
+            router.push(
+              `/verify-email?email=${encodeURIComponent(data.email)}`
+            );
           }
         },
         onError: (err) => {
           if (isApiError(err)) {
-            if (err.status === 409) {
-              setError(t("auth.userExists"));
-            } else {
-              setError(err.message);
-            }
+            setError(err.message);
           } else {
             setError(t("auth.registrationFailed"));
           }

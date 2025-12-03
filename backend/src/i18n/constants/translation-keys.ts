@@ -4,6 +4,7 @@ export const TK = {
     EMAIL_NOT_VERIFIED: 'auth.emailNotVerified',
     INVALID_VERIFICATION_CODE: 'auth.invalidVerificationCode',
     EMAIL_ALREADY_VERIFIED: 'auth.emailAlreadyVerified',
+    VERIFICATION_EMAIL_RESENT: 'auth.verificationEmailResent',
   },
   USERS: {
     NOT_FOUND: 'users.notFound',
