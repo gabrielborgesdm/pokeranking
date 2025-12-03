@@ -14,6 +14,7 @@ export function Logo({ className }: LogoProps) {
         alt="Pokeranking"
         width={142}
         height={40}
+        priority
         style={{ width: "auto", height: "40px" }}
         className="translate-y-[2px]"
       />
