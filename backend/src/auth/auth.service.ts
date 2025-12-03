@@ -37,11 +37,14 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<User | null> {
-    const user = await this.usersService.findByUsername(username);
+  async validateUser(
+    identifier: string,
+    password: string,
+  ): Promise<User | null> {
+    const user = await this.usersService.findByUsernameOrEmail(identifier);
 
     if (!user) {
-      this.logger.warn(`Login failed: user not found - ${username}`);
+      this.logger.warn(`Login failed: user not found - ${identifier}`);
       return null;
     }
 
@@ -51,12 +54,12 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      this.logger.warn(`Login failed: invalid password - ${username}`);
+      this.logger.warn(`Login failed: invalid password - ${identifier}`);
       return null;
     }
 
     if (!user.isActive) {
-      this.logger.warn(`Login failed: email not verified - ${username}`);
+      this.logger.warn(`Login failed: email not verified - ${identifier}`);
       throw new UnauthorizedException({ key: TK.AUTH.EMAIL_NOT_VERIFIED });
     }
 

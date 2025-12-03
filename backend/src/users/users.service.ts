@@ -222,6 +222,22 @@ export class UsersService {
       .exec();
   }
 
+  async findByUsernameOrEmail(
+    identifier: string,
+    options?: SessionOptions,
+  ): Promise<User | null> {
+    const isEmail = identifier.includes('@');
+    const query = isEmail
+      ? { email: identifier.toLowerCase() }
+      : { username: identifier };
+
+    return await this.userModel
+      .findOne(query)
+      .select('+password')
+      .session(options?.session ?? null)
+      .exec();
+  }
+
   async findByVerificationToken(
     token: string,
     options?: SessionOptions,

@@ -31,5 +31,7 @@ export const TK = {
   COMMON: {
     TOO_MANY_VERIFICATION_ATTEMPTS: 'common.tooManyVerificationAttempts',
     TOO_MANY_RESEND_ATTEMPTS: 'common.tooManyResendAttempts',
+    EMAIL_SEND_FAILED: 'common.emailSendFailed',
+    INTERNAL_ERROR: 'common.internalError',
   },
 } as const;
