@@ -133,9 +133,9 @@
   --secondary: oklch(0.28 0.02 280);
   --secondary-foreground: oklch(0.98 0 0);
   --muted: oklch(0.25 0.02 280);
-  --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.87 0.185 90);
-  --accent-foreground: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.70 0 0);
+  --accent: oklch(0.25 0.02 280);
+  --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(0.30 0.02 280);
   --input: oklch(0.30 0.02 280);
@@ -166,6 +166,21 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Pokemon Font */
+.font-pokemon {
+  font-family: 'Pokemon Solid', sans-serif;
+}
+
+/* Hover animation utility */
+.hover-scale {
+  transition: transform 200ms ease-out;
+  will-change: transform;
+  transform: translateZ(0);
+}
+.hover-scale:hover {
+  transform: scale(1.02) translateZ(0);
 }
 
 /* Pokemon Gradient Utilities */
@@ -223,6 +238,28 @@
       oklch(0.55 0.195 265) 0%,
       oklch(0.20 0.02 280) 100%
     );
+  }
+
+  .text-gradient-pokemon {
+    background: linear-gradient(
+      135deg,
+      oklch(0.87 0.185 90) 0%,
+      oklch(0.60 0.235 27) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-pokemon-blue {
+    background: linear-gradient(
+      135deg,
+      oklch(0.55 0.195 265) 0%,
+      oklch(0.48 0.195 265) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
 }

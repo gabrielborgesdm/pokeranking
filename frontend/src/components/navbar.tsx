@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Menu, Settings, LogOut, User } from "lucide-react";
+import { Menu, Settings, LogOut, User, Trophy, Info, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,37 +14,68 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useThemeContext } from "@/providers/theme-provider";
+import { Logo } from "@/components/logo";
+import { cn } from "@/lib/utils";
+
+interface NavLink {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+}
+
+interface NavLinksProps {
+  links: NavLink[];
+  pathname: string;
+  variant?: "desktop" | "mobile";
+}
+
+function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
+  return (
+    <>
+      {links.map((link) => {
+        const isActive = pathname === link.href;
+        return (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={cn(
+              "flex items-center font-medium transition-colors",
+              variant === "desktop" && "gap-1.5 text-sm hover-scale",
+              variant === "mobile" && "gap-2 text-lg",
+              isActive
+                ? "text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <link.icon className="h-5 w-5" />
+            {link.label}
+          </Link>
+        );
+      })}
+    </>
+  );
+}
 
 export function Navbar() {
   const { t } = useTranslation();
   const { isDark, ThemeIcon, toggleTheme } = useThemeContext();
+  const pathname = usePathname();
   // TODO: Replace with actual auth state
   const isAuthenticated = false;
 
-  const navLinks = [
-    { href: "/", label: t("nav.leaderboard") },
-    { href: "/about", label: t("nav.about") },
+  const navLinks: NavLink[] = [
+    { href: "/", label: t("nav.leaderboard"), icon: Trophy },
+    { href: "/about", label: t("nav.about"), icon: Info },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center px-4">
-        {/* Logo */}
-        <Link href="/" className="mr-6 flex items-center space-x-2">
-          <span className="text-xl font-bold text-primary">Pokeranking</span>
-        </Link>
+    <header className="top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto flex h-16 items-center px-4">
+        <Logo className="mr-6" />
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex md:flex-1 md:items-center md:gap-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {link.label}
-            </Link>
-          ))}
+          <NavLinks links={navLinks} pathname={pathname} variant="desktop" />
         </nav>
 
         {/* Desktop Right Side */}
@@ -80,7 +112,8 @@ export function Navbar() {
                 <ThemeIcon className="h-5 w-5" />
                 <span className="sr-only">{t("nav.toggleTheme")}</span>
               </Button>
-              <Button asChild>
+              <Button variant="outline">
+                <User className="mr-2 h-5 w-5" />
                 <Link href="/signin">{t("nav.signIn")}</Link>
               </Button>
             </>
@@ -107,16 +140,8 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px]">
-              <nav className="mt-6 flex flex-col gap-4">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-lg font-medium text-foreground transition-colors hover:text-primary"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+              <nav className="mt-6 mx-4 flex flex-col gap-4">
+                <NavLinks links={navLinks} pathname={pathname} variant="mobile" />
                 <div className="my-4 h-px bg-border" />
                 {isAuthenticated ? (
                   <>
