@@ -1,6 +1,7 @@
 {
   "common": {
-    "or": "or"
+    "or": "or",
+    "retry": "Try again"
   },
   "pokemonTypes": {
     "Bug": "Bug",
@@ -19,7 +20,7 @@
   "nav": {
     "leaderboard": "Leaderboard",
     "myRankings": "My Rankings",
-    "about": "About",
+    "contribute": "Contribute",
     "design": "Design",
     "signIn": "Sign in",
     "signOut": "Sign out",
@@ -149,5 +150,18 @@
     "successMessage": "Your feedback has been submitted successfully.",
     "errorMessage": "Failed to submit feedback. Please try again.",
     "characterCount": "{{count}}/2000 characters"
+  },
+  "contribute": {
+    "title": "Contribute",
+    "description": "Help us keep Pokeranking running and growing!",
+    "github": {
+      "title": "Star us on GitHub",
+      "description": "Giving a star is like giving a thumbs up! It helps more people discover Pokeranking and shows your support. It's free and takes just one click.",
+      "button": "Give a Star"
+    },
+    "stripe": {
+      "title": "Support Us",
+      "description": "Make a one-time donation to help cover server costs and development. Pay with Card or Pix."
+    }
   }
 }

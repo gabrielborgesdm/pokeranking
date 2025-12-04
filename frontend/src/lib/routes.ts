@@ -1,6 +1,6 @@
 export const routes = {
   home: "/",
-  about: "/about",
+  contribute: "/contribute",
   design: "/design",
   signin: "/signin",
   signup: "/signup",
@@ -19,7 +19,7 @@ export const publicPaths = [
   routes.verifyEmail,
   routes.forgotPassword,
   routes.resetPassword,
-  routes.about,
+  routes.contribute,
   routes.design,
 ];
 
