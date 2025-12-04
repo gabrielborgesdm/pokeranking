@@ -7,12 +7,20 @@
  */
 import type { PokemonResponseDto } from "./pokemonResponseDto";
 import type { ZoneDto } from "./zoneDto";
+import type { RankingResponseDtoBackground } from "./rankingResponseDtoBackground";
 
 export interface RankingResponseDto {
   _id: string;
   title: string;
   pokemon: PokemonResponseDto[];
   zones: ZoneDto[];
+  /** Theme ID for the ranking card */
+  theme: string;
+  /**
+   * Background theme ID for the full-page ranking view
+   * @nullable
+   */
+  background: RankingResponseDtoBackground;
   createdAt: string;
   updatedAt: string;
 }

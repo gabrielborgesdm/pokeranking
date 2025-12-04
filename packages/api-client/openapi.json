@@ -1195,6 +1195,46 @@
           "boxes"
         ]
       }
+    },
+    "/support": {
+      "post": {
+        "operationId": "SupportController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSupportMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Message submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupportMessageResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Submit a support/feedback message",
+        "tags": [
+          "support"
+        ]
+      }
     }
   },
   "info": {
@@ -1228,9 +1268,7 @@
         "scheme": "bearer",
         "bearerFormat": "JWT",
         "type": "http",
-        "name": "JWT",
-        "description": "Enter JWT token",
-        "in": "header"
+        "description": "Enter JWT token"
       }
     },
     "schemas": {
@@ -1384,6 +1422,17 @@
               "$ref": "#/components/schemas/ZoneDto"
             }
           },
+          "theme": {
+            "type": "string",
+            "example": "fire",
+            "description": "Theme ID for the ranking card"
+          },
+          "background": {
+            "type": "object",
+            "example": "ocean",
+            "description": "Background theme ID for the full-page ranking view",
+            "nullable": true
+          },
           "createdAt": {
             "format": "date-time",
             "type": "string",
@@ -1400,6 +1449,8 @@
           "title",
           "pokemon",
           "zones",
+          "theme",
+          "background",
           "createdAt",
           "updatedAt"
         ]
@@ -1728,6 +1779,16 @@
             "items": {
               "$ref": "#/components/schemas/ZoneDto"
             }
+          },
+          "theme": {
+            "type": "string",
+            "example": "fire",
+            "description": "Theme ID for the ranking card appearance"
+          },
+          "background": {
+            "type": "string",
+            "example": "ocean",
+            "description": "Background theme ID for the full-page ranking view"
           }
         },
         "required": [
@@ -1759,6 +1820,16 @@
             "items": {
               "$ref": "#/components/schemas/ZoneDto"
             }
+          },
+          "theme": {
+            "type": "string",
+            "example": "fire",
+            "description": "Theme ID for the ranking card appearance"
+          },
+          "background": {
+            "type": "string",
+            "example": "ocean",
+            "description": "Background theme ID for the full-page ranking view"
           }
         }
       },
@@ -1869,6 +1940,44 @@
             }
           }
         }
+      },
+      "CreateSupportMessageDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "The feedback message",
+            "minLength": 10,
+            "maxLength": 2000,
+            "example": "I would love to see a dark mode feature in the app!"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "SupportMessageResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "The message ID"
+          },
+          "message": {
+            "type": "string",
+            "description": "The message content"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "When the message was created"
+          }
+        },
+        "required": [
+          "_id",
+          "message",
+          "createdAt"
+        ]
       }
     }
   }

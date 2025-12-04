@@ -127,9 +127,11 @@
       "premium": "Temas Premium"
     },
     "cardPreview": "Prévia do Card",
+    "cardPreviewDescription": "Como seu ranking aparece na página Meus Rankings",
     "backgroundLabel": "Fundo da Página",
     "backgroundDescription": "Escolha um tema de fundo para a visualização de página inteira do ranking",
     "backgroundPreview": "Prévia do Fundo",
+    "backgroundPreviewDescription": "Como a página completa do ranking vai parecer",
     "sameAsCard": "Mesmo tema do card",
     "create": "Criar Ranking",
     "save": "Salvar Alterações",

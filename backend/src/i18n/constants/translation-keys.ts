@@ -21,6 +21,7 @@ export const TK = {
     TITLE_EXISTS: 'rankings.titleExists',
     CANNOT_MODIFY_OTHERS: 'rankings.cannotModifyOthers',
     ZONE_EXCEEDS_POKEMON: 'rankings.zoneExceedsPokemon',
+    THEME_NOT_AVAILABLE: 'rankings.themeNotAvailable',
   },
   BOXES: {
     NOT_FOUND: 'boxes.notFound',
@@ -34,5 +35,9 @@ export const TK = {
     TOO_MANY_RESEND_ATTEMPTS: 'common.tooManyResendAttempts',
     EMAIL_SEND_FAILED: 'common.emailSendFailed',
     INTERNAL_ERROR: 'common.internalError',
+  },
+  SUPPORT: {
+    MESSAGE_CREATED: 'support.messageCreated',
+    MESSAGE_NOT_FOUND: 'support.messageNotFound',
   },
 } as const;

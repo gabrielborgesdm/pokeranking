@@ -8,10 +8,12 @@ import {
   MinLength,
   MaxLength,
   IsMongoId,
+  Validate,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ZoneDto } from './zone.dto';
 import { AreZonesNonOverlapping } from '../validators/non-overlapping-zones.validator';
+import { ValidTheme } from '../validators/valid-theme.validator';
 
 export class CreateRankingDto {
   @ApiProperty({
@@ -44,4 +46,22 @@ export class CreateRankingDto {
   @Type(() => ZoneDto)
   @AreZonesNonOverlapping()
   zones?: ZoneDto[];
+
+  @ApiPropertyOptional({
+    example: 'fire',
+    description: 'Theme ID for the ranking card appearance',
+  })
+  @IsString()
+  @IsOptional()
+  @Validate(ValidTheme)
+  theme?: string;
+
+  @ApiPropertyOptional({
+    example: 'ocean',
+    description: 'Background theme ID for the full-page ranking view',
+  })
+  @IsString()
+  @IsOptional()
+  @Validate(ValidTheme)
+  background?: string;
 }
