@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
   HttpCode,
   HttpStatus,
   Logger,
@@ -18,14 +19,22 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { PokemonService } from './pokemon.service';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PokemonResponseDto } from './dto/pokemon-response.dto';
+import { PokemonCountResponseDto } from './dto/pokemon-count-response.dto';
+import {
+  PokemonQueryDto,
+  POKEMON_SORTABLE_FIELDS,
+} from './dto/pokemon-query.dto';
+import { PaginatedPokemonResponseDto } from './dto/paginated-pokemon-response.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 import { toDto } from '../common/utils/transform.util';
+import { POKEMON_TYPE_VALUES } from '@pokeranking/shared';
 
 @ApiTags('pokemon')
 @ApiBearerAuth('JWT-auth')
@@ -52,7 +61,7 @@ export class PokemonController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all pokemon' })
+  @ApiOperation({ summary: 'Get all pokemon (no pagination, cached)' })
   @ApiResponse({
     status: 200,
     description: 'Pokemon retrieved successfully',
@@ -61,6 +70,54 @@ export class PokemonController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async findAll() {
     return this.pokemonService.findAll();
+  }
+
+  @Get('search')
+  @Public()
+  @ApiOperation({ summary: 'Search Pokemon with pagination' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'sortBy', required: false, enum: POKEMON_SORTABLE_FIELDS })
+  @ApiQuery({ name: 'order', required: false, enum: ['asc', 'desc'] })
+  @ApiQuery({ name: 'name', required: false, type: String })
+  @ApiQuery({
+    name: 'types',
+    required: false,
+    type: String,
+    description: 'Comma-separated Pokemon types',
+    enum: POKEMON_TYPE_VALUES,
+    isArray: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Pokemon retrieved successfully',
+    type: PaginatedPokemonResponseDto,
+  })
+  async search(
+    @Query() query: PokemonQueryDto,
+  ): Promise<PaginatedPokemonResponseDto> {
+    const { pokemon, total } = await this.pokemonService.findAllPaginated(
+      query,
+    );
+    return {
+      data: toDto(PokemonResponseDto, pokemon),
+      total,
+      page: query.page || 1,
+      limit: query.limit || 20,
+    };
+  }
+
+  @Get('count')
+  @Public()
+  @ApiOperation({ summary: 'Get total Pokemon count in the system' })
+  @ApiResponse({
+    status: 200,
+    description: 'Pokemon count retrieved successfully',
+    type: PokemonCountResponseDto,
+  })
+  async getCount(): Promise<PokemonCountResponseDto> {
+    const totalPokemonCount = await this.pokemonService.getCachedTotalCount();
+    return { totalPokemonCount };
   }
 
   @Get(':id')

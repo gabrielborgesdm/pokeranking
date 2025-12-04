@@ -2,6 +2,8 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import {
   ALL_POKEMON,
+  BULBASAUR,
+  CHARIZARD,
   createPokemonData,
   PIKACHU,
 } from '../fixtures/pokemon.fixture';
@@ -294,6 +296,284 @@ describe('Pokemon (e2e)', () => {
 
     it('should return 401 when not authenticated', async () => {
       await request(app.getHttpServer()).get('/pokemon').expect(401);
+    });
+  });
+
+  describe('GET /pokemon/search (pagination, filtering, sorting)', () => {
+    beforeEach(async () => {
+      await clearDatabase(app);
+    });
+
+    it('should return empty data array when no pokemon exist', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search')
+        .expect(200);
+
+      expect(response.body.data).toEqual([]);
+      expect(response.body.total).toBe(0);
+    });
+
+    it('should return default pagination values (page=1, limit=20)', async () => {
+      await seedPokemon(app, [PIKACHU]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search')
+        .expect(200);
+
+      expect(response.body.page).toBe(1);
+      expect(response.body.limit).toBe(20);
+      expect(response.body).toHaveProperty('total');
+      expect(response.body).toHaveProperty('data');
+    });
+
+    it('should support pagination (page, limit)', async () => {
+      const pokemon = Array.from({ length: 5 }, (_, i) =>
+        createPokemonData({
+          name: `Pokemon_${i}`,
+          image: `pokemon_${i}.png`,
+          types: ['Normal'],
+        }),
+      );
+      await seedPokemon(app, pokemon);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?page=1&limit=2')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(2);
+      expect(response.body.total).toBe(5);
+      expect(response.body.page).toBe(1);
+      expect(response.body.limit).toBe(2);
+    });
+
+    it('should support page 2', async () => {
+      const pokemon = Array.from({ length: 5 }, (_, i) =>
+        createPokemonData({
+          name: `Pokemon_${i}`,
+          image: `pokemon_${i}.png`,
+          types: ['Normal'],
+        }),
+      );
+      await seedPokemon(app, pokemon);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?page=2&limit=2')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(2);
+      expect(response.body.page).toBe(2);
+    });
+
+    it('should sort by name ascending by default', async () => {
+      await seedPokemon(app, [
+        createPokemonData({ name: 'Zebra', image: 'zebra.png' }),
+        createPokemonData({ name: 'Alpha', image: 'alpha.png' }),
+      ]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search')
+        .expect(200);
+
+      expect(response.body.data[0].name).toBe('Alpha');
+      expect(response.body.data[1].name).toBe('Zebra');
+    });
+
+    it('should sort by name descending', async () => {
+      await seedPokemon(app, [
+        createPokemonData({ name: 'Zebra', image: 'zebra.png' }),
+        createPokemonData({ name: 'Alpha', image: 'alpha.png' }),
+      ]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?sortBy=name&order=desc')
+        .expect(200);
+
+      expect(response.body.data[0].name).toBe('Zebra');
+      expect(response.body.data[1].name).toBe('Alpha');
+    });
+
+    it('should sort by createdAt ascending', async () => {
+      await seedPokemon(app, [
+        createPokemonData({ name: 'First', image: 'first.png' }),
+      ]);
+      // Small delay to ensure different timestamps
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      await seedPokemon(app, [
+        createPokemonData({ name: 'Second', image: 'second.png' }),
+      ]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?sortBy=createdAt&order=asc')
+        .expect(200);
+
+      expect(response.body.data[0].name).toBe('First');
+      expect(response.body.data[1].name).toBe('Second');
+    });
+
+    it('should sort by createdAt descending', async () => {
+      await seedPokemon(app, [
+        createPokemonData({ name: 'First', image: 'first.png' }),
+      ]);
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      await seedPokemon(app, [
+        createPokemonData({ name: 'Second', image: 'second.png' }),
+      ]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?sortBy=createdAt&order=desc')
+        .expect(200);
+
+      expect(response.body.data[0].name).toBe('Second');
+      expect(response.body.data[1].name).toBe('First');
+    });
+
+    it('should filter by name (partial match, case-insensitive)', async () => {
+      await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?name=pika')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].name).toBe('Pikachu');
+      expect(response.body.total).toBe(1);
+    });
+
+    it('should filter by name case-insensitively', async () => {
+      await seedPokemon(app, [PIKACHU]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?name=PIKACHU')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].name).toBe('Pikachu');
+    });
+
+    it('should filter by single type', async () => {
+      await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?types=Electric')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].name).toBe('Pikachu');
+    });
+
+    it('should filter by multiple types (returns Pokemon with ANY of the types)', async () => {
+      await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?types=Electric,Fire')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(2);
+      const names = response.body.data.map((p: any) => p.name);
+      expect(names).toContain('Pikachu');
+      expect(names).toContain('Charizard');
+    });
+
+    it('should filter by type that matches secondary type', async () => {
+      await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?types=Flying')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].name).toBe('Charizard');
+    });
+
+    it('should combine name filter and type filter', async () => {
+      await seedPokemon(app, [
+        PIKACHU,
+        CHARIZARD,
+        createPokemonData({ name: 'Pichu', image: 'pichu.png', types: ['Electric'] }),
+      ]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?name=pi&types=Electric')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(2);
+      const names = response.body.data.map((p: any) => p.name);
+      expect(names).toContain('Pikachu');
+      expect(names).toContain('Pichu');
+      expect(names).not.toContain('Charizard');
+    });
+
+    it('should return correct pagination metadata (total, page, limit)', async () => {
+      const pokemon = Array.from({ length: 7 }, (_, i) =>
+        createPokemonData({
+          name: `Pokemon_${i}`,
+          image: `pokemon_${i}.png`,
+        }),
+      );
+      await seedPokemon(app, pokemon);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?page=2&limit=3')
+        .expect(200);
+
+      expect(response.body.total).toBe(7);
+      expect(response.body.page).toBe(2);
+      expect(response.body.limit).toBe(3);
+      expect(response.body.data).toHaveLength(3);
+    });
+
+    it('should include types in response', async () => {
+      await seedPokemon(app, [CHARIZARD]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search')
+        .expect(200);
+
+      expect(response.body.data[0]).toHaveProperty('types');
+      expect(response.body.data[0].types).toEqual(['Fire', 'Flying']);
+    });
+
+    it('should be accessible without authentication (public endpoint)', async () => {
+      await seedPokemon(app, [PIKACHU]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('data');
+      expect(response.body.data).toHaveLength(1);
+    });
+  });
+
+  describe('GET /pokemon/count', () => {
+    beforeEach(async () => {
+      await clearDatabase(app);
+    });
+
+    it('should return 0 when no pokemon exist', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/count')
+        .expect(200);
+
+      expect(response.body.totalPokemonCount).toBe(0);
+    });
+
+    it('should return correct count when pokemon exist', async () => {
+      await seedPokemon(app, ALL_POKEMON);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/count')
+        .expect(200);
+
+      expect(response.body.totalPokemonCount).toBe(3);
+    });
+
+    it('should be accessible without authentication (public endpoint)', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/count')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('totalPokemonCount');
     });
   });
 

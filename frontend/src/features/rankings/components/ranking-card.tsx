@@ -1,14 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { memo, useMemo } from "react";
+import { memo, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DEFAULT_POKEMON_IMAGE } from "@/lib/image-utils";
 import { formatShortDate } from "@/lib/date-utils";
 import { getThemeById, DEFAULT_THEME_ID } from "@pokeranking/shared";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface RankingCardProps {
+  id?: string;
   title: string;
   topPokemonImage?: string;
   pokemonCount: number;
@@ -16,19 +25,41 @@ interface RankingCardProps {
   updatedAt: string;
   theme?: string;
   onClick?: () => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
   className?: string;
 }
 
 export const RankingCard = memo(function RankingCard({
+  id,
   title,
   topPokemonImage,
   pokemonCount,
   updatedAt,
   theme,
   onClick,
+  onEdit,
+  onDelete,
   className,
 }: RankingCardProps) {
   const { t, i18n } = useTranslation();
+  const showActions = id && (onEdit || onDelete);
+
+  const handleEdit = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (id && onEdit) onEdit(id);
+    },
+    [id, onEdit]
+  );
+
+  const handleDelete = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (id && onDelete) onDelete(id);
+    },
+    [id, onDelete]
+  );
 
   const formattedDate = useMemo(
     () => formatShortDate(updatedAt, i18n.language),
@@ -82,6 +113,38 @@ export const RankingCard = memo(function RankingCard({
       {/* Decorative Elements */}
       <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white/10" />
       <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-white/5" />
+
+      {/* Actions Dropdown */}
+      {showActions && (
+        <div className="absolute top-2 right-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="bg-black/20 hover:bg-black/40 text-white"
+              >
+                <MoreVertical className="h-4 w-4" />
+                <span className="sr-only">{t("common.actions")}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {onEdit && (
+                <DropdownMenuItem onClick={handleEdit}>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  {t("myRankings.edit")}
+                </DropdownMenuItem>
+              )}
+              {onDelete && (
+                <DropdownMenuItem variant="destructive" onClick={handleDelete}>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  {t("myRankings.delete")}
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
     </div>
   );
 });

@@ -571,7 +571,153 @@
             "JWT-auth": []
           }
         ],
-        "summary": "Get all pokemon",
+        "summary": "Get all pokemon (no pagination, cached)",
+        "tags": [
+          "pokemon"
+        ]
+      }
+    },
+    "/pokemon/search": {
+      "get": {
+        "operationId": "PokemonController_search",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "maximum": 100,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Field to sort by",
+            "schema": {
+              "enum": [
+                "name",
+                "createdAt"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "required": false,
+            "in": "query",
+            "description": "Filter Pokemon by name (partial match, case-insensitive)",
+            "schema": {
+              "example": "pikachu",
+              "type": "string"
+            }
+          },
+          {
+            "name": "types",
+            "required": false,
+            "in": "query",
+            "description": "Comma-separated Pokemon types",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Bug",
+                  "Dark",
+                  "Dragon",
+                  "Electric",
+                  "Fairy",
+                  "Fighting",
+                  "Fire",
+                  "Flying",
+                  "Ghost",
+                  "Grass",
+                  "Ground",
+                  "Ice",
+                  "Normal",
+                  "Poison",
+                  "Psychic",
+                  "Rock",
+                  "Steel",
+                  "Water"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pokemon retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedPokemonResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Search Pokemon with pagination",
+        "tags": [
+          "pokemon"
+        ]
+      }
+    },
+    "/pokemon/count": {
+      "get": {
+        "operationId": "PokemonController_getCount",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Pokemon count retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PokemonCountResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get total Pokemon count in the system",
         "tags": [
           "pokemon"
         ]
@@ -1235,6 +1381,62 @@
           "support"
         ]
       }
+    },
+    "/upload/image": {
+      "post": {
+        "operationId": "UploadController_uploadImage",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "file"
+                ],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image file (JPG, PNG, GIF, WebP, max 5MB)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Image uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid file or upload failed"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Upload an image to Cloudinary (Admin only)",
+        "tags": [
+          "upload"
+        ]
+      }
     }
   },
   "info": {
@@ -1350,6 +1552,35 @@
             "type": "string",
             "example": "https://example.com/pokemon/pikachu.png"
           },
+          "types": {
+            "type": "array",
+            "example": [
+              "Electric"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "Bug",
+                "Dark",
+                "Dragon",
+                "Electric",
+                "Fairy",
+                "Fighting",
+                "Fire",
+                "Flying",
+                "Ghost",
+                "Grass",
+                "Ground",
+                "Ice",
+                "Normal",
+                "Poison",
+                "Psychic",
+                "Rock",
+                "Steel",
+                "Water"
+              ]
+            }
+          },
           "createdAt": {
             "format": "date-time",
             "type": "string",
@@ -1365,6 +1596,7 @@
           "_id",
           "name",
           "image",
+          "types",
           "createdAt",
           "updatedAt"
         ]
@@ -1428,7 +1660,7 @@
             "description": "Theme ID for the ranking card"
           },
           "background": {
-            "type": "object",
+            "type": "string",
             "example": "ocean",
             "description": "Background theme ID for the full-page ranking view",
             "nullable": true
@@ -1733,11 +1965,86 @@
             "type": "string",
             "example": "pikachu.png",
             "description": "Pokemon image - either a filename (e.g., \"pikachu.png\") or a URL from whitelisted domains"
+          },
+          "types": {
+            "type": "array",
+            "example": [
+              "Electric"
+            ],
+            "description": "Pokemon types",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Bug",
+                "Dark",
+                "Dragon",
+                "Electric",
+                "Fairy",
+                "Fighting",
+                "Fire",
+                "Flying",
+                "Ghost",
+                "Grass",
+                "Ground",
+                "Ice",
+                "Normal",
+                "Poison",
+                "Psychic",
+                "Rock",
+                "Steel",
+                "Water"
+              ]
+            }
           }
         },
         "required": [
           "name",
           "image"
+        ]
+      },
+      "PaginatedPokemonResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PokemonResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "example": 100,
+            "description": "Total number of Pokemon"
+          },
+          "page": {
+            "type": "number",
+            "example": 1,
+            "description": "Current page number"
+          },
+          "limit": {
+            "type": "number",
+            "example": 20,
+            "description": "Number of items per page"
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit"
+        ]
+      },
+      "PokemonCountResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalPokemonCount": {
+            "type": "number",
+            "example": 1025,
+            "description": "Total Pokemon registered in the system"
+          }
+        },
+        "required": [
+          "totalPokemonCount"
         ]
       },
       "UpdatePokemonDto": {
@@ -1751,6 +2058,36 @@
             "type": "string",
             "example": "pikachu.png",
             "description": "Pokemon image - either a filename (e.g., \"pikachu.png\") or a URL from whitelisted domains"
+          },
+          "types": {
+            "type": "array",
+            "example": [
+              "Electric"
+            ],
+            "description": "Pokemon types",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Bug",
+                "Dark",
+                "Dragon",
+                "Electric",
+                "Fairy",
+                "Fighting",
+                "Fire",
+                "Flying",
+                "Ghost",
+                "Grass",
+                "Ground",
+                "Ice",
+                "Normal",
+                "Poison",
+                "Psychic",
+                "Rock",
+                "Steel",
+                "Water"
+              ]
+            }
           }
         }
       },
@@ -1977,6 +2314,19 @@
           "_id",
           "message",
           "createdAt"
+        ]
+      },
+      "UploadResponseDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL of the uploaded image",
+            "example": "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/pokemon/abc123.png"
+          }
+        },
+        "required": [
+          "url"
         ]
       }
     }

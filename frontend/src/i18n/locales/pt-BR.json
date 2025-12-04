@@ -1,7 +1,12 @@
 {
   "common": {
     "or": "ou",
-    "retry": "Tentar novamente"
+    "retry": "Tentar novamente",
+    "actions": "Ações",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Excluir",
+    "deleting": "Excluindo..."
   },
   "pokemonTypes": {
     "Bug": "Inseto",
@@ -30,7 +35,14 @@
     "openMenu": "Abrir menu",
     "userMenu": "Menu do usuário",
     "toggleTheme": "Alternar tema",
-    "support": "Suporte"
+    "language": "Idioma",
+    "support": "Suporte",
+    "viewAll": "Ver Todos",
+    "viewAllRankings": "Ver todos ({{count}})",
+    "createNewRanking": "Criar Novo Ranking",
+    "noRankings": "Nenhum ranking ainda",
+    "admin": "Admin",
+    "adminPokemon": "Gerenciar Pokemon"
   },
   "auth": {
     "signIn": "Entrar",
@@ -109,7 +121,11 @@
     "errorDescription": "Por favor, tente novamente mais tarde.",
     "pokemonCount_one": "{{count}} Pokemon",
     "pokemonCount_other": "{{count}} Pokemon",
-    "createNew": "Criar Novo"
+    "createNew": "Criar Novo",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "deleteConfirmTitle": "Excluir Ranking",
+    "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
   },
   "rankingForm": {
     "createTitle": "Criar Novo Ranking",
@@ -162,6 +178,54 @@
     "stripe": {
       "title": "Nos Apoie",
       "description": "Faça uma doação única para ajudar a cobrir custos de servidor e desenvolvimento. Pague com Cartão ou Pix."
+    }
+  },
+  "admin": {
+    "pokemon": {
+      "title": "Gerenciamento de Pokemon",
+      "subtitle": "{{count}} Pokemon no total",
+      "create": "Adicionar Pokemon",
+      "createTitle": "Adicionar Novo Pokemon",
+      "createDescription": "Criar uma nova entrada de Pokemon",
+      "editTitle": "Editar Pokemon",
+      "editDescription": "Editando {{name}}",
+      "backToList": "Voltar para lista",
+      "name": "Nome",
+      "namePlaceholder": "Digite o nome do Pokemon",
+      "image": "Imagem",
+      "dragDrop": "Arraste e solte uma imagem ou clique para selecionar",
+      "allowedTypes": "JPG, PNG, GIF, WebP (máx 5MB)",
+      "uploading": "Enviando...",
+      "uploadError": "Falha ao enviar imagem",
+      "types": "Tipos",
+      "actions": "Ações",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "save": "Salvar Pokemon",
+      "saving": "Salvando...",
+      "saveSuccess": "Pokemon salvo com sucesso",
+      "saveError": "Falha ao salvar Pokemon",
+      "deleteSuccess": "Pokemon excluído com sucesso",
+      "deleteError": "Falha ao excluir Pokemon",
+      "deleteConfirmTitle": "Excluir Pokemon",
+      "deleteConfirmDescription": "Tem certeza que deseja excluir {{name}}? Esta ação não pode ser desfeita.",
+      "deleteCancel": "Cancelar",
+      "deleteConfirm": "Excluir",
+      "noResults": "Nenhum Pokemon encontrado",
+      "notFound": "Pokemon não encontrado",
+      "searchPlaceholder": "Buscar Pokemon por nome...",
+      "filterTypes": "Filtrar por tipo",
+      "selectTypes": "Selecionar tipos",
+      "clearTypes": "Limpar",
+      "sortBy": "Ordenar por",
+      "sortByName": "Nome",
+      "sortByDate": "Data de criação",
+      "orderAsc": "Crescente",
+      "orderDesc": "Decrescente",
+      "showing": "Mostrando {{from}}-{{to}} de {{total}}",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "pageOf": "Página {{page}} de {{totalPages}}"
     }
   }
 }

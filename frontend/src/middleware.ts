@@ -1,7 +1,7 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { publicPaths, authPaths, routes } from "@/lib/routes";
+import { publicPaths, authPaths, adminPaths, routes } from "@/lib/routes";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req });
@@ -12,6 +12,7 @@ export async function middleware(req: NextRequest) {
     (path) => pathname === path || pathname.startsWith("/api/")
   );
   const isAuthPath = authPaths.some((path) => pathname === path);
+  const isAdminPath = adminPaths.some((path) => pathname.startsWith(path));
 
   if (isAuthPath && isAuthenticated) {
     return NextResponse.redirect(new URL(routes.home, req.url));
@@ -19,6 +20,11 @@ export async function middleware(req: NextRequest) {
 
   if (!isPublicPath && !isAuthenticated) {
     return NextResponse.redirect(new URL(routes.signin, req.url));
+  }
+
+  // Require admin role for admin paths
+  if (isAdminPath && token?.role !== "admin") {
+    return NextResponse.redirect(new URL(routes.home, req.url));
   }
 
   return NextResponse.next();

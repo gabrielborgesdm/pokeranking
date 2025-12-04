@@ -25,6 +25,9 @@ import type {
 
 import type {
   CreatePokemonDto,
+  PaginatedPokemonResponseDto,
+  PokemonControllerSearchParams,
+  PokemonCountResponseDto,
   PokemonResponseDto,
   UpdatePokemonDto,
 } from "../../model";
@@ -160,7 +163,7 @@ export const usePokemonControllerCreate = <TError = void, TContext = unknown>(
   return useMutation(mutationOptions, queryClient);
 };
 /**
- * @summary Get all pokemon
+ * @summary Get all pokemon (no pagination, cached)
  */
 export type pokemonControllerFindAllResponse200 = {
   data: PokemonResponseDto[];
@@ -306,7 +309,7 @@ export function usePokemonControllerFindAll<
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 /**
- * @summary Get all pokemon
+ * @summary Get all pokemon (no pagination, cached)
  */
 
 export function usePokemonControllerFindAll<
@@ -426,7 +429,7 @@ export function usePokemonControllerFindAllSuspense<
   queryKey: DataTag<QueryKey, TData>;
 };
 /**
- * @summary Get all pokemon
+ * @summary Get all pokemon (no pagination, cached)
  */
 
 export function usePokemonControllerFindAllSuspense<
@@ -448,6 +451,634 @@ export function usePokemonControllerFindAllSuspense<
   queryKey: DataTag<QueryKey, TData>;
 } {
   const queryOptions = getPokemonControllerFindAllSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(
+    queryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Search Pokemon with pagination
+ */
+export type pokemonControllerSearchResponse200 = {
+  data: PaginatedPokemonResponseDto;
+  status: 200;
+};
+
+export type pokemonControllerSearchResponseSuccess =
+  pokemonControllerSearchResponse200 & {
+    headers: Headers;
+  };
+export type pokemonControllerSearchResponse =
+  pokemonControllerSearchResponseSuccess;
+
+export const getPokemonControllerSearchUrl = (
+  params?: PokemonControllerSearchParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["types"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? "null" : v.toString());
+      });
+      return;
+    }
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/pokemon/search?${stringifiedParams}`
+    : `/pokemon/search`;
+};
+
+export const pokemonControllerSearch = async (
+  params?: PokemonControllerSearchParams,
+  options?: RequestInit,
+): Promise<pokemonControllerSearchResponse> => {
+  return customFetch<pokemonControllerSearchResponse>(
+    getPokemonControllerSearchUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getPokemonControllerSearchQueryKey = (
+  params?: PokemonControllerSearchParams,
+) => {
+  return [`/pokemon/search`, ...(params ? [params] : [])] as const;
+};
+
+export const getPokemonControllerSearchQueryOptions = <
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getPokemonControllerSearchQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof pokemonControllerSearch>>
+  > = ({ signal }) =>
+    pokemonControllerSearch(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof pokemonControllerSearch>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type PokemonControllerSearchQueryResult = NonNullable<
+  Awaited<ReturnType<typeof pokemonControllerSearch>>
+>;
+export type PokemonControllerSearchQueryError = unknown;
+
+export function usePokemonControllerSearch<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params: undefined | PokemonControllerSearchParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof pokemonControllerSearch>>,
+          TError,
+          Awaited<ReturnType<typeof pokemonControllerSearch>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerSearch<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof pokemonControllerSearch>>,
+          TError,
+          Awaited<ReturnType<typeof pokemonControllerSearch>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function usePokemonControllerSearch<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+/**
+ * @summary Search Pokemon with pagination
+ */
+
+export function usePokemonControllerSearch<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getPokemonControllerSearchQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getPokemonControllerSearchSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getPokemonControllerSearchQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof pokemonControllerSearch>>
+  > = ({ signal }) =>
+    pokemonControllerSearch(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof pokemonControllerSearch>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type PokemonControllerSearchSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof pokemonControllerSearch>>
+>;
+export type PokemonControllerSearchSuspenseQueryError = unknown;
+
+export function usePokemonControllerSearchSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params: undefined | PokemonControllerSearchParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerSearchSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerSearchSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+/**
+ * @summary Search Pokemon with pagination
+ */
+
+export function usePokemonControllerSearchSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerSearch>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerSearchParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerSearch>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+} {
+  const queryOptions = getPokemonControllerSearchSuspenseQueryOptions(
+    params,
+    options,
+  );
+
+  const query = useSuspenseQuery(
+    queryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary Get total Pokemon count in the system
+ */
+export type pokemonControllerGetCountResponse200 = {
+  data: PokemonCountResponseDto;
+  status: 200;
+};
+
+export type pokemonControllerGetCountResponseSuccess =
+  pokemonControllerGetCountResponse200 & {
+    headers: Headers;
+  };
+export type pokemonControllerGetCountResponse =
+  pokemonControllerGetCountResponseSuccess;
+
+export const getPokemonControllerGetCountUrl = () => {
+  return `/pokemon/count`;
+};
+
+export const pokemonControllerGetCount = async (
+  options?: RequestInit,
+): Promise<pokemonControllerGetCountResponse> => {
+  return customFetch<pokemonControllerGetCountResponse>(
+    getPokemonControllerGetCountUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getPokemonControllerGetCountQueryKey = () => {
+  return [`/pokemon/count`] as const;
+};
+
+export const getPokemonControllerGetCountQueryOptions = <
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getPokemonControllerGetCountQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof pokemonControllerGetCount>>
+  > = ({ signal }) => pokemonControllerGetCount({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type PokemonControllerGetCountQueryResult = NonNullable<
+  Awaited<ReturnType<typeof pokemonControllerGetCount>>
+>;
+export type PokemonControllerGetCountQueryError = unknown;
+
+export function usePokemonControllerGetCount<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+          TError,
+          Awaited<ReturnType<typeof pokemonControllerGetCount>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerGetCount<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+          TError,
+          Awaited<ReturnType<typeof pokemonControllerGetCount>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function usePokemonControllerGetCount<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+/**
+ * @summary Get total Pokemon count in the system
+ */
+
+export function usePokemonControllerGetCount<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getPokemonControllerGetCountQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getPokemonControllerGetCountSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseSuspenseQueryOptions<
+      Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getPokemonControllerGetCountQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof pokemonControllerGetCount>>
+  > = ({ signal }) => pokemonControllerGetCount({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type PokemonControllerGetCountSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof pokemonControllerGetCount>>
+>;
+export type PokemonControllerGetCountSuspenseQueryError = unknown;
+
+export function usePokemonControllerGetCountSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerGetCountSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerGetCountSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+/**
+ * @summary Get total Pokemon count in the system
+ */
+
+export function usePokemonControllerGetCountSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerGetCount>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+} {
+  const queryOptions =
+    getPokemonControllerGetCountSuspenseQueryOptions(options);
 
   const query = useSuspenseQuery(
     queryOptions,

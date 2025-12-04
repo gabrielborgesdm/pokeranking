@@ -27,7 +27,6 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@pokeranking/shared": "*",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -36,6 +35,7 @@
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.3",
+    "@pokeranking/shared": "*",
     "@sentry/nestjs": "^10.28.0",
     "@sentry/profiling-node": "^10.28.0",
     "@upstash/ratelimit": "^2.0.7",
@@ -43,6 +43,7 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
+    "cloudinary": "^2.8.0",
     "handlebars": "^4.7.8",
     "mongoose": "^8.20.1",
     "nestjs-i18n": "^10.6.0",
@@ -64,6 +65,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/mongoose": "^5.11.96",
+    "@types/multer": "^2.0.0",
     "@types/node": "^22.19.1",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",

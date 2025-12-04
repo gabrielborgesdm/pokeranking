@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { transformObjectId } from '../../common/utils/transform.util';
+import { POKEMON_TYPE_VALUES, type PokemonType } from '@pokeranking/shared';
 
 @Exclude()
 export class PokemonResponseDto {
@@ -16,6 +17,14 @@ export class PokemonResponseDto {
   @Expose()
   @ApiProperty({ example: 'https://example.com/pokemon/pikachu.png' })
   image: string;
+
+  @Expose()
+  @ApiProperty({
+    example: ['Electric'],
+    enum: POKEMON_TYPE_VALUES,
+    isArray: true,
+  })
+  types: PokemonType[];
 
   @Expose()
   @ApiProperty({ example: '2024-01-15T10:30:00.000Z' })
