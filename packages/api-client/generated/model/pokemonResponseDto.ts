@@ -5,11 +5,13 @@
  * API for managing Pokemon and user rankings
  * OpenAPI spec version: 1.0
  */
+import type { PokemonResponseDtoTypesItem } from "./pokemonResponseDtoTypesItem";
 
 export interface PokemonResponseDto {
   _id: string;
   name: string;
   image: string;
+  types: PokemonResponseDtoTypesItem[];
   createdAt: string;
   updatedAt: string;
 }

@@ -11,10 +11,14 @@ import { Pokemon } from './schemas/pokemon.schema';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PokemonResponseDto } from './dto/pokemon-response.dto';
+import { PokemonQueryDto } from './dto/pokemon-query.dto';
 import { stripUndefined, toDto } from 'src/common/utils/transform.util';
 import { CacheService } from 'src/common/services/cache.service';
+import type { FilterQuery } from 'mongoose';
 
 const POKEMON_ALL_CACHE_KEY = 'pokemon:all';
+const POKEMON_COUNT_CACHE_KEY = 'pokemon:total_count';
+const POKEMON_COUNT_CACHE_TTL = 86400; // 24 hours
 
 @Injectable()
 export class PokemonService {
@@ -38,13 +42,13 @@ export class PokemonService {
     const pokemon = new this.pokemonModel(createPokemonDto);
     const saved = await pokemon.save();
 
-    await this.cacheService.del(POKEMON_ALL_CACHE_KEY);
+    await this.invalidateCountCache();
 
     return saved;
   }
 
   /**
-   * Retrieves all Pokemon from cache or database.
+   * Retrieves all Pokemon from cache or database (no pagination).
    *
    * Returns PokemonResponseDto[] directly from the service (rather than transforming
    * in the controller) because:
@@ -68,6 +72,47 @@ export class PokemonService {
 
     await this.cacheService.set(POKEMON_ALL_CACHE_KEY, dtos);
     return dtos;
+  }
+
+  /**
+   * Retrieves Pokemon with pagination, filtering, and sorting.
+   * Used for admin list with search and type filtering.
+   */
+  async findAllPaginated(
+    query: PokemonQueryDto,
+  ): Promise<{ pokemon: Pokemon[]; total: number }> {
+    const { page = 1, limit = 20, sortBy = 'name', order = 'asc' } = query;
+    const skip = (page - 1) * limit;
+
+    const filter = this.buildFilter(query);
+    const sortOrder = order === 'asc' ? 1 : -1;
+
+    const [pokemon, total] = await Promise.all([
+      this.pokemonModel
+        .find(filter)
+        .sort({ [sortBy]: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .lean<Pokemon[]>()
+        .exec(),
+      this.pokemonModel.countDocuments(filter).exec(),
+    ]);
+
+    return { pokemon, total };
+  }
+
+  private buildFilter(query: PokemonQueryDto): FilterQuery<Pokemon> {
+    const filter: FilterQuery<Pokemon> = {};
+
+    if (query.name) {
+      filter.name = { $regex: query.name, $options: 'i' };
+    }
+
+    if (query.types && query.types.length > 0) {
+      filter.types = { $in: query.types };
+    }
+
+    return filter;
   }
 
   async findOne(id: string): Promise<Pokemon> {
@@ -106,8 +151,38 @@ export class PokemonService {
 
     await pokemon.deleteOne();
 
-    await this.cacheService.del(POKEMON_ALL_CACHE_KEY);
+    await this.invalidateCountCache();
 
     return pokemon;
+  }
+
+  /**
+   * Get the total count of Pokemon in the system.
+   * Uses Redis cache with 24h TTL, invalidated on create/remove.
+   */
+  async getCachedTotalCount(): Promise<number> {
+    const cached = await this.cacheService.get<number>(POKEMON_COUNT_CACHE_KEY);
+    if (cached !== null) {
+      return cached;
+    }
+
+    const count = await this.pokemonModel.countDocuments().exec();
+    await this.cacheService.set(
+      POKEMON_COUNT_CACHE_KEY,
+      count,
+      POKEMON_COUNT_CACHE_TTL,
+    );
+    return count;
+  }
+
+  /**
+   * Invalidates the count cache. Called on create/remove operations.
+   * Also invalidates the all Pokemon cache.
+   */
+  private async invalidateCountCache(): Promise<void> {
+    await Promise.all([
+      this.cacheService.del(POKEMON_ALL_CACHE_KEY),
+      this.cacheService.del(POKEMON_COUNT_CACHE_KEY),
+    ]);
   }
 }

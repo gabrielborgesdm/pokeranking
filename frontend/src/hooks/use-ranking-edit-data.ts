@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import {
   useAuthControllerGetProfile,
-  usePokemonControllerFindAll,
+  usePokemonControllerGetCount,
 } from "@pokeranking/api-client";
 
 interface UseRankingEditDataOptions {
@@ -18,23 +18,23 @@ export function useRankingEditData({ rankingId }: UseRankingEditDataOptions) {
   } = useAuthControllerGetProfile();
 
   const {
-    data: pokemonData,
-    isLoading: isPokemonLoading,
-    error: pokemonError,
-  } = usePokemonControllerFindAll();
+    data: countData,
+    isLoading: isCountLoading,
+    error: countError,
+  } = usePokemonControllerGetCount();
 
   const ranking = useMemo(() => {
     const rankings = profileData?.data?.rankings ?? [];
     return rankings.find((r) => r._id === rankingId);
   }, [profileData, rankingId]);
 
-  const totalPokemon = pokemonData?.data?.length ?? 0;
+  const totalPokemon = countData?.data?.totalPokemonCount ?? 0;
 
   return {
     ranking,
     totalPokemon,
-    isLoading: isProfileLoading || isPokemonLoading,
-    error: profileError || pokemonError,
-    notFound: !isProfileLoading && !isPokemonLoading && !ranking,
+    isLoading: isProfileLoading || isCountLoading,
+    error: profileError || countError,
+    notFound: !isProfileLoading && !isCountLoading && !ranking,
   };
 }

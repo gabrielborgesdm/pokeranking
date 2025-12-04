@@ -159,7 +159,32 @@ function getThemeRequiredCount(themeId, totalPokemonInSystem) {
   }
 }
 
+// src/pokemon-types.ts
+var PokemonTypes = {
+  Bug: "Bug",
+  Dark: "Dark",
+  Dragon: "Dragon",
+  Electric: "Electric",
+  Fairy: "Fairy",
+  Fighting: "Fighting",
+  Fire: "Fire",
+  Flying: "Flying",
+  Ghost: "Ghost",
+  Grass: "Grass",
+  Ground: "Ground",
+  Ice: "Ice",
+  Normal: "Normal",
+  Poison: "Poison",
+  Psychic: "Psychic",
+  Rock: "Rock",
+  Steel: "Steel",
+  Water: "Water"
+};
+var POKEMON_TYPE_VALUES = Object.values(PokemonTypes);
+
 exports.DEFAULT_THEME_ID = DEFAULT_THEME_ID;
+exports.POKEMON_TYPE_VALUES = POKEMON_TYPE_VALUES;
+exports.PokemonTypes = PokemonTypes;
 exports.RANKING_THEMES = RANKING_THEMES;
 exports.THEME_IDS = THEME_IDS;
 exports.getAvailableThemes = getAvailableThemes;

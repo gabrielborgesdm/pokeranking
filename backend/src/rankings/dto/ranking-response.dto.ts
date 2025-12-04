@@ -31,6 +31,7 @@ export class RankingResponseDto {
 
   @Expose()
   @ApiProperty({
+    type: String,
     example: 'ocean',
     description: 'Background theme ID for the full-page ranking view',
     nullable: true,

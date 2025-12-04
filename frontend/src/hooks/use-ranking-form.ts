@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import {
   useRankingsControllerCreate,
   useRankingsControllerUpdate,
+  getAuthControllerGetProfileQueryKey,
   isApiError,
 } from "@pokeranking/api-client";
 import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
@@ -44,6 +46,7 @@ export function useRankingForm({
 }: UseRankingFormOptions) {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [error, setError] = useState<string | null>(null);
   const { trackRankingCreate } = useAnalytics();
 
@@ -70,6 +73,10 @@ export function useRankingForm({
             if (response.status === 201) {
               const createdRanking = response.data;
               trackRankingCreate(createdRanking._id, createdRanking.title);
+              // Invalidate profile query to refresh rankings list
+              queryClient.invalidateQueries({
+                queryKey: getAuthControllerGetProfileQueryKey(),
+              });
               onSuccess?.();
               router.push("/my-rankings");
             }
@@ -94,6 +101,10 @@ export function useRankingForm({
         {
           onSuccess: (response) => {
             if (response.status === 200) {
+              // Invalidate profile query to refresh rankings list
+              queryClient.invalidateQueries({
+                queryKey: getAuthControllerGetProfileQueryKey(),
+              });
               onSuccess?.();
               router.push("/my-rankings");
             }
