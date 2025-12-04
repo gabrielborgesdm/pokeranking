@@ -1,7 +1,12 @@
 {
   "common": {
     "or": "or",
-    "retry": "Try again"
+    "retry": "Try again",
+    "actions": "Actions",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "deleting": "Deleting..."
   },
   "pokemonTypes": {
     "Bug": "Bug",
@@ -16,21 +21,6 @@
     "Poison": "Poison",
     "Psychic": "Psychic",
     "Rock": "Rock"
-  },
-  "nav": {
-    "leaderboard": "Leaderboard",
-    "myRankings": "My Rankings",
-    "contribute": "Contribute",
-    "design": "Design",
-    "signIn": "Sign in",
-    "signOut": "Sign out",
-    "settings": "Settings",
-    "support": "Support",
-    "lightMode": "Light mode",
-    "darkMode": "Dark mode",
-    "openMenu": "Open menu",
-    "userMenu": "User menu",
-    "toggleTheme": "Toggle theme"
   },
   "auth": {
     "signIn": "Sign in",
@@ -109,7 +99,11 @@
     "errorDescription": "Please try again later.",
     "pokemonCount_one": "{{count}} Pokemon",
     "pokemonCount_other": "{{count}} Pokemon",
-    "createNew": "Create New"
+    "createNew": "Create New",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirmTitle": "Delete Ranking",
+    "deleteConfirmDescription": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
   },
   "rankingForm": {
     "createTitle": "Create New Ranking",
@@ -162,6 +156,72 @@
     "stripe": {
       "title": "Support Us",
       "description": "Make a one-time donation to help cover server costs and development. Pay with Card or Pix."
+    }
+  },
+  "nav": {
+    "leaderboard": "Leaderboard",
+    "myRankings": "My Rankings",
+    "contribute": "Contribute",
+    "design": "Design",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "settings": "Settings",
+    "support": "Support",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "openMenu": "Open menu",
+    "userMenu": "User menu",
+    "toggleTheme": "Toggle theme",
+    "language": "Language",
+    "viewAll": "View All",
+    "viewAllRankings": "View all ({{count}})",
+    "createNewRanking": "Create New Ranking",
+    "noRankings": "No rankings yet",
+    "admin": "Admin",
+    "adminPokemon": "Manage Pokemon"
+  },
+  "admin": {
+    "pokemon": {
+      "title": "Pokemon Management",
+      "subtitle": "{{count}} Pokemon total",
+      "create": "Add Pokemon",
+      "createTitle": "Add New Pokemon",
+      "createDescription": "Create a new Pokemon entry",
+      "editTitle": "Edit Pokemon",
+      "editDescription": "Editing {{name}}",
+      "backToList": "Back to list",
+      "name": "Name",
+      "namePlaceholder": "Enter Pokemon name",
+      "image": "Image",
+      "types": "Types",
+      "actions": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save Pokemon",
+      "saving": "Saving...",
+      "saveSuccess": "Pokemon saved successfully",
+      "saveError": "Failed to save Pokemon",
+      "deleteSuccess": "Pokemon deleted successfully",
+      "deleteError": "Failed to delete Pokemon",
+      "deleteConfirmTitle": "Delete Pokemon",
+      "deleteConfirmDescription": "Are you sure you want to delete {{name}}? This action cannot be undone.",
+      "deleteCancel": "Cancel",
+      "deleteConfirm": "Delete",
+      "noResults": "No Pokemon found",
+      "notFound": "Pokemon not found",
+      "searchPlaceholder": "Search Pokemon by name...",
+      "filterTypes": "Filter by type",
+      "selectTypes": "Select types",
+      "clearTypes": "Clear",
+      "sortBy": "Sort by",
+      "sortByName": "Name",
+      "sortByDate": "Created date",
+      "orderAsc": "Ascending",
+      "orderDesc": "Descending",
+      "showing": "Showing {{from}}-{{to}} of {{total}}",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {{page}} of {{totalPages}}"
     }
   }
 }
