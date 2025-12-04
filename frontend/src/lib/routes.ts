@@ -13,6 +13,7 @@ export const routes = {
   // Admin routes
   adminPokemon: "/admin/pokemon",
   adminPokemonNew: "/admin/pokemon/new",
+  adminPokemonBulk: "/admin/pokemon/bulk",
   adminPokemonEdit: (id: string) => `/admin/pokemon/${id}/edit` as const,
 } as const;
 

@@ -4,3 +4,4 @@ export * from '../../generated/endpoints/users/users';
 export * from '../../generated/endpoints/pokemon/pokemon';
 export * from '../../generated/endpoints/boxes/boxes';
 export * from '../../generated/endpoints/rankings/rankings';
+export * from '../../generated/endpoints/upload/upload';

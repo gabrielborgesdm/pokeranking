@@ -13,4 +13,28 @@ export interface UpdatePokemonDto {
   image?: string;
   /** Pokemon types */
   types?: UpdatePokemonDtoTypesItem[];
+  /** National Pokedex number */
+  pokedexNumber?: number;
+  /** Species classification */
+  species?: string;
+  /** Height in meters */
+  height?: number;
+  /** Weight in kilograms */
+  weight?: number;
+  /** Pokemon abilities */
+  abilities?: string[];
+  /** Base HP stat */
+  hp?: number;
+  /** Base Attack stat */
+  attack?: number;
+  /** Base Defense stat */
+  defense?: number;
+  /** Base Special Attack stat */
+  specialAttack?: number;
+  /** Base Special Defense stat */
+  specialDefense?: number;
+  /** Base Speed stat */
+  speed?: number;
+  /** Generation introduced */
+  generation?: number;
 }

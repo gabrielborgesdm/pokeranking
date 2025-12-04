@@ -22,3 +22,12 @@ export const PokemonTypes = {
 export type PokemonType = (typeof PokemonTypes)[keyof typeof PokemonTypes];
 
 export const POKEMON_TYPE_VALUES = Object.values(PokemonTypes);
+
+export interface PokemonStats {
+  hp?: number;
+  attack?: number;
+  defense?: number;
+  specialAttack?: number;
+  specialDefense?: number;
+  speed?: number;
+}

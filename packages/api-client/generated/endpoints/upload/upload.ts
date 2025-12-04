@@ -14,7 +14,9 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  BulkUploadResponseDto,
   UploadControllerUploadImageBody,
+  UploadControllerUploadImagesBody,
   UploadResponseDto,
 } from "../../model";
 
@@ -152,6 +154,141 @@ export const useUploadControllerUploadImage = <
 > => {
   const mutationOptions =
     getUploadControllerUploadImageMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary Upload multiple images to Cloudinary (Admin only)
+ */
+export type uploadControllerUploadImagesResponse201 = {
+  data: BulkUploadResponseDto;
+  status: 201;
+};
+
+export type uploadControllerUploadImagesResponse400 = {
+  data: void;
+  status: 400;
+};
+
+export type uploadControllerUploadImagesResponse401 = {
+  data: void;
+  status: 401;
+};
+
+export type uploadControllerUploadImagesResponse403 = {
+  data: void;
+  status: 403;
+};
+
+export type uploadControllerUploadImagesResponseSuccess =
+  uploadControllerUploadImagesResponse201 & {
+    headers: Headers;
+  };
+export type uploadControllerUploadImagesResponseError = (
+  | uploadControllerUploadImagesResponse400
+  | uploadControllerUploadImagesResponse401
+  | uploadControllerUploadImagesResponse403
+) & {
+  headers: Headers;
+};
+
+export type uploadControllerUploadImagesResponse =
+  | uploadControllerUploadImagesResponseSuccess
+  | uploadControllerUploadImagesResponseError;
+
+export const getUploadControllerUploadImagesUrl = () => {
+  return `/upload/images`;
+};
+
+export const uploadControllerUploadImages = async (
+  uploadControllerUploadImagesBody: UploadControllerUploadImagesBody,
+  options?: RequestInit,
+): Promise<uploadControllerUploadImagesResponse> => {
+  const formData = new FormData();
+  uploadControllerUploadImagesBody.files.forEach((value) =>
+    formData.append(`files`, value),
+  );
+
+  return customFetch<uploadControllerUploadImagesResponse>(
+    getUploadControllerUploadImagesUrl(),
+    {
+      ...options,
+      method: "POST",
+      body: formData,
+    },
+  );
+};
+
+export const getUploadControllerUploadImagesMutationOptions = <
+  TError = void,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof uploadControllerUploadImages>>,
+    TError,
+    { data: UploadControllerUploadImagesBody },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof uploadControllerUploadImages>>,
+  TError,
+  { data: UploadControllerUploadImagesBody },
+  TContext
+> => {
+  const mutationKey = ["uploadControllerUploadImages"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof uploadControllerUploadImages>>,
+    { data: UploadControllerUploadImagesBody }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return uploadControllerUploadImages(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UploadControllerUploadImagesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof uploadControllerUploadImages>>
+>;
+export type UploadControllerUploadImagesMutationBody =
+  UploadControllerUploadImagesBody;
+export type UploadControllerUploadImagesMutationError = void;
+
+/**
+ * @summary Upload multiple images to Cloudinary (Admin only)
+ */
+export const useUploadControllerUploadImages = <
+  TError = void,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof uploadControllerUploadImages>>,
+      TError,
+      { data: UploadControllerUploadImagesBody },
+      TContext
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof uploadControllerUploadImages>>,
+  TError,
+  { data: UploadControllerUploadImagesBody },
+  TContext
+> => {
+  const mutationOptions =
+    getUploadControllerUploadImagesMutationOptions(options);
 
   return useMutation(mutationOptions, queryClient);
 };

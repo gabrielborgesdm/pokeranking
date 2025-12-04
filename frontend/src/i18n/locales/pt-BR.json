@@ -13,14 +13,20 @@
     "Dark": "Sombrio",
     "Dragon": "Dragao",
     "Electric": "Eletrico",
+    "Fairy": "Fada",
+    "Fighting": "Lutador",
     "Fire": "Fogo",
     "Flying": "Voador",
     "Ghost": "Fantasma",
     "Grass": "Planta",
+    "Ground": "Terrestre",
+    "Ice": "Gelo",
     "Normal": "Normal",
     "Poison": "Venenoso",
     "Psychic": "Psiquico",
-    "Rock": "Pedra"
+    "Rock": "Pedra",
+    "Steel": "Metal",
+    "Water": "Agua"
   },
   "nav": {
     "leaderboard": "Ranking",
@@ -42,7 +48,8 @@
     "createNewRanking": "Criar Novo Ranking",
     "noRankings": "Nenhum ranking ainda",
     "admin": "Admin",
-    "adminPokemon": "Gerenciar Pokemon"
+    "adminPokemon": "Gerenciar Pokemon",
+    "welcome": "Bem-vindo"
   },
   "auth": {
     "signIn": "Entrar",
@@ -109,9 +116,10 @@
     "orderDesc": "Decrescente"
   },
   "pagination": {
-    "previous": "Página anterior",
-    "next": "Próxima página",
-    "page": "Página {{current}} de {{total}}"
+    "previous": "Anterior",
+    "next": "Próximo",
+    "page": "Página {{current}} de {{total}}",
+    "showing": "Mostrando {{from}}-{{to}} de {{total}}"
   },
   "myRankings": {
     "title": "Meus Rankings",
@@ -180,6 +188,13 @@
       "description": "Faça uma doação única para ajudar a cobrir custos de servidor e desenvolvimento. Pague com Cartão ou Pix."
     }
   },
+  "notFound": {
+    "title": "Página não encontrada!",
+    "description": "Parece que esta página fugiu da batalha. Ela deve estar escondida na grama alta em algum lugar...",
+    "goHome": "Ir para Início",
+    "viewRankings": "Ver Rankings",
+    "hint": "Dica: Tente usar \"Fly\" para navegar até um local conhecido!"
+  },
   "admin": {
     "pokemon": {
       "title": "Gerenciamento de Pokemon",
@@ -225,7 +240,46 @@
       "showing": "Mostrando {{from}}-{{to}} de {{total}}",
       "previous": "Anterior",
       "next": "Próximo",
-      "pageOf": "Página {{page}} de {{totalPages}}"
+      "pageOf": "Página {{page}} de {{totalPages}}",
+      "bulkCreate": "Importar em Lote",
+      "bulkCreateTitle": "Importar Pokemon em Lote",
+      "bulkCreateDescription": "Envie múltiplas imagens e crie Pokemon em lote",
+      "bulkTitle": "Importar em Lote",
+      "bulkDragDrop": "Arraste e solte imagens aqui, ou clique para selecionar",
+      "bulkItemCount": "{{count}} Pokemon para criar",
+      "bulkItemCountWithErrors": "{{count}} Pokemon para criar ({{errors}} com erros)",
+      "bulkSubmit": "Criar {{count}} Pokemon",
+      "bulkSubmitting": "Criando Pokemon...",
+      "bulkSuccess": "{{count}} Pokemon criados com sucesso",
+      "bulkPartialSuccess": "{{success}} Pokemon criados, {{failed}} falharam",
+      "bulkFailed": "Falha ao criar Pokemon",
+      "bulkUploadFailed": "Falha ao enviar imagens",
+      "createError": "Falha ao criar Pokemon",
+      "retryFailed": "Tentar Novamente",
+      "retryUpload": "Tentar",
+      "retryAllFailed": "Tentar Todos com Falha ({{count}})",
+      "uploadFailed": "Falha no envio",
+      "clearAll": "Limpar Tudo",
+      "pokedexInfo": "Informacoes da Pokedex",
+      "pokedexNumber": "Pokedex #",
+      "generation": "Geracao",
+      "species": "Especie",
+      "speciesPlaceholder": "Pokemon Rato",
+      "height": "Altura",
+      "heightUnit": "metros",
+      "weight": "Peso",
+      "weightUnit": "quilogramas",
+      "abilities": "Habilidades",
+      "abilitiesPlaceholder": "Estatica, Para-raio",
+      "abilitiesHint": "Separe multiplas habilidades com virgulas",
+      "baseStats": "Atributos Base",
+      "attack": "Ataque",
+      "defense": "Defesa",
+      "specialAttack": "Atq. Esp.",
+      "specialDefense": "Def. Esp.",
+      "speed": "Velocidade",
+      "showDetails": "Mais detalhes",
+      "hideDetails": "Ocultar detalhes"
     }
   }
 }

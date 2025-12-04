@@ -489,7 +489,11 @@ describe('Pokemon (e2e)', () => {
       await seedPokemon(app, [
         PIKACHU,
         CHARIZARD,
-        createPokemonData({ name: 'Pichu', image: 'pichu.png', types: ['Electric'] }),
+        createPokemonData({
+          name: 'Pichu',
+          image: 'pichu.png',
+          types: ['Electric'],
+        }),
       ]);
 
       const response = await request(app.getHttpServer())

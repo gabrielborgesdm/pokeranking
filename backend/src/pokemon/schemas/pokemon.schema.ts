@@ -26,6 +26,42 @@ export class Pokemon extends Document {
   })
   types: PokemonType[];
 
+  @Prop({ type: Number })
+  pokedexNumber?: number;
+
+  @Prop({ type: String, trim: true })
+  species?: string;
+
+  @Prop({ type: Number })
+  height?: number;
+
+  @Prop({ type: Number })
+  weight?: number;
+
+  @Prop({ type: [String], default: [] })
+  abilities?: string[];
+
+  @Prop({ type: Number })
+  hp?: number;
+
+  @Prop({ type: Number })
+  attack?: number;
+
+  @Prop({ type: Number })
+  defense?: number;
+
+  @Prop({ type: Number })
+  specialAttack?: number;
+
+  @Prop({ type: Number })
+  specialDefense?: number;
+
+  @Prop({ type: Number })
+  speed?: number;
+
+  @Prop({ type: Number })
+  generation?: number;
+
   createdAt: Date;
   updatedAt: Date;
 }

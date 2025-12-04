@@ -577,6 +577,49 @@
         ]
       }
     },
+    "/pokemon/bulk": {
+      "post": {
+        "operationId": "PokemonController_createBulk",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkCreatePokemonDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pokemon creation results (partial success possible)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkCreatePokemonResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create multiple Pokemon (Admin only, partial success possible)",
+        "tags": [
+          "pokemon"
+        ]
+      }
+    },
     "/pokemon/search": {
       "get": {
         "operationId": "PokemonController_search",
@@ -1437,6 +1480,65 @@
           "upload"
         ]
       }
+    },
+    "/upload/images": {
+      "post": {
+        "operationId": "UploadController_uploadImages",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "files"
+                ],
+                "properties": {
+                  "files": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "description": "Image files (JPG, PNG, GIF, WebP, max 5MB each)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Images uploaded (partial success possible)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkUploadResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No files provided"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Upload multiple images to Cloudinary (Admin only)",
+        "tags": [
+          "upload"
+        ]
+      }
     }
   },
   "info": {
@@ -1580,6 +1682,60 @@
                 "Water"
               ]
             }
+          },
+          "pokedexNumber": {
+            "type": "number",
+            "example": 25
+          },
+          "species": {
+            "type": "string",
+            "example": "Mouse Pokémon"
+          },
+          "height": {
+            "type": "number",
+            "example": 0.4
+          },
+          "weight": {
+            "type": "number",
+            "example": 6
+          },
+          "abilities": {
+            "example": [
+              "Static",
+              "Lightning Rod"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hp": {
+            "type": "number",
+            "example": 35
+          },
+          "attack": {
+            "type": "number",
+            "example": 55
+          },
+          "defense": {
+            "type": "number",
+            "example": 40
+          },
+          "specialAttack": {
+            "type": "number",
+            "example": 50
+          },
+          "specialDefense": {
+            "type": "number",
+            "example": 50
+          },
+          "speed": {
+            "type": "number",
+            "example": 90
+          },
+          "generation": {
+            "type": "number",
+            "example": 1
           },
           "createdAt": {
             "format": "date-time",
@@ -1995,11 +2151,162 @@
                 "Water"
               ]
             }
+          },
+          "pokedexNumber": {
+            "type": "number",
+            "example": 25,
+            "description": "National Pokedex number"
+          },
+          "species": {
+            "type": "string",
+            "example": "Mouse Pokémon",
+            "description": "Species classification"
+          },
+          "height": {
+            "type": "number",
+            "example": 0.4,
+            "description": "Height in meters"
+          },
+          "weight": {
+            "type": "number",
+            "example": 6,
+            "description": "Weight in kilograms"
+          },
+          "abilities": {
+            "example": [
+              "Static",
+              "Lightning Rod"
+            ],
+            "description": "Pokemon abilities",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hp": {
+            "type": "number",
+            "example": 35,
+            "description": "Base HP stat"
+          },
+          "attack": {
+            "type": "number",
+            "example": 55,
+            "description": "Base Attack stat"
+          },
+          "defense": {
+            "type": "number",
+            "example": 40,
+            "description": "Base Defense stat"
+          },
+          "specialAttack": {
+            "type": "number",
+            "example": 50,
+            "description": "Base Special Attack stat"
+          },
+          "specialDefense": {
+            "type": "number",
+            "example": 50,
+            "description": "Base Special Defense stat"
+          },
+          "speed": {
+            "type": "number",
+            "example": 90,
+            "description": "Base Speed stat"
+          },
+          "generation": {
+            "type": "number",
+            "example": 1,
+            "description": "Generation introduced"
           }
         },
         "required": [
           "name",
           "image"
+        ]
+      },
+      "BulkCreatePokemonDto": {
+        "type": "object",
+        "properties": {
+          "pokemon": {
+            "description": "Array of Pokemon to create",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreatePokemonDto"
+            }
+          }
+        },
+        "required": [
+          "pokemon"
+        ]
+      },
+      "BulkCreatePokemonItemDto": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "number",
+            "description": "Index in the original request array",
+            "example": 0
+          },
+          "name": {
+            "type": "string",
+            "description": "Pokemon name attempted",
+            "example": "Pikachu"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether creation succeeded",
+            "example": true
+          },
+          "pokemon": {
+            "description": "Created Pokemon data if successful",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PokemonResponseDto"
+              }
+            ]
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed",
+            "example": "Pokemon with name \"Pikachu\" already exists"
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "Error code (e.g., NAME_EXISTS)",
+            "example": "NAME_EXISTS"
+          }
+        },
+        "required": [
+          "index",
+          "name",
+          "success"
+        ]
+      },
+      "BulkCreatePokemonResponseDto": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "description": "Results for each Pokemon creation attempt",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BulkCreatePokemonItemDto"
+            }
+          },
+          "successCount": {
+            "type": "number",
+            "description": "Number of successful creations",
+            "example": 3
+          },
+          "failedCount": {
+            "type": "number",
+            "description": "Number of failed creations",
+            "example": 1
+          }
+        },
+        "required": [
+          "results",
+          "successCount",
+          "failedCount"
         ]
       },
       "PaginatedPokemonResponseDto": {
@@ -2088,6 +2395,72 @@
                 "Water"
               ]
             }
+          },
+          "pokedexNumber": {
+            "type": "number",
+            "example": 25,
+            "description": "National Pokedex number"
+          },
+          "species": {
+            "type": "string",
+            "example": "Mouse Pokémon",
+            "description": "Species classification"
+          },
+          "height": {
+            "type": "number",
+            "example": 0.4,
+            "description": "Height in meters"
+          },
+          "weight": {
+            "type": "number",
+            "example": 6,
+            "description": "Weight in kilograms"
+          },
+          "abilities": {
+            "example": [
+              "Static",
+              "Lightning Rod"
+            ],
+            "description": "Pokemon abilities",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "hp": {
+            "type": "number",
+            "example": 35,
+            "description": "Base HP stat"
+          },
+          "attack": {
+            "type": "number",
+            "example": 55,
+            "description": "Base Attack stat"
+          },
+          "defense": {
+            "type": "number",
+            "example": 40,
+            "description": "Base Defense stat"
+          },
+          "specialAttack": {
+            "type": "number",
+            "example": 50,
+            "description": "Base Special Attack stat"
+          },
+          "specialDefense": {
+            "type": "number",
+            "example": 50,
+            "description": "Base Special Defense stat"
+          },
+          "speed": {
+            "type": "number",
+            "example": 90,
+            "description": "Base Speed stat"
+          },
+          "generation": {
+            "type": "number",
+            "example": 1,
+            "description": "Generation introduced"
           }
         }
       },
@@ -2327,6 +2700,62 @@
         },
         "required": [
           "url"
+        ]
+      },
+      "BulkUploadItemDto": {
+        "type": "object",
+        "properties": {
+          "filename": {
+            "type": "string",
+            "description": "Original filename",
+            "example": "pikachu.png"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether upload succeeded",
+            "example": true
+          },
+          "url": {
+            "type": "string",
+            "description": "URL if successful",
+            "example": "https://res.cloudinary.com/your-cloud/image/upload/v1234567890/pokemon/abc123.png"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if failed",
+            "example": "Invalid file type"
+          }
+        },
+        "required": [
+          "filename",
+          "success"
+        ]
+      },
+      "BulkUploadResponseDto": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "description": "Results for each uploaded file",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BulkUploadItemDto"
+            }
+          },
+          "successCount": {
+            "type": "number",
+            "description": "Number of successful uploads",
+            "example": 3
+          },
+          "failedCount": {
+            "type": "number",
+            "description": "Number of failed uploads",
+            "example": 1
+          }
+        },
+        "required": [
+          "results",
+          "successCount",
+          "failedCount"
         ]
       }
     }

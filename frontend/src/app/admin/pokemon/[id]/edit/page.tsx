@@ -1,10 +1,9 @@
 "use client";
 
 import { use } from "react";
-import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
 import { PokemonForm } from "@/features/admin";
 import { usePokemonControllerFindOne } from "@pokeranking/api-client";
 import { routes } from "@/lib/routes";
@@ -28,15 +27,12 @@ export default function AdminPokemonEditPage({ params }: EditPokemonPageProps) {
 
   if (error || !data || data.status !== 200) {
     return (
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
-        <div className="mb-6">
-          <Button variant="ghost" size="sm" asChild className="mb-4">
-            <Link href={routes.adminPokemon}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {t("admin.pokemon.backToList")}
-            </Link>
-          </Button>
-        </div>
+      <main className="container mx-auto px-4 py-8 max-w-2xl space-y-6">
+        <PageHeader
+          backHref={routes.adminPokemon}
+          backLabel={t("admin.pokemon.backToList")}
+          title=""
+        />
         <div className="text-center py-8 text-muted-foreground">
           {t("admin.pokemon.notFound")}
         </div>
@@ -47,19 +43,13 @@ export default function AdminPokemonEditPage({ params }: EditPokemonPageProps) {
   const pokemon = data.data;
 
   return (
-    <main className="container mx-auto px-4 py-8 max-w-2xl">
-      <div className="mb-6">
-        <Button variant="ghost" size="sm" asChild className="mb-4">
-          <Link href={routes.adminPokemon}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            {t("admin.pokemon.backToList")}
-          </Link>
-        </Button>
-        <h1 className="text-3xl font-bold">{t("admin.pokemon.editTitle")}</h1>
-        <p className="text-muted-foreground">
-          {t("admin.pokemon.editDescription", { name: pokemon.name })}
-        </p>
-      </div>
+    <main className="container mx-auto px-4 py-8 max-w-2xl space-y-6">
+      <PageHeader
+        title={t("admin.pokemon.editTitle")}
+        description={t("admin.pokemon.editDescription", { name: pokemon.name })}
+        backHref={routes.adminPokemon}
+        backLabel={t("admin.pokemon.backToList")}
+      />
 
       <PokemonForm
         mode="edit"
@@ -67,6 +57,19 @@ export default function AdminPokemonEditPage({ params }: EditPokemonPageProps) {
         initialData={{
           name: pokemon.name,
           image: pokemon.image,
+          types: pokemon.types ?? [],
+          pokedexNumber: pokemon.pokedexNumber ?? null,
+          species: pokemon.species ?? null,
+          height: pokemon.height ?? null,
+          weight: pokemon.weight ?? null,
+          abilities: pokemon.abilities ?? [],
+          hp: pokemon.hp ?? null,
+          attack: pokemon.attack ?? null,
+          defense: pokemon.defense ?? null,
+          specialAttack: pokemon.specialAttack ?? null,
+          specialDefense: pokemon.specialDefense ?? null,
+          speed: pokemon.speed ?? null,
+          generation: pokemon.generation ?? null,
         }}
       />
     </main>

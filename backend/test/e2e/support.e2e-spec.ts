@@ -48,7 +48,10 @@ describe('Support (e2e)', () => {
         .expect(201);
 
       expect(response.body).toHaveProperty('_id');
-      expect(response.body).toHaveProperty('message', 'This is a valid feedback message for testing.');
+      expect(response.body).toHaveProperty(
+        'message',
+        'This is a valid feedback message for testing.',
+      );
       expect(response.body).toHaveProperty('createdAt');
     });
 

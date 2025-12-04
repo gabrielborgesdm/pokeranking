@@ -13,14 +13,20 @@
     "Dark": "Dark",
     "Dragon": "Dragon",
     "Electric": "Electric",
+    "Fairy": "Fairy",
+    "Fighting": "Fighting",
     "Fire": "Fire",
     "Flying": "Flying",
     "Ghost": "Ghost",
     "Grass": "Grass",
+    "Ground": "Ground",
+    "Ice": "Ice",
     "Normal": "Normal",
     "Poison": "Poison",
     "Psychic": "Psychic",
-    "Rock": "Rock"
+    "Rock": "Rock",
+    "Steel": "Steel",
+    "Water": "Water"
   },
   "auth": {
     "signIn": "Sign in",
@@ -87,9 +93,10 @@
     "orderDesc": "Descending"
   },
   "pagination": {
-    "previous": "Previous page",
-    "next": "Next page",
-    "page": "Page {{current}} of {{total}}"
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{current}} of {{total}}",
+    "showing": "Showing {{from}}-{{to}} of {{total}}"
   },
   "myRankings": {
     "title": "My Rankings",
@@ -178,7 +185,15 @@
     "createNewRanking": "Create New Ranking",
     "noRankings": "No rankings yet",
     "admin": "Admin",
-    "adminPokemon": "Manage Pokemon"
+    "adminPokemon": "Manage Pokemon",
+    "welcome": "Welcome"
+  },
+  "notFound": {
+    "title": "Page not found!",
+    "description": "Looks like this page fled the battle. It might be hiding in tall grass somewhere...",
+    "goHome": "Go to Homepage",
+    "viewRankings": "View Rankings",
+    "hint": "Hint: Try using \"Fly\" to navigate to a known location!"
   },
   "admin": {
     "pokemon": {
@@ -225,7 +240,46 @@
       "showing": "Showing {{from}}-{{to}} of {{total}}",
       "previous": "Previous",
       "next": "Next",
-      "pageOf": "Page {{page}} of {{totalPages}}"
+      "pageOf": "Page {{page}} of {{totalPages}}",
+      "bulkCreate": "Bulk Import",
+      "bulkCreateTitle": "Bulk Import Pokemon",
+      "bulkCreateDescription": "Upload multiple images and create Pokemon in batch",
+      "bulkTitle": "Bulk Import",
+      "bulkDragDrop": "Drag & drop images here, or click to select",
+      "bulkItemCount": "{{count}} Pokemon to create",
+      "bulkItemCountWithErrors": "{{count}} Pokemon to create ({{errors}} with errors)",
+      "bulkSubmit": "Create {{count}} Pokemon",
+      "bulkSubmitting": "Creating Pokemon...",
+      "bulkSuccess": "Successfully created {{count}} Pokemon",
+      "bulkPartialSuccess": "Created {{success}} Pokemon, {{failed}} failed",
+      "bulkFailed": "Failed to create Pokemon",
+      "bulkUploadFailed": "Failed to upload images",
+      "createError": "Failed to create Pokemon",
+      "retryFailed": "Retry Failed",
+      "retryUpload": "Retry",
+      "retryAllFailed": "Retry All Failed ({{count}})",
+      "uploadFailed": "Upload failed",
+      "clearAll": "Clear All",
+      "pokedexInfo": "Pokedex Info",
+      "pokedexNumber": "Pokedex #",
+      "generation": "Generation",
+      "species": "Species",
+      "speciesPlaceholder": "Mouse Pokemon",
+      "height": "Height",
+      "heightUnit": "meters",
+      "weight": "Weight",
+      "weightUnit": "kilograms",
+      "abilities": "Abilities",
+      "abilitiesPlaceholder": "Static, Lightning Rod",
+      "abilitiesHint": "Separate multiple abilities with commas",
+      "baseStats": "Base Stats",
+      "attack": "Attack",
+      "defense": "Defense",
+      "specialAttack": "Sp. Atk",
+      "specialDefense": "Sp. Def",
+      "speed": "Speed",
+      "showDetails": "More details",
+      "hideDetails": "Hide details"
     }
   }
 }
