@@ -279,7 +279,7 @@ npm run test:cov
 npm install
 
 # Start development server (watch mode)
-npm run start:dev
+npm run dev
 
 # Build for production
 npm run build
@@ -382,12 +382,12 @@ Full authentication flow integrated with the backend:
 
 Rankings feature a 4-tier unlock progression system that rewards users for ranking more Pokemon:
 
-| Tier         | Unlock Requirement           | Themes                        |
-| ------------ | ---------------------------- | ----------------------------- |
-| Starter      | Always available             | Classic, Fire, Water, Grass   |
-| Intermediate | 10 Pokemon or 5% of total    | Electric, Psychic, Poison     |
-| Advanced     | 25 Pokemon or 15% of total   | Dragon, Ghost, Dark           |
-| Premium      | 50 Pokemon or 30% of total   | Sunset, Ocean, Legendary      |
+| Tier         | Unlock Requirement         | Themes                      |
+| ------------ | -------------------------- | --------------------------- |
+| Starter      | Always available           | Classic, Fire, Water, Grass |
+| Intermediate | 10 Pokemon or 5% of total  | Electric, Psychic, Poison   |
+| Advanced     | 25 Pokemon or 15% of total | Dragon, Ghost, Dark         |
+| Premium      | 50 Pokemon or 30% of total | Sunset, Ocean, Legendary    |
 
 - Independent background customization from card theme
 - Visual lock indicators with progress bars

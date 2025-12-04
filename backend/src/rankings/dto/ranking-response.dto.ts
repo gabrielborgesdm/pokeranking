@@ -26,7 +26,10 @@ export class RankingResponseDto {
   zones: ZoneDto[];
 
   @Expose()
-  @ApiProperty({ example: 'fire', description: 'Theme ID for the ranking card' })
+  @ApiProperty({
+    example: 'fire',
+    description: 'Theme ID for the ranking card',
+  })
   theme: string;
 
   @Expose()

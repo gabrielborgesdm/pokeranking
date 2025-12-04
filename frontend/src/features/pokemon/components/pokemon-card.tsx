@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { memo } from "react";
 import { cn } from "@/lib/utils";
+import { PokemonImage } from "@/components/pokemon-image";
 import { PokemonType, pokemonTypeGradients } from "@/lib/pokemon-types";
 import { PokemonTypeIcon } from "./pokemon-type-icon";
 
@@ -36,11 +36,11 @@ export const PokemonCard = memo(function PokemonCard({
     >
       {/* Pokemon Image */}
       <div className="relative w-full aspect-square mb-3">
-        <Image
+        <PokemonImage
           src={image}
           alt={name}
           fill
-          className="object-contain drop-shadow-lg"
+          className="drop-shadow-lg"
           sizes="(max-width: 768px) 50vw, 200px"
         />
       </div>

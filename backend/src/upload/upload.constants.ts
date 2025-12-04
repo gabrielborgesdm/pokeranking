@@ -1,0 +1,1 @@
+export const IMAGE_PROVIDER_TOKEN = 'IMAGE_PROVIDER';

@@ -136,10 +136,14 @@ describe('Auth (e2e)', () => {
         })
         .expect(409);
 
-      expect(response.body.message).toContain('verification email has been sent');
+      expect(response.body.message).toContain(
+        'verification email has been sent',
+      );
 
       // Verify the verification code was updated
-      const user = await usersCollection.findOne({ email: 'inactive@test.com' });
+      const user = await usersCollection.findOne({
+        email: 'inactive@test.com',
+      });
       expect(user.emailVerificationCode).toBeDefined();
       expect(user.emailVerificationCode).not.toBe(oldCode);
     });
@@ -171,7 +175,9 @@ describe('Auth (e2e)', () => {
         })
         .expect(409);
 
-      expect(response.body.message).toContain('verification email has been sent');
+      expect(response.body.message).toContain(
+        'verification email has been sent',
+      );
 
       // Verify the verification code was updated
       const user = await usersCollection.findOne({ username: 'inactiveuser2' });

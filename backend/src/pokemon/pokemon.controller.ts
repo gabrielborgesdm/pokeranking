@@ -96,9 +96,8 @@ export class PokemonController {
   async search(
     @Query() query: PokemonQueryDto,
   ): Promise<PaginatedPokemonResponseDto> {
-    const { pokemon, total } = await this.pokemonService.findAllPaginated(
-      query,
-    );
+    const { pokemon, total } =
+      await this.pokemonService.findAllPaginated(query);
     return {
       data: toDto(PokemonResponseDto, pokemon),
       total,
