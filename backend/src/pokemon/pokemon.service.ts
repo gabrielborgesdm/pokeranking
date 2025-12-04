@@ -81,7 +81,12 @@ export class PokemonService {
   async findAllPaginated(
     query: PokemonQueryDto,
   ): Promise<{ pokemon: Pokemon[]; total: number }> {
-    const { page = 1, limit = 20, sortBy = 'name', order = 'asc' } = query;
+    const {
+      page = 1,
+      limit = 20,
+      sortBy = 'createdAt',
+      order = 'desc',
+    } = query;
     const skip = (page - 1) * limit;
 
     const filter = this.buildFilter(query);

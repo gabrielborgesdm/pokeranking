@@ -28,8 +28,8 @@ export function usePokemonList(options: UsePokemonListOptions = {}) {
   const [page, setPage] = useState(initialPage);
   const [limit, setLimit] = useState(initialLimit);
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<SortByOption>("name");
-  const [order, setOrder] = useState<OrderOption>("asc");
+  const [sortBy, setSortBy] = useState<SortByOption>("createdAt");
+  const [order, setOrder] = useState<OrderOption>("desc");
   const [selectedTypes, setSelectedTypes] = useState<PokemonType[]>([]);
 
   const params: PokemonControllerSearchParams = {
@@ -41,7 +41,8 @@ export function usePokemonList(options: UsePokemonListOptions = {}) {
     ...(selectedTypes.length > 0 && { types: selectedTypes }),
   };
 
-  const { data, isLoading, error, refetch } = usePokemonControllerSearch(params);
+  const { data, isLoading, error, refetch } =
+    usePokemonControllerSearch(params);
 
   const deleteMutation = usePokemonControllerRemove();
 
