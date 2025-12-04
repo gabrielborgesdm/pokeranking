@@ -15,8 +15,10 @@ import { UpdateRankingDto } from './dto/update-ranking.dto';
 import { stripUndefined } from '../common/utils/transform.util';
 import { Zone } from './schemas/ranking.schema';
 import { User } from '../users/schemas/user.schema';
+import { Pokemon } from '../pokemon/schemas/pokemon.schema';
 import { withTransaction } from '../common/utils/transaction.util';
 import { UsersService } from '../users/users.service';
+import { isThemeAvailable } from '@pokeranking/shared';
 
 @Injectable()
 export class RankingsService {
@@ -24,6 +26,7 @@ export class RankingsService {
     @InjectConnection() private connection: Connection,
     @InjectModel(Ranking.name) private readonly rankingModel: Model<Ranking>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
   ) {}
@@ -58,6 +61,17 @@ export class RankingsService {
         if (createRankingDto.zones && createRankingDto.zones.length > 0) {
           const pokemonCount = createRankingDto.pokemon?.length || 0;
           this.validateZoneIntervals(createRankingDto.zones, pokemonCount);
+        }
+
+        // Validate theme availability if theme provided
+        if (createRankingDto.theme) {
+          const pokemonCount = createRankingDto.pokemon?.length || 0;
+          const totalPokemon = await this.getTotalPokemonCount();
+          await this.validateThemeAvailability(
+            createRankingDto.theme,
+            pokemonCount,
+            totalPokemon,
+          );
         }
 
         const ranking = new this.rankingModel({
@@ -134,6 +148,16 @@ export class RankingsService {
     // Validate zone intervals with new data
     if (newZones && newZones.length > 0) {
       this.validateZoneIntervals(newZones, newPokemon.length);
+    }
+
+    // Validate theme availability if theme is being updated
+    if (updateRankingDto.theme) {
+      const totalPokemon = await this.getTotalPokemonCount();
+      await this.validateThemeAvailability(
+        updateRankingDto.theme,
+        newPokemon.length,
+        totalPokemon,
+      );
     }
 
     // Apply updates
@@ -241,6 +265,25 @@ export class RankingsService {
           },
         });
       }
+    }
+  }
+
+  // Helper: Get total Pokemon count in the system
+  private async getTotalPokemonCount(): Promise<number> {
+    return this.pokemonModel.countDocuments().exec();
+  }
+
+  // Helper: Validate theme availability based on Pokemon count
+  private async validateThemeAvailability(
+    themeId: string,
+    pokemonCount: number,
+    totalPokemon: number,
+  ): Promise<void> {
+    if (!isThemeAvailable(themeId, pokemonCount, totalPokemon)) {
+      throw new BadRequestException({
+        key: TK.RANKINGS.THEME_NOT_AVAILABLE,
+        args: { themeId },
+      });
     }
   }
 }

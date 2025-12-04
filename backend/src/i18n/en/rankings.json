@@ -2,5 +2,6 @@
   "notFound": "Ranking with ID {id} not found",
   "titleExists": "You already have a ranking with title \"{title}\"",
   "cannotModifyOthers": "You can only modify your own rankings",
-  "zoneExceedsPokemon": "Zone \"{zoneName}\" interval [{start}, {end}] exceeds pokemon count ({count})"
+  "zoneExceedsPokemon": "Zone \"{zoneName}\" interval [{start}, {end}] exceeds pokemon count ({count})",
+  "themeNotAvailable": "Theme \"{themeId}\" is not available. Rank more Pokemon to unlock it."
 }

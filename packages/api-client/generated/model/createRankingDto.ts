@@ -14,4 +14,8 @@ export interface CreateRankingDto {
   pokemon?: string[];
   /** Customizable zones with intervals and colors */
   zones?: ZoneDto[];
+  /** Theme ID for the ranking card appearance */
+  theme?: string;
+  /** Background theme ID for the full-page ranking view */
+  background?: string;
 }

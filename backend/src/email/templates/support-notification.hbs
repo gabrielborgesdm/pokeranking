@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>New Support Message - PokeRanking</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+      }
+      .header {
+        background: linear-gradient(135deg, #3B7DDD 0%, #2563EB 100%);
+        padding: 40px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+      }
+      .header p {
+        color: #ffffff;
+        margin: 10px 0 0 0;
+        font-size: 16px;
+        opacity: 0.95;
+      }
+      .content {
+        padding: 40px 30px;
+      }
+      .user-info {
+        background: #f9f9f9;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 25px;
+      }
+      .user-info-row {
+        display: flex;
+        margin-bottom: 10px;
+      }
+      .user-info-label {
+        font-weight: 600;
+        color: #555;
+        min-width: 100px;
+      }
+      .user-info-value {
+        color: #333;
+      }
+      .message-container {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-left: 4px solid #3B7DDD;
+        border-radius: 4px;
+        padding: 20px;
+        margin: 25px 0;
+      }
+      .message-label {
+        font-size: 14px;
+        color: #777;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+      }
+      .message-content {
+        font-size: 16px;
+        color: #333;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      .footer {
+        background-color: #f5f5f5;
+        padding: 30px;
+        text-align: center;
+        font-size: 13px;
+        color: #666;
+      }
+      .footer p {
+        margin: 5px 0;
+      }
+      @media only screen and (max-width: 600px) {
+        .content {
+          padding: 30px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class='header'>
+        <h1>📬 New Support Message</h1>
+        <p>A user has submitted feedback</p>
+      </div>
+
+      <div class='content'>
+        <div class='user-info'>
+          <div class='user-info-row'>
+            <span class='user-info-label'>Username:</span>
+            <span class='user-info-value'>{{username}}</span>
+          </div>
+          <div class='user-info-row'>
+            <span class='user-info-label'>Email:</span>
+            <span class='user-info-value'>{{userEmail}}</span>
+          </div>
+          <div class='user-info-row'>
+            <span class='user-info-label'>Timestamp:</span>
+            <span class='user-info-value'>{{timestamp}}</span>
+          </div>
+        </div>
+
+        <div class='message-container'>
+          <div class='message-label'>Message</div>
+          <div class='message-content'>{{message}}</div>
+        </div>
+      </div>
+
+      <div class='footer'>
+        <p><strong>PokeRanking Support</strong></p>
+        <p>© {{year}} PokeRanking. All rights reserved.</p>
+        <p>Reply to this email to respond directly to the user.</p>
+      </div>
+    </div>
+  </body>
+</html>

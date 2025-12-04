@@ -36,7 +36,7 @@ describe('Users (e2e)', () => {
       const activeUser = await seedUsers(app, [ADMIN_USER]);
 
       const token = await loginUser(app, {
-        username: ADMIN_USER.username,
+        identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
@@ -70,7 +70,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, [activeUser1, activeUser2, inactiveUser]);
 
       const token = await loginUser(app, {
-        username: activeUser1.username,
+        identifier: activeUser1.username,
         password: activeUser1.password,
       });
 
@@ -90,7 +90,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -117,7 +117,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, users);
 
       const token = await loginUser(app, {
-        username: users[0].username,
+        identifier: users[0].username,
         password: users[0].password,
       });
 
@@ -145,7 +145,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, users);
 
       const token = await loginUser(app, {
-        username: users[0].username,
+        identifier: users[0].username,
         password: users[0].password,
       });
 
@@ -188,7 +188,7 @@ describe('Users (e2e)', () => {
         );
 
       const token = await loginUser(app, {
-        username: lowRanker.username,
+        identifier: lowRanker.username,
         password: lowRanker.password,
       });
 
@@ -219,7 +219,7 @@ describe('Users (e2e)', () => {
       ]);
 
       const token = await loginUser(app, {
-        username: 'alpha_user',
+        identifier: 'alpha_user',
         password: 'test123456',
       });
 
@@ -247,7 +247,7 @@ describe('Users (e2e)', () => {
       ]);
 
       const token = await loginUser(app, {
-        username: 'alpha_user',
+        identifier: 'alpha_user',
         password: 'test123456',
       });
 
@@ -294,7 +294,7 @@ describe('Users (e2e)', () => {
         );
 
       const token = await loginUser(app, {
-        username: users[0].username,
+        identifier: users[0].username,
         password: users[0].password,
       });
 
@@ -339,7 +339,7 @@ describe('Users (e2e)', () => {
         );
 
       const token = await loginUser(app, {
-        username: users[0].username,
+        identifier: users[0].username,
         password: users[0].password,
       });
 
@@ -372,7 +372,7 @@ describe('Users (e2e)', () => {
       ]);
 
       const token = await loginUser(app, {
-        username: 'john_doe',
+        identifier: 'john_doe',
         password: 'test123456',
       });
 
@@ -398,7 +398,7 @@ describe('Users (e2e)', () => {
       ]);
 
       const token = await loginUser(app, {
-        username: 'John_Doe',
+        identifier: 'John_Doe',
         password: 'test123456',
       });
 
@@ -422,7 +422,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, users);
 
       const token = await loginUser(app, {
-        username: users[0].username,
+        identifier: users[0].username,
         password: users[0].password,
       });
 
@@ -450,7 +450,7 @@ describe('Users (e2e)', () => {
         );
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -465,8 +465,10 @@ describe('Users (e2e)', () => {
       );
     });
 
-    it('should return 401 when not authenticated', async () => {
-      await request(app.getHttpServer()).get('/users').expect(401);
+    it('should allow unauthenticated access (public endpoint)', async () => {
+      await seedUsers(app, [REGULAR_USER]);
+      const response = await request(app.getHttpServer()).get('/users').expect(200);
+      expect(response.body).toHaveProperty('data');
     });
   });
 
@@ -479,7 +481,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -501,7 +503,7 @@ describe('Users (e2e)', () => {
       const users = await seedUsers(app, [REGULAR_USER, ANOTHER_USER]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -539,7 +541,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -559,7 +561,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -578,7 +580,7 @@ describe('Users (e2e)', () => {
       await seedUsers(app, [REGULAR_USER]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -598,7 +600,7 @@ describe('Users (e2e)', () => {
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -639,7 +641,7 @@ describe('Users (e2e)', () => {
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -673,7 +675,7 @@ describe('Users (e2e)', () => {
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -716,7 +718,7 @@ describe('Users (e2e)', () => {
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -766,7 +768,7 @@ describe('Users (e2e)', () => {
       const pokemon = await seedPokemon(app, [PIKACHU]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -806,7 +808,7 @@ describe('Users (e2e)', () => {
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 
@@ -842,7 +844,7 @@ describe('Users (e2e)', () => {
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
 
       const token = await loginUser(app, {
-        username: REGULAR_USER.username,
+        identifier: REGULAR_USER.username,
         password: REGULAR_USER.password,
       });
 

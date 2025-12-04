@@ -6,8 +6,9 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { I18nContext } from 'nestjs-i18n';
+import { SentryService } from '../../sentry/sentry.service';
 
 interface I18nExceptionPayload {
   key: string;
@@ -15,6 +16,10 @@ interface I18nExceptionPayload {
 }
 
 type ExceptionResponseObject = Record<string, unknown>;
+
+interface AuthenticatedRequest extends Request {
+  user?: { _id?: string; email?: string; username?: string };
+}
 
 function isI18nPayload(value: unknown): value is I18nExceptionPayload {
   return (
@@ -33,12 +38,20 @@ function isObject(value: unknown): value is ExceptionResponseObject {
 export class I18nExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(I18nExceptionFilter.name);
 
+  constructor(private readonly sentryService: SentryService) {}
+
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<AuthenticatedRequest>();
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
     const i18n = I18nContext.current(host);
+
+    // Capture 5xx errors to Sentry
+    if (status >= 500) {
+      this.captureToSentry(exception, request);
+    }
 
     const message = this.extractMessage(exceptionResponse, i18n);
 
@@ -46,6 +59,30 @@ export class I18nExceptionFilter implements ExceptionFilter {
       statusCode: status,
       message,
       error: HttpStatus[status],
+    });
+  }
+
+  private captureToSentry(
+    exception: HttpException,
+    request: AuthenticatedRequest,
+  ): void {
+    const user = request.user;
+
+    if (user?._id) {
+      this.sentryService.setUser({
+        id: user._id,
+        email: user.email,
+        username: user.username,
+      });
+    }
+
+    this.sentryService.captureException(exception, {
+      url: request.url,
+      method: request.method,
+      statusCode: exception.getStatus(),
+      body: request.body,
+      query: request.query,
+      params: request.params,
     });
   }
 

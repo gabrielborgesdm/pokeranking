@@ -4,7 +4,8 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 export const DEFAULT_CORS_ORIGIN = 'http://localhost:3001';
 
 export const getCorsConfig = (configService: ConfigService): CorsOptions => {
-  const origin = configService.get<string>('CORS_ORIGIN') || DEFAULT_CORS_ORIGIN;
+  const origin =
+    configService.get<string>('CORS_ORIGIN') || DEFAULT_CORS_ORIGIN;
 
   return {
     origin,
