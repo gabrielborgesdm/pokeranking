@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, Settings, LogOut, User, Trophy, Info, Palette, List, MessageSquare, LucideIcon } from "lucide-react";
+import { Menu, Settings, LogOut, User, Trophy, Heart, Palette, List, MessageSquare, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -72,8 +72,7 @@ export function Navbar() {
     ...(isAuthenticated
       ? [{ href: routes.myRankings, label: t("nav.myRankings"), icon: List }]
       : []),
-    { href: routes.about, label: t("nav.about"), icon: Info },
-    { href: routes.design, label: t("nav.design"), icon: Palette },
+    { href: routes.contribute, label: t("nav.contribute"), icon: Heart },
   ];
 
   return (
@@ -97,14 +96,17 @@ export function Navbar() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem onClick={toggleTheme}>
-                  <ThemeIcon className="mr-2 h-4 w-4" />
-                  {isDark ? t("nav.lightMode") : t("nav.darkMode")}
-                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href={routes.settings}>
                     <Settings className="mr-2 h-4 w-4" />
                     {t("nav.settings")}
+                  </Link>
+                </DropdownMenuItem>
+                {/* design */}
+                <DropdownMenuItem asChild>
+                  <Link href={routes.design}>
+                    <Palette className="mr-2 h-4 w-4" />
+                    {t("nav.design")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -122,10 +124,6 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <>
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
-                <ThemeIcon className="h-5 w-5" />
-                <span className="sr-only">{t("nav.toggleTheme")}</span>
-              </Button>
               <Button variant="outline" asChild>
                 <Link href={routes.signin}>
                   <User className="mr-2 h-5 w-5" />
@@ -134,6 +132,10 @@ export function Navbar() {
               </Button>
             </>
           )}
+          <Button variant="ghost" size="icon" onClick={toggleTheme}>
+            <ThemeIcon className="h-5 w-5" />
+            <span className="sr-only">{t("nav.toggleTheme")}</span>
+          </Button>
         </div>
 
         {/* Mobile Menu */}

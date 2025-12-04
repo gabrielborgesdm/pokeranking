@@ -29,6 +29,8 @@
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@stripe/react-stripe-js": "^5.4.1",
+    "@stripe/stripe-js": "^8.5.3",
     "@tanstack/react-query": "^5.90.11",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -44,6 +46,7 @@
     "react-hook-form": "^7.67.0",
     "react-i18next": "^16.3.5",
     "sonner": "^2.0.7",
+    "stripe": "^20.0.0",
     "tailwind-merge": "^3.4.0",
     "zod": "^3.25.76"
   },

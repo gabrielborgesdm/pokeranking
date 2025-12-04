@@ -1,6 +1,7 @@
 {
   "common": {
-    "or": "ou"
+    "or": "ou",
+    "retry": "Tentar novamente"
   },
   "pokemonTypes": {
     "Bug": "Inseto",
@@ -19,7 +20,7 @@
   "nav": {
     "leaderboard": "Ranking",
     "myRankings": "Meus Rankings",
-    "about": "Sobre",
+    "contribute": "Contribuir",
     "design": "Design",
     "signIn": "Entrar",
     "signOut": "Sair",
@@ -149,5 +150,18 @@
     "successMessage": "Seu feedback foi enviado com sucesso.",
     "errorMessage": "Falha ao enviar feedback. Tente novamente.",
     "characterCount": "{{count}}/2000 caracteres"
+  },
+  "contribute": {
+    "title": "Contribuir",
+    "description": "Ajude a manter o Pokeranking funcionando e crescendo!",
+    "github": {
+      "title": "Dê uma estrela no GitHub",
+      "description": "Dar uma estrela é como dar um joinha! Ajuda mais pessoas a descobrirem o Pokeranking e mostra seu apoio. É grátis e leva apenas um clique.",
+      "button": "Dar uma Estrela"
+    },
+    "stripe": {
+      "title": "Nos Apoie",
+      "description": "Faça uma doação única para ajudar a cobrir custos de servidor e desenvolvimento. Pague com Cartão ou Pix."
+    }
   }
 }
