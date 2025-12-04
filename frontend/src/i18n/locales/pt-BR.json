@@ -42,7 +42,8 @@
     "createNewRanking": "Criar Novo Ranking",
     "noRankings": "Nenhum ranking ainda",
     "admin": "Admin",
-    "adminPokemon": "Gerenciar Pokemon"
+    "adminPokemon": "Gerenciar Pokemon",
+    "welcome": "Bem-vindo"
   },
   "auth": {
     "signIn": "Entrar",
@@ -226,7 +227,23 @@
       "showing": "Mostrando {{from}}-{{to}} de {{total}}",
       "previous": "Anterior",
       "next": "Próximo",
-      "pageOf": "Página {{page}} de {{totalPages}}"
+      "pageOf": "Página {{page}} de {{totalPages}}",
+      "bulkCreate": "Importar em Lote",
+      "bulkCreateTitle": "Importar Pokemon em Lote",
+      "bulkCreateDescription": "Envie múltiplas imagens e crie Pokemon em lote",
+      "bulkTitle": "Importar em Lote",
+      "bulkDragDrop": "Arraste e solte imagens aqui, ou clique para selecionar",
+      "bulkItemCount": "{{count}} Pokemon para criar",
+      "bulkItemCountWithErrors": "{{count}} Pokemon para criar ({{errors}} com erros)",
+      "bulkSubmit": "Criar {{count}} Pokemon",
+      "bulkSubmitting": "Criando Pokemon...",
+      "bulkSuccess": "{{count}} Pokemon criados com sucesso",
+      "bulkPartialSuccess": "{{success}} Pokemon criados, {{failed}} falharam",
+      "bulkFailed": "Falha ao criar Pokemon",
+      "bulkUploadFailed": "Falha ao enviar imagens",
+      "createError": "Falha ao criar Pokemon",
+      "retryFailed": "Tentar Novamente",
+      "clearAll": "Limpar Tudo"
     }
   }
 }

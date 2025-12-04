@@ -15,7 +15,13 @@ export function getInitials(name: string, maxLength = 2): string {
     .slice(0, maxLength);
 }
 
-const CARD_VARIANTS: PokemonTypeVariant[] = ["grass", "water", "fire"];
+const CARD_VARIANTS: PokemonTypeVariant[] = [
+  "grass",
+  "water",
+  "fire",
+  "electric",
+  "special",
+];
 
 const variantCache = new Map<number, PokemonTypeVariant>();
 

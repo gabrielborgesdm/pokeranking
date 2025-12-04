@@ -1,10 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, LogOut, User, Trophy, Heart, Palette, List, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check } from "lucide-react";
+import { Menu, LogOut, User, Trophy, Heart, Palette, List, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,7 +18,7 @@ import {
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { useIsAdmin } from "@/hooks/use-is-admin";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useThemeContext } from "@/providers/theme-provider";
 import { useLanguage } from "@/providers/language-provider";
 import { Logo } from "@/components/logo";
@@ -134,8 +135,33 @@ interface NavLinksProps {
 }
 
 function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
+  if (variant === "desktop") {
+    return (
+      <>
+        {links.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "flex items-center gap-1.5 text-sm font-medium transition-colors hover-scale",
+                isActive
+                  ? "text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <link.icon className="h-5 w-5" />
+              {link.label}
+            </Link>
+          );
+        })}
+      </>
+    );
+  }
+
   return (
-    <>
+    <div className="flex flex-col gap-1">
       {links.map((link) => {
         const isActive = pathname === link.href;
         return (
@@ -143,12 +169,10 @@ function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
             key={link.href}
             href={link.href}
             className={cn(
-              "flex items-center font-medium transition-colors",
-              variant === "desktop" && "gap-1.5 text-sm hover-scale",
-              variant === "mobile" && "gap-2 text-lg",
+              "flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-all",
               isActive
-                ? "text-foreground"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-muted font-semibold text-foreground"
+                : "font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground"
             )}
           >
             <link.icon className="h-5 w-5" />
@@ -156,18 +180,52 @@ function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
           </Link>
         );
       })}
-    </>
+    </div>
+  );
+}
+
+interface MobileNavLinkProps {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+  pathname: string;
+  indent?: boolean;
+}
+
+function MobileNavLink({ href, icon: Icon, label, pathname, indent }: MobileNavLinkProps) {
+  const isActive = pathname === href;
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-all",
+        indent && "ml-4",
+        isActive
+          ? "bg-muted font-semibold text-foreground"
+          : "font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+      )}
+    >
+      <Icon className="h-5 w-5" />
+      {label}
+    </Link>
   );
 }
 
 export function Navbar() {
   const { t } = useTranslation();
   const { isDark, ThemeIcon, toggleTheme } = useThemeContext();
+  const { language, setLanguage, languages } = useLanguage();
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const isLoading = status === "loading";
   const isAuthenticated = status === "authenticated";
   const isAdmin = useIsAdmin();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   // Desktop nav links (without My Rankings - it uses the dropdown)
   const desktopNavLinks: NavLink[] = [
@@ -228,67 +286,138 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         <div className="flex flex-1 items-center justify-end md:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            className="mr-2"
-          >
-            <ThemeIcon className="h-5 w-5" />
-            <span className="sr-only">{t("nav.toggleTheme")}</span>
-          </Button>
-
-          <Sheet>
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">{t("nav.openMenu")}</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px]">
-              <nav className="mt-6 mx-4 flex flex-col gap-4">
-                <NavLinks links={mobileNavLinks} pathname={pathname} variant="mobile" />
-                <div className="my-4 h-px bg-border" />
-                {isAuthenticated ? (
-                  <>
-                    <Link
-                      href={routes.support}
-                      className="flex items-center gap-2 text-lg font-medium text-foreground transition-colors hover:text-primary"
-                    >
-                      <MessageSquare className="h-5 w-5" />
-                      {t("nav.support")}
-                    </Link>
-                    {isAdmin && (
-                      <>
-                        <div className="my-2 h-px bg-border" />
-                        <span className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-                          <Shield className="h-4 w-4" />
-                          {t("nav.admin")}
-                        </span>
-                        <Link
+            <SheetContent side="right" className="w-[300px] p-0 flex flex-col">
+              {/* Header */}
+              <SheetHeader className={cn("px-6 py-4", !(isAuthenticated && session?.user?.username) && "border-b")}>
+                <SheetTitle className="flex items-center gap-2">
+                  <Logo />
+                </SheetTitle>
+              </SheetHeader>
+
+              {/* User greeting */}
+              {isAuthenticated && session?.user?.username && (
+                <div className="px-6 py-4 border-y bg-muted/30">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                      <User className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm text-muted-foreground">{t("nav.welcome")}</p>
+                      <p className="font-medium truncate">{session.user.username}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Main navigation */}
+              <div className="relative flex-1 min-h-0">
+                <nav className="h-full overflow-y-auto px-4 py-4">
+                  <NavLinks links={mobileNavLinks} pathname={pathname} variant="mobile" />
+
+                  {/* Secondary links */}
+                  {isAuthenticated && (
+                    <>
+                      <div className="my-4 h-px bg-border" />
+                      <div className="flex flex-col gap-1">
+                        <MobileNavLink
+                          href={routes.support}
+                          icon={MessageSquare}
+                          label={t("nav.support")}
+                          pathname={pathname}
+                        />
+                        <MobileNavLink
+                          href={routes.design}
+                          icon={Palette}
+                          label={t("nav.design")}
+                          pathname={pathname}
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Admin section */}
+                  {isAdmin && (
+                    <>
+                      <div className="my-4 h-px bg-border" />
+                      <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        {t("nav.admin")}
+                      </p>
+                      <div className="flex flex-col gap-1">
+                        <MobileNavLink
                           href={routes.adminPokemon}
-                          className="flex items-center gap-2 text-lg font-medium text-foreground transition-colors hover:text-primary pl-6"
+                          icon={PawPrint}
+                          label={t("nav.adminPokemon")}
+                          pathname={pathname}
+                        />
+                      </div>
+                    </>
+                  )}
+                </nav>
+                {/* Scroll fade indicator */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-background to-transparent" />
+              </div>
+
+              {/* Footer with settings and sign out */}
+              <div className="mt-auto border-t px-4 py-4">
+                {/* Settings row */}
+                <div className="mb-4 flex items-center justify-between gap-2">
+                  {/* Theme toggle */}
+                  <button
+                    onClick={toggleTheme}
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+                  >
+                    {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                    {isDark ? t("nav.lightMode") : t("nav.darkMode")}
+                  </button>
+
+                  {/* Language selector */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-muted">
+                        <Globe className="h-4 w-4" />
+                        {languages.find(l => l.code === language)?.label ?? language}
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {languages.map((lang) => (
+                        <DropdownMenuItem
+                          key={lang.code}
+                          onClick={() => setLanguage(lang.code)}
                         >
-                          <PawPrint className="h-5 w-5" />
-                          {t("nav.adminPokemon")}
-                        </Link>
-                      </>
-                    )}
-                    <div className="my-2 h-px bg-border" />
-                    <button
-                      onClick={() => signOut()}
-                      className="flex items-center gap-2 text-lg font-medium text-destructive transition-colors hover:text-destructive/80"
-                    >
-                      <LogOut className="h-5 w-5" />
-                      {t("nav.signOut")}
-                    </button>
-                  </>
+                          {lang.label}
+                          {language === lang.code && <Check className="ml-auto h-4 w-4" />}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+
+                {/* Sign in/out */}
+                {isAuthenticated ? (
+                  <Button
+                    variant="outline"
+                    className="w-full justify-center gap-2"
+                    onClick={() => signOut()}
+                  >
+                    <LogOut className="h-4 w-4" />
+                    {t("nav.signOut")}
+                  </Button>
                 ) : (
                   <Button asChild className="w-full">
-                    <Link href={routes.signin}>{t("nav.signIn")}</Link>
+                    <Link href={routes.signin}>
+                      <User className="mr-2 h-4 w-4" />
+                      {t("nav.signIn")}
+                    </Link>
                   </Button>
                 )}
-              </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
