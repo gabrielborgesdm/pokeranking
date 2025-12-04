@@ -2,8 +2,13 @@
 
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/page-header";
+import {
+  SimplePagination,
+  SimplePaginationSkeleton,
+} from "@/components/pagination";
 import {
   PokemonTable,
   PokemonFilters,
@@ -30,35 +35,36 @@ export default function AdminPokemonPage() {
     handleOrderChange,
     handleTypesChange,
     handlePageChange,
+    handleLimitChange,
     handleDelete,
   } = usePokemonList({ initialLimit: 10 });
 
   return (
     <main className="container mx-auto px-4 py-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">{t("admin.pokemon.title")}</h1>
-          <p className="text-muted-foreground">
-            {t("admin.pokemon.subtitle", { count: total })}
-          </p>
-        </div>
-        <Button asChild>
-          <Link href={routes.adminPokemonNew}>
-            <Plus className="h-4 w-4 mr-2" />
-            {t("admin.pokemon.create")}
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title={t("admin.pokemon.title")}
+        description={t("admin.pokemon.subtitle", { count: total })}
+        action={
+          <Button asChild>
+            <Link href={routes.adminPokemonNew}>
+              <Plus className="h-4 w-4 mr-2" />
+              {t("admin.pokemon.create")}
+            </Link>
+          </Button>
+        }
+      />
 
       <PokemonFilters
         searchValue={search}
         sortBy={sortBy}
         order={order}
         selectedTypes={selectedTypes}
+        limit={limit}
         onSearchChange={handleSearchChange}
         onSortByChange={handleSortByChange}
         onOrderChange={handleOrderChange}
         onTypesChange={handleTypesChange}
+        onLimitChange={handleLimitChange}
       />
 
       <PokemonTable
@@ -66,41 +72,19 @@ export default function AdminPokemonPage() {
         isLoading={isLoading}
         isDeleting={isDeleting}
         onDelete={handleDelete}
+        skeletonRows={limit}
       />
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            {t("admin.pokemon.showing", {
-              from: (page - 1) * limit + 1,
-              to: Math.min(page * limit, total),
-              total,
-            })}
-          </p>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handlePageChange(page - 1)}
-              disabled={page <= 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-              {t("admin.pokemon.previous")}
-            </Button>
-            <span className="text-sm">
-              {t("admin.pokemon.pageOf", { page, totalPages })}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handlePageChange(page + 1)}
-              disabled={page >= totalPages}
-            >
-              {t("admin.pokemon.next")}
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+      {isLoading ? (
+        <SimplePaginationSkeleton />
+      ) : (
+        <SimplePagination
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          limit={limit}
+          onPageChange={handlePageChange}
+        />
       )}
     </main>
   );
