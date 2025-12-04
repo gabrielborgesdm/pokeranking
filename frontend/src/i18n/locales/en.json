@@ -87,9 +87,10 @@
     "orderDesc": "Descending"
   },
   "pagination": {
-    "previous": "Previous page",
-    "next": "Next page",
-    "page": "Page {{current}} of {{total}}"
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{current}} of {{total}}",
+    "showing": "Showing {{from}}-{{to}} of {{total}}"
   },
   "myRankings": {
     "title": "My Rankings",
