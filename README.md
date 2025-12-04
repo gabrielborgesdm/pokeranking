@@ -81,6 +81,7 @@ The backend is built with NestJS 11 and follows a modular architecture with clea
 | Resend                 | Transactional emails                  |
 | nestjs-i18n            | Internationalization                  |
 | Swagger/OpenAPI        | API documentation                     |
+| Sentry                 | Error tracking and monitoring         |
 | Jest + Supertest       | Testing                               |
 
 ### Project Structure
@@ -94,6 +95,8 @@ backend/
 │   ├── rankings/       # Tier list rankings
 │   ├── boxes/          # Pokemon collections
 │   ├── email/          # Email service
+│   ├── support/        # User feedback and support
+│   ├── sentry/         # Error tracking integration
 │   ├── common/         # Shared utilities, guards, decorators
 │   ├── config/         # Configuration and validation
 │   ├── i18n/           # Translation files
@@ -139,6 +142,7 @@ User tier list management:
 - Multiple Pokemon per ranking
 - Unique titles per user
 - Owner-only modifications
+- Theme and background customization (see Gamification below)
 
 #### Boxes Module
 
@@ -156,6 +160,25 @@ Transactional emails via Resend:
 - Handlebars templating
 - Verification emails
 - Password reset emails
+- Support notification emails
+
+#### Support Module
+
+User feedback and support:
+
+- Message submission endpoint
+- Email notifications to support team
+- Message validation (10-2000 characters)
+- Stores user context with messages
+
+#### Sentry Module
+
+Error tracking integration:
+
+- Global exception capture
+- User context tracking
+- Environment-aware sampling (10% prod, 100% dev)
+- Node profiling for performance monitoring
 
 ### Security Features
 
@@ -225,6 +248,8 @@ ALLOWED_IMAGE_DOMAINS=res.cloudinary.com
 RATE_LIMIT_VERIFY_EMAIL=10
 RATE_LIMIT_RESEND_EMAIL=2
 RATE_LIMIT_WINDOW_SECONDS=60
+SENTRY_DSN=your-sentry-dsn
+SUPPORT_EMAIL=support@yourdomain.com
 ```
 
 ### Testing
@@ -301,6 +326,8 @@ The frontend is built with Next.js 16 using the App Router and follows a feature
 | i18next               | Internationalization            |
 | Radix UI + shadcn/ui  | Accessible component library    |
 | Zod + react-hook-form | Form validation and handling    |
+| Stripe                | Payment processing (donations)  |
+| Google Analytics      | Event tracking and analytics    |
 
 ### Project Structure
 
@@ -309,13 +336,16 @@ frontend/
 ├── src/
 │   ├── app/              # Next.js App Router pages
 │   │   ├── (auth)/       # Auth pages (signin, signup, verify-email, etc.)
+│   │   ├── my-rankings/  # Ranking management pages
+│   │   ├── contribute/   # Donation and contribution pages
+│   │   ├── support/      # Support and feedback page
 │   │   ├── design/       # Design system showcase
 │   │   └── api/          # API routes (NextAuth)
 │   ├── components/       # Shared components (ui/, navbar, logo)
-│   ├── features/         # Feature modules (users/, pokemon/)
-│   ├── hooks/            # Custom hooks (auth, forms)
+│   ├── features/         # Feature modules (users/, pokemon/, rankings/)
+│   ├── hooks/            # Custom hooks (auth, forms, analytics)
 │   ├── i18n/             # i18n configuration
-│   ├── lib/              # Utilities (auth, config, routes)
+│   ├── lib/              # Utilities (auth, config, routes, stripe)
 │   ├── providers/        # React context providers
 │   └── middleware.ts     # Next.js middleware (auth protection)
 └── public/               # Static assets
@@ -342,6 +372,43 @@ Full authentication flow integrated with the backend:
 - Pokemon cards with type icons
 - Type-based styling
 
+#### Ranking Features
+
+- Create and edit personalized tier lists
+- Theme and background customization
+- Live preview while editing
+
+#### Gamification - Theme System
+
+Rankings feature a 4-tier unlock progression system that rewards users for ranking more Pokemon:
+
+| Tier         | Unlock Requirement           | Themes                        |
+| ------------ | ---------------------------- | ----------------------------- |
+| Starter      | Always available             | Classic, Fire, Water, Grass   |
+| Intermediate | 10 Pokemon or 5% of total    | Electric, Psychic, Poison     |
+| Advanced     | 25 Pokemon or 15% of total   | Dragon, Ghost, Dark           |
+| Premium      | 50 Pokemon or 30% of total   | Sunset, Ocean, Legendary      |
+
+- Independent background customization from card theme
+- Visual lock indicators with progress bars
+- Tooltips showing unlock requirements
+
+#### Contribution System
+
+- GitHub stars integration for community support
+- Stripe embedded checkout for donations
+- Success page with email confirmation
+
+#### Analytics
+
+Google Analytics 4 integration with custom event tracking:
+
+- `ranking_view` / `ranking_create` / `ranking_edit` - Ranking interactions
+- `ranking_share` - Share tracking with method
+- `pokemon_search` - Search term tracking
+- `tier_change` - Pokemon tier changes
+- `donation_start` / `donation_complete` - Donation funnel
+
 ### Environment Variables
 
 Required:
@@ -350,6 +417,16 @@ Required:
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXTAUTH_SECRET=your-secret-key
 NEXTAUTH_URL=http://localhost:3000
+```
+
+Optional:
+
+```env
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_xxx
+NEXT_PUBLIC_STRIPE_PRICE_ID=price_xxx
+STRIPE_SECRET_KEY=sk_test_xxx
+NEXT_PUBLIC_GITHUB_URL=https://github.com/your-repo
 ```
 
 ### Development Commands

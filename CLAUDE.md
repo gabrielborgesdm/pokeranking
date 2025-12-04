@@ -62,7 +62,7 @@ The backend follows NestJS modular architecture with global guards:
 - **LoggingInterceptor** - Request/response logging
 - **I18nExceptionFilter** - Translates exceptions to user's language
 
-Core modules: `AuthModule`, `UsersModule`, `PokemonModule`, `RankingsModule`, `BoxesModule`
+Core modules: `AuthModule`, `UsersModule`, `PokemonModule`, `RankingsModule`, `BoxesModule`, `SupportModule`, `SentryModule`
 
 ### Key Patterns
 - DTOs in `*.dto.ts` files for request/response validation
@@ -89,11 +89,25 @@ UPSTASH_REDIS_URL=<url>
 UPSTASH_REDIS_TOKEN=<token>
 ```
 
+Optional for backend:
+```
+SENTRY_DSN=<dsn>              # Error tracking
+SUPPORT_EMAIL=<email>         # Support notification emails
+```
+
 Required for frontend development:
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXTAUTH_SECRET=<secret>
 NEXTAUTH_URL=http://localhost:3000
+```
+
+Optional for frontend:
+```
+NEXT_PUBLIC_GA_MEASUREMENT_ID=<measurement-id>    # Google Analytics
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=<key>          # Stripe donations
+NEXT_PUBLIC_STRIPE_PRICE_ID=<price-id>            # Stripe price ID
+NEXT_PUBLIC_GITHUB_URL=<url>                      # GitHub repo link
 ```
 
 ## Database Notes

@@ -12,6 +12,7 @@ import {
   isApiError,
 } from "@pokeranking/api-client";
 import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const rankingFormSchema = z.object({
   title: z.string().min(1).max(100),
@@ -44,6 +45,7 @@ export function useRankingForm({
   const { t } = useTranslation();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const { trackRankingCreate } = useAnalytics();
 
   const createMutation = useRankingsControllerCreate();
   const updateMutation = useRankingsControllerUpdate();
@@ -66,6 +68,8 @@ export function useRankingForm({
         {
           onSuccess: (response) => {
             if (response.status === 201) {
+              const createdRanking = response.data;
+              trackRankingCreate(createdRanking._id, createdRanking.title);
               onSuccess?.();
               router.push("/my-rankings");
             }
