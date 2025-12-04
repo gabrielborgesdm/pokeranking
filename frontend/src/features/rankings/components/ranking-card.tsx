@@ -1,11 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { memo, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DEFAULT_POKEMON_IMAGE } from "@/lib/image-utils";
+import { PokemonImage } from "@/components/pokemon-image";
 import { formatShortDate } from "@/lib/date-utils";
 import { getThemeById, DEFAULT_THEME_ID } from "@pokeranking/shared";
 import { Button } from "@/components/ui/button";
@@ -72,9 +71,6 @@ export const RankingCard = memo(function RankingCard({
     return foundTheme ?? getThemeById(DEFAULT_THEME_ID)!;
   }, [theme]);
 
-  // Use fallback silhouette image when ranking has no Pokemon
-  const imageUrl = topPokemonImage || DEFAULT_POKEMON_IMAGE;
-
   return (
     <div
       onClick={onClick}
@@ -87,14 +83,11 @@ export const RankingCard = memo(function RankingCard({
     >
       {/* Top Pokemon Image */}
       <div className="relative w-full aspect-square mb-4">
-        <Image
-          src={imageUrl}
+        <PokemonImage
+          src={topPokemonImage}
           alt={title}
           fill
-          className={cn(
-            "object-contain drop-shadow-lg",
-            !topPokemonImage && "opacity-60"
-          )}
+          className={cn("drop-shadow-lg", !topPokemonImage && "opacity-60")}
           sizes="(max-width: 768px) 50vw, 200px"
         />
       </div>

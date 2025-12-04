@@ -9,6 +9,7 @@ Pokeranking is a Pokemon tier list ranking application with a NestJS backend and
 ## Repository Structure
 
 This is an npm workspace monorepo:
+
 - `backend/` - NestJS 11 API server
 - `frontend/` - Next.js 16 frontend (React 19, TailwindCSS 4, NextAuth)
 - `packages/api-client/` - Generated TypeScript API client (Orval + TanStack Query)
@@ -17,6 +18,7 @@ This is an npm workspace monorepo:
 ## Common Commands
 
 ### Root Level
+
 ```bash
 npm run api:export      # Export OpenAPI spec from backend
 npm run api:build       # Generate and build API client
@@ -24,8 +26,9 @@ npm run api:full        # Export spec + build client (full pipeline)
 ```
 
 ### Backend (`cd backend`)
+
 ```bash
-npm run start:dev       # Development server with watch mode
+npm run dev       # Development server with watch mode
 npm run build           # Build for production
 npm run lint            # ESLint with auto-fix
 npm run format          # Prettier formatting
@@ -41,12 +44,14 @@ docker-compose up -d    # Start MongoDB (replica set) + Redis
 ```
 
 ### API Client (`cd packages/api-client`)
+
 ```bash
 npm run generate        # Generate from OpenAPI spec via Orval
 npm run build           # Generate + compile with tsup
 ```
 
 ### Frontend (`cd frontend`)
+
 ```bash
 npm run dev             # Development server
 npm run build           # Build for production
@@ -56,7 +61,9 @@ npm run lint            # ESLint
 ## Architecture
 
 ### Backend Module Structure
+
 The backend follows NestJS modular architecture with global guards:
+
 - **JwtAuthGuard** - Global authentication (use `@Public()` decorator to bypass)
 - **RolesGuard** - Global role-based authorization (use `@Roles()` decorator)
 - **LoggingInterceptor** - Request/response logging
@@ -65,6 +72,7 @@ The backend follows NestJS modular architecture with global guards:
 Core modules: `AuthModule`, `UsersModule`, `PokemonModule`, `RankingsModule`, `BoxesModule`, `SupportModule`, `SentryModule`
 
 ### Key Patterns
+
 - DTOs in `*.dto.ts` files for request/response validation
 - Schemas in `*.schema.ts` with Mongoose decorators
 - Services handle business logic, controllers are thin
@@ -72,14 +80,17 @@ Core modules: `AuthModule`, `UsersModule`, `PokemonModule`, `RankingsModule`, `B
 - i18n translations in `src/i18n/` (en, pt-BR)
 
 ### Testing Setup
+
 E2E tests use MongoDB Memory Server with fixtures in `test/fixtures/`. Tests run sequentially (`maxWorkers: 1`) due to shared database state. Redis and email services are mocked.
 
 ### API Client Generation
+
 OpenAPI spec is exported to `packages/api-client/openapi.json` via `npm run export:openapi`. Orval generates typed hooks for TanStack Query.
 
 ## Environment Variables
 
 Required for backend development:
+
 ```
 MONGODB_URI=mongodb://localhost:27017/pokeranking?replicaSet=rs0
 JWT_SECRET=<secret>
@@ -90,12 +101,14 @@ UPSTASH_REDIS_TOKEN=<token>
 ```
 
 Optional for backend:
+
 ```
 SENTRY_DSN=<dsn>              # Error tracking
 SUPPORT_EMAIL=<email>         # Support notification emails
 ```
 
 Required for frontend development:
+
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXTAUTH_SECRET=<secret>
@@ -103,6 +116,7 @@ NEXTAUTH_URL=http://localhost:3000
 ```
 
 Optional for frontend:
+
 ```
 NEXT_PUBLIC_GA_MEASUREMENT_ID=<measurement-id>    # Google Analytics
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=<key>          # Stripe donations

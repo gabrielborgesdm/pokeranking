@@ -108,11 +108,27 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   CLOUDINARY_API_SECRET?: string;
+
+  @IsString()
+  @IsOptional()
+  IMAGE_PROVIDER?: string;
+
+  @IsString()
+  @IsOptional()
+  IMAGEKIT_PUBLIC_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  IMAGEKIT_PRIVATE_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  IMAGEKIT_URL_ENDPOINT?: string;
 }
 
 export function validate(config: Record<string, unknown>) {
   const defaultValues = {
-    ALLOWED_IMAGE_DOMAINS: 'res.cloudinary.com',
+    ALLOWED_IMAGE_DOMAINS: 'res.cloudinary.com,ik.imagekit.io',
     CORS_ORIGIN: 'http://localhost:3000',
     PORT: 8000,
     RATE_LIMIT_VERIFY_EMAIL: 5,

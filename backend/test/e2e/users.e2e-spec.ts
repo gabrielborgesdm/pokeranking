@@ -176,16 +176,10 @@ describe('Users (e2e)', () => {
       const connection = app.get(getConnectionToken());
       await connection
         .collection('users')
-        .updateOne(
-          { _id: users[0]._id },
-          { $set: { rankedPokemonCount: 5 } },
-        );
+        .updateOne({ _id: users[0]._id }, { $set: { rankedPokemonCount: 5 } });
       await connection
         .collection('users')
-        .updateOne(
-          { _id: users[1]._id },
-          { $set: { rankedPokemonCount: 50 } },
-        );
+        .updateOne({ _id: users[1]._id }, { $set: { rankedPokemonCount: 50 } });
 
       const token = await loginUser(app, {
         identifier: lowRanker.username,
@@ -444,10 +438,7 @@ describe('Users (e2e)', () => {
       const connection = app.get(getConnectionToken());
       await connection
         .collection('users')
-        .updateOne(
-          { _id: users[0]._id },
-          { $set: { rankedPokemonCount: 42 } },
-        );
+        .updateOne({ _id: users[0]._id }, { $set: { rankedPokemonCount: 42 } });
 
       const token = await loginUser(app, {
         identifier: REGULAR_USER.username,
@@ -459,15 +450,14 @@ describe('Users (e2e)', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(200);
 
-      expect(response.body.data[0]).toHaveProperty(
-        'rankedPokemonCount',
-        42,
-      );
+      expect(response.body.data[0]).toHaveProperty('rankedPokemonCount', 42);
     });
 
     it('should allow unauthenticated access (public endpoint)', async () => {
       await seedUsers(app, [REGULAR_USER]);
-      const response = await request(app.getHttpServer()).get('/users').expect(200);
+      const response = await request(app.getHttpServer())
+        .get('/users')
+        .expect(200);
       expect(response.body).toHaveProperty('data');
     });
   });
