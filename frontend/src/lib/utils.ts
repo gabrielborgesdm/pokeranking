@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { PokemonTypeVariant } from "@/features/users/components/user-card";
+import type { PokemonTypeVariant } from "@/lib/pokemon-variants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

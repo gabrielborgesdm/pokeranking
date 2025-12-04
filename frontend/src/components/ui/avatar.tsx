@@ -5,9 +5,7 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar"
 import Image from "next/image"
 
 import { cn } from "@/lib/utils"
-
-const BASE_AVATAR_URL = `/pokemon`;
-const DEFAULT_AVATAR = `${BASE_AVATAR_URL}/pikachu.png`
+import { DEFAULT_POKEMON_IMAGE, normalizePokemonImageSrc } from "@/lib/image-utils"
 
 function Avatar({
   className,
@@ -32,22 +30,16 @@ interface AvatarImageProps {
   fallback?: string
 }
 
-function normalizeImageSrc(src: string | undefined | null): string {
-  if (!src) return DEFAULT_AVATAR
-  if (src.startsWith("/") || src.startsWith("http")) return src
-  return `${BASE_AVATAR_URL}/${src}`
-}
-
 const AvatarImage = React.memo(function AvatarImage({
   src,
   alt,
   className,
-  fallback = DEFAULT_AVATAR,
+  fallback = DEFAULT_POKEMON_IMAGE,
 }: AvatarImageProps) {
-  const [imgSrc, setImgSrc] = React.useState(() => normalizeImageSrc(src))
+  const [imgSrc, setImgSrc] = React.useState(() => normalizePokemonImageSrc(src))
 
   React.useEffect(() => {
-    setImgSrc(normalizeImageSrc(src))
+    setImgSrc(normalizePokemonImageSrc(src))
   }, [src])
 
   return (

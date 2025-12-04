@@ -27,6 +27,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@pokeranking/shared": "*",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -35,6 +36,8 @@
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.3",
+    "@sentry/nestjs": "^10.28.0",
+    "@sentry/profiling-node": "^10.28.0",
     "@upstash/ratelimit": "^2.0.7",
     "@upstash/redis": "^1.35.7",
     "bcrypt": "^6.0.0",
