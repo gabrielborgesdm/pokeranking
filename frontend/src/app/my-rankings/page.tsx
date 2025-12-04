@@ -10,6 +10,7 @@ import { RankingCard, RankingCardSkeleton } from "@/features/rankings";
 import { AnimatedList } from "@/components/animated-list";
 import { ErrorMessage } from "@/components/error-message";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { useDeleteRanking } from "@/hooks/use-delete-ranking";
 
@@ -97,18 +98,18 @@ export default function MyRankingsPage() {
   return (
     <main className="container mx-auto px-4 py-8">
       <section className="space-y-8">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">{t("myRankings.title")}</h1>
-            <p className="text-muted-foreground">{t("myRankings.description")}</p>
-          </div>
-          <Button asChild>
-            <Link href="/my-rankings/new">
-              <Plus className="mr-2 h-4 w-4" />
-              {t("myRankings.createNew")}
-            </Link>
-          </Button>
-        </div>
+        <PageHeader
+          title={t("myRankings.title")}
+          description={t("myRankings.description")}
+          action={
+            <Button asChild>
+              <Link href="/my-rankings/new">
+                <Plus className="mr-2 h-4 w-4" />
+                {t("myRankings.createNew")}
+              </Link>
+            </Button>
+          }
+        />
 
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
