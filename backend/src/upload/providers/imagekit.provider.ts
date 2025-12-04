@@ -56,4 +56,57 @@ export class ImageKitProvider extends BaseImageProvider {
       throw new Error('Failed to upload image');
     }
   }
+
+  async deleteImage(imageUrl: string): Promise<boolean> {
+    if (!this.imagekit) {
+      this.logger.warn('ImageKit not configured, cannot delete image');
+      return false;
+    }
+
+    try {
+      // Extract fileId from ImageKit URL
+      const fileId = await this.extractFileId(imageUrl);
+      if (!fileId) {
+        this.logger.warn(`Could not extract fileId from URL: ${imageUrl}`);
+        return false;
+      }
+
+      await this.imagekit.deleteFile(fileId);
+      this.logger.log(`Successfully deleted image: ${fileId}`);
+      return true;
+    } catch (error) {
+      this.logger.error(`Failed to delete image: ${imageUrl}`, error);
+      return false;
+    }
+  }
+
+  private async extractFileId(imageUrl: string): Promise<string | null> {
+    if (!this.imagekit) {
+      return null;
+    }
+
+    try {
+      const url = new URL(imageUrl);
+      // Extract path without leading slash
+      const filePath = url.pathname.slice(1);
+
+      // Use ImageKit API to search for file by name/path
+      const files = await this.imagekit.listFiles({
+        name: filePath.split('/').pop(),
+        limit: 1,
+      });
+
+      if (files && files.length > 0) {
+        const file = files[0] as { fileId?: string };
+        // Only FileObject has fileId, not FolderObject
+        if (file.fileId) {
+          return file.fileId;
+        }
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
+  }
 }
