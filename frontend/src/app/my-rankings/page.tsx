@@ -1,19 +1,24 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
 import { useAuthControllerGetProfile } from "@pokeranking/api-client";
 import { RankingCard, RankingCardSkeleton } from "@/features/rankings";
 import { AnimatedList } from "@/components/animated-list";
+import { ErrorMessage } from "@/components/error-message";
 import { Button } from "@/components/ui/button";
 
 const SKELETON_COUNT = 6;
 
 export default function MyRankingsPage() {
   const { t } = useTranslation();
-  const { data, isLoading, error } = useAuthControllerGetProfile();
+  const { data, isLoading, error, refetch } = useAuthControllerGetProfile();
+
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   const rankings = useMemo(() => data?.data?.rankings ?? [], [data]);
 
@@ -36,14 +41,11 @@ export default function MyRankingsPage() {
   if (error) {
     return (
       <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-          <h1 className="text-2xl font-bold text-destructive">
-            {t("myRankings.errorTitle")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("myRankings.errorDescription")}
-          </p>
-        </div>
+        <ErrorMessage
+          title={t("myRankings.errorTitle")}
+          description={t("myRankings.errorDescription")}
+          onRetry={handleRetry}
+        />
       </main>
     );
   }
