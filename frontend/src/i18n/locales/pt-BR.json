@@ -1,7 +1,12 @@
 {
   "common": {
     "or": "ou",
-    "retry": "Tentar novamente"
+    "retry": "Tentar novamente",
+    "actions": "Ações",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Excluir",
+    "deleting": "Excluindo..."
   },
   "pokemonTypes": {
     "Bug": "Inseto",
@@ -30,7 +35,12 @@
     "openMenu": "Abrir menu",
     "userMenu": "Menu do usuário",
     "toggleTheme": "Alternar tema",
-    "support": "Suporte"
+    "language": "Idioma",
+    "support": "Suporte",
+    "viewAll": "Ver Todos",
+    "viewAllRankings": "Ver todos ({{count}})",
+    "createNewRanking": "Criar Novo Ranking",
+    "noRankings": "Nenhum ranking ainda"
   },
   "auth": {
     "signIn": "Entrar",
@@ -109,7 +119,11 @@
     "errorDescription": "Por favor, tente novamente mais tarde.",
     "pokemonCount_one": "{{count}} Pokemon",
     "pokemonCount_other": "{{count}} Pokemon",
-    "createNew": "Criar Novo"
+    "createNew": "Criar Novo",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "deleteConfirmTitle": "Excluir Ranking",
+    "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
   },
   "rankingForm": {
     "createTitle": "Criar Novo Ranking",

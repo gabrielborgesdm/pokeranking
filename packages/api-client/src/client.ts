@@ -7,6 +7,9 @@ let baseURL =
 // Token storage
 let authToken: string | null = null;
 
+// Language storage for Accept-Language header
+let currentLanguage: string = 'en';
+
 /**
  * Set the authentication token for API requests
  */
@@ -18,6 +21,18 @@ export const setAuthToken = (token: string | null) => {
  * Get the current authentication token
  */
 export const getAuthToken = () => authToken;
+
+/**
+ * Set the language for API requests (Accept-Language header)
+ */
+export const setLanguage = (lang: string) => {
+  currentLanguage = lang;
+};
+
+/**
+ * Get the current language
+ */
+export const getLanguage = () => currentLanguage;
 
 /**
  * Configure the base URL for the API client
@@ -85,8 +100,12 @@ export const customFetch = async <T>(
   // Build headers
   const headers = new Headers(fetchOptions?.headers);
 
-  // Set default content type if not set and we have a body
-  if (fetchOptions?.body && !headers.has('Content-Type')) {
+  // Set default content type if not set and we have a body (but not for FormData)
+  if (
+    fetchOptions?.body &&
+    !headers.has('Content-Type') &&
+    !(fetchOptions.body instanceof FormData)
+  ) {
     headers.set('Content-Type', 'application/json');
   }
 
@@ -95,6 +114,9 @@ export const customFetch = async <T>(
   if (resolvedToken) {
     headers.set('Authorization', `Bearer ${resolvedToken}`);
   }
+
+  // Add Accept-Language header for i18n
+  headers.set('Accept-Language', currentLanguage);
 
   // Make the request
   const response = await fetch(fullUrl, {

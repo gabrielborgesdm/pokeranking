@@ -4,6 +4,8 @@ export {
   getAuthToken,
   setBaseURL,
   getBaseURL,
+  setLanguage,
+  getLanguage,
   customFetch,
   isApiError,
   ApiError,
@@ -21,3 +23,4 @@ export * from '../generated/endpoints/pokemon/pokemon';
 export * from '../generated/endpoints/boxes/boxes';
 export * from '../generated/endpoints/rankings/rankings';
 export * from '../generated/endpoints/support/support';
+export * from '../generated/endpoints/upload/upload';
