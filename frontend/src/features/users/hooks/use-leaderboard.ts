@@ -13,7 +13,7 @@ export function useLeaderboard() {
   const [sortBy, setSortBy] = useState<SortByOption>("rankedPokemonCount");
   const [order, setOrder] = useState<OrderOption>("desc");
 
-  const { data, isLoading: isLoadingOG, error } = useUsersControllerFindAll({
+  const { data, isLoading: isLoadingOG, error, refetch } = useUsersControllerFindAll({
     page: currentPage,
     limit: ITEMS_PER_PAGE,
     sortBy,
@@ -59,6 +59,7 @@ export function useLeaderboard() {
     totalPages,
     isLoading,
     error,
+    refetch,
 
     // Handlers
     handlePageChange,

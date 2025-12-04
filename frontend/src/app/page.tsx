@@ -9,6 +9,7 @@ import {
   useLeaderboard,
 } from "@/features/users";
 import { Pagination } from "@/components/pagination";
+import { ErrorMessage } from "@/components/error-message";
 import { getVariantByIndex } from "@/lib/utils";
 import { AnimatedList } from "@/components/animated-list";
 
@@ -23,6 +24,7 @@ export default function Home() {
     totalPages,
     isLoading,
     error,
+    refetch,
     handlePageChange,
     handleSearchChange,
     handleSortByChange,
@@ -51,14 +53,11 @@ export default function Home() {
   if (error) {
     return (
       <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
-          <h1 className="text-2xl font-bold text-destructive">
-            {t("leaderboard.errorTitle")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("leaderboard.errorDescription")}
-          </p>
-        </div>
+        <ErrorMessage
+          title={t("leaderboard.errorTitle")}
+          description={t("leaderboard.errorDescription")}
+          onRetry={() => refetch()}
+        />
       </main>
     );
   }
