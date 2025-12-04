@@ -3,6 +3,7 @@ export { PokemonCardSkeleton } from "./components/pokemon-card-skeleton";
 export { PokemonTypeIcon } from "./components/pokemon-type-icon";
 export { PokemonTable } from "./components/pokemon-table";
 export { PokemonFilters } from "./components/pokemon-filters";
+export { TypesSelector, SelectedTypesBadges } from "./components/types-selector";
 export {
   usePokemonList,
   type SortByOption,

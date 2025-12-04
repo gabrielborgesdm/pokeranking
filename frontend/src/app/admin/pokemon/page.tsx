@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { Plus } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/page-header";
 import {
@@ -45,12 +45,20 @@ export default function AdminPokemonPage() {
         title={t("admin.pokemon.title")}
         description={t("admin.pokemon.subtitle", { count: total })}
         action={
-          <Button asChild>
-            <Link href={routes.adminPokemonNew}>
-              <Plus className="h-4 w-4 mr-2" />
-              {t("admin.pokemon.create")}
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild variant="outline">
+              <Link href={routes.adminPokemonBulk}>
+                <Upload className="h-4 w-4 mr-2" />
+                {t("admin.pokemon.bulkCreate")}
+              </Link>
+            </Button>
+            <Button asChild>
+              <Link href={routes.adminPokemonNew}>
+                <Plus className="h-4 w-4 mr-2" />
+                {t("admin.pokemon.create")}
+              </Link>
+            </Button>
+          </div>
         }
       />
 

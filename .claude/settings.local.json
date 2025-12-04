@@ -6,7 +6,8 @@
       "Bash(tree:*)",
       "Bash(npm run build:*)",
       "Bash(npm run test:e2e:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
