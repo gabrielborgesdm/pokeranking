@@ -7,7 +7,9 @@ import { UsersModule } from './users/users.module';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { RankingsModule } from './rankings/rankings.module';
 import { BoxesModule } from './boxes/boxes.module';
+import { SupportModule } from './support/support.module';
 import { CommonModule } from './common/common.module';
+import { SentryModule } from './sentry/sentry.module';
 import { I18nConfigModule } from './i18n/i18n.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
@@ -32,6 +34,8 @@ import { getDatabaseConfig } from './config/database.config';
     }),
     // Common module (global)
     CommonModule,
+    // Sentry module (global)
+    SentryModule,
     // I18n module
     I18nConfigModule,
     // Feature modules
@@ -40,6 +44,7 @@ import { getDatabaseConfig } from './config/database.config';
     PokemonModule,
     RankingsModule,
     BoxesModule,
+    SupportModule,
   ],
   controllers: [],
   providers: [
