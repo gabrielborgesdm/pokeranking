@@ -25,15 +25,19 @@ import type { PokemonType } from "@pokeranking/shared";
 export type SortByOption = "name" | "createdAt";
 export type OrderOption = "asc" | "desc";
 
+const LIMIT_OPTIONS = [10, 20, 50, 100] as const;
+
 interface PokemonFiltersProps {
   searchValue: string;
   sortBy: SortByOption;
   order: OrderOption;
   selectedTypes: PokemonType[];
+  limit?: number;
   onSearchChange: (value: string) => void;
   onSortByChange: (value: SortByOption) => void;
   onOrderChange: (value: OrderOption) => void;
   onTypesChange: (types: PokemonType[]) => void;
+  onLimitChange?: (limit: number) => void;
 }
 
 export const PokemonFilters = memo(function PokemonFilters({
@@ -41,10 +45,12 @@ export const PokemonFilters = memo(function PokemonFilters({
   sortBy,
   order,
   selectedTypes,
+  limit,
   onSearchChange,
   onSortByChange,
   onOrderChange,
   onTypesChange,
+  onLimitChange,
 }: PokemonFiltersProps) {
   const { t } = useTranslation();
   const [inputValue, setInputValue] = useState(searchValue);
@@ -89,7 +95,7 @@ export const PokemonFilters = memo(function PokemonFilters({
           />
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="min-w-[120px]">
@@ -143,7 +149,7 @@ export const PokemonFilters = memo(function PokemonFilters({
           </Popover>
 
           <Select value={sortBy} onValueChange={onSortByChange}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="flex-1 sm:flex-none sm:w-[140px]">
               <SelectValue placeholder={t("admin.pokemon.sortBy")} />
             </SelectTrigger>
             <SelectContent>
@@ -153,7 +159,7 @@ export const PokemonFilters = memo(function PokemonFilters({
           </Select>
 
           <Select value={order} onValueChange={onOrderChange}>
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="flex-1 sm:flex-none sm:w-[120px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -161,6 +167,24 @@ export const PokemonFilters = memo(function PokemonFilters({
               <SelectItem value="desc">{t("admin.pokemon.orderDesc")}</SelectItem>
             </SelectContent>
           </Select>
+
+          {limit !== undefined && onLimitChange && (
+            <Select
+              value={String(limit)}
+              onValueChange={(value) => onLimitChange(Number(value))}
+            >
+              <SelectTrigger className="w-[80px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {LIMIT_OPTIONS.map((option) => (
+                  <SelectItem key={option} value={String(option)}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </div>
       </div>
 
