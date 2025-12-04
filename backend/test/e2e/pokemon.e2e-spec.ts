@@ -113,25 +113,41 @@ describe('Pokemon (e2e)', () => {
       expect(response.body.image).toBe('test.png');
     });
 
-    it('should accept public image with different extensions', async () => {
+    it('should accept public image with .png extension', async () => {
       const token = await loginUser(app, {
         identifier: ADMIN_USER.username,
         password: ADMIN_USER.password,
       });
 
-      const extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+      const response = await request(app.getHttpServer())
+        .post('/pokemon')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          name: 'Test PNG',
+          image: 'test.png',
+        })
+        .expect(201);
 
-      for (const ext of extensions) {
-        const response = await request(app.getHttpServer())
+      expect(response.body.image).toBe('test.png');
+    });
+
+    it('should reject public image with non-png extensions', async () => {
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const invalidExtensions = ['jpg', 'jpeg', 'gif', 'webp'];
+
+      for (const ext of invalidExtensions) {
+        await request(app.getHttpServer())
           .post('/pokemon')
           .set('Authorization', `Bearer ${token}`)
           .send({
             name: `Test ${ext}`,
             image: `test.${ext}`,
           })
-          .expect(201);
-
-        expect(response.body.image).toBe(`test.${ext}`);
+          .expect(400);
       }
     });
 
@@ -547,6 +563,52 @@ describe('Pokemon (e2e)', () => {
       expect(response.body).toHaveProperty('data');
       expect(response.body.data).toHaveLength(1);
     });
+
+    it('should return 400 for limit exceeding maximum (100)', async () => {
+      await request(app.getHttpServer())
+        .get('/pokemon/search?limit=101')
+        .expect(400);
+    });
+
+    it('should return empty array for page beyond results', async () => {
+      await seedPokemon(app, [PIKACHU, CHARIZARD]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?page=100&limit=10')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(0);
+      expect(response.body.total).toBe(2);
+    });
+
+    it('should handle limit=1 correctly', async () => {
+      await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
+
+      const response = await request(app.getHttpServer())
+        .get('/pokemon/search?limit=1')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.total).toBe(3);
+    });
+
+    it('should return 400 for negative page value', async () => {
+      await request(app.getHttpServer())
+        .get('/pokemon/search?page=-1')
+        .expect(400);
+    });
+
+    it('should return 400 for page=0', async () => {
+      await request(app.getHttpServer())
+        .get('/pokemon/search?page=0')
+        .expect(400);
+    });
+
+    it('should return 400 for limit=0', async () => {
+      await request(app.getHttpServer())
+        .get('/pokemon/search?limit=0')
+        .expect(400);
+    });
   });
 
   describe('GET /pokemon/count', () => {
@@ -697,9 +759,9 @@ describe('Pokemon (e2e)', () => {
 
       expect(response1.body.image).toBe(updateToHosted.image);
 
-      // Update back to public image format
+      // Update back to public image format (only .png allowed)
       const updateToPublic = {
-        image: 'pikachu-final.webp',
+        image: 'pikachu-final.png',
       };
 
       const response2 = await request(app.getHttpServer())
@@ -801,6 +863,292 @@ describe('Pokemon (e2e)', () => {
       await request(app.getHttpServer())
         .delete(`/pokemon/${pokemonId}`)
         .expect(401);
+    });
+  });
+
+  describe('POST /pokemon/bulk', () => {
+    beforeEach(async () => {
+      await clearDatabase(app);
+    });
+
+    it('should create multiple Pokemon when user is admin', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            { name: 'Bulbasaur', image: 'bulbasaur.png' },
+            { name: 'Charmander', image: 'charmander.png' },
+            { name: 'Squirtle', image: 'squirtle.png' },
+          ],
+        })
+        .expect(201);
+
+      expect(response.body.results).toHaveLength(3);
+      expect(response.body.successCount).toBe(3);
+      expect(response.body.failedCount).toBe(0);
+      expect(response.body.results[0]).toMatchObject({
+        index: 0,
+        name: 'Bulbasaur',
+        success: true,
+        pokemon: expect.objectContaining({
+          name: 'Bulbasaur',
+          image: 'bulbasaur.png',
+        }),
+      });
+    });
+
+    it('should return 403 when user is not admin', async () => {
+      await seedUsers(app, [REGULAR_USER]);
+      const token = await loginUser(app, {
+        identifier: REGULAR_USER.username,
+        password: REGULAR_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [{ name: 'Pikachu', image: 'pikachu.png' }],
+        })
+        .expect(403);
+    });
+
+    it('should return 401 when not authenticated', async () => {
+      await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .send({
+          pokemon: [{ name: 'Pikachu', image: 'pikachu.png' }],
+        })
+        .expect(401);
+    });
+
+    it('should handle partial success with some duplicates', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      await seedPokemon(app, [PIKACHU]);
+
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            { name: 'Pikachu', image: 'pikachu.png' }, // Already exists
+            { name: 'Raichu', image: 'raichu.png' }, // New
+          ],
+        })
+        .expect(201);
+
+      expect(response.body.successCount).toBe(1);
+      expect(response.body.failedCount).toBe(1);
+      expect(response.body.results[0]).toMatchObject({
+        index: 0,
+        name: 'Pikachu',
+        success: false,
+        error: expect.stringContaining('already exists'),
+        errorCode: 'NAME_EXISTS',
+      });
+      expect(response.body.results[1]).toMatchObject({
+        index: 1,
+        name: 'Raichu',
+        success: true,
+      });
+    });
+
+    it('should reject duplicates within the same batch', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            { name: 'Eevee', image: 'eevee.png' },
+            { name: 'Eevee', image: 'eevee2.png' }, // Duplicate within batch
+          ],
+        })
+        .expect(201);
+
+      expect(response.body.successCount).toBe(1);
+      expect(response.body.failedCount).toBe(1);
+      expect(response.body.results[0]).toMatchObject({
+        index: 0,
+        name: 'Eevee',
+        success: true,
+      });
+      expect(response.body.results[1]).toMatchObject({
+        index: 1,
+        name: 'Eevee',
+        success: false,
+        errorCode: 'NAME_EXISTS',
+      });
+    });
+
+    it('should return 400 for empty pokemon array', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ pokemon: [] })
+        .expect(400);
+    });
+
+    it('should return 400 for invalid Pokemon data in array', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            { name: '', image: 'invalid.png' }, // Empty name
+          ],
+        })
+        .expect(400);
+    });
+
+    it('should validate image field for each Pokemon', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            { name: 'ValidPokemon', image: '../../../path/traversal.png' },
+          ],
+        })
+        .expect(400);
+    });
+
+    it('should create Pokemon with all optional fields', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            {
+              name: 'Mewtwo',
+              image: 'mewtwo.png',
+              types: ['Psychic'],
+              pokedexNumber: 150,
+              species: 'Genetic Pokémon',
+              height: 2.0,
+              weight: 122.0,
+              abilities: ['Pressure', 'Unnerve'],
+              hp: 106,
+              attack: 110,
+              defense: 90,
+              specialAttack: 154,
+              specialDefense: 90,
+              speed: 130,
+              generation: 1,
+            },
+          ],
+        })
+        .expect(201);
+
+      expect(response.body.successCount).toBe(1);
+      expect(response.body.results[0].pokemon).toMatchObject({
+        name: 'Mewtwo',
+        types: ['Psychic'],
+        pokedexNumber: 150,
+        species: 'Genetic Pokémon',
+        hp: 106,
+        attack: 110,
+        defense: 90,
+        specialAttack: 154,
+        specialDefense: 90,
+        speed: 130,
+        generation: 1,
+      });
+    });
+
+    it('should return correct index for each result', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      await seedPokemon(app, [CHARIZARD]); // Pre-seed to cause failure
+
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            { name: 'Blastoise', image: 'blastoise.png' },
+            { name: 'Charizard', image: 'charizard.png' }, // Already exists
+            { name: 'Venusaur', image: 'venusaur.png' },
+          ],
+        })
+        .expect(201);
+
+      expect(response.body.results[0].index).toBe(0);
+      expect(response.body.results[1].index).toBe(1);
+      expect(response.body.results[2].index).toBe(2);
+      expect(response.body.results[1].success).toBe(false);
+    });
+
+    it('should continue processing after failures', async () => {
+      await seedUsers(app, [ADMIN_USER]);
+      await seedPokemon(app, [BULBASAUR]);
+
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post('/pokemon/bulk')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          pokemon: [
+            { name: 'Bulbasaur', image: 'bulbasaur.png' }, // Fails
+            { name: 'Ivysaur', image: 'ivysaur.png' }, // Should succeed
+            { name: 'Venusaur', image: 'venusaur.png' }, // Should succeed
+          ],
+        })
+        .expect(201);
+
+      expect(response.body.successCount).toBe(2);
+      expect(response.body.failedCount).toBe(1);
+      expect(response.body.results[1].success).toBe(true);
+      expect(response.body.results[2].success).toBe(true);
     });
   });
 });

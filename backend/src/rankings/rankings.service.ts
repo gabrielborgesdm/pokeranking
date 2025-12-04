@@ -67,7 +67,7 @@ export class RankingsService {
         if (createRankingDto.theme) {
           const pokemonCount = createRankingDto.pokemon?.length || 0;
           const totalPokemon = await this.getTotalPokemonCount();
-          await this.validateThemeAvailability(
+          this.validateThemeAvailability(
             createRankingDto.theme,
             pokemonCount,
             totalPokemon,
@@ -153,7 +153,7 @@ export class RankingsService {
     // Validate theme availability if theme is being updated
     if (updateRankingDto.theme) {
       const totalPokemon = await this.getTotalPokemonCount();
-      await this.validateThemeAvailability(
+      this.validateThemeAvailability(
         updateRankingDto.theme,
         newPokemon.length,
         totalPokemon,
@@ -274,11 +274,11 @@ export class RankingsService {
   }
 
   // Helper: Validate theme availability based on Pokemon count
-  private async validateThemeAvailability(
+  private validateThemeAvailability(
     themeId: string,
     pokemonCount: number,
     totalPokemon: number,
-  ): Promise<void> {
+  ): void {
     if (!isThemeAvailable(themeId, pokemonCount, totalPokemon)) {
       throw new BadRequestException({
         key: TK.RANKINGS.THEME_NOT_AVAILABLE,

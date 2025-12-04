@@ -77,13 +77,17 @@ export class CloudinaryProvider extends BaseImageProvider {
         return false;
       }
 
-      const result = await cloudinary.uploader.destroy(publicId);
+      const result = (await cloudinary.uploader.destroy(publicId)) as {
+        result: string;
+      };
       if (result.result === 'ok') {
         this.logger.log(`Successfully deleted image: ${publicId}`);
         return true;
       }
 
-      this.logger.warn(`Failed to delete image: ${publicId}, result: ${result.result}`);
+      this.logger.warn(
+        `Failed to delete image: ${publicId}, result: ${result.result}`,
+      );
       return false;
     } catch (error) {
       this.logger.error(`Failed to delete image: ${imageUrl}`, error);
