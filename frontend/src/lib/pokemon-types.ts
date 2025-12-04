@@ -71,3 +71,14 @@ export const pokemonTypeColors: Record<PokemonType, string> = {
 export function getPokemonTypeColor(type: PokemonType): string {
   return pokemonTypeColors[type] ?? "#919AA2";
 }
+
+export function getRandomType(types: PokemonType[]): PokemonType | null {
+  if (types.length === 0) return null;
+  return types[Math.floor(Math.random() * types.length)];
+}
+
+export function getCardGradient(types: PokemonType[]): string {
+  if (types.length === 0) return "";
+  const type = types.length === 1 ? types[0] : getRandomType(types);
+  return type ? pokemonTypeGradients[type] : "";
+}

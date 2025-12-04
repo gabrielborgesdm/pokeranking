@@ -369,3 +369,28 @@
   background: linear-gradient(to bottom right, #B8A038, #786824) !important;
   color: white !important;
 }
+
+.gradient-type-fairy {
+  background: linear-gradient(to bottom right, #EE99AC, #CD6889) !important;
+  color: white !important;
+}
+
+.gradient-type-fighting {
+  background: linear-gradient(to bottom right, #C03028, #7D1F1A) !important;
+  color: white !important;
+}
+
+.gradient-type-ground {
+  background: linear-gradient(to bottom right, #E0C068, #927D44) !important;
+  color: #1a1a2e !important;
+}
+
+.gradient-type-ice {
+  background: linear-gradient(to bottom right, #98D8D8, #5DB1B1) !important;
+  color: #1a1a2e !important;
+}
+
+.gradient-type-steel {
+  background: linear-gradient(to bottom right, #B8B8D0, #787887) !important;
+  color: #1a1a2e !important;
+}

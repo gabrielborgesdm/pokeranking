@@ -12,6 +12,18 @@ export interface PokemonResponseDto {
   name: string;
   image: string;
   types: PokemonResponseDtoTypesItem[];
+  pokedexNumber?: number;
+  species?: string;
+  height?: number;
+  weight?: number;
+  abilities?: string[];
+  hp?: number;
+  attack?: number;
+  defense?: number;
+  specialAttack?: number;
+  specialDefense?: number;
+  speed?: number;
+  generation?: number;
   createdAt: string;
   updatedAt: string;
 }

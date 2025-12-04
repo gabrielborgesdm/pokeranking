@@ -24,6 +24,8 @@ import type {
 } from "@tanstack/react-query";
 
 import type {
+  BulkCreatePokemonDto,
+  BulkCreatePokemonResponseDto,
   CreatePokemonDto,
   PaginatedPokemonResponseDto,
   PokemonControllerSearchParams,
@@ -464,6 +466,130 @@ export function usePokemonControllerFindAllSuspense<
   return query;
 }
 
+/**
+ * @summary Create multiple Pokemon (Admin only, partial success possible)
+ */
+export type pokemonControllerCreateBulkResponse201 = {
+  data: BulkCreatePokemonResponseDto;
+  status: 201;
+};
+
+export type pokemonControllerCreateBulkResponse401 = {
+  data: void;
+  status: 401;
+};
+
+export type pokemonControllerCreateBulkResponse403 = {
+  data: void;
+  status: 403;
+};
+
+export type pokemonControllerCreateBulkResponseSuccess =
+  pokemonControllerCreateBulkResponse201 & {
+    headers: Headers;
+  };
+export type pokemonControllerCreateBulkResponseError = (
+  | pokemonControllerCreateBulkResponse401
+  | pokemonControllerCreateBulkResponse403
+) & {
+  headers: Headers;
+};
+
+export type pokemonControllerCreateBulkResponse =
+  | pokemonControllerCreateBulkResponseSuccess
+  | pokemonControllerCreateBulkResponseError;
+
+export const getPokemonControllerCreateBulkUrl = () => {
+  return `/pokemon/bulk`;
+};
+
+export const pokemonControllerCreateBulk = async (
+  bulkCreatePokemonDto: BulkCreatePokemonDto,
+  options?: RequestInit,
+): Promise<pokemonControllerCreateBulkResponse> => {
+  return customFetch<pokemonControllerCreateBulkResponse>(
+    getPokemonControllerCreateBulkUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(bulkCreatePokemonDto),
+    },
+  );
+};
+
+export const getPokemonControllerCreateBulkMutationOptions = <
+  TError = void,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof pokemonControllerCreateBulk>>,
+    TError,
+    { data: BulkCreatePokemonDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof pokemonControllerCreateBulk>>,
+  TError,
+  { data: BulkCreatePokemonDto },
+  TContext
+> => {
+  const mutationKey = ["pokemonControllerCreateBulk"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof pokemonControllerCreateBulk>>,
+    { data: BulkCreatePokemonDto }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return pokemonControllerCreateBulk(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PokemonControllerCreateBulkMutationResult = NonNullable<
+  Awaited<ReturnType<typeof pokemonControllerCreateBulk>>
+>;
+export type PokemonControllerCreateBulkMutationBody = BulkCreatePokemonDto;
+export type PokemonControllerCreateBulkMutationError = void;
+
+/**
+ * @summary Create multiple Pokemon (Admin only, partial success possible)
+ */
+export const usePokemonControllerCreateBulk = <
+  TError = void,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof pokemonControllerCreateBulk>>,
+      TError,
+      { data: BulkCreatePokemonDto },
+      TContext
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof pokemonControllerCreateBulk>>,
+  TError,
+  { data: BulkCreatePokemonDto },
+  TContext
+> => {
+  const mutationOptions =
+    getPokemonControllerCreateBulkMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
 /**
  * @summary Search Pokemon with pagination
  */

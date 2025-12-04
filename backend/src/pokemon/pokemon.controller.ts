@@ -26,6 +26,8 @@ import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PokemonResponseDto } from './dto/pokemon-response.dto';
 import { PokemonCountResponseDto } from './dto/pokemon-count-response.dto';
+import { BulkCreatePokemonDto } from './dto/bulk-create-pokemon.dto';
+import { BulkCreatePokemonResponseDto } from './dto/bulk-create-pokemon-response.dto';
 import {
   PokemonQueryDto,
   POKEMON_SORTABLE_FIELDS,
@@ -58,6 +60,31 @@ export class PokemonController {
   async create(@Body() createPokemonDto: CreatePokemonDto) {
     const pokemon = await this.pokemonService.create(createPokemonDto);
     return toDto(PokemonResponseDto, pokemon);
+  }
+
+  @Post('bulk')
+  @Roles(UserRole.Admin)
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Create multiple Pokemon (Admin only, partial success possible)',
+  })
+  @ApiBody({ type: BulkCreatePokemonDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Pokemon creation results (partial success possible)',
+    type: BulkCreatePokemonResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
+  async createBulk(
+    @Body() bulkCreateDto: BulkCreatePokemonDto,
+  ): Promise<BulkCreatePokemonResponseDto> {
+    const results = await this.pokemonService.createBulk(bulkCreateDto.pokemon);
+    return {
+      results,
+      successCount: results.filter((r) => r.success).length,
+      failedCount: results.filter((r) => !r.success).length,
+    };
   }
 
   @Get()

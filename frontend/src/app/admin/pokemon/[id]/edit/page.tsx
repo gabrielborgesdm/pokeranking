@@ -57,6 +57,19 @@ export default function AdminPokemonEditPage({ params }: EditPokemonPageProps) {
         initialData={{
           name: pokemon.name,
           image: pokemon.image,
+          types: pokemon.types ?? [],
+          pokedexNumber: pokemon.pokedexNumber ?? null,
+          species: pokemon.species ?? null,
+          height: pokemon.height ?? null,
+          weight: pokemon.weight ?? null,
+          abilities: pokemon.abilities ?? [],
+          hp: pokemon.hp ?? null,
+          attack: pokemon.attack ?? null,
+          defense: pokemon.defense ?? null,
+          specialAttack: pokemon.specialAttack ?? null,
+          specialDefense: pokemon.specialDefense ?? null,
+          speed: pokemon.speed ?? null,
+          generation: pokemon.generation ?? null,
         }}
       />
     </main>
