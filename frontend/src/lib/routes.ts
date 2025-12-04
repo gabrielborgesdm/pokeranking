@@ -10,6 +10,10 @@ export const routes = {
   settings: "/settings",
   myRankings: "/my-rankings",
   support: "/support",
+  // Admin routes
+  adminPokemon: "/admin/pokemon",
+  adminPokemonNew: "/admin/pokemon/new",
+  adminPokemonEdit: (id: string) => `/admin/pokemon/${id}/edit` as const,
 } as const;
 
 export const publicPaths = [
@@ -30,3 +34,5 @@ export const authPaths = [
   routes.forgotPassword,
   routes.resetPassword,
 ];
+
+export const adminPaths = ["/admin"];

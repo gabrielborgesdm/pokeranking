@@ -1,6 +1,9 @@
+import { PokemonType } from '@pokeranking/shared';
+
 export interface PokemonFixtureData {
   name: string;
   image: string;
+  types?: PokemonType[];
 }
 
 /**
@@ -9,6 +12,7 @@ export interface PokemonFixtureData {
 export const PIKACHU: PokemonFixtureData = {
   name: 'Pikachu',
   image: 'pikachu.png',
+  types: ['Electric'],
 };
 
 /**
@@ -17,6 +21,7 @@ export const PIKACHU: PokemonFixtureData = {
 export const CHARIZARD: PokemonFixtureData = {
   name: 'Charizard',
   image: 'https://res.cloudinary.com/pokemon/charizard.png',
+  types: ['Fire', 'Flying'],
 };
 
 /**
@@ -25,6 +30,7 @@ export const CHARIZARD: PokemonFixtureData = {
 export const BULBASAUR: PokemonFixtureData = {
   name: 'Bulbasaur',
   image: 'bulbasaur.webp',
+  types: ['Grass', 'Poison'],
 };
 
 /**
@@ -42,5 +48,6 @@ export function createPokemonData(
   return {
     name: overrides.name || 'Test Pokemon',
     image: overrides.image || 'test-pokemon.png',
+    types: overrides.types,
   };
 }

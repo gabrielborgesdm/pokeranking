@@ -7,7 +7,6 @@
  */
 import type { PokemonResponseDto } from "./pokemonResponseDto";
 import type { ZoneDto } from "./zoneDto";
-import type { RankingResponseDtoBackground } from "./rankingResponseDtoBackground";
 
 export interface RankingResponseDto {
   _id: string;
@@ -20,7 +19,7 @@ export interface RankingResponseDto {
    * Background theme ID for the full-page ranking view
    * @nullable
    */
-  background: RankingResponseDtoBackground;
+  background: string | null;
   createdAt: string;
   updatedAt: string;
 }
