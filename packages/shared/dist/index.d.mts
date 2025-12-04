@@ -97,4 +97,27 @@ declare function isValidThemeId(themeId: string): boolean;
  */
 declare function getThemeRequiredCount(themeId: string, totalPokemonInSystem: number): number;
 
-export { DEFAULT_THEME_ID, RANKING_THEMES, type RankingTheme, THEME_IDS, type ThemeTier, type ThemeUnlockProgress, type ThemeUnlockRequirement, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };
+declare const PokemonTypes: {
+    readonly Bug: "Bug";
+    readonly Dark: "Dark";
+    readonly Dragon: "Dragon";
+    readonly Electric: "Electric";
+    readonly Fairy: "Fairy";
+    readonly Fighting: "Fighting";
+    readonly Fire: "Fire";
+    readonly Flying: "Flying";
+    readonly Ghost: "Ghost";
+    readonly Grass: "Grass";
+    readonly Ground: "Ground";
+    readonly Ice: "Ice";
+    readonly Normal: "Normal";
+    readonly Poison: "Poison";
+    readonly Psychic: "Psychic";
+    readonly Rock: "Rock";
+    readonly Steel: "Steel";
+    readonly Water: "Water";
+};
+type PokemonType = (typeof PokemonTypes)[keyof typeof PokemonTypes];
+declare const POKEMON_TYPE_VALUES: ("Fire" | "Water" | "Grass" | "Electric" | "Psychic" | "Poison" | "Dragon" | "Ghost" | "Dark" | "Bug" | "Fairy" | "Fighting" | "Flying" | "Ground" | "Ice" | "Normal" | "Rock" | "Steel")[];
+
+export { DEFAULT_THEME_ID, POKEMON_TYPE_VALUES, type PokemonType, PokemonTypes, RANKING_THEMES, type RankingTheme, THEME_IDS, type ThemeTier, type ThemeUnlockProgress, type ThemeUnlockRequirement, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };

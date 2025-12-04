@@ -6,8 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-/**
- * Background theme ID for the full-page ranking view
- * @nullable
- */
-export type RankingResponseDtoBackground = { [key: string]: unknown } | null;
+export interface UploadResponseDto {
+  /** The URL of the uploaded image */
+  url: string;
+}

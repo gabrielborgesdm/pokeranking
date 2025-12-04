@@ -8,6 +8,7 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { RankingsModule } from './rankings/rankings.module';
 import { BoxesModule } from './boxes/boxes.module';
 import { SupportModule } from './support/support.module';
+import { UploadModule } from './upload/upload.module';
 import { CommonModule } from './common/common.module';
 import { SentryModule } from './sentry/sentry.module';
 import { I18nConfigModule } from './i18n/i18n.module';
@@ -45,6 +46,7 @@ import { getDatabaseConfig } from './config/database.config';
     RankingsModule,
     BoxesModule,
     SupportModule,
+    UploadModule,
   ],
   controllers: [],
   providers: [

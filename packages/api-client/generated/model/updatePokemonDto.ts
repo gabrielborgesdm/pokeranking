@@ -5,9 +5,12 @@
  * API for managing Pokemon and user rankings
  * OpenAPI spec version: 1.0
  */
+import type { UpdatePokemonDtoTypesItem } from "./updatePokemonDtoTypesItem";
 
 export interface UpdatePokemonDto {
   name?: string;
   /** Pokemon image - either a filename (e.g., "pikachu.png") or a URL from whitelisted domains */
   image?: string;
+  /** Pokemon types */
+  types?: UpdatePokemonDtoTypesItem[];
 }

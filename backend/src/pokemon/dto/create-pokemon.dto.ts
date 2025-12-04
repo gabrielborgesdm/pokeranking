@@ -1,6 +1,13 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  IsString,
+  IsArray,
+  IsIn,
+  IsOptional,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsImageString } from '../../common/validators';
+import { POKEMON_TYPE_VALUES, type PokemonType } from '@pokeranking/shared';
 
 export class CreatePokemonDto {
   @ApiProperty({ example: 'Pikachu' })
@@ -17,4 +24,15 @@ export class CreatePokemonDto {
   @IsNotEmpty()
   @IsImageString()
   image: string;
+
+  @ApiPropertyOptional({
+    example: ['Electric'],
+    description: 'Pokemon types',
+    enum: POKEMON_TYPE_VALUES,
+    isArray: true,
+  })
+  @IsArray()
+  @IsIn(POKEMON_TYPE_VALUES, { each: true })
+  @IsOptional()
+  types?: PokemonType[];
 }
