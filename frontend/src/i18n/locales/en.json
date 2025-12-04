@@ -18,11 +18,13 @@
   },
   "nav": {
     "leaderboard": "Leaderboard",
+    "myRankings": "My Rankings",
     "about": "About",
     "design": "Design",
     "signIn": "Sign in",
     "signOut": "Sign out",
     "settings": "Settings",
+    "support": "Support",
     "lightMode": "Light mode",
     "darkMode": "Dark mode",
     "openMenu": "Open menu",
@@ -97,5 +99,53 @@
     "previous": "Previous page",
     "next": "Next page",
     "page": "Page {{current}} of {{total}}"
+  },
+  "myRankings": {
+    "title": "My Rankings",
+    "description": "Your personal Pokemon tier lists",
+    "noRankings": "You haven't created any rankings yet.",
+    "errorTitle": "Error loading rankings",
+    "errorDescription": "Please try again later.",
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon",
+    "createNew": "Create New"
+  },
+  "rankingForm": {
+    "createTitle": "Create New Ranking",
+    "createDescription": "Set up your new Pokemon tier list",
+    "editTitle": "Edit Ranking",
+    "editDescription": "Update your ranking settings",
+    "titleLabel": "Title",
+    "titlePlaceholder": "My Favorite Pokemon",
+    "themeLabel": "Card Theme",
+    "themeDescription": "Choose how your ranking card appears. Unlock more themes by adding Pokemon!",
+    "unlockRequirement": "{{current}}/{{required}} Pokemon to unlock",
+    "themeTier": {
+      "starter": "Starter Themes",
+      "intermediate": "Intermediate Themes",
+      "advanced": "Advanced Themes",
+      "premium": "Premium Themes"
+    },
+    "cardPreview": "Card Preview",
+    "backgroundLabel": "Page Background",
+    "backgroundDescription": "Choose a background theme for the full-page ranking view",
+    "backgroundPreview": "Background Preview",
+    "sameAsCard": "Same as card theme",
+    "create": "Create Ranking",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "saveFailed": "Failed to save ranking"
+  },
+  "support": {
+    "title": "Support & Feedback",
+    "description": "Have a question or suggestion? We'd love to hear from you!",
+    "messageLabel": "Your Message",
+    "messagePlaceholder": "Tell us what's on your mind... (min 10 characters)",
+    "submit": "Send Feedback",
+    "submitting": "Sending...",
+    "successTitle": "Thank you!",
+    "successMessage": "Your feedback has been submitted successfully.",
+    "errorMessage": "Failed to submit feedback. Please try again.",
+    "characterCount": "{{count}}/2000 characters"
   }
 }

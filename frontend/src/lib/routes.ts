@@ -8,6 +8,8 @@ export const routes = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   settings: "/settings",
+  myRankings: "/my-rankings",
+  support: "/support",
 } as const;
 
 export const publicPaths = [

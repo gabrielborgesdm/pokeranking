@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, Settings, LogOut, User, Trophy, Info, Palette, LucideIcon } from "lucide-react";
+import { Menu, Settings, LogOut, User, Trophy, Info, Palette, List, MessageSquare, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -69,6 +69,9 @@ export function Navbar() {
 
   const navLinks: NavLink[] = [
     { href: routes.home, label: t("nav.leaderboard"), icon: Trophy },
+    ...(isAuthenticated
+      ? [{ href: routes.myRankings, label: t("nav.myRankings"), icon: List }]
+      : []),
     { href: routes.about, label: t("nav.about"), icon: Info },
     { href: routes.design, label: t("nav.design"), icon: Palette },
   ];
@@ -102,6 +105,12 @@ export function Navbar() {
                   <Link href={routes.settings}>
                     <Settings className="mr-2 h-4 w-4" />
                     {t("nav.settings")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={routes.support}>
+                    <MessageSquare className="mr-2 h-4 w-4" />
+                    {t("nav.support")}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -158,6 +167,13 @@ export function Navbar() {
                     >
                       <Settings className="h-5 w-5" />
                       {t("nav.settings")}
+                    </Link>
+                    <Link
+                      href={routes.support}
+                      className="flex items-center gap-2 text-lg font-medium text-foreground transition-colors hover:text-primary"
+                    >
+                      <MessageSquare className="h-5 w-5" />
+                      {t("nav.support")}
                     </Link>
                     <button
                       onClick={() => signOut()}

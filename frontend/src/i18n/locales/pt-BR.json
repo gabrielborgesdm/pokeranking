@@ -18,6 +18,7 @@
   },
   "nav": {
     "leaderboard": "Ranking",
+    "myRankings": "Meus Rankings",
     "about": "Sobre",
     "design": "Design",
     "signIn": "Entrar",
@@ -27,7 +28,8 @@
     "darkMode": "Modo escuro",
     "openMenu": "Abrir menu",
     "userMenu": "Menu do usuário",
-    "toggleTheme": "Alternar tema"
+    "toggleTheme": "Alternar tema",
+    "support": "Suporte"
   },
   "auth": {
     "signIn": "Entrar",
@@ -97,5 +99,53 @@
     "previous": "Página anterior",
     "next": "Próxima página",
     "page": "Página {{current}} de {{total}}"
+  },
+  "myRankings": {
+    "title": "Meus Rankings",
+    "description": "Suas tier lists pessoais de Pokemon",
+    "noRankings": "Voce ainda nao criou nenhum ranking.",
+    "errorTitle": "Erro ao carregar rankings",
+    "errorDescription": "Por favor, tente novamente mais tarde.",
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon",
+    "createNew": "Criar Novo"
+  },
+  "rankingForm": {
+    "createTitle": "Criar Novo Ranking",
+    "createDescription": "Configure sua nova tier list de Pokemon",
+    "editTitle": "Editar Ranking",
+    "editDescription": "Atualize as configurações do seu ranking",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Meus Pokemon Favoritos",
+    "themeLabel": "Tema do Card",
+    "themeDescription": "Escolha como seu card de ranking aparece. Desbloqueie mais temas adicionando Pokemon!",
+    "unlockRequirement": "{{current}}/{{required}} Pokemon para desbloquear",
+    "themeTier": {
+      "starter": "Temas Iniciais",
+      "intermediate": "Temas Intermediários",
+      "advanced": "Temas Avançados",
+      "premium": "Temas Premium"
+    },
+    "cardPreview": "Prévia do Card",
+    "backgroundLabel": "Fundo da Página",
+    "backgroundDescription": "Escolha um tema de fundo para a visualização de página inteira do ranking",
+    "backgroundPreview": "Prévia do Fundo",
+    "sameAsCard": "Mesmo tema do card",
+    "create": "Criar Ranking",
+    "save": "Salvar Alterações",
+    "saving": "Salvando...",
+    "saveFailed": "Falha ao salvar ranking"
+  },
+  "support": {
+    "title": "Suporte e Feedback",
+    "description": "Tem alguma dúvida ou sugestão? Adoraríamos ouvir você!",
+    "messageLabel": "Sua Mensagem",
+    "messagePlaceholder": "Conte-nos o que está pensando... (mín. 10 caracteres)",
+    "submit": "Enviar Feedback",
+    "submitting": "Enviando...",
+    "successTitle": "Obrigado!",
+    "successMessage": "Seu feedback foi enviado com sucesso.",
+    "errorMessage": "Falha ao enviar feedback. Tente novamente.",
+    "characterCount": "{{count}}/2000 caracteres"
   }
 }
