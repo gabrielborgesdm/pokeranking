@@ -54,6 +54,11 @@ export class UploadService {
       );
     }
 
+    // Handle empty or undefined files array
+    if (!files || files.length === 0) {
+      return [];
+    }
+
     // Upload all files in parallel
     const results = await Promise.all(
       files.map(async (file): Promise<BulkUploadItemDto> => {

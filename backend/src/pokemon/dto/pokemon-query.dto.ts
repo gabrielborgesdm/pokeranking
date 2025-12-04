@@ -67,12 +67,12 @@ export class PokemonQueryDto {
     enum: POKEMON_TYPE_VALUES,
     isArray: true,
   })
-  @Transform(({ value }) => {
+  @Transform(({ value }: { value: unknown }) => {
     // Handle comma-separated string or array
     if (typeof value === 'string') {
       return value.split(',').map((v) => v.trim());
     }
-    return value;
+    return value as string[];
   })
   @IsIn(POKEMON_TYPE_VALUES, { each: true })
   @IsOptional()
