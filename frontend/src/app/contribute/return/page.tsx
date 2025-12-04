@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { DonationCompleteTracker } from "@/components/donation-complete-tracker";
 import { stripe } from "@/lib/stripe";
 import { routes } from "@/lib/routes";
 
@@ -33,6 +34,7 @@ export default async function ReturnPage({ searchParams }: ReturnPageProps) {
 
     return (
       <main className="container mx-auto px-4 py-8 max-w-2xl">
+        <DonationCompleteTracker />
         <Card>
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900">

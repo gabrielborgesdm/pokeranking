@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { ConditionalNavbar } from "@/components/conditional-navbar";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -87,6 +88,7 @@ export default function RootLayout({
           {children}
         </Providers>
         <Toaster richColors position="top-right" />
+        <GoogleAnalytics />
       </body>
     </html>
   );
