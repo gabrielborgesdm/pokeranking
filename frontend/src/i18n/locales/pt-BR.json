@@ -109,9 +109,10 @@
     "orderDesc": "Decrescente"
   },
   "pagination": {
-    "previous": "Página anterior",
-    "next": "Próxima página",
-    "page": "Página {{current}} de {{total}}"
+    "previous": "Anterior",
+    "next": "Próximo",
+    "page": "Página {{current}} de {{total}}",
+    "showing": "Mostrando {{from}}-{{to}} de {{total}}"
   },
   "myRankings": {
     "title": "Meus Rankings",
