@@ -61,4 +61,63 @@ export class CloudinaryProvider extends BaseImageProvider {
       uploadStream.end(file.buffer);
     });
   }
+
+  async deleteImage(imageUrl: string): Promise<boolean> {
+    if (!this.isConfigured) {
+      this.logger.warn('Cloudinary not configured, cannot delete image');
+      return false;
+    }
+
+    try {
+      // Extract public_id from Cloudinary URL
+      // URL format: https://res.cloudinary.com/{cloud_name}/image/upload/{version}/{folder}/{filename}.{ext}
+      const publicId = this.extractPublicId(imageUrl);
+      if (!publicId) {
+        this.logger.warn(`Could not extract public_id from URL: ${imageUrl}`);
+        return false;
+      }
+
+      const result = await cloudinary.uploader.destroy(publicId);
+      if (result.result === 'ok') {
+        this.logger.log(`Successfully deleted image: ${publicId}`);
+        return true;
+      }
+
+      this.logger.warn(`Failed to delete image: ${publicId}, result: ${result.result}`);
+      return false;
+    } catch (error) {
+      this.logger.error(`Failed to delete image: ${imageUrl}`, error);
+      return false;
+    }
+  }
+
+  private extractPublicId(imageUrl: string): string | null {
+    try {
+      const url = new URL(imageUrl);
+      // Check if it's a Cloudinary URL
+      if (!url.hostname.includes('cloudinary.com')) {
+        return null;
+      }
+
+      // Path format: /image/upload/{version}/{public_id}.{ext}
+      // or: /image/upload/{public_id}.{ext}
+      const pathParts = url.pathname.split('/');
+      const uploadIndex = pathParts.indexOf('upload');
+      if (uploadIndex === -1) {
+        return null;
+      }
+
+      // Get everything after 'upload', skip version if present (starts with 'v' followed by numbers)
+      let startIndex = uploadIndex + 1;
+      if (pathParts[startIndex]?.match(/^v\d+$/)) {
+        startIndex++;
+      }
+
+      // Join remaining parts and remove file extension
+      const publicIdWithExt = pathParts.slice(startIndex).join('/');
+      return publicIdWithExt.replace(/\.[^/.]+$/, '');
+    } catch {
+      return null;
+    }
+  }
 }

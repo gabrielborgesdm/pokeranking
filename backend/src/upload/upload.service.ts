@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { BaseImageProvider } from './providers';
 import { IMAGE_PROVIDER_TOKEN } from './upload.constants';
+import { BulkUploadItemDto } from './dto/bulk-upload-response.dto';
 
 const ALLOWED_MIME_TYPES = [
   'image/jpeg',
@@ -41,6 +42,56 @@ export class UploadService {
     } catch (error) {
       this.logger.error('Image upload failed', error);
       throw new BadRequestException('Failed to upload image');
+    }
+  }
+
+  async uploadImages(
+    files: Express.Multer.File[],
+  ): Promise<BulkUploadItemDto[]> {
+    if (!this.imageProvider.isConfigured) {
+      throw new BadRequestException(
+        `Image upload is not configured. Please set ${this.imageProvider.name} credentials.`,
+      );
+    }
+
+    // Upload all files in parallel
+    const results = await Promise.all(
+      files.map(async (file): Promise<BulkUploadItemDto> => {
+        try {
+          this.validateFile(file);
+          const result = await this.imageProvider.uploadImage(file, 'pokemon');
+          return {
+            filename: file.originalname,
+            success: true,
+            url: result.url,
+          };
+        } catch (error) {
+          return {
+            filename: file.originalname,
+            success: false,
+            error:
+              error instanceof BadRequestException
+                ? error.message
+                : 'Failed to upload image',
+          };
+        }
+      }),
+    );
+
+    return results;
+  }
+
+  async deleteImage(imageUrl: string): Promise<boolean> {
+    if (!this.imageProvider.isConfigured) {
+      this.logger.warn('Image provider not configured, cannot delete image');
+      return false;
+    }
+
+    try {
+      return await this.imageProvider.deleteImage(imageUrl);
+    } catch (error) {
+      this.logger.error('Image deletion failed', error);
+      return false;
     }
   }
 

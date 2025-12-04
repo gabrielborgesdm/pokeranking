@@ -11,4 +11,11 @@ export abstract class BaseImageProvider {
     file: Express.Multer.File,
     folder: string,
   ): Promise<UploadResult>;
+
+  /**
+   * Delete an image from the provider.
+   * @param imageUrl The URL of the image to delete
+   * @returns true if deletion was successful, false otherwise
+   */
+  abstract deleteImage(imageUrl: string): Promise<boolean>;
 }
