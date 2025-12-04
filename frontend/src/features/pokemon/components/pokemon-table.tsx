@@ -1,10 +1,10 @@
 "use client";
 
 import { memo } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Edit, Trash2, Loader2 } from "lucide-react";
+import { PokemonImage } from "@/components/pokemon-image";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -36,6 +36,7 @@ interface PokemonTableProps {
   isLoading: boolean;
   isDeleting: boolean;
   onDelete: (id: string) => void;
+  skeletonRows?: number;
 }
 
 export const PokemonTable = memo(function PokemonTable({
@@ -43,11 +44,12 @@ export const PokemonTable = memo(function PokemonTable({
   isLoading,
   isDeleting,
   onDelete,
+  skeletonRows = 10,
 }: PokemonTableProps) {
   const { t } = useTranslation();
 
   if (isLoading) {
-    return <PokemonTableSkeleton />;
+    return <PokemonTableSkeleton rows={skeletonRows} />;
   }
 
   if (pokemon.length === 0) {
@@ -74,11 +76,10 @@ export const PokemonTable = memo(function PokemonTable({
             <TableRow key={p._id}>
               <TableCell>
                 <div className="relative h-10 w-10">
-                  <Image
-                    src={p.image.startsWith("http") ? p.image : `/pokemon/${p.image}`}
+                  <PokemonImage
+                    src={p.image}
                     alt={p.name}
                     fill
-                    className="object-contain"
                   />
                 </div>
               </TableCell>
@@ -148,7 +149,7 @@ export const PokemonTable = memo(function PokemonTable({
   );
 });
 
-function PokemonTableSkeleton() {
+function PokemonTableSkeleton({ rows = 9 }: { rows?: number }) {
   return (
     <div className="rounded-md border">
       <Table>
@@ -169,7 +170,7 @@ function PokemonTableSkeleton() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {Array.from({ length: 5 }).map((_, i) => (
+          {Array.from({ length: rows }).map((_, i) => (
             <TableRow key={i}>
               <TableCell>
                 <Skeleton className="h-10 w-10 rounded" />
