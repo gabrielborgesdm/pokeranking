@@ -1,0 +1,140 @@
+"use client";
+
+import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { Lock } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  RANKING_THEMES,
+  isThemeAvailable,
+  getThemeUnlockProgress,
+  DEFAULT_THEME_ID,
+  type RankingTheme,
+  type ThemeTier,
+} from "@pokeranking/shared";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Progress } from "@/components/ui/progress";
+
+interface ThemePickerProps {
+  value?: string;
+  onChange: (themeId: string) => void;
+  pokemonCount: number;
+  totalPokemonInSystem: number;
+  className?: string;
+}
+
+const TIER_ORDER: ThemeTier[] = ["starter", "intermediate", "advanced", "premium"];
+
+export const ThemePicker = memo(function ThemePicker({
+  value = DEFAULT_THEME_ID,
+  onChange,
+  pokemonCount,
+  totalPokemonInSystem,
+  className,
+}: ThemePickerProps) {
+  const { t } = useTranslation();
+
+  const groupedThemes = useMemo(() => {
+    const groups: Record<ThemeTier, RankingTheme[]> = {
+      starter: [],
+      intermediate: [],
+      advanced: [],
+      premium: [],
+    };
+
+    RANKING_THEMES.forEach((theme) => {
+      groups[theme.tier].push(theme);
+    });
+
+    return groups;
+  }, []);
+
+  const renderThemeButton = (theme: RankingTheme) => {
+    const available = isThemeAvailable(
+      theme.id,
+      pokemonCount,
+      totalPokemonInSystem
+    );
+    const isSelected = value === theme.id;
+    const progress = getThemeUnlockProgress(
+      theme,
+      pokemonCount,
+      totalPokemonInSystem
+    );
+
+    const button = (
+      <button
+        key={theme.id}
+        type="button"
+        onClick={() => available && onChange(theme.id)}
+        disabled={!available}
+        className={cn(
+          "relative w-16 h-16 rounded-lg transition-all border-2 border-transparent",
+          theme.gradientClass,
+          isSelected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
+          available
+            ? "cursor-pointer hover:scale-105"
+            : "opacity-50 cursor-not-allowed"
+        )}
+        aria-label={theme.displayName}
+      >
+        {!available && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+            <Lock className="w-5 h-5 text-white" />
+          </div>
+        )}
+      </button>
+    );
+
+    if (!available) {
+      return (
+        <Tooltip key={theme.id}>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent className="max-w-xs p-3">
+            <div className="space-y-2">
+              <p className="font-medium">{theme.displayName}</p>
+              <p className="text-xs opacity-80">
+                {t("rankingForm.unlockRequirement", {
+                  current: progress.current,
+                  required: progress.required,
+                })}
+              </p>
+              <Progress value={progress.percentage} className="h-2" />
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return (
+      <Tooltip key={theme.id}>
+        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipContent>{theme.displayName}</TooltipContent>
+      </Tooltip>
+    );
+  };
+
+  return (
+    <div className={cn("space-y-4", className)}>
+      {TIER_ORDER.map((tier) => {
+        const themes = groupedThemes[tier];
+        if (themes.length === 0) return null;
+
+        return (
+          <div key={tier} className="space-y-2">
+            <h4 className="text-sm font-medium text-muted-foreground capitalize">
+              {t(`rankingForm.themeTier.${tier}`)}
+            </h4>
+            <div className="flex flex-wrap gap-3">
+              {themes.map(renderThemeButton)}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+});

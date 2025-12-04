@@ -1,6 +1,8 @@
 // Components
 export { UserCard } from "./components/user-card";
-export type { PokemonTypeVariant } from "./components/user-card";
+
+// Re-export shared types from lib
+export type { PokemonTypeVariant } from "@/lib/pokemon-variants";
 
 export { UserCardSkeleton } from "./components/user-card-skeleton";
 

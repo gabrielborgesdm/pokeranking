@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export type SortByOption = "rankedPokemonCount" | "username" | "createdAt";
 export type OrderOption = "asc" | "desc";
@@ -33,17 +34,21 @@ export const LeaderboardFilters = memo(function LeaderboardFilters({
   onOrderChange,
 }: LeaderboardFiltersProps) {
   const { t } = useTranslation();
+  const { trackPokemonSearch } = useAnalytics();
   const [inputValue, setInputValue] = useState(searchValue);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (inputValue !== searchValue) {
         onSearchChange(inputValue);
+        if (inputValue.trim()) {
+          trackPokemonSearch(inputValue.trim());
+        }
       }
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [inputValue, searchValue, onSearchChange]);
+  }, [inputValue, searchValue, onSearchChange, trackPokemonSearch]);
 
   useEffect(() => {
     setInputValue(searchValue);

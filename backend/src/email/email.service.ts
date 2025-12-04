@@ -17,9 +17,11 @@ export class EmailService {
   private readonly resend: Resend;
   private readonly fromEmail: string;
   private readonly frontendUrl: string;
+  private readonly supportEmail: string | undefined;
   private readonly emailVerificationRequired: boolean;
   private readonly verifyEmailTemplate: HandlebarsTemplateDelegate;
   private readonly resetPasswordTemplate: HandlebarsTemplateDelegate;
+  private readonly supportNotificationTemplate: HandlebarsTemplateDelegate;
 
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.getOrThrow<string>('RESEND_API_KEY');
@@ -30,6 +32,7 @@ export class EmailService {
       'FRONTEND_URL',
       'http://localhost:3000',
     );
+    this.supportEmail = this.configService.get<string>('SUPPORT_EMAIL');
     this.emailVerificationRequired = this.configService.get<boolean>(
       'EMAIL_VERIFICATION_REQUIRED',
       true,
@@ -45,9 +48,16 @@ export class EmailService {
       join(templatesDir, 'reset-password.hbs'),
       'utf-8',
     );
+    const supportNotificationHtml = readFileSync(
+      join(templatesDir, 'support-notification.hbs'),
+      'utf-8',
+    );
 
     this.verifyEmailTemplate = Handlebars.compile(verifyEmailHtml);
     this.resetPasswordTemplate = Handlebars.compile(resetPasswordHtml);
+    this.supportNotificationTemplate = Handlebars.compile(
+      supportNotificationHtml,
+    );
   }
 
   async sendVerificationEmail(user: User, code: string): Promise<boolean> {
@@ -129,6 +139,53 @@ export class EmailService {
       throw new ServiceUnavailableException({
         key: TK.COMMON.EMAIL_SEND_FAILED,
       });
+    }
+  }
+
+  async sendSupportNotification(
+    username: string,
+    userEmail: string,
+    message: string,
+  ): Promise<boolean> {
+    if (!this.supportEmail) {
+      this.logger.log(
+        'Support email not configured, skipping support notification',
+      );
+      return true;
+    }
+
+    try {
+      const html = this.supportNotificationTemplate({
+        username,
+        userEmail,
+        message,
+        timestamp: new Date().toISOString(),
+        year: new Date().getFullYear(),
+      });
+
+      const { data, error } = await this.resend.emails.send({
+        from: this.fromEmail,
+        to: this.supportEmail,
+        replyTo: userEmail,
+        subject: `[Support] New feedback from ${username}`,
+        html,
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      this.logger.debug(
+        `Support notification sent to ${this.supportEmail} (ID: ${data?.id})`,
+      );
+      return true;
+    } catch (error) {
+      this.logger.error(
+        `Failed to send support notification email`,
+        error instanceof Error ? error.stack : String(error),
+      );
+      // Don't throw - support notification failure shouldn't break the flow
+      return false;
     }
   }
 }

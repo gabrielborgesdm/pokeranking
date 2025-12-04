@@ -2,14 +2,8 @@
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { pokemonVariantClasses, type PokemonTypeVariant } from "@/lib/pokemon-variants";
 import { memo, useMemo } from "react";
-
-export type PokemonTypeVariant =
-  | "grass"
-  | "water"
-  | "fire"
-  | "electric"
-  | "special";
 
 interface UserCardProps {
   rank: number;
@@ -19,14 +13,6 @@ interface UserCardProps {
   variant?: PokemonTypeVariant;
   className?: string;
 }
-
-const variantClasses: Record<PokemonTypeVariant, string> = {
-  grass: "gradient-type-grass",
-  water: "gradient-type-water",
-  fire: "gradient-type-fire",
-  electric: "gradient-type-electric",
-  special: "gradient-type-special",
-};
 
 export const UserCard = memo(function UserCard({
   rank,
@@ -45,7 +31,7 @@ export const UserCard = memo(function UserCard({
     <div
       className={cn(
         "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105 hover:cursor-pointer",
-        variantClasses[variant],
+        pokemonVariantClasses[variant],
         className
       )}
     >

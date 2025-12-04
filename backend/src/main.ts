@@ -1,3 +1,6 @@
+// Sentry must be imported before any other imports
+import './sentry/instrument';
+
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
@@ -44,9 +47,7 @@ async function bootstrap() {
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
-          name: 'JWT',
           description: 'Enter JWT token',
-          in: 'header',
         },
         'JWT-auth',
       )

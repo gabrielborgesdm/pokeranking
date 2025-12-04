@@ -1,14 +1,15 @@
 import { z } from "zod";
 
-const configSchema = z.object({
+// Server-side config (includes secrets)
+const serverConfigSchema = z.object({
   apiUrl: z.string().url(),
   nextAuthSecret: z.string().min(1),
 });
 
-export type Config = z.infer<typeof configSchema>;
+export type ServerConfig = z.infer<typeof serverConfigSchema>;
 
-export function getConfig(): Config {
-  const result = configSchema.safeParse({
+export function getServerConfig(): ServerConfig {
+  const result = serverConfigSchema.safeParse({
     apiUrl: process.env.NEXT_PUBLIC_API_URL,
     nextAuthSecret: process.env.NEXTAUTH_SECRET,
   });
@@ -17,8 +18,43 @@ export function getConfig(): Config {
     const missing = result.error.issues
       .map((issue) => issue.path.join("."))
       .join(", ");
-    throw new Error(`Invalid environment configuration: ${missing}`);
+    console.error(`Invalid server configuration: ${missing}`);
+    throw new Error(`Invalid server configuration: ${missing}`);
   }
 
   return result.data;
 }
+
+// Client-side config (only NEXT_PUBLIC_ vars)
+const clientConfigSchema = z.object({
+  apiUrl: z.string().url(),
+  githubUrl: z.string().url().optional(),
+  stripePublishableKey: z.string().optional(),
+  stripePriceId: z.string().optional(),
+});
+
+export type ClientConfig = z.infer<typeof clientConfigSchema>;
+
+export function getClientConfig(): ClientConfig {
+  const result = clientConfigSchema.safeParse({
+    apiUrl: process.env.NEXT_PUBLIC_API_URL,
+    githubUrl: process.env.NEXT_PUBLIC_GITHUB_URL || undefined,
+    stripePublishableKey:
+      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || undefined,
+    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || undefined,
+  });
+
+  if (!result.success) {
+    const missing = result.error.issues
+      .map((issue) => issue.path.join("."))
+      .join(", ");
+    console.error(`Invalid client configuration: ${missing}`);
+    throw new Error(`Invalid client configuration: ${missing}`);
+  }
+
+  return result.data;
+}
+
+// Legacy alias for backward compatibility
+export const getConfig = getServerConfig;
+export type Config = ServerConfig;

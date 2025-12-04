@@ -12,6 +12,7 @@ export class PublicUserResponseDto {
   @ApiPropertyOptional({ example: 'https://example.com/avatar.jpg' })
   profilePic?: string;
 
+  @Expose()
   @Type(() => RankingResponseDto)
   @ApiProperty({ type: [RankingResponseDto] })
   rankings: RankingResponseDto[];

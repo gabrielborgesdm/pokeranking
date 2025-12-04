@@ -26,6 +26,18 @@ export class RankingResponseDto {
   zones: ZoneDto[];
 
   @Expose()
+  @ApiProperty({ example: 'fire', description: 'Theme ID for the ranking card' })
+  theme: string;
+
+  @Expose()
+  @ApiProperty({
+    example: 'ocean',
+    description: 'Background theme ID for the full-page ranking view',
+    nullable: true,
+  })
+  background: string | null;
+
+  @Expose()
   @ApiProperty({ example: '2024-01-15T10:30:00.000Z' })
   createdAt: Date;
 

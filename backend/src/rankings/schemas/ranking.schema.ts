@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types, Schema as MongooseSchema } from 'mongoose';
+import { DEFAULT_THEME_ID } from '@pokeranking/shared';
 
 // Zone subdocument schema
 @Schema({ _id: false })
@@ -70,6 +71,20 @@ export class Ranking extends Document {
     default: [],
   })
   zones: Zone[];
+
+  @Prop({
+    type: String,
+    default: DEFAULT_THEME_ID,
+    trim: true,
+  })
+  theme: string;
+
+  @Prop({
+    type: String,
+    default: null,
+    trim: true,
+  })
+  background: string | null;
 
   createdAt: Date;
   updatedAt: Date;

@@ -1,6 +1,7 @@
 {
   "common": {
-    "or": "ou"
+    "or": "ou",
+    "retry": "Tentar novamente"
   },
   "pokemonTypes": {
     "Bug": "Inseto",
@@ -18,7 +19,8 @@
   },
   "nav": {
     "leaderboard": "Ranking",
-    "about": "Sobre",
+    "myRankings": "Meus Rankings",
+    "contribute": "Contribuir",
     "design": "Design",
     "signIn": "Entrar",
     "signOut": "Sair",
@@ -27,7 +29,8 @@
     "darkMode": "Modo escuro",
     "openMenu": "Abrir menu",
     "userMenu": "Menu do usuário",
-    "toggleTheme": "Alternar tema"
+    "toggleTheme": "Alternar tema",
+    "support": "Suporte"
   },
   "auth": {
     "signIn": "Entrar",
@@ -97,5 +100,68 @@
     "previous": "Página anterior",
     "next": "Próxima página",
     "page": "Página {{current}} de {{total}}"
+  },
+  "myRankings": {
+    "title": "Meus Rankings",
+    "description": "Suas tier lists pessoais de Pokemon",
+    "noRankings": "Voce ainda nao criou nenhum ranking.",
+    "errorTitle": "Erro ao carregar rankings",
+    "errorDescription": "Por favor, tente novamente mais tarde.",
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon",
+    "createNew": "Criar Novo"
+  },
+  "rankingForm": {
+    "createTitle": "Criar Novo Ranking",
+    "createDescription": "Configure sua nova tier list de Pokemon",
+    "editTitle": "Editar Ranking",
+    "editDescription": "Atualize as configurações do seu ranking",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Meus Pokemon Favoritos",
+    "themeLabel": "Tema do Card",
+    "themeDescription": "Escolha como seu card de ranking aparece. Desbloqueie mais temas adicionando Pokemon!",
+    "unlockRequirement": "{{current}}/{{required}} Pokemon para desbloquear",
+    "themeTier": {
+      "starter": "Temas Iniciais",
+      "intermediate": "Temas Intermediários",
+      "advanced": "Temas Avançados",
+      "premium": "Temas Premium"
+    },
+    "cardPreview": "Prévia do Card",
+    "cardPreviewDescription": "Como seu ranking aparece na página Meus Rankings",
+    "backgroundLabel": "Fundo da Página",
+    "backgroundDescription": "Escolha um tema de fundo para a visualização de página inteira do ranking",
+    "backgroundPreview": "Prévia do Fundo",
+    "backgroundPreviewDescription": "Como a página completa do ranking vai parecer",
+    "sameAsCard": "Mesmo tema do card",
+    "create": "Criar Ranking",
+    "save": "Salvar Alterações",
+    "saving": "Salvando...",
+    "saveFailed": "Falha ao salvar ranking"
+  },
+  "support": {
+    "title": "Suporte e Feedback",
+    "description": "Tem alguma dúvida ou sugestão? Adoraríamos ouvir você!",
+    "messageLabel": "Sua Mensagem",
+    "messagePlaceholder": "Conte-nos o que está pensando... (mín. 10 caracteres)",
+    "submit": "Enviar Feedback",
+    "submitting": "Enviando...",
+    "successTitle": "Obrigado!",
+    "successMessage": "Seu feedback foi enviado com sucesso.",
+    "errorMessage": "Falha ao enviar feedback. Tente novamente.",
+    "characterCount": "{{count}}/2000 caracteres"
+  },
+  "contribute": {
+    "title": "Contribuir",
+    "description": "Ajude a manter o Pokeranking funcionando e crescendo!",
+    "github": {
+      "title": "Dê uma estrela no GitHub",
+      "description": "Dar uma estrela é como dar um joinha! Ajuda mais pessoas a descobrirem o Pokeranking e mostra seu apoio. É grátis e leva apenas um clique.",
+      "button": "Dar uma Estrela"
+    },
+    "stripe": {
+      "title": "Nos Apoie",
+      "description": "Faça uma doação única para ajudar a cobrir custos de servidor e desenvolvimento. Pague com Cartão ou Pix."
+    }
   }
 }

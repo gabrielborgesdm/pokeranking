@@ -1,16 +1,15 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import {
+  ALL_POKEMON,
+  createPokemonData,
+  PIKACHU,
+} from '../fixtures/pokemon.fixture';
+import { ADMIN_USER, REGULAR_USER } from '../fixtures/user.fixture';
+import { loginUser } from '../helpers/auth.helper';
+import { seedPokemon, seedUsers } from '../helpers/seed.helper';
 import { createTestApp } from '../utils/test-app.util';
 import { clearDatabase } from '../utils/test-db.util';
-import { ADMIN_USER, REGULAR_USER } from '../fixtures/user.fixture';
-import {
-  PIKACHU,
-  CHARIZARD,
-  createPokemonData,
-  ALL_POKEMON,
-} from '../fixtures/pokemon.fixture';
-import { seedUsers, seedPokemon } from '../helpers/seed.helper';
-import { loginUser } from '../helpers/auth.helper';
 
 describe('Pokemon (e2e)', () => {
   let app: INestApplication;
@@ -337,10 +336,12 @@ describe('Pokemon (e2e)', () => {
         .expect(404);
     });
 
-    it('should return 401 when not authenticated', async () => {
-      await request(app.getHttpServer())
+    it('should return pokemon when not authenticated (public endpoint)', async () => {
+      const response = await request(app.getHttpServer())
         .get(`/pokemon/${pokemonId}`)
-        .expect(401);
+        .expect(200);
+
+      expect(response.body).toHaveProperty('name', 'Pikachu');
     });
   });
 
