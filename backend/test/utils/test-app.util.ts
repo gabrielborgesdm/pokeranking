@@ -11,6 +11,7 @@ import { PokemonModule } from '../../src/pokemon/pokemon.module';
 import { RankingsModule } from '../../src/rankings/rankings.module';
 import { BoxesModule } from '../../src/boxes/boxes.module';
 import { SupportModule } from '../../src/support/support.module';
+import { UploadModule } from '../../src/upload/upload.module';
 import { CommonModule } from '../../src/common/common.module';
 import { SentryModule } from '../../src/sentry/sentry.module';
 import { JwtAuthGuard } from '../../src/common/guards/jwt-auth.guard';
@@ -54,6 +55,7 @@ export async function createTestApp(): Promise<INestApplication> {
       RankingsModule,
       BoxesModule,
       SupportModule,
+      UploadModule,
     ],
     providers: [
       // Global authentication guard (same as production)

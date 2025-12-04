@@ -67,9 +67,9 @@ export const LeaderboardFilters = memo(function LeaderboardFilters({
         />
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 w-full sm:w-auto">
         <Select value={sortBy} onValueChange={onSortByChange}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="flex-1 sm:flex-none sm:w-[160px]">
             <SelectValue placeholder={t("leaderboard.sortBy")} />
           </SelectTrigger>
           <SelectContent>
@@ -86,7 +86,7 @@ export const LeaderboardFilters = memo(function LeaderboardFilters({
         </Select>
 
         <Select value={order} onValueChange={onOrderChange}>
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="flex-1 sm:flex-none sm:w-[140px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

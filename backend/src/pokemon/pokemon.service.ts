@@ -12,8 +12,10 @@ import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PokemonResponseDto } from './dto/pokemon-response.dto';
 import { PokemonQueryDto } from './dto/pokemon-query.dto';
+import { BulkCreatePokemonItemDto } from './dto/bulk-create-pokemon-response.dto';
 import { stripUndefined, toDto } from 'src/common/utils/transform.util';
 import { CacheService } from 'src/common/services/cache.service';
+import { UploadService } from '../upload/upload.service';
 import type { FilterQuery } from 'mongoose';
 
 const POKEMON_ALL_CACHE_KEY = 'pokemon:all';
@@ -22,9 +24,12 @@ const POKEMON_COUNT_CACHE_TTL = 86400; // 24 hours
 
 @Injectable()
 export class PokemonService {
+  private readonly logger = new Logger(PokemonService.name);
+
   constructor(
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     private readonly cacheService: CacheService,
+    private readonly uploadService: UploadService,
   ) {}
 
   async create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
@@ -45,6 +50,64 @@ export class PokemonService {
     await this.invalidateCountCache();
 
     return saved;
+  }
+
+  async createBulk(
+    pokemonList: CreatePokemonDto[],
+  ): Promise<BulkCreatePokemonItemDto[]> {
+    const results: BulkCreatePokemonItemDto[] = [];
+
+    // Get all existing names in one query for efficiency
+    const names = pokemonList.map((p) => p.name);
+    const existingPokemon = await this.pokemonModel
+      .find({ name: { $in: names } })
+      .lean()
+      .exec();
+    const existingNames = new Set(existingPokemon.map((p) => p.name));
+
+    for (let i = 0; i < pokemonList.length; i++) {
+      const dto = pokemonList[i];
+
+      // Check if name already exists (from initial query or created in this batch)
+      if (existingNames.has(dto.name)) {
+        results.push({
+          index: i,
+          name: dto.name,
+          success: false,
+          error: `Pokemon with name "${dto.name}" already exists`,
+          errorCode: 'NAME_EXISTS',
+        });
+        continue;
+      }
+
+      try {
+        const created = new this.pokemonModel(dto);
+        const saved = await created.save();
+        existingNames.add(dto.name); // Prevent duplicates within same batch
+
+        results.push({
+          index: i,
+          name: dto.name,
+          success: true,
+          pokemon: toDto(PokemonResponseDto, saved),
+        });
+      } catch (error) {
+        results.push({
+          index: i,
+          name: dto.name,
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+          errorCode: 'CREATE_FAILED',
+        });
+      }
+    }
+
+    // Invalidate cache if any were created
+    if (results.some((r) => r.success)) {
+      await this.invalidateCountCache();
+    }
+
+    return results;
   }
 
   /**
@@ -81,7 +144,12 @@ export class PokemonService {
   async findAllPaginated(
     query: PokemonQueryDto,
   ): Promise<{ pokemon: Pokemon[]; total: number }> {
-    const { page = 1, limit = 20, sortBy = 'name', order = 'asc' } = query;
+    const {
+      page = 1,
+      limit = 20,
+      sortBy = 'createdAt',
+      order = 'desc',
+    } = query;
     const skip = (page - 1) * limit;
 
     const filter = this.buildFilter(query);
@@ -128,14 +196,25 @@ export class PokemonService {
     updatePokemonDto: UpdatePokemonDto,
   ): Promise<Pokemon> {
     const pokemon = await this.pokemonModel.findById(id).exec();
-    Logger.log('Updating pokemon:', updatePokemonDto);
+    this.logger.log('Updating pokemon:', updatePokemonDto);
     if (!pokemon) {
       throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
     }
 
+    // Check if image is being updated and delete the old one from the provider
+    const oldImage = pokemon.image;
+    const newImage = updatePokemonDto.image;
+    if (newImage !== undefined && oldImage && oldImage !== newImage) {
+      this.logger.log(`Image changed, deleting old image: ${oldImage}`);
+      // Delete in background, don't block the update
+      this.uploadService.deleteImage(oldImage).catch((error) => {
+        this.logger.error(`Failed to delete old image: ${oldImage}`, error);
+      });
+    }
+
     // Remove undefined fields from the update DTO before applying the update
     Object.assign(pokemon, stripUndefined(updatePokemonDto));
-    Logger.log('Updated pokemon:', pokemon);
+    this.logger.log('Updated pokemon:', pokemon);
     const updated = await pokemon.save();
 
     await this.cacheService.del(POKEMON_ALL_CACHE_KEY);
@@ -147,6 +226,15 @@ export class PokemonService {
     const pokemon = await this.pokemonModel.findById(id).exec();
     if (!pokemon) {
       throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
+    }
+
+    // Delete the image from the provider if it exists
+    if (pokemon.image) {
+      this.logger.log(`Deleting image for removed pokemon: ${pokemon.image}`);
+      // Delete in background, don't block the removal
+      this.uploadService.deleteImage(pokemon.image).catch((error) => {
+        this.logger.error(`Failed to delete image: ${pokemon.image}`, error);
+      });
     }
 
     await pokemon.deleteOne();

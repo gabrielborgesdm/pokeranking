@@ -4,7 +4,7 @@ import {
   ValidationArguments,
 } from 'class-validator';
 
-const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+const ALLOWED_EXTENSIONS = ['.png'];
 const INVALID_CHARS = /[/\\<>:"|?*]/; // Path traversal and special chars
 const PATH_TRAVERSAL = /\.\./;
 

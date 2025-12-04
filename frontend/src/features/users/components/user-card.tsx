@@ -1,7 +1,7 @@
 "use client";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { PokemonImage } from "@/components/pokemon-image";
 import { pokemonVariantClasses, type PokemonTypeVariant } from "@/lib/pokemon-variants";
 import { memo, useMemo } from "react";
 
@@ -41,10 +41,13 @@ export const UserCard = memo(function UserCard({
       </div>
 
       {/* Avatar */}
-      <div className="absolute top-4 right-4">
-        <Avatar className="h-16 w-16 border-2 border-white/30 shadow-md">
-          {avatarUrl && <AvatarImage src={avatarUrl} alt={username} />}
-        </Avatar>
+      <div className="absolute top-4 right-4 h-16 w-16 rounded-full border-2 border-white/30 shadow-md overflow-hidden">
+        <PokemonImage
+          src={avatarUrl}
+          alt={username}
+          fill
+          sizes="64px"
+        />
       </div>
 
       {/* Content */}

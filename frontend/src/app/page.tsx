@@ -8,7 +8,7 @@ import {
   LeaderboardFilters,
   useLeaderboard,
 } from "@/features/users";
-import { Pagination } from "@/components/pagination";
+import { SimplePagination } from "@/components/pagination";
 import { ErrorMessage } from "@/components/error-message";
 import { getVariantByIndex } from "@/lib/utils";
 import { AnimatedList } from "@/components/animated-list";
@@ -21,6 +21,7 @@ export default function Home() {
     sortBy,
     order,
     users,
+    total,
     totalPages,
     isLoading,
     error,
@@ -80,7 +81,7 @@ export default function Home() {
         />
 
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
               <UserCardSkeleton key={index} />
             ))}
@@ -93,14 +94,16 @@ export default function Home() {
           <>
             <AnimatedList
               key={currentPage}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6"
             >
               {userCards}
             </AnimatedList>
 
-            <Pagination
-              currentPage={currentPage}
+            <SimplePagination
+              page={currentPage}
               totalPages={totalPages}
+              total={total}
+              limit={ITEMS_PER_PAGE}
               onPageChange={handlePageChange}
             />
           </>
