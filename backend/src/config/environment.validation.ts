@@ -84,6 +84,18 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   CORS_ORIGIN?: string;
+
+  @IsString()
+  @IsOptional()
+  SENTRY_DSN?: string;
+
+  @IsString()
+  @IsOptional()
+  SENTRY_ENVIRONMENT?: string;
+
+  @IsEmail()
+  @IsOptional()
+  SUPPORT_EMAIL?: string;
 }
 
 export function validate(config: Record<string, unknown>) {

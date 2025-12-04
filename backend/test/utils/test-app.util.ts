@@ -10,7 +10,9 @@ import { UsersModule } from '../../src/users/users.module';
 import { PokemonModule } from '../../src/pokemon/pokemon.module';
 import { RankingsModule } from '../../src/rankings/rankings.module';
 import { BoxesModule } from '../../src/boxes/boxes.module';
+import { SupportModule } from '../../src/support/support.module';
 import { CommonModule } from '../../src/common/common.module';
+import { SentryModule } from '../../src/sentry/sentry.module';
 import { JwtAuthGuard } from '../../src/common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../src/common/guards/roles.guard';
 import { I18nExceptionFilter } from '../../src/i18n/filters/i18n-exception.filter';
@@ -34,6 +36,8 @@ export async function createTestApp(): Promise<INestApplication> {
       }),
       // Common module (global)
       CommonModule,
+      // Sentry module (global)
+      SentryModule,
       // I18n module for tests
       I18nModule.forRoot({
         fallbackLanguage: 'en',
@@ -49,6 +53,7 @@ export async function createTestApp(): Promise<INestApplication> {
       PokemonModule,
       RankingsModule,
       BoxesModule,
+      SupportModule,
     ],
     providers: [
       // Global authentication guard (same as production)
