@@ -16,6 +16,8 @@ interface SortablePokemonCardProps {
   position?: number;
   /** Zone color for the position badge */
   color?: string;
+  /** Optional style for virtual positioning */
+  style?: React.CSSProperties;
 }
 
 export const SortablePokemonCard = memo(function SortablePokemonCard({
@@ -23,6 +25,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
   onRemove,
   position,
   color,
+  style: virtualStyle,
 }: SortablePokemonCardProps) {
   const {
     attributes,
@@ -33,7 +36,9 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
     isDragging,
   } = useSortable({ id: `dropzone-${pokemon._id}` });
 
-  const style = {
+  // Merge virtual positioning with dnd-kit transform
+  const style: React.CSSProperties = {
+    ...virtualStyle,
     transform: CSS.Transform.toString(transform),
     transition,
   };

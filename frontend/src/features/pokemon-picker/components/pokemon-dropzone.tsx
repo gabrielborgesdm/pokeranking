@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useState, useRef } from "react";
 import {
   useDroppable,
   DragOverlay,
@@ -10,13 +10,15 @@ import {
 } from "@dnd-kit/core";
 import {
   SortableContext,
-  horizontalListSortingStrategy,
   rectSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { SortablePokemonCard } from "./sortable-pokemon-card";
+import { useResponsiveGrid } from "../hooks/use-responsive-grid";
+import { POKEMON_PICKER_DEFAULTS } from "../constants";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -31,14 +33,14 @@ export interface PokemonDropzoneProps {
   onRemove?: (id: string) => void;
   /** Placeholder text when empty */
   placeholder?: string;
-  /** Layout direction */
-  layout?: "horizontal" | "grid";
   /** Maximum number of columns for grid layout */
   maxColumns?: number;
   /** Optional class name */
   className?: string;
   /** Min height of the dropzone */
-  minHeight?: number;
+  minHeight?: number | string;
+  /** Max height of the dropzone (enables scrolling). Accepts px number or CSS string like "80vh" */
+  maxHeight?: number | string;
   /** All available pokemon (for inserting new items) */
   allPokemon?: PokemonResponseDto[];
   /** Map of position (1-based) to zone color */
@@ -54,9 +56,10 @@ const extractPokemonId = (sortableId: string) => {
 };
 
 /**
- * PokemonDropzone - A droppable area that accepts Pokemon from PokemonPicker
+ * PokemonDropzone - A virtualized droppable area that accepts Pokemon from PokemonPicker
  * and allows reordering of dropped Pokemon.
  *
+ * Uses TanStack Virtual for efficient rendering of large lists.
  * Must be used inside a DndContext.
  */
 export const PokemonDropzone = memo(function PokemonDropzone({
@@ -65,17 +68,32 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   onChange,
   onRemove,
   placeholder = "Drag Pokemon here",
-  layout = "grid",
   maxColumns = 4,
   className,
   minHeight = 150,
+  maxHeight = POKEMON_PICKER_DEFAULTS.HEIGHT,
   allPokemon = [],
   positionColors,
   showPositions = true,
 }: PokemonDropzoneProps) {
   const [activeItem, setActiveItem] = useState<PokemonResponseDto | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const { isOver, setNodeRef } = useDroppable({ id });
+
+  // Use responsive grid hook to calculate layout
+  const { containerRef, config, rowCount } = useResponsiveGrid({
+    maxColumns,
+    itemCount: pokemon.length,
+  });
+
+  // Row virtualizer for efficient rendering
+  const rowVirtualizer = useVirtualizer({
+    count: rowCount,
+    getScrollElement: () => scrollRef.current,
+    estimateSize: () => config.rowHeight + config.gap,
+    overscan: 2, // Pre-render extra rows for smooth drag operations
+  });
 
   // Monitor drag events for internal sorting and external drops
   useDndMonitor({
@@ -151,11 +169,26 @@ export const PokemonDropzone = memo(function PokemonDropzone({
     [pokemon, onChange, onRemove]
   );
 
+  // Critical: SortableContext receives ALL IDs for proper drag calculations
   const sortableIds = pokemon.map((p) => `dropzone-${p._id}`);
+
+  // Calculate total virtual height
+  const totalHeight = rowVirtualizer.getTotalSize();
+  // If maxHeight is a string (e.g., "80vh"), use it directly; otherwise calculate min
+  const scrollHeight =
+    typeof maxHeight === "string"
+      ? maxHeight
+      : Math.min(maxHeight, totalHeight);
 
   return (
     <div
-      ref={setNodeRef}
+      ref={(node) => {
+        // Merge refs: droppable ref and container ref for responsive grid
+        setNodeRef(node);
+        if (containerRef.current !== node) {
+          (containerRef as { current: HTMLDivElement | null }).current = node;
+        }
+      }}
       style={{ minHeight }}
       className={cn(
         "relative border-2 border-dashed rounded-xl p-4 transition-colors duration-200",
@@ -177,50 +210,67 @@ export const PokemonDropzone = memo(function PokemonDropzone({
           </p>
         </div>
       ) : (
-        <SortableContext
-          items={sortableIds}
-          strategy={
-            layout === "horizontal"
-              ? horizontalListSortingStrategy
-              : rectSortingStrategy
-          }
-        >
+        <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
+          {/* Scroll container */}
           <div
-            className={cn(
-              layout === "horizontal"
-                ? "flex gap-4 overflow-x-auto pb-2"
-                : "grid gap-4"
-            )}
-            style={
-              layout === "grid"
-                ? {
-                  gridTemplateColumns: `repeat(auto-fill, minmax(min(204px, 100%), 1fr))`,
-                  maxWidth: maxColumns * 300 + (maxColumns - 1) * 16,
-                }
-                : undefined
-            }
+            ref={scrollRef}
+            style={{ maxHeight: scrollHeight, overflowY: "auto" }}
+            className="overflow-x-hidden"
           >
-            {pokemon.map((p, index) => {
-              const position = index + 1;
-              const color = positionColors?.get(position);
+            {/* Virtual container with full height */}
+            <div
+              style={{
+                height: totalHeight,
+                width: "100%",
+                position: "relative",
+              }}
+            >
+              {/* Only render visible rows */}
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const startIndex = virtualRow.index * config.columnCount;
+                const rowPokemon = pokemon.slice(
+                  startIndex,
+                  startIndex + config.columnCount
+                );
 
-              return (
-                <div
-                  key={p._id}
-                  className={cn(
-                    layout === "horizontal" && "flex-shrink-0 w-32",
-                    layout === "grid" && "w-full"
-                  )}
-                >
-                  <SortablePokemonCard
-                    pokemon={p}
-                    onRemove={handleRemove}
-                    position={showPositions ? position : undefined}
-                    color={color}
-                  />
-                </div>
-              );
-            })}
+                return (
+                  <div
+                    key={virtualRow.key}
+                    style={{
+                      position: "absolute",
+                      top: virtualRow.start,
+                      left: 0,
+                      width: "100%",
+                      height: virtualRow.size,
+                      display: "flex",
+                      gap: config.gap,
+                    }}
+                  >
+                    {rowPokemon.map((p, colIndex) => {
+                      const position = startIndex + colIndex + 1;
+                      const color = positionColors?.get(position);
+
+                      return (
+                        <div
+                          key={p._id}
+                          style={{
+                            width: config.columnWidth,
+                            flexShrink: 0,
+                          }}
+                        >
+                          <SortablePokemonCard
+                            pokemon={p}
+                            onRemove={handleRemove}
+                            position={showPositions ? position : undefined}
+                            color={color}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </SortableContext>
       )}
