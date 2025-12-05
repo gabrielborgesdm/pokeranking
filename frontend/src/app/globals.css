@@ -400,3 +400,31 @@
   background: linear-gradient(to bottom right, #4a5568, #2d3748) !important;
   color: white !important;
 }
+
+/* Pokeball wobble animation for drag overlay */
+@keyframes wobble {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-15deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(0deg) scale(1);
+  }
+  75% {
+    transform: rotate(15deg) scale(1.1);
+  }
+}
+
+/* Lift animation for dragging cards */
+@keyframes lift {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.05) rotate(2deg);
+    opacity: 1;
+  }
+}

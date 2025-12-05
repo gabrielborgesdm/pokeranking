@@ -16,6 +16,8 @@ interface PokemonCardProps {
   position?: number;
   /** Zone color for the position circle */
   positionColor?: string;
+  /** Whether a drag operation is in progress (shows drop overlay) */
+  isDropping?: boolean;
 }
 
 const DEFAULT_GRADIENT = "gradient-pokemon-default";
@@ -48,6 +50,7 @@ export const PokemonCard = memo(function PokemonCard({
   className,
   position,
   positionColor,
+  isDropping,
 }: PokemonCardProps) {
   const primaryType = types[0];
   const gradientClass = primaryType
@@ -84,6 +87,26 @@ export const PokemonCard = memo(function PokemonCard({
           <PokemonTypeIcon key={type} type={type} size={28} />
         ))}
       </div>
+
+      {/* Dropping Overlay */}
+      {isDropping && (
+        <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center pointer-events-none z-20 border-2 border-dashed border-white/80 backdrop-blur-[2px] animate-pulse">
+          {/* Pokeball icon with wobble animation */}
+          <div className="relative w-12 h-12 animate-[wobble_0.8s_ease-in-out_infinite]">
+            <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-lg">
+              {/* Top half - red */}
+              <path d="M 50 5 A 45 45 0 0 1 95 50 L 5 50 A 45 45 0 0 1 50 5" fill="#EF4444" stroke="#1F2937" strokeWidth="4"/>
+              {/* Bottom half - white */}
+              <path d="M 50 95 A 45 45 0 0 1 5 50 L 95 50 A 45 45 0 0 1 50 95" fill="#FAFAFA" stroke="#1F2937" strokeWidth="4"/>
+              {/* Center band */}
+              <rect x="5" y="46" width="90" height="8" fill="#1F2937"/>
+              {/* Center button with glow */}
+              <circle cx="50" cy="50" r="12" fill="#FAFAFA" stroke="#1F2937" strokeWidth="4"/>
+              <circle cx="50" cy="50" r="6" fill="#FAFAFA" stroke="#1F2937" strokeWidth="2" className="animate-ping"/>
+            </svg>
+          </div>
+        </div>
+      )}
 
       {/* Decorative Elements */}
       <div

@@ -64,13 +64,18 @@ const DragModePicker = memo(function DragModePicker({
       {/* Drag overlay for visual feedback */}
       <DragOverlay dropAnimation={null}>
         {activePokemon && (
-          <div className="cursor-grabbing">
-            <div className="shadow-2xl rounded-xl opacity-90">
-              <PokemonCard
-                name={activePokemon.name}
-                image={activePokemon.image}
-                types={activePokemon.types as PokemonType[]}
-              />
+          <div className="cursor-grabbing animate-[lift_0.2s_ease-out_forwards]">
+            <div className="relative">
+              {/* Glow effect */}
+              <div className="absolute -inset-2 bg-primary/30 rounded-2xl blur-xl animate-pulse" />
+              {/* Card with shadow */}
+              <div className="relative shadow-2xl rounded-xl">
+                <PokemonCard
+                  name={activePokemon.name}
+                  image={activePokemon.image}
+                  types={activePokemon.types as PokemonType[]}
+                />
+              </div>
             </div>
           </div>
         )}

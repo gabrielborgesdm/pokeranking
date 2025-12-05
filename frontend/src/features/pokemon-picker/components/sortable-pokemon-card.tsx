@@ -18,6 +18,8 @@ interface SortablePokemonCardProps {
   color?: string;
   /** Optional style for virtual positioning */
   style?: React.CSSProperties;
+  /** Whether a drag operation is in progress (shows drop overlay) */
+  isDropping?: boolean;
 }
 
 export const SortablePokemonCard = memo(function SortablePokemonCard({
@@ -26,6 +28,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
   position,
   color,
   style: virtualStyle,
+  isDropping,
 }: SortablePokemonCardProps) {
   const {
     attributes,
@@ -76,6 +79,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
         className="!min-w-0"
         position={position}
         positionColor={color}
+        isDropping={isDropping}
       />
     </div>
   );
