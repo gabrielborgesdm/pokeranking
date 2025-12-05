@@ -1,19 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xargs:*)",
-      "Bash(dir:*)",
-      "Bash(tree:*)",
-      "Bash(npm run build:*)",
-      "Bash(npm run test:e2e:*)",
-      "Bash(find:*)",
-      "Bash(git add:*)",
-      "Bash(npm run lint:*)",
-      "Bash(npm install:*)",
-      "Bash(node -e:*)",
-      "Bash(cat:*)",
-      "Bash(npx tsc:*)",
-      "Bash(ls -la \"d:\\www\\personal\\pokeranking\\frontend\\src\\features\\rankings\\components\"\" 2>/dev/null || echo \"Directory not found \")"
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

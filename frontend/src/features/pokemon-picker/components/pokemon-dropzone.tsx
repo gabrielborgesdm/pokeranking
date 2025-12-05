@@ -52,7 +52,9 @@ export interface PokemonDropzoneProps {
 // Helper to extract pokemon ID from sortable ID (removes "dropzone-" prefix)
 const extractPokemonId = (sortableId: string) => {
   const prefix = "dropzone-";
-  return sortableId.startsWith(prefix) ? sortableId.slice(prefix.length) : sortableId;
+  return sortableId.startsWith(prefix)
+    ? sortableId.slice(prefix.length)
+    : sortableId;
 };
 
 /**
@@ -126,7 +128,8 @@ export const PokemonDropzone = memo(function PokemonDropzone({
 
       if (!isInternalDrag && (isDroppedOnDropzone || isDroppedOnItem)) {
         // External drop from picker - find the pokemon from allPokemon or active.data
-        const newPokemon = allPokemon.find((p) => p._id === activeId) ||
+        const newPokemon =
+          allPokemon.find((p) => p._id === activeId) ||
           (active.data.current?.pokemon as PokemonResponseDto | undefined);
 
         if (newPokemon && !pokemon.some((p) => p._id === newPokemon._id)) {
@@ -183,6 +186,10 @@ export const PokemonDropzone = memo(function PokemonDropzone({
       ? maxHeight
       : Math.min(maxHeight, totalHeight);
 
+  // Padding for remove button overflow
+  const paddingTop = 16;
+  const paddingX = 16;
+
   return (
     <div
       ref={(node) => {
@@ -227,9 +234,9 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                 height: totalHeight,
                 width: "100%",
                 position: "relative",
-                paddingTop: 16,
-                paddingLeft: 16,
-                paddingRight: 16,
+                paddingTop,
+                paddingLeft: paddingX,
+                paddingRight: paddingX,
               }}
             >
               {/* Only render visible rows */}
@@ -245,7 +252,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                     key={virtualRow.key}
                     style={{
                       position: "absolute",
-                      top: virtualRow.start + 10, // 10 for the remove icon
+                      top: virtualRow.start + paddingTop,
                       left: 0,
                       width: "100%",
                       height: virtualRow.size,
