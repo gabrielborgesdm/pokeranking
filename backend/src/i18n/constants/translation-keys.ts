@@ -20,7 +20,6 @@ export const TK = {
     NOT_FOUND: 'rankings.notFound',
     TITLE_EXISTS: 'rankings.titleExists',
     CANNOT_MODIFY_OTHERS: 'rankings.cannotModifyOthers',
-    ZONE_EXCEEDS_POKEMON: 'rankings.zoneExceedsPokemon',
     THEME_NOT_AVAILABLE: 'rankings.themeNotAvailable',
   },
   BOXES: {

@@ -2,6 +2,10 @@
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
+  "watchOptions": {
+    "watchDirectory": "useFsEvents",
+    "exclude": ["../**"]
+  },
   "compilerOptions": {
     "deleteOutDir": true,
     "assets": [

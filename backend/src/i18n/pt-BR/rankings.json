@@ -2,6 +2,5 @@
   "notFound": "Ranking com ID {id} não encontrado",
   "titleExists": "Você já tem um ranking com título \"{title}\"",
   "cannotModifyOthers": "Você só pode modificar seus próprios rankings",
-  "zoneExceedsPokemon": "Zona \"{zoneName}\" intervalo [{start}, {end}] excede quantidade de pokemon ({count})",
   "themeNotAvailable": "O tema \"{themeId}\" não está disponível. Classifique mais Pokemon para desbloqueá-lo."
 }

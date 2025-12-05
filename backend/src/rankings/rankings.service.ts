@@ -13,7 +13,6 @@ import { Ranking } from './schemas/ranking.schema';
 import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
 import { stripUndefined } from '../common/utils/transform.util';
-import { Zone } from './schemas/ranking.schema';
 import { User } from '../users/schemas/user.schema';
 import { Pokemon } from '../pokemon/schemas/pokemon.schema';
 import { withTransaction } from '../common/utils/transaction.util';
@@ -56,12 +55,6 @@ export class RankingsService {
           user.rankings,
           createRankingDto.title,
         );
-
-        // Validate zone intervals if zones provided
-        if (createRankingDto.zones && createRankingDto.zones.length > 0) {
-          const pokemonCount = createRankingDto.pokemon?.length || 0;
-          this.validateZoneIntervals(createRankingDto.zones, pokemonCount);
-        }
 
         // Validate theme availability if theme provided
         if (createRankingDto.theme) {
@@ -145,11 +138,6 @@ export class RankingsService {
       updateRankingDto.pokemon !== undefined &&
       ranking.pokemon.length !== newPokemon.length;
 
-    // Validate zone intervals with new data
-    if (newZones && newZones.length > 0) {
-      this.validateZoneIntervals(newZones, newPokemon.length);
-    }
-
     // Validate theme availability if theme is being updated
     if (updateRankingDto.theme) {
       const totalPokemon = await this.getTotalPokemonCount();
@@ -171,6 +159,20 @@ export class RankingsService {
     }
 
     return savedRanking;
+  }
+
+  async findOne(id: string): Promise<Ranking> {
+    const ranking = await this.rankingModel
+      .findById(id)
+      .populate('pokemon')
+      .populate('user')
+      .exec();
+
+    if (!ranking) {
+      throw new NotFoundException({ key: TK.RANKINGS.NOT_FOUND, args: { id } });
+    }
+
+    return ranking;
   }
 
   async remove(id: string, userId: string): Promise<Ranking> {
@@ -247,25 +249,6 @@ export class RankingsService {
     }
 
     return candidateTitle;
-  }
-
-  // Helper: Validate zone intervals don't exceed pokemon count
-  private validateZoneIntervals(zones: Zone[], pokemonCount: number): void {
-    for (const zone of zones) {
-      const [, end] = zone.interval;
-
-      if (end > pokemonCount) {
-        throw new BadRequestException({
-          key: TK.RANKINGS.ZONE_EXCEEDS_POKEMON,
-          args: {
-            zoneName: zone.name,
-            start: zone.interval[0],
-            end,
-            count: pokemonCount,
-          },
-        });
-      }
-    }
   }
 
   // Helper: Get total Pokemon count in the system

@@ -12,13 +12,22 @@ export class ValidInterval implements ValidatorConstraintInterface {
 
     const [start, end] = interval as [unknown, unknown];
 
-    // Must be numbers
-    if (typeof start !== 'number' || typeof end !== 'number') {
+    // Start must be a number
+    if (typeof start !== 'number') {
       return false;
     }
 
     // Start must be >= 1
     if (start < 1) {
+      return false;
+    }
+
+    // End can be null (unbounded) or a number >= start
+    if (end === null) {
+      return true;
+    }
+
+    if (typeof end !== 'number') {
       return false;
     }
 
@@ -31,6 +40,6 @@ export class ValidInterval implements ValidatorConstraintInterface {
   }
 
   defaultMessage() {
-    return 'Interval must be [start, end] where start >= 1 and end >= start';
+    return 'Interval must be [start, end] where start >= 1 and end >= start (or null for unbounded)';
   }
 }

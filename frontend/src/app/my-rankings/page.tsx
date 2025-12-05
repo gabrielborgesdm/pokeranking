@@ -13,6 +13,7 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { useDeleteRanking } from "@/hooks/use-delete-ranking";
+import { routes } from "@/lib/routes";
 
 const SKELETON_COUNT = 6;
 
@@ -64,6 +65,13 @@ export default function MyRankingsPage() {
     }
   }, [rankingToDelete, deleteRanking]);
 
+  const handleCardClick = useCallback(
+    (id: string) => {
+      router.push(routes.ranking(id));
+    },
+    [router]
+  );
+
   const rankingCards = useMemo(
     () =>
       rankings.map((ranking) => (
@@ -76,11 +84,12 @@ export default function MyRankingsPage() {
           createdAt={ranking.createdAt}
           updatedAt={ranking.updatedAt}
           theme={ranking.theme}
+          onClick={() => handleCardClick(ranking._id)}
           onEdit={handleEdit}
           onDelete={handleDeleteClick}
         />
       )),
-    [rankings, handleEdit, handleDeleteClick]
+    [rankings, handleCardClick, handleEdit, handleDeleteClick]
   );
 
   if (error) {

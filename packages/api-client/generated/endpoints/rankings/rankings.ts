@@ -5,12 +5,22 @@
  * API for managing Pokemon and user rankings
  * OpenAPI spec version: 1.0
  */
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult,
+  UseSuspenseQueryOptions,
+  UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 
 import type {
@@ -24,131 +34,332 @@ import { customFetch } from "../../../src/client";
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
- * @summary Create a new ranking
+ * @summary Get ranking by ID
  */
-export type rankingsControllerCreateResponse201 = {
+export type rankingsControllerFindOneResponse200 = {
   data: RankingResponseDto;
-  status: 201;
+  status: 200;
 };
 
-export type rankingsControllerCreateResponse400 = {
+export type rankingsControllerFindOneResponse404 = {
   data: void;
-  status: 400;
+  status: 404;
 };
 
-export type rankingsControllerCreateResponse401 = {
-  data: void;
-  status: 401;
-};
-
-export type rankingsControllerCreateResponse409 = {
-  data: void;
-  status: 409;
-};
-
-export type rankingsControllerCreateResponseSuccess =
-  rankingsControllerCreateResponse201 & {
+export type rankingsControllerFindOneResponseSuccess =
+  rankingsControllerFindOneResponse200 & {
     headers: Headers;
   };
-export type rankingsControllerCreateResponseError = (
-  | rankingsControllerCreateResponse400
-  | rankingsControllerCreateResponse401
-  | rankingsControllerCreateResponse409
-) & {
-  headers: Headers;
+export type rankingsControllerFindOneResponseError =
+  rankingsControllerFindOneResponse404 & {
+    headers: Headers;
+  };
+
+export type rankingsControllerFindOneResponse =
+  | rankingsControllerFindOneResponseSuccess
+  | rankingsControllerFindOneResponseError;
+
+export const getRankingsControllerFindOneUrl = (id: string) => {
+  return `/rankings/${id}`;
 };
 
-export type rankingsControllerCreateResponse =
-  | rankingsControllerCreateResponseSuccess
-  | rankingsControllerCreateResponseError;
-
-export const getRankingsControllerCreateUrl = () => {
-  return `/rankings`;
-};
-
-export const rankingsControllerCreate = async (
-  createRankingDto: CreateRankingDto,
+export const rankingsControllerFindOne = async (
+  id: string,
   options?: RequestInit,
-): Promise<rankingsControllerCreateResponse> => {
-  return customFetch<rankingsControllerCreateResponse>(
-    getRankingsControllerCreateUrl(),
+): Promise<rankingsControllerFindOneResponse> => {
+  return customFetch<rankingsControllerFindOneResponse>(
+    getRankingsControllerFindOneUrl(id),
     {
       ...options,
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(createRankingDto),
+      method: "GET",
     },
   );
 };
 
-export const getRankingsControllerCreateMutationOptions = <
-  TError = void,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof rankingsControllerCreate>>,
-    TError,
-    { data: CreateRankingDto },
-    TContext
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof rankingsControllerCreate>>,
-  TError,
-  { data: CreateRankingDto },
-  TContext
-> => {
-  const mutationKey = ["rankingsControllerCreate"];
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof rankingsControllerCreate>>,
-    { data: CreateRankingDto }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return rankingsControllerCreate(data, requestOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
+export const getRankingsControllerFindOneQueryKey = (id?: string) => {
+  return [`/rankings/${id}`] as const;
 };
 
-export type RankingsControllerCreateMutationResult = NonNullable<
-  Awaited<ReturnType<typeof rankingsControllerCreate>>
->;
-export type RankingsControllerCreateMutationBody = CreateRankingDto;
-export type RankingsControllerCreateMutationError = void;
-
-/**
- * @summary Create a new ranking
- */
-export const useRankingsControllerCreate = <TError = void, TContext = unknown>(
+export const getRankingsControllerFindOneQueryOptions = <
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
   options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof rankingsControllerCreate>>,
-      TError,
-      { data: CreateRankingDto },
-      TContext
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getRankingsControllerFindOneQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof rankingsControllerFindOne>>
+  > = ({ signal }) =>
+    rankingsControllerFindOne(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type RankingsControllerFindOneQueryResult = NonNullable<
+  Awaited<ReturnType<typeof rankingsControllerFindOne>>
+>;
+export type RankingsControllerFindOneQueryError = void;
+
+export function useRankingsControllerFindOne<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+          TError,
+          Awaited<ReturnType<typeof rankingsControllerFindOne>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useRankingsControllerFindOne<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+          TError,
+          Awaited<ReturnType<typeof rankingsControllerFindOne>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useRankingsControllerFindOne<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
     >;
     request?: SecondParameter<typeof customFetch>;
   },
   queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof rankingsControllerCreate>>,
-  TError,
-  { data: CreateRankingDto },
-  TContext
-> => {
-  const mutationOptions = getRankingsControllerCreateMutationOptions(options);
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+/**
+ * @summary Get ranking by ID
+ */
 
-  return useMutation(mutationOptions, queryClient);
+export function useRankingsControllerFindOne<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getRankingsControllerFindOneQueryOptions(id, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getRankingsControllerFindOneSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getRankingsControllerFindOneQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof rankingsControllerFindOne>>
+  > = ({ signal }) =>
+    rankingsControllerFindOne(id, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
 };
+
+export type RankingsControllerFindOneSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof rankingsControllerFindOne>>
+>;
+export type RankingsControllerFindOneSuspenseQueryError = void;
+
+export function useRankingsControllerFindOneSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useRankingsControllerFindOneSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useRankingsControllerFindOneSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+/**
+ * @summary Get ranking by ID
+ */
+
+export function useRankingsControllerFindOneSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+  TError = void,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindOne>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+} {
+  const queryOptions = getRankingsControllerFindOneSuspenseQueryOptions(
+    id,
+    options,
+  );
+
+  const query = useSuspenseQuery(
+    queryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 /**
  * @summary Update ranking (owner only)
  */
@@ -409,6 +620,132 @@ export const useRankingsControllerRemove = <TError = void, TContext = unknown>(
   TContext
 > => {
   const mutationOptions = getRankingsControllerRemoveMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary Create a new ranking
+ */
+export type rankingsControllerCreateResponse201 = {
+  data: RankingResponseDto;
+  status: 201;
+};
+
+export type rankingsControllerCreateResponse400 = {
+  data: void;
+  status: 400;
+};
+
+export type rankingsControllerCreateResponse401 = {
+  data: void;
+  status: 401;
+};
+
+export type rankingsControllerCreateResponse409 = {
+  data: void;
+  status: 409;
+};
+
+export type rankingsControllerCreateResponseSuccess =
+  rankingsControllerCreateResponse201 & {
+    headers: Headers;
+  };
+export type rankingsControllerCreateResponseError = (
+  | rankingsControllerCreateResponse400
+  | rankingsControllerCreateResponse401
+  | rankingsControllerCreateResponse409
+) & {
+  headers: Headers;
+};
+
+export type rankingsControllerCreateResponse =
+  | rankingsControllerCreateResponseSuccess
+  | rankingsControllerCreateResponseError;
+
+export const getRankingsControllerCreateUrl = () => {
+  return `/rankings`;
+};
+
+export const rankingsControllerCreate = async (
+  createRankingDto: CreateRankingDto,
+  options?: RequestInit,
+): Promise<rankingsControllerCreateResponse> => {
+  return customFetch<rankingsControllerCreateResponse>(
+    getRankingsControllerCreateUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(createRankingDto),
+    },
+  );
+};
+
+export const getRankingsControllerCreateMutationOptions = <
+  TError = void,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof rankingsControllerCreate>>,
+    TError,
+    { data: CreateRankingDto },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof rankingsControllerCreate>>,
+  TError,
+  { data: CreateRankingDto },
+  TContext
+> => {
+  const mutationKey = ["rankingsControllerCreate"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof rankingsControllerCreate>>,
+    { data: CreateRankingDto }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return rankingsControllerCreate(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type RankingsControllerCreateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof rankingsControllerCreate>>
+>;
+export type RankingsControllerCreateMutationBody = CreateRankingDto;
+export type RankingsControllerCreateMutationError = void;
+
+/**
+ * @summary Create a new ranking
+ */
+export const useRankingsControllerCreate = <TError = void, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof rankingsControllerCreate>>,
+      TError,
+      { data: CreateRankingDto },
+      TContext
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof rankingsControllerCreate>>,
+  TError,
+  { data: CreateRankingDto },
+  TContext
+> => {
+  const mutationOptions = getRankingsControllerCreateMutationOptions(options);
 
   return useMutation(mutationOptions, queryClient);
 };

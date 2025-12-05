@@ -1,14 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(xargs:*)",
-      "Bash(dir:*)",
-      "Bash(tree:*)",
-      "Bash(npm run build:*)",
-      "Bash(npm run test:e2e:*)",
-      "Bash(find:*)",
-      "Bash(git add:*)",
-      "Bash(npm run lint:*)"
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
