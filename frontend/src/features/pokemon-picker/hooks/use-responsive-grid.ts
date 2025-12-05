@@ -49,12 +49,8 @@ export function useResponsiveGrid({
         Math.min(rawColumnCount, maxCols)
       );
 
-      // Calculate actual column width to fill available space
-      // columnWidth = (width - (columnCount - 1) * gap) / columnCount
-      const columnWidth = Math.min(
-        POKEMON_PICKER_DEFAULTS.MAX_CARD_WIDTH,
-        Math.floor((width - (columnCount - 1) * gap) / columnCount)
-      );
+      // Use fixed card width instead of stretching to fill space
+      const columnWidth = minCardWidth;
 
       return {
         containerWidth: width,

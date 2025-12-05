@@ -87,11 +87,14 @@ export const PokemonDropzone = memo(function PokemonDropzone({
     itemCount: pokemon.length,
   });
 
+  // Vertical gap between rows (same as horizontal gap)
+  const rowGap = config.gap;
+
   // Row virtualizer for efficient rendering
   const rowVirtualizer = useVirtualizer({
     count: rowCount,
     getScrollElement: () => scrollRef.current,
-    estimateSize: () => config.rowHeight + config.gap,
+    estimateSize: () => config.rowHeight + rowGap,
     overscan: 2, // Pre-render extra rows for smooth drag operations
   });
 
@@ -190,16 +193,17 @@ export const PokemonDropzone = memo(function PokemonDropzone({
         }
       }}
       style={{ minHeight }}
-      className={cn(
-        "relative border-2 border-dashed rounded-xl p-4 transition-colors duration-200",
-        isOver
-          ? "border-primary bg-primary/5"
-          : "border-muted-foreground/30",
-        className
-      )}
+      className={cn("relative", className)}
     >
       {pokemon.length === 0 ? (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          className={cn(
+            "absolute inset-0 flex items-center justify-center rounded-xl border-2 border-dashed transition-colors duration-200",
+            isOver
+              ? "border-primary bg-primary/5"
+              : "border-muted-foreground/30"
+          )}
+        >
           <p
             className={cn(
               "text-muted-foreground transition-colors",
@@ -211,18 +215,21 @@ export const PokemonDropzone = memo(function PokemonDropzone({
         </div>
       ) : (
         <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
-          {/* Scroll container */}
+          {/* Scroll container - hidden scrollbar */}
           <div
             ref={scrollRef}
-            style={{ maxHeight: scrollHeight, overflowY: "auto" }}
-            className="overflow-x-hidden"
+            style={{ maxHeight: scrollHeight }}
+            className="overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
-            {/* Virtual container with full height */}
+            {/* Virtual container with full height + padding for badge overflow */}
             <div
               style={{
                 height: totalHeight,
                 width: "100%",
                 position: "relative",
+                paddingTop: 16,
+                paddingLeft: 16,
+                paddingRight: 16,
               }}
             >
               {/* Only render visible rows */}
@@ -243,6 +250,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                       width: "100%",
                       height: virtualRow.size,
                       display: "flex",
+                      justifyContent: "center",
                       gap: config.gap,
                     }}
                   >
