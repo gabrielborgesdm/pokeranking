@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,8 @@ import { ThemePicker } from "./theme-picker";
 import { BackgroundPicker } from "./background-picker";
 import { CardThemePreview } from "./card-theme-preview";
 import { BackgroundPreview } from "./background-preview";
+import { ZonePicker } from "./zone-picker";
+import { ZonePreview } from "./zone-preview";
 import { useRankingForm, type RankingFormData } from "@/hooks/use-ranking-form";
 
 interface RankingFormProps {
@@ -50,6 +53,25 @@ export function RankingForm({
   const watchedTitle = form.watch("title");
   const watchedTheme = form.watch("theme");
   const watchedBackground = form.watch("background");
+  const watchedZones = form.watch("zones");
+
+  // Extract zone errors from form state
+  const zoneErrors = useMemo(() => {
+    const errors = form.formState.errors.zones;
+    if (!errors || !Array.isArray(errors)) return undefined;
+
+    const result: Record<number, { name?: string; interval?: string; color?: string }> = {};
+    errors.forEach((zoneError, index) => {
+      if (zoneError) {
+        result[index] = {
+          name: zoneError.name?.message,
+          interval: zoneError.interval?.message,
+          color: zoneError.color?.message,
+        };
+      }
+    });
+    return Object.keys(result).length > 0 ? result : undefined;
+  }, [form.formState.errors.zones]);
 
   return (
     <Card>
@@ -148,6 +170,36 @@ export function RankingForm({
               <BackgroundPreview
                 background={watchedBackground}
                 theme={watchedTheme}
+              />
+            </div>
+
+            {/* Zone Section - Picker on left, Preview on right */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              <FormField
+                control={form.control}
+                name="zones"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("zoneEditor.label")}</FormLabel>
+                    <FormDescription>
+                      {t("zoneEditor.description")}
+                    </FormDescription>
+                    <FormControl>
+                      <ZonePicker
+                        value={field.value}
+                        onChange={field.onChange}
+                        errors={zoneErrors}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Zone Preview */}
+              <ZonePreview
+                zones={watchedZones}
+                theme={watchedBackground || watchedTheme}
               />
             </div>
 

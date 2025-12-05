@@ -8,7 +8,7 @@
 
 export interface ZoneDto {
   name: string;
-  /** Position interval [start, end] where start >= 1 */
+  /** Position interval [start, end] where start >= 1. Use null for end to indicate "until the end" (unbounded) */
   interval: number[];
   /** Hex color code */
   color: string;

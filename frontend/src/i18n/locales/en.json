@@ -6,7 +6,9 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "delete": "Delete",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "save": "Save",
+    "saving": "Saving..."
   },
   "pokemonTypes": {
     "Bug": "Bug",
@@ -139,6 +141,51 @@
     "save": "Save Changes",
     "saving": "Saving...",
     "saveFailed": "Failed to save ranking"
+  },
+  "zoneEditor": {
+    "label": "Tier Zones",
+    "description": "Define custom zones to group your ranked Pokemon (optional)",
+    "preview": "Zone Preview",
+    "previewDescription": "How zones will appear on your ranking",
+    "addZone": "Add Zone",
+    "removeZone": "Remove",
+    "zoneName": "Zone Name",
+    "zoneNamePlaceholder": "S-Tier",
+    "startPosition": "Start",
+    "endPosition": "End",
+    "untilEnd": "Until end",
+    "color": "Color",
+    "noZones": "No zones defined",
+    "defaultZones": "Use Default Tiers",
+    "unnamed": "Unnamed",
+    "validation": {
+      "nameRequired": "Zone name is required",
+      "invalidInterval": "Invalid position interval",
+      "invalidColor": "Invalid color format"
+    }
+  },
+  "rankingView": {
+    "editRanking": "Edit Ranking",
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon",
+    "pokemon_one": "Pokemon",
+    "pokemon_other": "Pokemon",
+    "unsavedChanges": "Unsaved changes",
+    "allPokemon": "All Pokemon",
+    "dropPokemonHere": "Drop Pokemon here",
+    "releaseToAdd": "Release to add!",
+    "emptyZone": "No Pokemon in this zone"
+  },
+  "boxSelector": {
+    "title": "Your Boxes",
+    "allPokemon": "All Pokemon",
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon"
+  },
+  "boxPicker": {
+    "title": "Pokemon Boxes",
+    "description": "Drag Pokemon to add them to your ranking",
+    "emptyBox": "This box is empty"
   },
   "support": {
     "title": "Support & Feedback",

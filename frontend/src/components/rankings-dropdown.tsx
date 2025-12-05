@@ -68,7 +68,7 @@ export function RankingsDropdown() {
             {rankings.slice(0, MAX_RANKINGS_SHOWN).map((ranking) => (
               <DropdownMenuItem key={ranking._id} asChild>
                 <Link
-                  href={`${routes.myRankings}/${ranking._id}`}
+                  href={routes.ranking(ranking._id)}
                   className="truncate"
                 >
                   {ranking.title}

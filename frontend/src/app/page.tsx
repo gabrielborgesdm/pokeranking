@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
   UserCard,
@@ -12,9 +13,11 @@ import { SimplePagination } from "@/components/pagination";
 import { ErrorMessage } from "@/components/error-message";
 import { getVariantByIndex } from "@/lib/utils";
 import { AnimatedList } from "@/components/animated-list";
+import { routes } from "@/lib/routes";
 
 export default function Home() {
   const { t } = useTranslation();
+  const router = useRouter();
   const {
     currentPage,
     searchUsername,
@@ -33,6 +36,17 @@ export default function Home() {
     ITEMS_PER_PAGE,
   } = useLeaderboard();
 
+  const handleUserClick = useCallback(
+    (username: string, rankings: { _id: string }[]) => {
+      if (rankings.length === 1) {
+        router.push(routes.ranking(rankings[0]._id));
+      } else if (rankings.length > 1) {
+        router.push(routes.userRankings(username));
+      }
+    },
+    [router]
+  );
+
   const userCards = useMemo(
     () =>
       users.map((user, index) => {
@@ -45,10 +59,15 @@ export default function Home() {
             avatarUrl={user.profilePic}
             totalScore={user.rankedPokemonCount}
             variant={getVariantByIndex(index)}
+            onClick={
+              user.rankings.length > 0
+                ? () => handleUserClick(user.username, user.rankings)
+                : undefined
+            }
           />
         );
       }),
-    [users, currentPage, ITEMS_PER_PAGE]
+    [users, currentPage, ITEMS_PER_PAGE, handleUserClick]
   );
 
   if (error) {

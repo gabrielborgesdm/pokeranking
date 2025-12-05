@@ -15,19 +15,24 @@ export class Zone {
 
   @Prop({
     required: true,
-    type: [Number],
+    type: Array,
     validate: {
-      validator: function (interval: number[]) {
+      validator: function (interval: (number | null)[]) {
         if (interval.length !== 2) return false;
 
         const [start, end] = interval;
-        return start >= 1 && end >= start;
+        if (typeof start !== 'number' || start < 1) return false;
+
+        // End can be null (unbounded) or a number >= start
+        if (end === null) return true;
+        if (typeof end !== 'number') return false;
+        return end >= start;
       },
       message:
-        'Interval must be [start, end] where start >= 1 and end >= start',
+        'Interval must be [start, end] where start >= 1 and end >= start (or null for unbounded)',
     },
   })
-  interval: [number, number];
+  interval: [number, number | null];
 
   @Prop({
     required: true,

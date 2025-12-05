@@ -1,15 +1,15 @@
-import { Metadata } from "next";
-import { ColorPalette } from "./sections/color-palette";
-import { GradientShowcase } from "./sections/gradient-showcase";
-import { ButtonShowcase } from "./sections/button-showcase";
-import { FormShowcase } from "./sections/form-showcase";
-import { FeedbackShowcase } from "./sections/feedback-showcase";
-import { NavigationShowcase } from "./sections/navigation-showcase";
-import { DataDisplayShowcase } from "./sections/data-display-showcase";
-import { LayoutShowcase } from "./sections/layout-showcase";
-import { UserCardShowcase } from "./sections/user-card-showcase";
-import { PokemonCardShowcase } from "./sections/pokemon-card-showcase";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Metadata } from "next";
+import { ButtonShowcase } from "./sections/button-showcase";
+import { ColorPalette } from "./sections/color-palette";
+import { DataDisplayShowcase } from "./sections/data-display-showcase";
+import { FeedbackShowcase } from "./sections/feedback-showcase";
+import { FormShowcase } from "./sections/form-showcase";
+import { GradientShowcase } from "./sections/gradient-showcase";
+import { LayoutShowcase } from "./sections/layout-showcase";
+import { NavigationShowcase } from "./sections/navigation-showcase";
+import { PokemonPickerShowcase } from "./sections/pokemon-picker-showcase";
+import { UserCardShowcase } from "./sections/user-card-showcase";
 
 export const metadata: Metadata = {
   title: "Design System | Pokeranking",
@@ -27,7 +27,7 @@ export default function DesignPage() {
       </header>
 
       <UserCardShowcase />
-      <PokemonCardShowcase />
+      <PokemonPickerShowcase />
       <ColorPalette />
       <GradientShowcase />
       <ButtonShowcase />
