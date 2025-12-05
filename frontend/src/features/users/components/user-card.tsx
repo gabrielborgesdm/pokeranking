@@ -12,6 +12,7 @@ interface UserCardProps {
   totalScore: number;
   variant?: PokemonTypeVariant;
   className?: string;
+  onClick?: () => void;
 }
 
 export const UserCard = memo(function UserCard({
@@ -21,6 +22,7 @@ export const UserCard = memo(function UserCard({
   totalScore,
   variant = "water",
   className,
+  onClick,
 }: UserCardProps) {
   const formattedScore = useMemo(
     () => totalScore.toLocaleString(),
@@ -29,8 +31,10 @@ export const UserCard = memo(function UserCard({
 
   return (
     <div
+      onClick={onClick}
       className={cn(
-        "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105 hover:cursor-pointer",
+        "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105",
+        onClick && "hover:cursor-pointer",
         pokemonVariantClasses[variant],
         className
       )}

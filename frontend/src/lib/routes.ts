@@ -9,6 +9,9 @@ export const routes = {
   resetPassword: "/reset-password",
   settings: "/settings",
   myRankings: "/my-rankings",
+  rankings: "/rankings",
+  ranking: (id: string) => `/rankings/${id}` as const,
+  userRankings: (username: string) => `/users/${username}/rankings` as const,
   support: "/support",
   // Admin routes
   adminPokemon: "/admin/pokemon",
@@ -26,6 +29,7 @@ export const publicPaths = [
   routes.resetPassword,
   routes.contribute,
   routes.design,
+  routes.rankings,
 ];
 
 export const authPaths = [
