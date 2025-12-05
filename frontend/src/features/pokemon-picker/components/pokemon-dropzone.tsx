@@ -7,7 +7,6 @@ import {
   useDndMonitor,
   DragEndEvent,
   DragStartEvent,
-  DragOverEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -34,8 +33,8 @@ export interface PokemonDropzoneProps {
   placeholder?: string;
   /** Layout direction */
   layout?: "horizontal" | "grid";
-  /** Number of columns for grid layout */
-  columns?: number;
+  /** Maximum number of columns for grid layout */
+  maxColumns?: number;
   /** Optional class name */
   className?: string;
   /** Min height of the dropzone */
@@ -43,6 +42,12 @@ export interface PokemonDropzoneProps {
   /** All available pokemon (for inserting new items) */
   allPokemon?: PokemonResponseDto[];
 }
+
+// Helper to extract pokemon ID from sortable ID (removes "dropzone-" prefix)
+const extractPokemonId = (sortableId: string) => {
+  const prefix = "dropzone-";
+  return sortableId.startsWith(prefix) ? sortableId.slice(prefix.length) : sortableId;
+};
 
 /**
  * PokemonDropzone - A droppable area that accepts Pokemon from PokemonPicker
@@ -57,13 +62,12 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   onRemove,
   placeholder = "Drag Pokemon here",
   layout = "grid",
-  columns = 4,
+  maxColumns = 4,
   className,
   minHeight = 150,
   allPokemon = [],
 }: PokemonDropzoneProps) {
   const [activeItem, setActiveItem] = useState<PokemonResponseDto | null>(null);
-  const [overItemId, setOverItemId] = useState<string | null>(null);
 
   const { isOver, setNodeRef } = useDroppable({ id });
 
@@ -71,39 +75,30 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   useDndMonitor({
     onDragStart(event: DragStartEvent) {
       // Check if it's an internal item being dragged (for reordering)
-      const draggedPokemon = pokemon.find((p) => p._id === event.active.id);
+      const activeId = extractPokemonId(String(event.active.id));
+      const draggedPokemon = pokemon.find((p) => p._id === activeId);
       if (draggedPokemon) {
         setActiveItem(draggedPokemon);
-      }
-    },
-    onDragOver(event: DragOverEvent) {
-      const { over } = event;
-      // Track which item we're hovering over for insertion position
-      if (over) {
-        const isOverDropzone = over.id === id;
-        const isOverItem = pokemon.some((p) => p._id === over.id);
-        setOverItemId(isOverItem ? String(over.id) : isOverDropzone ? "dropzone" : null);
-      } else {
-        setOverItemId(null);
       }
     },
     onDragEnd(event: DragEndEvent) {
       const { active, over } = event;
       setActiveItem(null);
-      setOverItemId(null);
 
       if (!over) return;
 
-      const activeId = String(active.id);
-      const overId = String(over.id);
+      const rawActiveId = String(active.id);
+      const rawOverId = String(over.id);
+      const activeId = extractPokemonId(rawActiveId);
+      const overId = extractPokemonId(rawOverId);
 
-      // Check if this is a new item being dropped from outside
-      const isExternalDrop = !pokemon.some((p) => p._id === activeId);
-      const isDroppedOnDropzone = overId === id;
+      // Check if this is an internal reorder (sortable IDs have "dropzone-" prefix)
+      const isInternalDrag = rawActiveId.startsWith("dropzone-");
+      const isDroppedOnDropzone = rawOverId === id;
       const isDroppedOnItem = pokemon.some((p) => p._id === overId);
 
-      if (isExternalDrop && (isDroppedOnDropzone || isDroppedOnItem)) {
-        // Find the pokemon from allPokemon or active.data
+      if (!isInternalDrag && (isDroppedOnDropzone || isDroppedOnItem)) {
+        // External drop from picker - find the pokemon from allPokemon or active.data
         const newPokemon = allPokemon.find((p) => p._id === activeId) ||
           (active.data.current?.pokemon as PokemonResponseDto | undefined);
 
@@ -123,17 +118,18 @@ export const PokemonDropzone = memo(function PokemonDropzone({
       }
 
       // Handle reordering within the dropzone
-      const oldIndex = pokemon.findIndex((p) => p._id === activeId);
-      const newIndex = pokemon.findIndex((p) => p._id === overId);
+      if (isInternalDrag) {
+        const oldIndex = pokemon.findIndex((p) => p._id === activeId);
+        const newIndex = pokemon.findIndex((p) => p._id === overId);
 
-      if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-        const reordered = arrayMove(pokemon, oldIndex, newIndex);
-        onChange(reordered);
+        if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+          const reordered = arrayMove(pokemon, oldIndex, newIndex);
+          onChange(reordered);
+        }
       }
     },
     onDragCancel() {
       setActiveItem(null);
-      setOverItemId(null);
     },
   });
 
@@ -149,16 +145,16 @@ export const PokemonDropzone = memo(function PokemonDropzone({
     [pokemon, onChange, onRemove]
   );
 
-  const sortableIds = pokemon.map((p) => p._id);
+  const sortableIds = pokemon.map((p) => `dropzone-${p._id}`);
 
   return (
     <div
       ref={setNodeRef}
       style={{ minHeight }}
       className={cn(
-        "relative border-2 border-dashed rounded-xl p-4 transition-all duration-200",
+        "relative border-2 border-dashed rounded-xl p-4 transition-colors duration-200",
         isOver
-          ? "border-primary bg-primary/5 scale-[1.01]"
+          ? "border-primary bg-primary/5"
           : "border-muted-foreground/30",
         className
       )}
@@ -191,7 +187,10 @@ export const PokemonDropzone = memo(function PokemonDropzone({
             )}
             style={
               layout === "grid"
-                ? { gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }
+                ? {
+                  gridTemplateColumns: `repeat(auto-fill, minmax(min(204px, 100%), 1fr))`,
+                  maxWidth: maxColumns * 300 + (maxColumns - 1) * 16,
+                }
                 : undefined
             }
           >

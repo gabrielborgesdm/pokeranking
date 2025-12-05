@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import {
   DndContext,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -26,7 +27,13 @@ export function PokemonPickerShowcase() {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 3,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 50,
+        tolerance: 5,
       },
     })
   );
@@ -93,7 +100,7 @@ export function PokemonPickerShowcase() {
             selectedId={selectedId}
             disabledIds={originalDisabledIds}
             onSelect={handleSelect}
-            columns={4}
+            maxColumns={4}
             className="border rounded-lg p-4"
           />
         </div>
@@ -136,7 +143,7 @@ export function PokemonPickerShowcase() {
                 pokemon={droppedPokemon}
                 onChange={setDroppedPokemon}
                 allPokemon={samplePokemonData}
-                columns={4}
+                maxColumns={4}
                 placeholder="Drag Pokemon here to add them"
               />
             </div>
@@ -145,7 +152,7 @@ export function PokemonPickerShowcase() {
               pokemon={samplePokemonData}
               mode="drag"
               disabledIds={pickerDisabledIds}
-              columns={4}
+              maxColumns={4}
               className="border rounded-lg p-4"
             />
           </div>

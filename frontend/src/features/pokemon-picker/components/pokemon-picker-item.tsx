@@ -15,7 +15,7 @@ interface PokemonPickerItemProps {
   mode: PokemonPickerMode;
   isSelected: boolean;
   isDisabled: boolean;
-  onSelect?: () => void;
+  onSelect?: (pokemon: PokemonResponseDto | null) => void;
 }
 
 export const PokemonPickerItem = memo(function PokemonPickerItem({
@@ -42,7 +42,7 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
 
   const handleClick = () => {
     if (mode === "select" && !isDisabled) {
-      onSelect?.();
+      onSelect?.(isSelected ? null : pokemon);
     }
   };
 
@@ -59,11 +59,11 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
       }}
       {...(mode === "drag" ? { ...attributes, ...listeners } : {})}
       className={cn(
-        "relative h-full transition-transform duration-150",
+        "relative h-full",
         isDragging && "opacity-0",
         mode === "drag" &&
           !isDisabled &&
-          "cursor-grab active:cursor-grabbing hover:scale-105 hover:z-10",
+          "touch-none cursor-grab active:cursor-grabbing",
         isDisabled && "opacity-40 cursor-not-allowed"
       )}
     >

@@ -20,8 +20,8 @@ export interface PokemonPickerProps {
   onDragEnd?: (event: DragEndEvent, pokemon: PokemonResponseDto | null) => void;
   /** Optional class name for the container */
   className?: string;
-  /** Fixed number of columns (overrides responsive behavior) */
-  columns?: number;
+  /** Maximum number of columns (caps responsive behavior) */
+  maxColumns?: number;
   /** Minimum card width in pixels (default: 180, ignored if columns is set) */
   minCardWidth?: number;
   /** Gap between cards in pixels (default: 16) */

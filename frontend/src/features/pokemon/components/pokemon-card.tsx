@@ -28,7 +28,7 @@ export const PokemonCard = memo(function PokemonCard({
     <div
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden rounded-xl p-4 min-w-[200px] shadow-lg transition-transform hover:scale-105",
+        "relative overflow-hidden rounded-xl p-4 min-w-[200px] shadow-lg",
         onClick && "hover:cursor-pointer",
         gradientClass,
         className
@@ -49,7 +49,7 @@ export const PokemonCard = memo(function PokemonCard({
       <h3 className="text-xl font-bold text-center truncate mb-2">{name}</h3>
 
       {/* Type Icons */}
-      <div className="flex justify-center gap-2">
+      <div className="flex justify-center gap-2 h-7">
         {types.map((type) => (
           <PokemonTypeIcon key={type} type={type} size={28} />
         ))}

@@ -28,7 +28,6 @@ export default function DesignPage() {
       </header>
 
       <UserCardShowcase />
-      <PokemonCardShowcase />
       <PokemonPickerShowcase />
       <ColorPalette />
       <GradientShowcase />
