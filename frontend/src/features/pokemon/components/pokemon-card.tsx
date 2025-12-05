@@ -12,9 +12,33 @@ interface PokemonCardProps {
   types: PokemonType[];
   onClick?: () => void;
   className?: string;
+  /** 1-based position in the ranking */
+  position?: number;
+  /** Zone color for the position circle */
+  positionColor?: string;
 }
 
 const DEFAULT_GRADIENT = "gradient-pokemon-default";
+
+const PositionBadge = memo(function PositionBadge({
+  position,
+}: {
+  position: number;
+}) {
+  const displayText = position < 10 ? `0${position}` : String(position);
+  const isThreeDigit = position >= 100;
+  const isFourDigit = position >= 1000;
+  const textSize = isFourDigit ? "text-xl" : isThreeDigit ? "text-2xl" : "text-3xl";
+  const marginLeft = isFourDigit ? "ml-2" : isThreeDigit ? "ml-2" : "ml-3";
+
+  return (
+    <span
+      className={`${marginLeft} mb-3 font-black text-white drop-shadow-md ${textSize}`}
+    >
+      {displayText}
+    </span>
+  );
+});
 
 export const PokemonCard = memo(function PokemonCard({
   name,
@@ -22,6 +46,8 @@ export const PokemonCard = memo(function PokemonCard({
   types,
   onClick,
   className,
+  position,
+  positionColor,
 }: PokemonCardProps) {
   const primaryType = types[0];
   const gradientClass = primaryType
@@ -60,7 +86,14 @@ export const PokemonCard = memo(function PokemonCard({
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white/10" />
+      <div
+        className="absolute -top-6 -right-6 w-20 h-20 rounded-full flex items-end justify-start"
+        style={{
+          backgroundColor: positionColor ?? "rgba(255,255,255,0.1)",
+        }}
+      >
+        {position !== undefined && <PositionBadge position={position} />}
+      </div>
       <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-white/5" />
     </div>
   );

@@ -8,6 +8,7 @@ import {
 import {
   useRankingsControllerFindOne,
   type PokemonResponseDto,
+  type ZoneResponseDto,
 } from "@pokeranking/api-client";
 
 interface UseRankingOptions {
@@ -37,6 +38,26 @@ export function useRanking({ id }: UseRankingOptions) {
     setPokemon(newPokemon);
   }, []);
 
+  const zones = useMemo<ZoneResponseDto[]>(() => ranking?.zones ?? [], [ranking]);
+
+  // Build position -> color map based on zones and pokemon count
+  const positionColors = useMemo(() => {
+    const map = new Map<number, string>();
+    const pokemonCount = pokemon.length;
+
+    for (let pos = 1; pos <= pokemonCount; pos++) {
+      for (const zone of zones) {
+        const [start, end] = zone.interval;
+        if (pos >= start && (end === null || pos <= end)) {
+          map.set(pos, zone.color);
+          break;
+        }
+      }
+    }
+
+    return map;
+  }, [zones, pokemon.length]);
+
   const notFound = error || (data && data.status === 404);
 
   const sensors = useSensors(
@@ -57,6 +78,7 @@ export function useRanking({ id }: UseRankingOptions) {
     ranking,
     pokemon,
     setPokemon: handlePokemonChange,
+    positionColors,
     isLoading,
     error,
     notFound,
