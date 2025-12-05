@@ -41,6 +41,10 @@ export interface PokemonDropzoneProps {
   minHeight?: number;
   /** All available pokemon (for inserting new items) */
   allPokemon?: PokemonResponseDto[];
+  /** Map of position (1-based) to zone color */
+  positionColors?: Map<number, string>;
+  /** Whether to show position badges */
+  showPositions?: boolean;
 }
 
 // Helper to extract pokemon ID from sortable ID (removes "dropzone-" prefix)
@@ -66,6 +70,8 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   className,
   minHeight = 150,
   allPokemon = [],
+  positionColors,
+  showPositions = true,
 }: PokemonDropzoneProps) {
   const [activeItem, setActiveItem] = useState<PokemonResponseDto | null>(null);
 
@@ -194,17 +200,27 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                 : undefined
             }
           >
-            {pokemon.map((p) => (
-              <div
-                key={p._id}
-                className={cn(
-                  layout === "horizontal" && "flex-shrink-0 w-32",
-                  layout === "grid" && "w-full"
-                )}
-              >
-                <SortablePokemonCard pokemon={p} onRemove={handleRemove} />
-              </div>
-            ))}
+            {pokemon.map((p, index) => {
+              const position = index + 1;
+              const color = positionColors?.get(position);
+
+              return (
+                <div
+                  key={p._id}
+                  className={cn(
+                    layout === "horizontal" && "flex-shrink-0 w-32",
+                    layout === "grid" && "w-full"
+                  )}
+                >
+                  <SortablePokemonCard
+                    pokemon={p}
+                    onRemove={handleRemove}
+                    position={showPositions ? position : undefined}
+                    color={color}
+                  />
+                </div>
+              );
+            })}
           </div>
         </SortableContext>
       )}

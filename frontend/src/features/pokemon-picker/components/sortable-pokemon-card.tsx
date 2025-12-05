@@ -12,11 +12,17 @@ import type { PokemonType } from "@/lib/pokemon-types";
 interface SortablePokemonCardProps {
   pokemon: PokemonResponseDto;
   onRemove?: (id: string) => void;
+  /** 1-based position of the pokemon in the ranking */
+  position?: number;
+  /** Zone color for the position badge */
+  color?: string;
 }
 
 export const SortablePokemonCard = memo(function SortablePokemonCard({
   pokemon,
   onRemove,
+  position,
+  color,
 }: SortablePokemonCardProps) {
   const {
     attributes,
@@ -63,6 +69,8 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
         image={pokemon.image}
         types={types}
         className="!min-w-0"
+        position={position}
+        positionColor={color}
       />
     </div>
   );
