@@ -1,7 +1,7 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 
 interface ZoneWithInterval {
-  interval: [number, number];
+  interval: [number, number | null];
 }
 
 export function AreZonesNonOverlapping(validationOptions?: ValidationOptions) {
@@ -27,6 +27,12 @@ export function AreZonesNonOverlapping(validationOptions?: ValidationOptions) {
             const currentEnd = sorted[i].interval[1];
             const nextStart = sorted[i + 1].interval[0];
 
+            // If current zone has null end (unbounded), it must be the last zone
+            // Having a zone after an unbounded zone means they overlap
+            if (currentEnd === null) {
+              return false;
+            }
+
             // If current zone ends at or after next zone starts, they overlap
             if (currentEnd >= nextStart) {
               return false; // Overlap detected
@@ -36,7 +42,7 @@ export function AreZonesNonOverlapping(validationOptions?: ValidationOptions) {
           return true;
         },
         defaultMessage() {
-          return 'Zone intervals must not overlap';
+          return 'Zone intervals must not overlap. Unbounded zones (with null end) must be last.';
         },
       },
     });

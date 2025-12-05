@@ -12,24 +12,42 @@ import {
   useRankingsControllerUpdate,
   getAuthControllerGetProfileQueryKey,
   isApiError,
+  type CreateRankingDto,
+  type UpdateRankingDto,
 } from "@pokeranking/api-client";
 import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
 import { useAnalytics } from "@/hooks/use-analytics";
 
-const rankingFormSchema = z.object({
-  title: z.string().min(1).max(100),
-  theme: z.string().refine((val) => THEME_IDS.includes(val), {
-    message: "Invalid theme",
-  }),
-  background: z
-    .string()
-    .refine((val) => !val || THEME_IDS.includes(val), {
-      message: "Invalid background",
-    })
-    .optional(),
-});
+function createZoneSchema(t: (key: string) => string) {
+  return z.object({
+    name: z.string().min(1, t("zoneEditor.validation.nameRequired")).max(50),
+    interval: z.tuple([z.number().min(1), z.number().nullable()]),
+    color: z
+      .string()
+      .regex(/^#[0-9A-Fa-f]{6}$/, t("zoneEditor.validation.invalidColor")),
+  });
+}
 
-export type RankingFormData = z.infer<typeof rankingFormSchema>;
+function createRankingFormSchema(t: (key: string) => string) {
+  return z.object({
+    title: z.string().min(1).max(100),
+    theme: z.string().refine((val) => THEME_IDS.includes(val), {
+      message: "Invalid theme",
+    }),
+    background: z
+      .string()
+      .refine((val) => !val || THEME_IDS.includes(val), {
+        message: "Invalid background",
+      })
+      .optional(),
+    zones: z.array(createZoneSchema(t)).optional(),
+  });
+}
+
+export type ZoneFormData = z.infer<ReturnType<typeof createZoneSchema>>;
+export type RankingFormData = z.infer<
+  ReturnType<typeof createRankingFormSchema>
+>;
 
 interface UseRankingFormOptions {
   mode: "create" | "edit";
@@ -54,20 +72,30 @@ export function useRankingForm({
   const updateMutation = useRankingsControllerUpdate();
 
   const form = useForm<RankingFormData>({
-    resolver: zodResolver(rankingFormSchema),
+    resolver: zodResolver(createRankingFormSchema(t)),
     defaultValues: {
       title: initialData?.title ?? "",
       theme: initialData?.theme ?? DEFAULT_THEME_ID,
       background: initialData?.background ?? undefined,
+      zones: initialData?.zones ?? [],
     },
   });
 
   async function onSubmit(data: RankingFormData) {
     setError(null);
 
+    // Transform zones to match API type (interval as number[] which can contain null)
+    const apiData = {
+      ...data,
+      zones: data.zones?.map((zone) => ({
+        ...zone,
+        interval: zone.interval as unknown as number[],
+      })),
+    } as CreateRankingDto | UpdateRankingDto;
+
     if (mode === "create") {
       createMutation.mutate(
-        { data },
+        { data: apiData as CreateRankingDto },
         {
           onSuccess: (response) => {
             if (response.status === 201) {
@@ -78,7 +106,7 @@ export function useRankingForm({
                 queryKey: getAuthControllerGetProfileQueryKey(),
               });
               onSuccess?.();
-              router.push("/my-rankings");
+              router.push("/rankings");
             }
           },
           onError: (err) => {
@@ -97,7 +125,7 @@ export function useRankingForm({
       }
 
       updateMutation.mutate(
-        { id: rankingId, data },
+        { id: rankingId, data: apiData as UpdateRankingDto },
         {
           onSuccess: (response) => {
             if (response.status === 200) {
@@ -106,7 +134,7 @@ export function useRankingForm({
                 queryKey: getAuthControllerGetProfileQueryKey(),
               });
               onSuccess?.();
-              router.push("/my-rankings");
+              router.push("/rankings");
             }
           },
           onError: (err) => {

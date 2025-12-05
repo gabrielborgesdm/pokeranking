@@ -6,7 +6,9 @@
     "cancel": "Cancelar",
     "confirm": "Confirmar",
     "delete": "Excluir",
-    "deleting": "Excluindo..."
+    "deleting": "Excluindo...",
+    "save": "Salvar",
+    "saving": "Salvando..."
   },
   "pokemonTypes": {
     "Bug": "Inseto",
@@ -162,6 +164,51 @@
     "save": "Salvar Alterações",
     "saving": "Salvando...",
     "saveFailed": "Falha ao salvar ranking"
+  },
+  "zoneEditor": {
+    "label": "Zonas de Tier",
+    "description": "Defina zonas personalizadas para agrupar seus Pokemon ranqueados (opcional)",
+    "preview": "Prévia das Zonas",
+    "previewDescription": "Como as zonas aparecerão no seu ranking",
+    "addZone": "Adicionar Zona",
+    "removeZone": "Remover",
+    "zoneName": "Nome da Zona",
+    "zoneNamePlaceholder": "S-Tier",
+    "startPosition": "Início",
+    "endPosition": "Fim",
+    "untilEnd": "Até o final",
+    "color": "Cor",
+    "noZones": "Nenhuma zona definida",
+    "defaultZones": "Usar Tiers Padrão",
+    "unnamed": "Sem nome",
+    "validation": {
+      "nameRequired": "Nome da zona é obrigatório",
+      "invalidInterval": "Intervalo de posição inválido",
+      "invalidColor": "Formato de cor inválido"
+    }
+  },
+  "rankingView": {
+    "editRanking": "Editar Ranking",
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon",
+    "pokemon_one": "Pokemon",
+    "pokemon_other": "Pokemon",
+    "unsavedChanges": "Alterações não salvas",
+    "allPokemon": "Todos os Pokemon",
+    "dropPokemonHere": "Solte Pokemon aqui",
+    "releaseToAdd": "Solte para adicionar!",
+    "emptyZone": "Nenhum Pokemon nesta zona"
+  },
+  "boxSelector": {
+    "title": "Suas Boxes",
+    "allPokemon": "Todos os Pokemon",
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon"
+  },
+  "boxPicker": {
+    "title": "Boxes de Pokemon",
+    "description": "Arraste Pokemon para adicioná-los ao seu ranking",
+    "emptyBox": "Esta box está vazia"
   },
   "support": {
     "title": "Suporte e Feedback",

@@ -12,7 +12,8 @@
       "Bash(npm install:*)",
       "Bash(node -e:*)",
       "Bash(cat:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(ls -la \"d:\\www\\personal\\pokeranking\\frontend\\src\\features\\rankings\\components\"\" 2>/dev/null || echo \"Directory not found \")"
     ],
     "deny": [],
     "ask": []
