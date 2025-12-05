@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, CSSProperties, ReactElement } from "react";
+import { memo, useMemo, ReactElement } from "react";
 import { Grid, CellComponentProps } from "react-window";
 import { cn } from "@/lib/utils";
 import { useResponsiveGrid } from "../hooks/use-responsive-grid";
@@ -15,7 +15,7 @@ interface PokemonPickerGridProps {
   selectedId?: string | null;
   disabledIds?: string[];
   onSelect?: (pokemon: PokemonResponseDto | null) => void;
-  columns?: number;
+  maxColumns?: number;
   minCardWidth?: number;
   gap?: number;
   rowHeight?: number;
@@ -42,7 +42,6 @@ function Cell({
   style,
   pokemon,
   columnCount,
-  columnWidth,
   gap,
   mode,
   selectedId,
@@ -80,7 +79,7 @@ function Cell({
           mode={mode}
           isSelected={isSelected}
           isDisabled={isDisabled}
-          onSelect={() => onSelect?.(isSelected ? null : poke)}
+          onSelect={onSelect}
         />
       </div>
     </div>
@@ -93,7 +92,7 @@ export const PokemonPickerGrid = memo(function PokemonPickerGrid({
   selectedId,
   disabledIds = [],
   onSelect,
-  columns,
+  maxColumns,
   minCardWidth,
   gap,
   rowHeight,
@@ -101,7 +100,7 @@ export const PokemonPickerGrid = memo(function PokemonPickerGrid({
   className,
 }: PokemonPickerGridProps) {
   const { containerRef, config, rowCount } = useResponsiveGrid({
-    columns,
+    maxColumns,
     minCardWidth,
     gap,
     rowHeight,

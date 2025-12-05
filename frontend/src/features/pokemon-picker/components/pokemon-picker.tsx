@@ -18,7 +18,7 @@ const DragModePicker = memo(function DragModePicker({
   onDragStart,
   onDragEnd,
   className,
-  columns,
+  maxColumns,
   minCardWidth,
   gap,
   rowHeight,
@@ -52,7 +52,7 @@ const DragModePicker = memo(function DragModePicker({
         pokemon={pokemon}
         mode="drag"
         disabledIds={disabledIds}
-        columns={columns}
+        maxColumns={maxColumns}
         minCardWidth={minCardWidth}
         gap={gap}
         rowHeight={rowHeight}
@@ -62,17 +62,13 @@ const DragModePicker = memo(function DragModePicker({
       {/* Drag overlay for visual feedback */}
       <DragOverlay dropAnimation={null}>
         {activePokemon && (
-          <div className="scale-110 rotate-3 cursor-grabbing animate-in zoom-in-95 duration-150">
-            <div className="relative">
-              {/* Glow effect */}
-              <div className="absolute -inset-2 bg-primary/20 rounded-2xl blur-xl" />
-              <div className="relative shadow-2xl shadow-primary/25 rounded-xl">
-                <PokemonCard
-                  name={activePokemon.name}
-                  image={activePokemon.image}
-                  types={activePokemon.types as PokemonType[]}
-                />
-              </div>
+          <div className="cursor-grabbing">
+            <div className="shadow-2xl rounded-xl opacity-90">
+              <PokemonCard
+                name={activePokemon.name}
+                image={activePokemon.image}
+                types={activePokemon.types as PokemonType[]}
+              />
             </div>
           </div>
         )}
@@ -105,7 +101,7 @@ export const PokemonPicker = memo(function PokemonPicker({
   onDragStart,
   onDragEnd,
   className,
-  columns,
+  maxColumns,
   minCardWidth,
   gap,
   rowHeight,
@@ -120,7 +116,7 @@ export const PokemonPicker = memo(function PokemonPicker({
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         className={className}
-        columns={columns}
+        maxColumns={maxColumns}
         minCardWidth={minCardWidth}
         gap={gap}
         rowHeight={rowHeight}
@@ -138,7 +134,7 @@ export const PokemonPicker = memo(function PokemonPicker({
         selectedId={selectedId}
         disabledIds={disabledIds}
         onSelect={onSelect}
-        columns={columns}
+        maxColumns={maxColumns}
         minCardWidth={minCardWidth}
         gap={gap}
         rowHeight={rowHeight}

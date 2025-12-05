@@ -25,7 +25,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: pokemon._id });
+  } = useSortable({ id: `dropzone-${pokemon._id}` });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -62,10 +62,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
         name={pokemon.name}
         image={pokemon.image}
         types={types}
-        className={cn(
-          "!min-w-0 transition-transform duration-200",
-          isDragging && "scale-105 shadow-2xl"
-        )}
+        className="!min-w-0"
       />
     </div>
   );

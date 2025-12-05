@@ -99,7 +99,7 @@ export function PokemonForm({ mode, pokemonId, initialData }: PokemonFormProps) 
                     <SelectedTypesBadges
                       selectedTypes={selectedTypes}
                       onTypeRemove={(type) =>
-                        field.onChange(field.value.filter((t: string) => t !== type))
+                        field.onChange((field.value ?? []).filter((t: string) => t !== type))
                       }
                       disabled={isLoading}
                     />

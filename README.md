@@ -448,3 +448,9 @@ npm run lint
 ### API Integration
 
 The frontend uses the `@pokeranking/api-client` package for type-safe API calls. This package is auto-generated from the backend's OpenAPI spec using Orval, providing TanStack Query hooks for data fetching.
+
+---
+
+## Acknowledgments
+
+- Pokemon type SVG icons from [duiker101/pokemon-type-svg-icons](https://github.com/duiker101/pokemon-type-svg-icons)
