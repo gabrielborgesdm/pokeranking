@@ -70,7 +70,7 @@ export const PokemonCard = memo(function PokemonCard({
           src={image}
           alt={name}
           fill
-          className="drop-shadow-lg"
+          className="drop-shadow-lg z-10"
           sizes="(max-width: 768px) 50vw, 200px"
         />
       </div>
