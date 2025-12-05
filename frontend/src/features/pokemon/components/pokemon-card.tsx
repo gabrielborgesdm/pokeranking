@@ -14,6 +14,8 @@ interface PokemonCardProps {
   className?: string;
 }
 
+const DEFAULT_GRADIENT = "gradient-pokemon-default";
+
 export const PokemonCard = memo(function PokemonCard({
   name,
   image,
@@ -22,7 +24,9 @@ export const PokemonCard = memo(function PokemonCard({
   className,
 }: PokemonCardProps) {
   const primaryType = types[0];
-  const gradientClass = primaryType ? pokemonTypeGradients[primaryType] : "";
+  const gradientClass = primaryType
+    ? pokemonTypeGradients[primaryType]
+    : DEFAULT_GRADIENT;
 
   return (
     <div
