@@ -245,7 +245,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                     key={virtualRow.key}
                     style={{
                       position: "absolute",
-                      top: virtualRow.start,
+                      top: virtualRow.start + 10, // 10 for the remove icon
                       left: 0,
                       width: "100%",
                       height: virtualRow.size,
