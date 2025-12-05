@@ -59,7 +59,7 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
       }}
       {...(mode === "drag" ? { ...attributes, ...listeners } : {})}
       className={cn(
-        "relative h-full",
+        "relative",
         isDragging && "opacity-0",
         mode === "drag" &&
           !isDisabled &&
@@ -80,7 +80,7 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
         types={types}
         onClick={handleClick}
         className={cn(
-          "!min-w-0 h-full", // Override min-width for grid layout, fill height
+          "!min-w-0", // Override min-width for grid layout
           isSelected && "ring-4 ring-primary shadow-lg shadow-primary/30",
           mode === "select" && !isDisabled && "cursor-pointer"
         )}

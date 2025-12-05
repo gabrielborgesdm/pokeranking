@@ -28,8 +28,8 @@ export interface PokemonPickerProps {
   gap?: number;
   /** Row height for virtualization (default: 280) */
   rowHeight?: number;
-  /** Height of the picker container (default: 600) */
-  height?: number;
+  /** Height of the picker container (default: 600). Accepts number for px or string for CSS value like "75vh" */
+  height?: number | string;
 }
 
 export interface PokemonPickerItemProps {

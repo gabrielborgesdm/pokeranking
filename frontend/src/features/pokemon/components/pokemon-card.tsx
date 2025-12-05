@@ -9,7 +9,7 @@ import { PokemonTypeIcon } from "./pokemon-type-icon";
 interface PokemonCardProps {
   name: string;
   image: string;
-  types: PokemonType[];
+  types?: PokemonType[];
   onClick?: () => void;
   className?: string;
   /** 1-based position in the ranking */
@@ -43,7 +43,7 @@ const PositionBadge = memo(function PositionBadge({
 export const PokemonCard = memo(function PokemonCard({
   name,
   image,
-  types,
+  types = [],
   onClick,
   className,
   position,
