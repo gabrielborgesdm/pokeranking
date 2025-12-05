@@ -14,7 +14,7 @@ interface RankingPageProps {
 export default function RankingPage({ params }: RankingPageProps) {
   const { id } = use(params);
 
-  const { ranking, pokemon, isLoading, notFound: rankingNotFound, sensors } = useRanking({ id });
+  const { ranking, pokemon, setPokemon, isLoading, notFound: rankingNotFound, sensors } = useRanking({ id });
 
   if (rankingNotFound) {
     notFound();
@@ -41,7 +41,7 @@ export default function RankingPage({ params }: RankingPageProps) {
             <PokemonDropzone
               id="ranking-pokemon"
               pokemon={pokemon}
-              onChange={() => {}}
+              onChange={setPokemon}
               maxColumns={6}
             />
           </DndContext>

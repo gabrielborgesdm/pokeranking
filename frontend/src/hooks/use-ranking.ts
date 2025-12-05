@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
 import {
   PointerSensor,
   TouchSensor,
@@ -19,10 +19,23 @@ export function useRanking({ id }: UseRankingOptions) {
 
   const ranking = useMemo(() => data?.data, [data]);
 
-  const pokemon = useMemo<PokemonResponseDto[]>(
+  const initialPokemon = useMemo<PokemonResponseDto[]>(
     () => ranking?.pokemon ?? [],
     [ranking]
   );
+
+  const [pokemon, setPokemon] = useState<PokemonResponseDto[]>([]);
+
+  // Sync local state with fetched data
+  useMemo(() => {
+    if (initialPokemon.length > 0 && pokemon.length === 0) {
+      setPokemon(initialPokemon);
+    }
+  }, [initialPokemon, pokemon.length]);
+
+  const handlePokemonChange = useCallback((newPokemon: PokemonResponseDto[]) => {
+    setPokemon(newPokemon);
+  }, []);
 
   const notFound = error || (data && data.status === 404);
 
@@ -43,6 +56,7 @@ export function useRanking({ id }: UseRankingOptions) {
   return {
     ranking,
     pokemon,
+    setPokemon: handlePokemonChange,
     isLoading,
     error,
     notFound,
