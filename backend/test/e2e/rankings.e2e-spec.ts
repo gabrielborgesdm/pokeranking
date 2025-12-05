@@ -443,6 +443,62 @@ describe('Rankings (e2e)', () => {
     });
   });
 
+  describe('GET /rankings/:id', () => {
+    let rankingId: string;
+
+    beforeEach(async () => {
+      await clearDatabase(app);
+      await seedUsers(app, [REGULAR_USER]);
+      const token = await loginUser(app, {
+        identifier: REGULAR_USER.username,
+        password: REGULAR_USER.password,
+      });
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD, BULBASAUR]);
+      const rankingData = createRankingData({
+        title: 'Test Ranking',
+        pokemon: pokemon.map((p) => p._id.toString()),
+      });
+      const response = await request(app.getHttpServer())
+        .post('/rankings')
+        .set('Authorization', `Bearer ${token}`)
+        .send(rankingData);
+      rankingId = response.body._id;
+    });
+
+    it('should return ranking by id without authentication (public)', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/rankings/${rankingId}`)
+        .expect(200);
+
+      expect(response.body._id).toBe(rankingId);
+      expect(response.body.title).toBe('Test Ranking');
+    });
+
+    it('should return 404 when ranking not found', async () => {
+      const fakeId = '507f1f77bcf86cd799439011';
+      await request(app.getHttpServer())
+        .get(`/rankings/${fakeId}`)
+        .expect(404);
+    });
+
+    it('should return ranking with populated pokemon', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/rankings/${rankingId}`)
+        .expect(200);
+
+      expect(response.body.pokemon).toHaveLength(3);
+      expect(response.body.pokemon[0]).toHaveProperty('name');
+    });
+
+    it('should return ranking with populated user', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/rankings/${rankingId}`)
+        .expect(200);
+
+      expect(response.body.user).toHaveProperty('username');
+    });
+  });
+
   describe('GET /users/:id (rankings integration)', () => {
     beforeEach(async () => {
       await clearDatabase(app);

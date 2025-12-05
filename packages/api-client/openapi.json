@@ -1018,23 +1018,24 @@
         ]
       }
     },
-    "/rankings": {
-      "post": {
-        "operationId": "RankingsController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRankingDto"
-              }
+    "/rankings/{id}": {
+      "get": {
+        "operationId": "RankingsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Ranking ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
-          "201": {
-            "description": "Ranking created successfully",
+          "200": {
+            "description": "Ranking retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -1043,14 +1044,8 @@
               }
             }
           },
-          "400": {
-            "description": "Invalid data or validation error"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "409": {
-            "description": "Conflict - Ranking with this title already exists for user"
+          "404": {
+            "description": "Ranking not found"
           }
         },
         "security": [
@@ -1058,13 +1053,11 @@
             "JWT-auth": []
           }
         ],
-        "summary": "Create a new ranking",
+        "summary": "Get ranking by ID",
         "tags": [
           "rankings"
         ]
-      }
-    },
-    "/rankings/{id}": {
+      },
       "patch": {
         "operationId": "RankingsController_update",
         "parameters": [
@@ -1160,6 +1153,52 @@
           }
         ],
         "summary": "Delete ranking (owner only)",
+        "tags": [
+          "rankings"
+        ]
+      }
+    },
+    "/rankings": {
+      "post": {
+        "operationId": "RankingsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRankingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ranking created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data or validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict - Ranking with this title already exists for user"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a new ranking",
         "tags": [
           "rankings"
         ]
@@ -1787,6 +1826,27 @@
           "color"
         ]
       },
+      "RankingUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "username": {
+            "type": "string",
+            "example": "john_doe"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          }
+        },
+        "required": [
+          "_id",
+          "username"
+        ]
+      },
       "RankingResponseDto": {
         "type": "object",
         "properties": {
@@ -1830,6 +1890,9 @@
             "format": "date-time",
             "type": "string",
             "example": "2024-01-20T15:45:00.000Z"
+          },
+          "user": {
+            "$ref": "#/components/schemas/RankingUserResponseDto"
           }
         },
         "required": [

@@ -1,8 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { ZoneResponseDto } from './zone-response.dto';
 import { transformObjectId } from '../../common/utils/transform.util';
 import { PokemonResponseDto } from '../../pokemon/dto/pokemon-response.dto';
+
+@Exclude()
+export class RankingUserResponseDto {
+  @Expose()
+  @Transform(transformObjectId)
+  @ApiProperty({ example: '507f1f77bcf86cd799439011' })
+  _id: string;
+
+  @Expose()
+  @ApiProperty({ example: 'john_doe' })
+  username: string;
+
+  @Expose()
+  @ApiPropertyOptional({ example: 'https://example.com/avatar.jpg' })
+  profilePic?: string;
+}
 
 @Exclude()
 export class RankingResponseDto {
@@ -48,4 +64,9 @@ export class RankingResponseDto {
   @Expose()
   @ApiProperty({ example: '2024-01-20T15:45:00.000Z' })
   updatedAt: Date;
+
+  @Expose()
+  @Type(() => RankingUserResponseDto)
+  @ApiPropertyOptional({ type: RankingUserResponseDto })
+  user?: RankingUserResponseDto;
 }

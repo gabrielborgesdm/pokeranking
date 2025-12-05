@@ -34,6 +34,7 @@ export * from "./pokemonResponseDto";
 export * from "./pokemonResponseDtoTypesItem";
 export * from "./publicUserResponseDto";
 export * from "./rankingResponseDto";
+export * from "./rankingUserResponseDto";
 export * from "./registerDto";
 export * from "./registerResponseDto";
 export * from "./resendVerificationDto";
