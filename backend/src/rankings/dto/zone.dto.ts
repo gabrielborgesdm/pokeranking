@@ -8,7 +8,6 @@ import {
   Matches,
   Validate,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { ValidInterval } from '../validators/valid-interval.validator';
 
 export class ZoneDto {
@@ -19,15 +18,15 @@ export class ZoneDto {
 
   @ApiProperty({
     example: [1, 5],
-    description: 'Position interval [start, end] where start >= 1',
+    description:
+      'Position interval [start, end] where start >= 1. Use null for end to indicate "until the end" (unbounded)',
     type: [Number],
   })
   @IsArray()
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
-  @Type(() => Number)
   @Validate(ValidInterval)
-  interval: [number, number];
+  interval: [number, number | null];
 
   @ApiProperty({
     example: '#FF5733',

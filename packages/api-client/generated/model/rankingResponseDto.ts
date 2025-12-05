@@ -6,13 +6,13 @@
  * OpenAPI spec version: 1.0
  */
 import type { PokemonResponseDto } from "./pokemonResponseDto";
-import type { ZoneDto } from "./zoneDto";
+import type { ZoneResponseDto } from "./zoneResponseDto";
 
 export interface RankingResponseDto {
   _id: string;
   title: string;
   pokemon: PokemonResponseDto[];
-  zones: ZoneDto[];
+  zones: ZoneResponseDto[];
   /** Theme ID for the ranking card */
   theme: string;
   /**

@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface ZoneDto {
+export interface ZoneResponseDto {
   name: string;
   /** Position interval [start, end] where start >= 1. Use null for end to indicate "until the end" (unbounded) */
   interval: number[];

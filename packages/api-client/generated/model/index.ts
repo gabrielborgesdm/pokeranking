@@ -56,3 +56,4 @@ export * from "./usersControllerFindAllSortBy";
 export * from "./verifyEmailDto";
 export * from "./verifyEmailResponseDto";
 export * from "./zoneDto";
+export * from "./zoneResponseDto";

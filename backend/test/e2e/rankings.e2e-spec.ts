@@ -197,7 +197,7 @@ describe('Rankings (e2e)', () => {
         .expect(201);
     });
 
-    it('should reject zone max interval > pokemon count', async () => {
+    it('should allow zone max interval > pokemon count', async () => {
       await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]); // Only 2 pokemon
       const token = await loginUser(app, {
@@ -206,7 +206,7 @@ describe('Rankings (e2e)', () => {
       });
 
       const rankingData = createRankingData({
-        title: 'Invalid Zone Range',
+        title: 'Zone Beyond Pokemon Count',
         pokemon: pokemon.map((p) => p._id.toString()),
         zones: [
           { name: 'S-Tier', interval: [1, 10], color: '#FF5733' }, // Max 10 > pokemon count 2
@@ -217,7 +217,31 @@ describe('Rankings (e2e)', () => {
         .post('/rankings')
         .set('Authorization', `Bearer ${token}`)
         .send(rankingData)
-        .expect(400);
+        .expect(201);
+    });
+
+    it('should allow null end value for unbounded last zone', async () => {
+      await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      const token = await loginUser(app, {
+        identifier: REGULAR_USER.username,
+        password: REGULAR_USER.password,
+      });
+
+      const rankingData = createRankingData({
+        title: 'Unbounded Zone',
+        pokemon: pokemon.map((p) => p._id.toString()),
+        zones: [
+          { name: 'S-Tier', interval: [1, 5], color: '#FF5733' },
+          { name: 'Rest', interval: [6, null], color: '#AAAAAA' }, // Unbounded last zone
+        ],
+      });
+
+      await request(app.getHttpServer())
+        .post('/rankings')
+        .set('Authorization', `Bearer ${token}`)
+        .send(rankingData)
+        .expect(201);
     });
 
     it('should return 401 when not authenticated', async () => {
@@ -319,7 +343,7 @@ describe('Rankings (e2e)', () => {
         .expect(403);
     });
 
-    it('should validate zone max interval <= pokemon count on update', async () => {
+    it('should allow zone max interval > pokemon count on update', async () => {
       const users = await seedUsers(app, [REGULAR_USER]);
       const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
       const rankings = await seedRankings(
@@ -340,9 +364,9 @@ describe('Rankings (e2e)', () => {
         .patch(`/rankings/${rankings[0]._id.toString()}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          zones: [{ name: 'S-Tier', interval: [1, 10], color: '#FF5733' }], // 10 > 2 pokemon
+          zones: [{ name: 'S-Tier', interval: [1, 10], color: '#FF5733' }], // 10 > 2 pokemon - now allowed
         })
-        .expect(400);
+        .expect(200);
     });
 
     it('should return 404 when ranking not found', async () => {
