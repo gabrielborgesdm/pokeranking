@@ -2,8 +2,10 @@
 
 import { use } from "react";
 import { notFound } from "next/navigation";
-import { useRankingsControllerFindOne } from "@pokeranking/api-client";
+import { DndContext } from "@dnd-kit/core";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PokemonDropzone } from "@/features/pokemon-picker";
+import { useRanking } from "@/hooks/use-ranking";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;
@@ -12,13 +14,11 @@ interface RankingPageProps {
 export default function RankingPage({ params }: RankingPageProps) {
   const { id } = use(params);
 
-  const { data, isLoading, error } = useRankingsControllerFindOne(id);
+  const { ranking, pokemon, isLoading, notFound: rankingNotFound, sensors } = useRanking({ id });
 
-  if (error || (data && data.status === 404)) {
+  if (rankingNotFound) {
     notFound();
   }
-
-  const ranking = data?.data;
 
   return (
     <main className="container mx-auto px-4 py-8">
@@ -37,10 +37,14 @@ export default function RankingPage({ params }: RankingPageProps) {
             )}
           </div>
 
-          {/* TODO: Display ranking content */}
-          <pre className="text-sm text-muted-foreground">
-            {JSON.stringify(ranking, null, 2)}
-          </pre>
+          <DndContext sensors={sensors}>
+            <PokemonDropzone
+              id="ranking-pokemon"
+              pokemon={pokemon}
+              onChange={() => {}}
+              maxColumns={6}
+            />
+          </DndContext>
         </div>
       )}
     </main>

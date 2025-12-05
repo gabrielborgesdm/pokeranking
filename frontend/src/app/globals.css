@@ -394,3 +394,9 @@
   background: linear-gradient(to bottom right, #B8B8D0, #787887) !important;
   color: #1a1a2e !important;
 }
+
+/* Default Pokemon gradient - neutral gray */
+.gradient-pokemon-default {
+  background: linear-gradient(to bottom right, #4a5568, #2d3748) !important;
+  color: white !important;
+}
