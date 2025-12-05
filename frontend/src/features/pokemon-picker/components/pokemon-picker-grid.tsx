@@ -13,6 +13,7 @@ interface PokemonPickerGridProps {
   mode: PokemonPickerMode;
   selectedId?: string | null;
   disabledIds?: string[];
+  filteredOutIds?: string[];
   onSelect?: (pokemon: PokemonResponseDto | null) => void;
   maxColumns?: number;
   minCardWidth?: number;
@@ -27,6 +28,7 @@ export const PokemonPickerGrid = memo(function PokemonPickerGrid({
   mode,
   selectedId,
   disabledIds = [],
+  filteredOutIds = [],
   onSelect,
   maxColumns,
   minCardWidth,
@@ -36,6 +38,15 @@ export const PokemonPickerGrid = memo(function PokemonPickerGrid({
   className,
 }: PokemonPickerGridProps) {
   const disabledSet = useMemo(() => new Set(disabledIds), [disabledIds]);
+  const filteredOutSet = useMemo(
+    () => new Set(filteredOutIds),
+    [filteredOutIds]
+  );
+
+  const visiblePokemon = useMemo(
+    () => pokemon.filter((p) => !filteredOutSet.has(p._id)),
+    [pokemon, filteredOutSet]
+  );
 
   const renderItem = useCallback(
     (poke: PokemonResponseDto) => (
@@ -52,7 +63,7 @@ export const PokemonPickerGrid = memo(function PokemonPickerGrid({
 
   return (
     <VirtualizedPokemonGrid
-      pokemon={pokemon}
+      pokemon={visiblePokemon}
       renderItem={renderItem}
       maxColumns={maxColumns}
       minCardWidth={minCardWidth}

@@ -10,8 +10,10 @@ export interface PokemonPickerProps {
   mode: PokemonPickerMode;
   /** Currently selected Pokemon ID (select mode only) */
   selectedId?: string | null;
-  /** IDs of Pokemon that should appear disabled/unavailable */
+  /** IDs of Pokemon that should appear disabled/unavailable (grayed out but visible) */
   disabledIds?: string[];
+  /** IDs of Pokemon that should be completely hidden from the picker */
+  filteredOutIds?: string[];
   /** Callback when a Pokemon is selected (select mode) */
   onSelect?: (pokemon: PokemonResponseDto | null) => void;
   /** Callback when drag starts (drag mode) */
