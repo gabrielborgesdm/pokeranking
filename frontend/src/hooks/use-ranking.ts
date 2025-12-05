@@ -74,10 +74,17 @@ export function useRanking({ id }: UseRankingOptions) {
     })
   );
 
+  // Stable set of initial Pokemon IDs (saved Pokemon)
+  const initialPokemonIds = useMemo(
+    () => new Set(initialPokemon.map((p) => p._id)),
+    [initialPokemon]
+  );
+
   return {
     ranking,
     pokemon,
     setPokemon: handlePokemonChange,
+    initialPokemonIds,
     positionColors,
     isLoading,
     error,

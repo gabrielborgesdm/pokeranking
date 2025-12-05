@@ -23,6 +23,7 @@ export default function RankingPage({ params }: RankingPageProps) {
     ranking,
     pokemon,
     setPokemon,
+    initialPokemonIds,
     positionColors,
     isLoading,
     notFound: rankingNotFound,
@@ -34,8 +35,17 @@ export default function RankingPage({ params }: RankingPageProps) {
     usePokemonControllerFindAll();
   const allPokemon = allPokemonData?.data ?? [];
 
-  // Disable Pokemon already in ranking
-  const disabledIds = useMemo(() => pokemon.map((p) => p._id), [pokemon]);
+  // Derive filtered and disabled IDs from current pokemon state
+  const { filteredOutIds, disabledIds } = useMemo(() => {
+    const currentIds = pokemon.map((p) => p._id);
+
+    return {
+      // Saved Pokemon (from initial load) should be filtered out (hidden)
+      filteredOutIds: currentIds.filter((id) => initialPokemonIds.has(id)),
+      // Draft Pokemon (added after load) should be disabled (grayed out)
+      disabledIds: currentIds.filter((id) => !initialPokemonIds.has(id)),
+    };
+  }, [pokemon, initialPokemonIds]);
 
   if (rankingNotFound) {
     notFound();
@@ -78,6 +88,7 @@ export default function RankingPage({ params }: RankingPageProps) {
                   pokemon={allPokemon}
                   mode="drag"
                   disabledIds={disabledIds}
+                  filteredOutIds={filteredOutIds}
                   maxColumns={5}
                   height="75vh"
                 />

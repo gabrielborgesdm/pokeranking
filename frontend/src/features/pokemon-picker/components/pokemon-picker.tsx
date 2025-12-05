@@ -15,6 +15,7 @@ import type { PokemonPickerProps } from "../types";
 const DragModePicker = memo(function DragModePicker({
   pokemon,
   disabledIds = [],
+  filteredOutIds = [],
   onDragStart,
   onDragEnd,
   className,
@@ -52,6 +53,7 @@ const DragModePicker = memo(function DragModePicker({
         pokemon={pokemon}
         mode="drag"
         disabledIds={disabledIds}
+        filteredOutIds={filteredOutIds}
         maxColumns={maxColumns}
         minCardWidth={minCardWidth}
         gap={gap}
@@ -97,6 +99,7 @@ export const PokemonPicker = memo(function PokemonPicker({
   mode,
   selectedId,
   disabledIds = [],
+  filteredOutIds = [],
   onSelect,
   onDragStart,
   onDragEnd,
@@ -113,6 +116,7 @@ export const PokemonPicker = memo(function PokemonPicker({
       <DragModePicker
         pokemon={pokemon}
         disabledIds={disabledIds}
+        filteredOutIds={filteredOutIds}
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         className={className}
@@ -133,6 +137,7 @@ export const PokemonPicker = memo(function PokemonPicker({
         mode="select"
         selectedId={selectedId}
         disabledIds={disabledIds}
+        filteredOutIds={filteredOutIds}
         onSelect={onSelect}
         maxColumns={maxColumns}
         minCardWidth={minCardWidth}
