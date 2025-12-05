@@ -161,6 +161,20 @@ export class RankingsService {
     return savedRanking;
   }
 
+  async findOne(id: string): Promise<Ranking> {
+    const ranking = await this.rankingModel
+      .findById(id)
+      .populate('pokemon')
+      .populate('user')
+      .exec();
+
+    if (!ranking) {
+      throw new NotFoundException({ key: TK.RANKINGS.NOT_FOUND, args: { id } });
+    }
+
+    return ranking;
+  }
+
   async remove(id: string, userId: string): Promise<Ranking> {
     const deletedRanking = await withTransaction(
       this.connection,

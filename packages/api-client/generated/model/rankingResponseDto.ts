@@ -7,6 +7,7 @@
  */
 import type { PokemonResponseDto } from "./pokemonResponseDto";
 import type { ZoneResponseDto } from "./zoneResponseDto";
+import type { RankingUserResponseDto } from "./rankingUserResponseDto";
 
 export interface RankingResponseDto {
   _id: string;
@@ -22,4 +23,5 @@ export interface RankingResponseDto {
   background: string | null;
   createdAt: string;
   updatedAt: string;
+  user?: RankingUserResponseDto;
 }

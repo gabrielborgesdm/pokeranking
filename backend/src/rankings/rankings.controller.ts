@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Post,
   Patch,
   Delete,
@@ -22,6 +23,7 @@ import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
 import { RankingResponseDto } from './dto/ranking-response.dto';
 import { toDto } from '../common/utils/transform.util';
+import { Public } from '../common/decorators/public.decorator';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
 
 @ApiTags('rankings')
@@ -29,6 +31,25 @@ import type { AuthenticatedRequest } from '../common/interfaces/authenticated-re
 @Controller('rankings')
 export class RankingsController {
   constructor(private readonly rankingsService: RankingsService) {}
+
+  @Get(':id')
+  @Public()
+  @ApiOperation({ summary: 'Get ranking by ID' })
+  @ApiParam({
+    name: 'id',
+    description: 'Ranking ID',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Ranking retrieved successfully',
+    type: RankingResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Ranking not found' })
+  async findOne(@Param('id') id: string) {
+    const ranking = await this.rankingsService.findOne(id);
+    return toDto(RankingResponseDto, ranking);
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
