@@ -47,6 +47,8 @@ export interface PokemonDropzoneProps {
   positionColors?: Map<number, string>;
   /** Whether to show position badges */
   showPositions?: boolean;
+  /** Whether a drag operation is in progress (shows drop overlay on cards) */
+  isDropping?: boolean;
 }
 
 // Helper to extract pokemon ID from sortable ID (removes "dropzone-" prefix)
@@ -77,8 +79,11 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   allPokemon = [],
   positionColors,
   showPositions = true,
+  isDropping: isDroppingProp,
 }: PokemonDropzoneProps) {
   const [activeItem, setActiveItem] = useState<PokemonResponseDto | null>(null);
+  // Track when an external drag (from picker) is in progress
+  const [isExternalDragging, setIsExternalDragging] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { isOver, setNodeRef } = useDroppable({ id });
@@ -103,8 +108,16 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   // Monitor drag events for internal sorting and external drops
   useDndMonitor({
     onDragStart(event: DragStartEvent) {
+      const rawActiveId = String(event.active.id);
+      const isInternalDrag = rawActiveId.startsWith("dropzone-");
+
+      // Track external drags (from picker)
+      if (!isInternalDrag) {
+        setIsExternalDragging(true);
+      }
+
       // Check if it's an internal item being dragged (for reordering)
-      const activeId = extractPokemonId(String(event.active.id));
+      const activeId = extractPokemonId(rawActiveId);
       const draggedPokemon = pokemon.find((p) => p._id === activeId);
       if (draggedPokemon) {
         setActiveItem(draggedPokemon);
@@ -113,6 +126,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
     onDragEnd(event: DragEndEvent) {
       const { active, over } = event;
       setActiveItem(null);
+      setIsExternalDragging(false);
 
       if (!over) return;
 
@@ -160,8 +174,12 @@ export const PokemonDropzone = memo(function PokemonDropzone({
     },
     onDragCancel() {
       setActiveItem(null);
+      setIsExternalDragging(false);
     },
   });
+
+  // Combine prop and internal state for isDropping
+  const isDropping = isDroppingProp ?? isExternalDragging;
 
   const handleRemove = useCallback(
     (itemId: string) => {
@@ -278,6 +296,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                             onRemove={handleRemove}
                             position={showPositions ? position : undefined}
                             color={color}
+                            isDropping={isDropping}
                           />
                         </div>
                       );

@@ -33,12 +33,14 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
       disabled: mode !== "drag" || isDisabled,
     });
 
-  // Apply transform only to the inner draggable element, not the positioned wrapper
-  const dragTransform = transform
-    ? {
-        transform: CSS.Translate.toString(transform),
-      }
-    : undefined;
+  // Don't apply transform when dragging - the DragOverlay handles the visual
+  // This prevents the "ghost" effect of the original card following the cursor
+  const dragTransform =
+    transform && !isDragging
+      ? {
+          transform: CSS.Translate.toString(transform),
+        }
+      : undefined;
 
   const handleClick = () => {
     if (mode === "select" && !isDisabled) {
@@ -60,7 +62,7 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
       {...(mode === "drag" ? { ...attributes, ...listeners } : {})}
       className={cn(
         "relative",
-        isDragging && "opacity-0",
+        isDragging && "opacity-40 scale-95 transition-all duration-150",
         mode === "drag" &&
           !isDisabled &&
           "touch-none cursor-grab active:cursor-grabbing",
