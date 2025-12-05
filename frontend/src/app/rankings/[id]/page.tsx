@@ -21,7 +21,7 @@ export default function RankingPage({ params }: RankingPageProps) {
   }
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4">
       {isLoading || !ranking ? (
         <div className="space-y-4">
           <Skeleton className="h-10 w-64" />
@@ -43,7 +43,8 @@ export default function RankingPage({ params }: RankingPageProps) {
               pokemon={pokemon}
               onChange={setPokemon}
               positionColors={positionColors}
-              maxColumns={6}
+              maxColumns={5}
+              maxHeight={"75vh"}
             />
           </DndContext>
         </div>
