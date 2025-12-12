@@ -63,11 +63,17 @@ class EnvironmentVariables {
   @IsEmail()
   RESEND_FROM_EMAIL: string;
 
-  @IsString()
-  UPSTASH_REDIS_URL: string;
+  @IsBoolean()
+  @IsOptional()
+  CACHE_ENABLED?: boolean;
 
   @IsString()
-  UPSTASH_REDIS_TOKEN: string;
+  @IsOptional()
+  UPSTASH_REDIS_URL?: string;
+
+  @IsString()
+  @IsOptional()
+  UPSTASH_REDIS_TOKEN?: string;
 
   @IsNumber()
   @IsOptional()
@@ -129,6 +135,7 @@ class EnvironmentVariables {
 export function validate(config: Record<string, unknown>) {
   const defaultValues = {
     ALLOWED_IMAGE_DOMAINS: 'res.cloudinary.com,ik.imagekit.io',
+    CACHE_ENABLED: false,
     CORS_ORIGIN: 'http://localhost:3000',
     PORT: 8000,
     RATE_LIMIT_VERIFY_EMAIL: 5,
