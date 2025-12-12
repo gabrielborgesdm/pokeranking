@@ -4,20 +4,41 @@ import { Redis } from '@upstash/redis';
 
 @Injectable()
 export class CacheService {
-  private readonly redis: Redis;
+  private readonly redis: Redis | null;
   private readonly logger = new Logger(CacheService.name);
+  private readonly enabled: boolean;
 
   constructor(private configService: ConfigService) {
-    this.redis = new Redis({
-      url: this.configService.getOrThrow<string>('UPSTASH_REDIS_URL'),
-      token: this.configService.getOrThrow<string>('UPSTASH_REDIS_TOKEN'),
-    });
+    this.enabled = this.configService.get<boolean>('CACHE_ENABLED', false);
+
+    if (this.enabled) {
+      const url = this.configService.get<string>('UPSTASH_REDIS_URL');
+      const token = this.configService.get<string>('UPSTASH_REDIS_TOKEN');
+
+      if (!url || !token) {
+        this.logger.warn(
+          'CACHE_ENABLED is true but UPSTASH_REDIS_URL or UPSTASH_REDIS_TOKEN is missing. Cache disabled.',
+        );
+        this.enabled = false;
+        this.redis = null;
+      } else {
+        this.redis = new Redis({ url, token });
+        this.logger.log('Cache service initialized with Redis');
+      }
+    } else {
+      this.redis = null;
+      this.logger.log('Cache service disabled');
+    }
+  }
+
+  isEnabled(): boolean {
+    return this.enabled;
   }
 
   /**
    * Exposes the Redis client for services that need direct access (e.g., RateLimitService)
    */
-  getRedisClient(): Redis {
+  getRedisClient(): Redis | null {
     return this.redis;
   }
 
@@ -26,6 +47,9 @@ export class CacheService {
    * @returns The cached value or null if not found/expired
    */
   async get<T>(key: string): Promise<T | null> {
+    if (!this.redis) {
+      return null;
+    }
     try {
       const value = await this.redis.get<T>(key);
       if (value === null) {
@@ -45,6 +69,9 @@ export class CacheService {
    * @param ttlSeconds Time-to-live in seconds. If omitted, cache persists until explicitly deleted.
    */
   async set<T>(key: string, value: T, ttlSeconds?: number): Promise<void> {
+    if (!this.redis) {
+      return;
+    }
     try {
       const options = ttlSeconds ? { ex: ttlSeconds } : undefined;
       await this.redis.set(key, value, options);
@@ -57,6 +84,9 @@ export class CacheService {
    * Deletes a cached value by key
    */
   async del(key: string): Promise<void> {
+    if (!this.redis) {
+      return;
+    }
     try {
       await this.redis.del(key);
     } catch (error) {
