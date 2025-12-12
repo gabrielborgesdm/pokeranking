@@ -15,6 +15,10 @@ export function getInitials(name: string, maxLength = 2): string {
     .slice(0, maxLength);
 }
 
+export function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 const CARD_VARIANTS: PokemonTypeVariant[] = [
   "grass",
   "water",

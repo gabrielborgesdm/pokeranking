@@ -10,32 +10,32 @@ const mockPokemon: {
     {
       name: "Fuecoco",
       image: "/pokemon/fuecoco.png",
-      types: ["Fire"],
+      types: ["fire"],
     },
     {
       name: "Gengar",
       image: "/pokemon/gengar.png",
-      types: ["Ghost", "Poison"],
+      types: ["ghost", "poison"],
     },
     {
       name: "Pikachu",
       image: "/pokemon/pikachu.png",
-      types: ["Electric"],
+      types: ["electric"],
     },
     {
       name: "Bulbasaur",
       image: "/pokemon/bulbasaur.png",
-      types: ["Grass", "Poison"],
+      types: ["grass", "poison"],
     },
     {
       name: "Dragonite",
       image: "/pokemon/dragonite.png",
-      types: ["Dragon", "Flying"],
+      types: ["dragon", "flying"],
     },
     {
       name: "Alakazam",
       image: "/pokemon/alakazam.png",
-      types: ["Psychic"],
+      types: ["psychic"],
     },
   ];
 
