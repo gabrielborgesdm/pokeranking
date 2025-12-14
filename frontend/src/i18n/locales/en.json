@@ -185,7 +185,13 @@
   "boxPicker": {
     "title": "Pokemon Boxes",
     "description": "Drag Pokemon to add them to your ranking",
-    "emptyBox": "This box is empty"
+    "emptyBox": "This box is empty",
+    "addBox": "New Box"
+  },
+  "pokemonFilters": {
+    "allGenerations": "All Gens",
+    "generation": "Gen {{gen}}",
+    "sortByPokedex": "Pokedex #"
   },
   "support": {
     "title": "Support & Feedback",

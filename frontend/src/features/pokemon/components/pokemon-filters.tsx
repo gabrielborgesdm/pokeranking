@@ -14,21 +14,24 @@ import {
 import { TypesSelector, SelectedTypesBadges } from "./types-selector";
 import type { PokemonType } from "@pokeranking/shared";
 
-export type SortByOption = "name" | "createdAt";
+export type SortByOption = "name" | "createdAt" | "pokedexNumber";
 export type OrderOption = "asc" | "desc";
 
 const LIMIT_OPTIONS = [10, 20, 50, 100] as const;
+const GENERATION_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 
 interface PokemonFiltersProps {
   searchValue: string;
   sortBy: SortByOption;
   order: OrderOption;
   selectedTypes: PokemonType[];
+  generation?: number | null;
   limit?: number;
   onSearchChange: (value: string) => void;
   onSortByChange: (value: SortByOption) => void;
   onOrderChange: (value: OrderOption) => void;
   onTypesChange: (types: PokemonType[]) => void;
+  onGenerationChange?: (generation: number | null) => void;
   onLimitChange?: (limit: number) => void;
 }
 
@@ -37,11 +40,13 @@ export const PokemonFilters = memo(function PokemonFilters({
   sortBy,
   order,
   selectedTypes,
+  generation,
   limit,
   onSearchChange,
   onSortByChange,
   onOrderChange,
   onTypesChange,
+  onGenerationChange,
   onLimitChange,
 }: PokemonFiltersProps) {
   const { t } = useTranslation();
@@ -85,11 +90,33 @@ export const PokemonFilters = memo(function PokemonFilters({
             onTypesChange={onTypesChange}
           />
 
+          {generation !== undefined && onGenerationChange && (
+            <Select
+              value={generation?.toString() ?? "all"}
+              onValueChange={(value) =>
+                onGenerationChange(value === "all" ? null : Number(value))
+              }
+            >
+              <SelectTrigger className="flex-1 sm:flex-none sm:w-[120px]">
+                <SelectValue placeholder={t("admin.pokemon.generation")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("pokemonFilters.allGenerations")}</SelectItem>
+                {GENERATION_OPTIONS.map((gen) => (
+                  <SelectItem key={gen} value={String(gen)}>
+                    {t("pokemonFilters.generation", { gen })}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+
           <Select value={sortBy} onValueChange={onSortByChange}>
             <SelectTrigger className="flex-1 sm:flex-none sm:w-[140px]">
               <SelectValue placeholder={t("admin.pokemon.sortBy")} />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="pokedexNumber">{t("pokemonFilters.sortByPokedex")}</SelectItem>
               <SelectItem value="name">{t("admin.pokemon.sortByName")}</SelectItem>
               <SelectItem value="createdAt">{t("admin.pokemon.sortByDate")}</SelectItem>
             </SelectContent>
