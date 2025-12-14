@@ -3,11 +3,10 @@
 import { use, useMemo } from "react";
 import { notFound } from "next/navigation";
 import { DndContext } from "@dnd-kit/core";
-import { usePokemonControllerFindAll } from "@pokeranking/api-client";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   PokemonDropzone,
-  PokemonPicker,
+  PokemonBoxes,
   PickerDropzoneLayout,
 } from "@/features/pokemon-picker";
 import { useRanking } from "@/hooks/use-ranking";
@@ -30,11 +29,6 @@ export default function RankingPage({ params }: RankingPageProps) {
     sensors,
   } = useRanking({ id });
 
-  // Fetch all Pokemon for the picker
-  const { data: allPokemonData, isLoading: isPokemonLoading } =
-    usePokemonControllerFindAll();
-  const allPokemon = allPokemonData?.data ?? [];
-
   // Derive filtered and disabled IDs from current pokemon state
   const { filteredOutIds, disabledIds } = useMemo(() => {
     const currentIds = pokemon.map((p) => p._id);
@@ -51,11 +45,9 @@ export default function RankingPage({ params }: RankingPageProps) {
     notFound();
   }
 
-  const loading = isLoading || isPokemonLoading;
-
   return (
     <main className="container mx-auto px-4">
-      {loading || !ranking ? (
+      {isLoading || !ranking ? (
         <div className="space-y-4">
           <Skeleton className="h-10 w-64" />
           <Skeleton className="h-6 w-48" />
@@ -77,16 +69,13 @@ export default function RankingPage({ params }: RankingPageProps) {
                   id="ranking-pokemon"
                   pokemon={pokemon}
                   onChange={setPokemon}
-                  allPokemon={allPokemon}
                   positionColors={positionColors}
                   maxColumns={5}
                   maxHeight="75vh"
                 />
               }
               picker={
-                <PokemonPicker
-                  pokemon={allPokemon}
-                  mode="drag"
+                <PokemonBoxes
                   disabledIds={disabledIds}
                   filteredOutIds={filteredOutIds}
                   maxColumns={5}

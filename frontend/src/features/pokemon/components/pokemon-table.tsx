@@ -30,6 +30,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { routes } from "@/lib/routes";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { getPokemonTypeColor } from "@/lib/pokemon-types";
+import { capitalize } from "@/lib/utils";
 
 interface PokemonTableProps {
   pokemon: PokemonResponseDto[];
@@ -93,7 +94,7 @@ export const PokemonTable = memo(function PokemonTable({
                       style={{ backgroundColor: getPokemonTypeColor(type) }}
                       className="text-white text-xs"
                     >
-                      {type}
+                      {capitalize(type)}
                     </Badge>
                   ))}
                 </div>

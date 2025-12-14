@@ -12,7 +12,7 @@ export interface PokemonFixtureData {
 export const PIKACHU: PokemonFixtureData = {
   name: 'Pikachu',
   image: 'pikachu.png',
-  types: ['Electric'],
+  types: ['electric'],
 };
 
 /**
@@ -21,7 +21,7 @@ export const PIKACHU: PokemonFixtureData = {
 export const CHARIZARD: PokemonFixtureData = {
   name: 'Charizard',
   image: 'https://res.cloudinary.com/pokemon/charizard.png',
-  types: ['Fire', 'Flying'],
+  types: ['fire', 'flying'],
 };
 
 /**
@@ -30,7 +30,7 @@ export const CHARIZARD: PokemonFixtureData = {
 export const BULBASAUR: PokemonFixtureData = {
   name: 'Bulbasaur',
   image: 'bulbasaur.webp',
-  types: ['Grass', 'Poison'],
+  types: ['grass', 'poison'],
 };
 
 /**

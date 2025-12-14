@@ -31,6 +31,7 @@ export function usePokemonList(options: UsePokemonListOptions = {}) {
   const [sortBy, setSortBy] = useState<SortByOption>("createdAt");
   const [order, setOrder] = useState<OrderOption>("desc");
   const [selectedTypes, setSelectedTypes] = useState<PokemonType[]>([]);
+  const [generation, setGeneration] = useState<number | null>(null);
 
   const params: PokemonControllerSearchParams = {
     page,
@@ -86,6 +87,11 @@ export function usePokemonList(options: UsePokemonListOptions = {}) {
     setPage(1);
   }, []);
 
+  const handleGenerationChange = useCallback((gen: number | null) => {
+    setGeneration(gen);
+    setPage(1);
+  }, []);
+
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
   }, []);
@@ -109,6 +115,7 @@ export function usePokemonList(options: UsePokemonListOptions = {}) {
     sortBy,
     order,
     selectedTypes,
+    generation,
     isLoading,
     isDeleting: deleteMutation.isPending,
     error,
@@ -116,6 +123,7 @@ export function usePokemonList(options: UsePokemonListOptions = {}) {
     handleSortByChange,
     handleOrderChange,
     handleTypesChange,
+    handleGenerationChange,
     handlePageChange,
     handleLimitChange,
     handleDelete,

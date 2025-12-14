@@ -11,24 +11,24 @@
     "saving": "Salvando..."
   },
   "pokemonTypes": {
-    "Bug": "Inseto",
-    "Dark": "Sombrio",
-    "Dragon": "Dragao",
-    "Electric": "Eletrico",
-    "Fairy": "Fada",
-    "Fighting": "Lutador",
-    "Fire": "Fogo",
-    "Flying": "Voador",
-    "Ghost": "Fantasma",
-    "Grass": "Planta",
-    "Ground": "Terrestre",
-    "Ice": "Gelo",
-    "Normal": "Normal",
-    "Poison": "Venenoso",
-    "Psychic": "Psiquico",
-    "Rock": "Pedra",
-    "Steel": "Metal",
-    "Water": "Agua"
+    "bug": "Inseto",
+    "dark": "Sombrio",
+    "dragon": "Dragão",
+    "electric": "Elétrico",
+    "fairy": "Fada",
+    "fighting": "Lutador",
+    "fire": "Fogo",
+    "flying": "Voador",
+    "ghost": "Fantasma",
+    "grass": "Planta",
+    "ground": "Terrestre",
+    "ice": "Gelo",
+    "normal": "Normal",
+    "poison": "Venenoso",
+    "psychic": "Psíquico",
+    "rock": "Pedra",
+    "steel": "Metal",
+    "water": "Água"
   },
   "nav": {
     "leaderboard": "Ranking",
@@ -208,7 +208,13 @@
   "boxPicker": {
     "title": "Boxes de Pokemon",
     "description": "Arraste Pokemon para adicioná-los ao seu ranking",
-    "emptyBox": "Esta box está vazia"
+    "emptyBox": "Esta box está vazia",
+    "addBox": "Nova Box"
+  },
+  "pokemonFilters": {
+    "allGenerations": "Todas Ger.",
+    "generation": "Ger. {{gen}}",
+    "sortByPokedex": "Pokedex #"
   },
   "support": {
     "title": "Suporte e Feedback",

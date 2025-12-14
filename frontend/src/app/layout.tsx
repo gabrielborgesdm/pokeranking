@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Gabriel Borges", url: "https://github.com/gabrielborgesdm" }],
   creator: "Gabriel Borges",
   icons: {
-    icon: "/ranking-logo.png",
-    shortcut: "/ranking-logo.png",
-    apple: "/ranking-logo.png",
+    icon: "/ico.png",
+    shortcut: "/ico.png",
+    apple: "/ico.png",
   },
   openGraph: {
     type: "website",

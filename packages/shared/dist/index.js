@@ -160,27 +160,29 @@ function getThemeRequiredCount(themeId, totalPokemonInSystem) {
 }
 
 // src/pokemon-types.ts
-var PokemonTypes = {
-  Bug: "Bug",
-  Dark: "Dark",
-  Dragon: "Dragon",
-  Electric: "Electric",
-  Fairy: "Fairy",
-  Fighting: "Fighting",
-  Fire: "Fire",
-  Flying: "Flying",
-  Ghost: "Ghost",
-  Grass: "Grass",
-  Ground: "Ground",
-  Ice: "Ice",
-  Normal: "Normal",
-  Poison: "Poison",
-  Psychic: "Psychic",
-  Rock: "Rock",
-  Steel: "Steel",
-  Water: "Water"
-};
-var POKEMON_TYPE_VALUES = Object.values(PokemonTypes);
+var POKEMON_TYPE_VALUES = [
+  "bug",
+  "dark",
+  "dragon",
+  "electric",
+  "fairy",
+  "fighting",
+  "fire",
+  "flying",
+  "ghost",
+  "grass",
+  "ground",
+  "ice",
+  "normal",
+  "poison",
+  "psychic",
+  "rock",
+  "steel",
+  "water"
+];
+var PokemonTypes = Object.fromEntries(
+  POKEMON_TYPE_VALUES.map((t) => [t, t])
+);
 
 exports.DEFAULT_THEME_ID = DEFAULT_THEME_ID;
 exports.POKEMON_TYPE_VALUES = POKEMON_TYPE_VALUES;
