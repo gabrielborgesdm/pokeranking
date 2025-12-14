@@ -223,6 +223,36 @@ This starts:
 - MongoDB 7 with replica set (`rs0`)
 - Redis 7 for local caching
 
+### Seeding Data
+
+#### Pokemon Seeder
+
+The Pokemon seeder populates the database from the fixture file at `scripts/fixtures/pokemon-fixture.json`. It performs upserts with **priority to existing data**:
+
+- **New Pokemon**: Created with all data from the fixture
+- **Existing Pokemon** (matched by name): Only missing fields are filled in; existing values are preserved
+
+```bash
+npm run seed:pokemon
+```
+
+This is useful for:
+- Initial database population
+- Adding new Pokemon from updated fixtures
+- Filling in missing attributes without overwriting manual edits
+
+The script is idempotent and safe to run multiple times.
+
+#### Legacy Migration Seeder
+
+For migrating data from the old database export files:
+
+```bash
+npm run seed
+```
+
+This reads from `scripts/seed/` directory and migrates users, Pokemon, and rankings from the legacy schema.
+
 ### Environment Variables
 
 Required:
@@ -292,6 +322,9 @@ npm run format
 
 # Export OpenAPI spec
 npm run export:openapi
+
+# Seed Pokemon data
+npm run seed:pokemon
 ```
 
 ### API Documentation
