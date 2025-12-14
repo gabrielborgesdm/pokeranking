@@ -65,7 +65,7 @@ class EnvironmentVariables {
 
   @IsBoolean()
   @IsOptional()
-  CACHE_ENABLED?: boolean;
+  CACHE_DISABLED?: boolean;
 
   @IsString()
   @IsOptional()
@@ -135,7 +135,7 @@ class EnvironmentVariables {
 export function validate(config: Record<string, unknown>) {
   const defaultValues = {
     ALLOWED_IMAGE_DOMAINS: 'res.cloudinary.com,ik.imagekit.io',
-    CACHE_ENABLED: false,
+    CACHE_DISABLED: false,
     CORS_ORIGIN: 'http://localhost:3000',
     PORT: 8000,
     RATE_LIMIT_VERIFY_EMAIL: 5,

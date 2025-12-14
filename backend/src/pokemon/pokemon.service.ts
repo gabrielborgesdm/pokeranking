@@ -126,12 +126,19 @@ export class PokemonService {
     const cached = await this.cacheService.get<PokemonResponseDto[]>(
       POKEMON_ALL_CACHE_KEY,
     );
+    console.log('cached');
     if (cached) {
+      console.log('returning cached');
       return cached;
     }
 
-    const pokemon = await this.pokemonModel.find().lean().exec();
+    const pokemon = await this.pokemonModel
+      .find()
+      .select('name image types')
+      .lean()
+      .exec();
     const dtos = toDto(PokemonResponseDto, pokemon);
+    console.log(dtos[0]);
 
     await this.cacheService.set(POKEMON_ALL_CACHE_KEY, dtos);
     return dtos;
