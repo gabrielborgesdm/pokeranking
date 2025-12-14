@@ -2,13 +2,14 @@
  * Pokemon Seeder Script
  *
  * This script seeds or updates the Pokemon collection from the fixture file.
- * It reads from `test/fixtures/pokemon-fixture.json` and performs upserts,
- * giving priority to existing data in the database.
+ * It reads from `fixtures/pokemon-fixture.json` and syncs the database.
  *
  * Behavior:
  *   - New Pokemon: Created with all data from fixture
- *   - Existing Pokemon (matched by name): Only missing fields are filled in
- *     from the fixture; existing values are preserved
+ *   - Existing Pokemon (matched by name): Fields are synced with fixture
+ *     - If fixture has data: fills in missing DB fields
+ *     - If fixture lacks data (only name/image/pokedexNumber): removes extra
+ *       attributes from DB to clear incorrect data
  *
  * This script is idempotent and safe to run multiple times.
  *
@@ -103,8 +104,26 @@ async function seedPokemon() {
 
   let created = 0;
   let updated = 0;
+  let cleaned = 0;
   let unchanged = 0;
   const total = fixtureData.length;
+
+  // Fields that can be removed if fixture doesn't have them
+  const removableFields = [
+    'nameCode',
+    'types',
+    'species',
+    'height',
+    'weight',
+    'abilities',
+    'hp',
+    'attack',
+    'defense',
+    'specialAttack',
+    'specialDefense',
+    'speed',
+    'generation',
+  ];
 
   for (const pokemon of fixtureData) {
     // Build the document for insertion (only on new documents)
@@ -158,38 +177,64 @@ async function seedPokemon() {
       });
       created++;
     } else {
-      // Update existing Pokemon - only fill in missing fields
+      // Update existing Pokemon
       const updateFields: Record<string, unknown> = {};
+      const unsetFields: Record<string, unknown> = {};
 
-      for (const [field, value] of Object.entries(setIfMissingFields)) {
-        // Only set field if it's missing or null/undefined in the existing document
-        if (
-          existing[field] === undefined ||
-          existing[field] === null ||
-          (Array.isArray(existing[field]) && existing[field].length === 0)
-        ) {
-          updateFields[field] = value;
+      // Check if fixture is incomplete (only has name, image, pokedexNumber)
+      const fixtureHasData = Object.keys(pokemon).some(
+        (k) => !['name', 'image', 'pokedexNumber'].includes(k),
+      );
+
+      if (fixtureHasData) {
+        // Fixture has data - fill in missing DB fields
+        for (const [field, value] of Object.entries(setIfMissingFields)) {
+          if (
+            existing[field] === undefined ||
+            existing[field] === null ||
+            (Array.isArray(existing[field]) && existing[field].length === 0)
+          ) {
+            updateFields[field] = value;
+          }
+        }
+      } else {
+        // Fixture is incomplete - remove extra attributes from DB
+        for (const field of removableFields) {
+          if (existing[field] !== undefined && existing[field] !== null) {
+            unsetFields[field] = '';
+          }
         }
       }
 
-      if (Object.keys(updateFields).length > 0) {
-        await pokemonCollection.updateOne(
-          { _id: existing._id },
-          {
-            $set: {
-              ...updateFields,
-              updatedAt: new Date(),
-            },
-          },
-        );
-        updated++;
+      const hasUpdates = Object.keys(updateFields).length > 0;
+      const hasUnsets = Object.keys(unsetFields).length > 0;
+
+      if (hasUpdates || hasUnsets) {
+        const updateOp: Record<string, unknown> = {};
+        if (hasUpdates) {
+          updateOp.$set = { ...updateFields, updatedAt: new Date() };
+        }
+        if (hasUnsets) {
+          updateOp.$unset = unsetFields;
+          if (!hasUpdates) {
+            updateOp.$set = { updatedAt: new Date() };
+          }
+        }
+
+        await pokemonCollection.updateOne({ _id: existing._id }, updateOp);
+
+        if (hasUnsets) {
+          cleaned++;
+        } else {
+          updated++;
+        }
       } else {
         unchanged++;
       }
     }
 
     // Log progress every 100 Pokemon
-    const processed = created + updated + unchanged;
+    const processed = created + updated + cleaned + unchanged;
     if (processed % 100 === 0 || processed === total) {
       process.stdout.write(`\r  Processing: ${processed}/${total} Pokemon`);
     }
@@ -203,6 +248,7 @@ async function seedPokemon() {
   console.log('='.repeat(50));
   console.log(`  Created:   ${created}`);
   console.log(`  Updated:   ${updated}`);
+  console.log(`  Cleaned:   ${cleaned}`);
   console.log(`  Unchanged: ${unchanged}`);
   console.log(`  Total:     ${total}`);
   console.log();
