@@ -42,7 +42,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta charSet="utf-8" />
-          <link rel="icon" href="ranking-logo.png" />
+          <link rel="icon" href="ico.png" />
         </Head>
         <body>
           <Main />

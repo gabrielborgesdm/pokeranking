@@ -14,7 +14,7 @@ export function Logo({ className, size = "default" }: LogoProps) {
   return (
     <Link href="/" className={cn("flex items-center", className)}>
       <Image
-        src="/images/pokeranking.png"
+        src='/images/logo.png'
         alt="Pokeranking"
         width={width}
         height={height}
