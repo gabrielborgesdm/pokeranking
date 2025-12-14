@@ -6,12 +6,13 @@ import { Redis } from '@upstash/redis';
 export class CacheService {
   private readonly redis: Redis | null;
   private readonly logger = new Logger(CacheService.name);
-  private readonly enabled: boolean;
+  private readonly disabled: boolean;
 
   constructor(private configService: ConfigService) {
-    this.enabled = this.configService.get<boolean>('CACHE_ENABLED', false);
+    this.disabled = this.configService.get<boolean>('CACHE_DISABLED', false);
+    console.log('isDisabled', this.disabled);
 
-    if (this.enabled) {
+    if (this.isEnabled()) {
       const url = this.configService.get<string>('UPSTASH_REDIS_URL');
       const token = this.configService.get<string>('UPSTASH_REDIS_TOKEN');
 
@@ -19,7 +20,7 @@ export class CacheService {
         this.logger.warn(
           'CACHE_ENABLED is true but UPSTASH_REDIS_URL or UPSTASH_REDIS_TOKEN is missing. Cache disabled.',
         );
-        this.enabled = false;
+        this.disabled = true;
         this.redis = null;
       } else {
         this.redis = new Redis({ url, token });
@@ -32,7 +33,7 @@ export class CacheService {
   }
 
   isEnabled(): boolean {
-    return this.enabled;
+    return this.disabled === false;
   }
 
   /**
@@ -48,8 +49,11 @@ export class CacheService {
    */
   async get<T>(key: string): Promise<T | null> {
     if (!this.redis) {
+      this.logger.warn('Cache is disabled');
+      console.log(this.redis);
       return null;
     }
+    console.log(this.redis);
     try {
       const value = await this.redis.get<T>(key);
       if (value === null) {
@@ -72,6 +76,7 @@ export class CacheService {
     if (!this.redis) {
       return;
     }
+    console.log(this.redis);
     try {
       const options = ttlSeconds ? { ex: ttlSeconds } : undefined;
       await this.redis.set(key, value, options);

@@ -12,7 +12,7 @@ export default async function globalSetup() {
   process.env.NODE_ENV = 'test';
 
   // Enable cache with mock Upstash credentials for in-memory Redis
-  process.env.CACHE_ENABLED = 'true';
+  process.env.CACHE_DISABLED = 'false';
   process.env.UPSTASH_REDIS_URL = 'http://localhost:6379';
   process.env.UPSTASH_REDIS_TOKEN = 'test-token';
 

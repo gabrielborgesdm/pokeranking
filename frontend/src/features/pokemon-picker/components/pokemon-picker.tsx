@@ -115,6 +115,7 @@ export const PokemonPicker = memo(function PokemonPicker({
   rowHeight,
   height,
 }: PokemonPickerProps) {
+  console.log('pokemon debug', pokemon)
   // Use separate component for drag mode to isolate useDndMonitor hook
   if (mode === "drag") {
     return (
