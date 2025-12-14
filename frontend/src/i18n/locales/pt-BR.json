@@ -208,7 +208,13 @@
   "boxPicker": {
     "title": "Boxes de Pokemon",
     "description": "Arraste Pokemon para adicioná-los ao seu ranking",
-    "emptyBox": "Esta box está vazia"
+    "emptyBox": "Esta box está vazia",
+    "addBox": "Nova Box"
+  },
+  "pokemonFilters": {
+    "allGenerations": "Todas Ger.",
+    "generation": "Ger. {{gen}}",
+    "sortByPokedex": "Pokedex #"
   },
   "support": {
     "title": "Suporte e Feedback",
