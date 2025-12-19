@@ -8,9 +8,7 @@ export async function middleware(req: NextRequest) {
   const isAuthenticated = !!token;
   const { pathname } = req.nextUrl;
 
-  const isPublicPath = publicPaths.some(
-    (path) => pathname === path || pathname.startsWith("/api/")
-  );
+  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
   const isAuthPath = authPaths.some((path) => pathname === path);
   const isAdminPath = adminPaths.some((path) => pathname.startsWith(path));
 

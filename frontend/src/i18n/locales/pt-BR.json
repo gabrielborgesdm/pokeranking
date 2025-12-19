@@ -137,6 +137,18 @@
     "deleteConfirmTitle": "Excluir Ranking",
     "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
   },
+  "userRankings": {
+    "title": "Rankings de {{username}}",
+    "description": "Tier lists de Pokemon por {{username}}",
+    "descriptionOwner": "Suas tier lists pessoais de Pokemon",
+    "noRankings": "{{username}} ainda não criou nenhum ranking.",
+    "noRankingsOwner": "Você ainda não criou nenhum ranking.",
+    "errorTitle": "Erro ao carregar rankings",
+    "errorDescription": "Por favor, tente novamente mais tarde.",
+    "createNew": "Criar Novo",
+    "deleteConfirmTitle": "Excluir Ranking",
+    "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
+  },
   "rankingForm": {
     "createTitle": "Criar Novo Ranking",
     "createDescription": "Configure sua nova tier list de Pokemon",
@@ -214,7 +226,12 @@
   "pokemonFilters": {
     "allGenerations": "Todas Ger.",
     "generation": "Ger. {{gen}}",
-    "sortByPokedex": "Pokedex #"
+    "sortByPokedex": "Pokedex #",
+    "filters": "Filtros",
+    "type": "Tipo",
+    "sortBy": "Ordenar por",
+    "order": "Ordem",
+    "clearFilters": "Limpar filtros"
   },
   "support": {
     "title": "Suporte e Feedback",

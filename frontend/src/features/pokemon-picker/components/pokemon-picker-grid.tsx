@@ -70,8 +70,6 @@ export const PokemonPickerGrid = memo(function PokemonPickerGrid({
       gap={gap}
       rowHeight={rowHeight}
       height={height}
-      paddingTop={16}
-      paddingX={16}
       className={cn("overflow-x-hidden", className)}
     />
   );

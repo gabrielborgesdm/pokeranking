@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { useSession } from "next-auth/react";
 import { List, Plus, ChevronDown } from "lucide-react";
 import { useAuthControllerGetProfile } from "@pokeranking/api-client";
 import { Button } from "@/components/ui/button";
@@ -23,10 +24,13 @@ const MAX_RANKINGS_SHOWN = 5;
 export function RankingsDropdown() {
   const { t } = useTranslation();
   const pathname = usePathname();
+  const { data: session } = useSession();
   const { data, isLoading } = useAuthControllerGetProfile();
 
   const rankings = useMemo(() => data?.data?.rankings ?? [], [data]);
-  const isActive = pathname.startsWith(routes.myRankings);
+  const username = session?.user?.username ?? "";
+  const userRankingsPath = username ? routes.userRankings(username) : "";
+  const isActive = pathname.startsWith("/rankings/user");
 
   return (
     <DropdownMenu>
@@ -47,7 +51,7 @@ export function RankingsDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56">
         <DropdownMenuItem asChild>
-          <Link href={routes.myRankings} className="font-medium">
+          <Link href={userRankingsPath} className="font-medium">
             <List className="mr-2 h-4 w-4" />
             {t("nav.viewAll")}
           </Link>
@@ -77,7 +81,7 @@ export function RankingsDropdown() {
             ))}
             {rankings.length > MAX_RANKINGS_SHOWN && (
               <DropdownMenuItem asChild>
-                <Link href={routes.myRankings} className="text-primary">
+                <Link href={userRankingsPath} className="text-primary">
                   {t("nav.viewAllRankings", {
                     count: rankings.length,
                   })}
@@ -88,7 +92,7 @@ export function RankingsDropdown() {
         )}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={`${routes.myRankings}/new`}>
+          <Link href={routes.rankingNew}>
             <Plus className="mr-2 h-4 w-4" />
             {t("nav.createNewRanking")}
           </Link>

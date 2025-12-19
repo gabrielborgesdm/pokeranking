@@ -63,7 +63,7 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href={routes.myRankings}>
+            <Link href={routes.home}>
               <Search className="size-4" />
               {t("notFound.viewRankings", "View Rankings")}
             </Link>
