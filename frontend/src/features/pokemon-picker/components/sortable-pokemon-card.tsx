@@ -6,7 +6,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { X } from "lucide-react";
-import { useIsSmallScreen } from "@/hooks/use-is-small-screen";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -31,7 +31,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
   style: virtualStyle,
   isDropping,
 }: SortablePokemonCardProps) {
-  const { isSmall } = useIsSmallScreen();
+  const { isSmall } = useScreenSize();
 
   const {
     attributes,

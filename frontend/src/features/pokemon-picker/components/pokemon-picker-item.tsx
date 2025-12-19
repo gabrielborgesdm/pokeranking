@@ -6,7 +6,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { Check } from "lucide-react";
-import { useIsSmallScreen } from "@/hooks/use-is-small-screen";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 import type { PokemonPickerMode } from "../types";
@@ -26,7 +26,7 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
   isDisabled,
   onSelect,
 }: PokemonPickerItemProps) {
-  const { isSmall } = useIsSmallScreen();
+  const { isSmall } = useScreenSize();
 
   // Only use draggable in drag mode
   const { attributes, listeners, setNodeRef, transform, isDragging } =

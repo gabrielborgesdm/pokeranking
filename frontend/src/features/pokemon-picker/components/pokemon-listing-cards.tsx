@@ -6,6 +6,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { useResponsiveGrid } from "../hooks/use-responsive-grid";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -34,11 +35,12 @@ export const PokemonListingCards = memo(function PokemonListingCards({
 }: PokemonListingCardsProps) {
   const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { isSmall } = useScreenSize();
 
-  // Use responsive grid hook to calculate layout with larger gaps for read-only view
+  // Use responsive grid hook to calculate layout
   const { containerRef, config, rowCount } = useResponsiveGrid({
     itemCount: pokemon.length,
-    gap: 36,
+    paddingX: isSmall ? 12 : 16,
   });
 
   // Vertical gap between rows
@@ -84,7 +86,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
       {/* Scroll container */}
       <div
         ref={scrollRef}
-        className="overflow-y-auto overflow-x-hidden"
+        className="overflow-y-auto overflow-x-hidden px-3 md:px-4"
       >
         {/* Virtual container with full height + padding for badge overflow */}
         <div
@@ -113,6 +115,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                   height: virtualRow.size,
                   display: "flex",
                   gap: config.gap,
+                  justifyContent: "center",
                 }}
               >
                 {rowPokemon.map((p, colIndex) => {
@@ -133,6 +136,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                         types={p.types as PokemonType[]}
                         position={showPositions ? position : undefined}
                         positionColor={color}
+                        isCompact={isSmall}
                       />
                     </div>
                   );
