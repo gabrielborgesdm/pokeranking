@@ -156,22 +156,22 @@
   },
   "zoneEditor": {
     "label": "Tier Zones",
-    "description": "Define custom zones to group your ranked Pokemon (optional)",
-    "preview": "Zone Preview",
-    "previewDescription": "How zones will appear on your ranking",
-    "addZone": "Add Zone",
+    "description": "Define custom tier zones to group your ranked Pokemon (optional)",
+    "preview": "Tier Zone Preview",
+    "previewDescription": "How tier zones will appear on your ranking",
+    "addZone": "Add Tier Zone",
     "removeZone": "Remove",
-    "zoneName": "Zone Name",
+    "zoneName": "Tier Zone Name",
     "zoneNamePlaceholder": "S-Tier",
     "startPosition": "Start",
     "endPosition": "End",
     "untilEnd": "Until end",
     "color": "Color",
-    "noZones": "No zones defined",
+    "noZones": "No tier zones defined",
     "defaultZones": "Use Default Tiers",
     "unnamed": "Unnamed",
     "validation": {
-      "nameRequired": "Zone name is required",
+      "nameRequired": "Tier zone name is required",
       "invalidInterval": "Invalid position interval",
       "invalidColor": "Invalid color format"
     }
@@ -186,7 +186,12 @@
     "allPokemon": "All Pokemon",
     "dropPokemonHere": "Drop Pokemon here",
     "releaseToAdd": "Release to add!",
-    "emptyZone": "No Pokemon in this zone"
+    "emptyZone": "No Pokemon in this tier zone",
+    "emptyRanking": "No Pokemon in this ranking",
+    "edit": "Edit",
+    "discardChanges": "Discard",
+    "discardConfirmTitle": "Discard changes?",
+    "discardConfirmDescription": "You have unsaved changes. Are you sure you want to discard them? This action cannot be undone."
   },
   "boxSelector": {
     "title": "Your Boxes",
