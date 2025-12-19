@@ -5,3 +5,6 @@ export { useVerifyEmail, type VerifyEmailFormData } from "./hooks/use-verify-ema
 export { useForgotPassword, type ForgotPasswordFormData } from "./hooks/use-forgot-password";
 export { useResetPassword, type ResetPasswordFormData } from "./hooks/use-reset-password";
 export { useAuthSync } from "./hooks/use-auth-sync";
+
+// Utils
+export { handleSessionExpired } from "./utils/session-expired-handler";
