@@ -1018,6 +1018,50 @@
         ]
       }
     },
+    "/rankings/user/{username}": {
+      "get": {
+        "operationId": "RankingsController_findByUsername",
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "path",
+            "description": "Username to fetch rankings for",
+            "schema": {
+              "example": "john_doe",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User rankings retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RankingResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Get rankings by username",
+        "tags": [
+          "rankings"
+        ]
+      }
+    },
     "/rankings/{id}": {
       "get": {
         "operationId": "RankingsController_findOne",

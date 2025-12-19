@@ -15,8 +15,12 @@ export default function EditRankingPage({ params }: EditRankingPageProps) {
   const { id } = use(params);
   const { t } = useTranslation();
 
-  const { ranking, totalPokemon, isLoading, notFound: rankingNotFound } =
-    useRankingEditData({ rankingId: id });
+  const {
+    ranking,
+    totalPokemon,
+    isLoading,
+    notFound: rankingNotFound,
+  } = useRankingEditData({ rankingId: id });
 
   if (rankingNotFound) {
     notFound();

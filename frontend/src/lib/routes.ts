@@ -8,10 +8,11 @@ export const routes = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   settings: "/settings",
-  myRankings: "/my-rankings",
   rankings: "/rankings",
   ranking: (id: string) => `/rankings/${id}` as const,
-  userRankings: (username: string) => `/users/${username}/rankings` as const,
+  rankingEdit: (id: string) => `/rankings/${id}/edit` as const,
+  rankingNew: "/rankings/new",
+  userRankings: (username: string) => `/rankings/user/${username}` as const,
   support: "/support",
   // Admin routes
   adminPokemon: "/admin/pokemon",
@@ -30,6 +31,7 @@ export const publicPaths = [
   routes.contribute,
   routes.design,
   routes.rankings,
+  "/rankings/user",
 ];
 
 export const authPaths = [

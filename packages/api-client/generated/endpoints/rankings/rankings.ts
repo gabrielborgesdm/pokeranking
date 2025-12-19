@@ -34,6 +34,340 @@ import { customFetch } from "../../../src/client";
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 /**
+ * @summary Get rankings by username
+ */
+export type rankingsControllerFindByUsernameResponse200 = {
+  data: RankingResponseDto[];
+  status: 200;
+};
+
+export type rankingsControllerFindByUsernameResponse404 = {
+  data: void;
+  status: 404;
+};
+
+export type rankingsControllerFindByUsernameResponseSuccess =
+  rankingsControllerFindByUsernameResponse200 & {
+    headers: Headers;
+  };
+export type rankingsControllerFindByUsernameResponseError =
+  rankingsControllerFindByUsernameResponse404 & {
+    headers: Headers;
+  };
+
+export type rankingsControllerFindByUsernameResponse =
+  | rankingsControllerFindByUsernameResponseSuccess
+  | rankingsControllerFindByUsernameResponseError;
+
+export const getRankingsControllerFindByUsernameUrl = (username: string) => {
+  return `/rankings/user/${username}`;
+};
+
+export const rankingsControllerFindByUsername = async (
+  username: string,
+  options?: RequestInit,
+): Promise<rankingsControllerFindByUsernameResponse> => {
+  return customFetch<rankingsControllerFindByUsernameResponse>(
+    getRankingsControllerFindByUsernameUrl(username),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getRankingsControllerFindByUsernameQueryKey = (
+  username?: string,
+) => {
+  return [`/rankings/user/${username}`] as const;
+};
+
+export const getRankingsControllerFindByUsernameQueryOptions = <
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getRankingsControllerFindByUsernameQueryKey(username);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof rankingsControllerFindByUsername>>
+  > = ({ signal }) =>
+    rankingsControllerFindByUsername(username, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!username,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type RankingsControllerFindByUsernameQueryResult = NonNullable<
+  Awaited<ReturnType<typeof rankingsControllerFindByUsername>>
+>;
+export type RankingsControllerFindByUsernameQueryError = void;
+
+export function useRankingsControllerFindByUsername<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+          TError,
+          Awaited<ReturnType<typeof rankingsControllerFindByUsername>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useRankingsControllerFindByUsername<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+          TError,
+          Awaited<ReturnType<typeof rankingsControllerFindByUsername>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useRankingsControllerFindByUsername<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+/**
+ * @summary Get rankings by username
+ */
+
+export function useRankingsControllerFindByUsername<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getRankingsControllerFindByUsernameQueryOptions(
+    username,
+    options,
+  );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getRankingsControllerFindByUsernameSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getRankingsControllerFindByUsernameQueryKey(username);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof rankingsControllerFindByUsername>>
+  > = ({ signal }) =>
+    rankingsControllerFindByUsername(username, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type RankingsControllerFindByUsernameSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof rankingsControllerFindByUsername>>
+>;
+export type RankingsControllerFindByUsernameSuspenseQueryError = void;
+
+export function useRankingsControllerFindByUsernameSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useRankingsControllerFindByUsernameSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useRankingsControllerFindByUsernameSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+/**
+ * @summary Get rankings by username
+ */
+
+export function useRankingsControllerFindByUsernameSuspense<
+  TData = Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+  TError = void,
+>(
+  username: string,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof rankingsControllerFindByUsername>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+} {
+  const queryOptions = getRankingsControllerFindByUsernameSuspenseQueryOptions(
+    username,
+    options,
+  );
+
+  const query = useSuspenseQuery(
+    queryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
  * @summary Get ranking by ID
  */
 export type rankingsControllerFindOneResponse200 = {

@@ -46,7 +46,7 @@ export default function RankingPage({ params }: RankingPageProps) {
   }
 
   return (
-    <main className="container mx-auto px-4">
+    <main>
       {isLoading || !ranking ? (
         <div className="space-y-4">
           <Skeleton className="h-10 w-64" />
@@ -55,7 +55,7 @@ export default function RankingPage({ params }: RankingPageProps) {
         </div>
       ) : (
         <div className="space-y-8">
-          <div>
+          <div className="flex left-20">
             <h1 className="text-3xl font-bold">{ranking.title}</h1>
             {ranking.user && (
               <p className="text-muted-foreground">by {ranking.user.username}</p>
@@ -63,7 +63,7 @@ export default function RankingPage({ params }: RankingPageProps) {
           </div>
 
           <DndContext sensors={sensors}>
-            <PickerDropzoneLayout
+            <PickerDropzoneLayout className="h-[82vh]"
               dropzone={
                 <PokemonDropzone
                   id="ranking-pokemon"
@@ -71,14 +71,13 @@ export default function RankingPage({ params }: RankingPageProps) {
                   onChange={setPokemon}
                   positionColors={positionColors}
                   maxColumns={5}
-                  maxHeight="75vh"
+                  maxHeight="80vh"
                 />
               }
               picker={
                 <PokemonBoxes
                   disabledIds={disabledIds}
                   filteredOutIds={filteredOutIds}
-                  maxColumns={5}
                   height="75vh"
                 />
               }

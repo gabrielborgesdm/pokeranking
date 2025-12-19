@@ -21,16 +21,19 @@ export function PickerDropzoneLayout({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 md:grid-cols-2 gap-4",
-        "h-[calc(100vh-12rem)] md:h-auto",
+        "grid gap-4",
+        // Mobile: single column, auto rows that fit content
+        "grid-cols-1 auto-rows-min",
+        // Desktop: two equal columns, single row
+        "md:grid-cols-2 md:grid-rows-1",
         className
       )}
     >
       {/* Dropzone - left on desktop, top on mobile */}
-      <div className="h-[50%] md:h-auto overflow-hidden">{dropzone}</div>
+      <div className="min-h-0 overflow-hidden max-h-[40vh] md:max-h-none">{dropzone}</div>
 
       {/* Picker - right on desktop, bottom on mobile */}
-      <div className="h-[50%] md:h-auto overflow-hidden">{picker}</div>
+      <div className="min-h-0 overflow-hidden max-h-[40vh] md:max-h-none">{picker}</div>
     </div>
   );
 }

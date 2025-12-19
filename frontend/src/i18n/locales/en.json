@@ -114,6 +114,18 @@
     "deleteConfirmTitle": "Delete Ranking",
     "deleteConfirmDescription": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
   },
+  "userRankings": {
+    "title": "{{username}}'s Rankings",
+    "description": "Pokemon tier lists by {{username}}",
+    "descriptionOwner": "Your personal Pokemon tier lists",
+    "noRankings": "{{username}} hasn't created any rankings yet.",
+    "noRankingsOwner": "You haven't created any rankings yet.",
+    "errorTitle": "Error loading rankings",
+    "errorDescription": "Please try again later.",
+    "createNew": "Create New",
+    "deleteConfirmTitle": "Delete Ranking",
+    "deleteConfirmDescription": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
+  },
   "rankingForm": {
     "createTitle": "Create New Ranking",
     "createDescription": "Set up your new Pokemon tier list",
@@ -191,7 +203,12 @@
   "pokemonFilters": {
     "allGenerations": "All Gens",
     "generation": "Gen {{gen}}",
-    "sortByPokedex": "Pokedex #"
+    "sortByPokedex": "Pokedex #",
+    "filters": "Filters",
+    "type": "Type",
+    "sortBy": "Sort by",
+    "order": "Order",
+    "clearFilters": "Clear filters"
   },
   "support": {
     "title": "Support & Feedback",
