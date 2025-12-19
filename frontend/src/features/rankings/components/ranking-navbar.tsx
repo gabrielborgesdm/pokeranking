@@ -70,7 +70,7 @@ export const RankingNavbar = memo(function RankingNavbar({
   return (
     <nav
       className={cn(
-        "flex items-center justify-between gap-4 py-4 px-2 border-b border-border/40 rounded-lg bg-card/30",
+        "flex items-center justify-between gap-4 py-4 px-6 border-b border-border/40 rounded-lg bg-card/30",
         className
       )}
     >
@@ -88,7 +88,7 @@ export const RankingNavbar = memo(function RankingNavbar({
       </div>
 
       {/* Center section: Unsaved changes indicator (edit mode) or search placeholder (view mode) */}
-      <div className="flex-1 flex items-center justify-center gap-2 max-w-md mx-4">
+      <div className="flex-1 flex items-center justify-end gap-2">
         {isEditMode ? (
           hasUnsavedChanges && (
             <div className="flex items-center gap-1 text-amber-500 text-sm">
@@ -97,7 +97,7 @@ export const RankingNavbar = memo(function RankingNavbar({
             </div>
           )
         ) : (
-          <div className="hidden sm:flex w-full">
+          <div className="hidden sm:flex max-w-md">
             <Input
               type="text"
               placeholder="..."

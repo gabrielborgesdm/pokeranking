@@ -40,7 +40,6 @@ export const PokemonListingCards = memo(function PokemonListingCards({
   // Use responsive grid hook to calculate layout
   const { containerRef, config, rowCount } = useResponsiveGrid({
     itemCount: pokemon.length,
-    paddingX: isSmall ? 12 : 16,
   });
 
   // Vertical gap between rows
@@ -86,7 +85,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
       {/* Scroll container */}
       <div
         ref={scrollRef}
-        className="overflow-y-auto overflow-x-hidden px-3 md:px-4"
+        className="overflow-y-auto overflow-x-hidden px-1 md:px-4"
       >
         {/* Virtual container with full height + padding for badge overflow */}
         <div
