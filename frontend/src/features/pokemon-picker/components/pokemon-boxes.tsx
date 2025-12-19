@@ -29,7 +29,7 @@ import { TypesSelector, SelectedTypesBadges } from "@/features/pokemon";
 import { PokemonPicker } from "./pokemon-picker";
 import { useBoxPokemon, type BoxSortByOption, type BoxOrderOption } from "../hooks/use-box-pokemon";
 import { useResponsiveGrid } from "../hooks/use-responsive-grid";
-import { useIsMobile } from "@/hooks/use-is-mobile";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonType } from "@pokeranking/shared";
 import { cn } from "@/lib/utils";
 
@@ -81,7 +81,7 @@ export const PokemonBoxes = memo(function PokemonBoxes({
   });
 
   // Use viewport-based mobile detection to match CSS breakpoints
-  const isMobile = useIsMobile(768);
+  const { isMobile } = useScreenSize();
 
   // Local state for debounced search
   const [inputValue, setInputValue] = useState(search);

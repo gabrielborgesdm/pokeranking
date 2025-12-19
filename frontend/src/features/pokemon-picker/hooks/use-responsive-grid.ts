@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { POKEMON_PICKER_DEFAULTS, POKEMON_PICKER_COMPACT } from "../constants";
-import { useIsSmallScreen } from "@/hooks/use-is-small-screen";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { ResponsiveGridConfig } from "../types";
 
 interface UseResponsiveGridOptions {
@@ -24,7 +24,7 @@ export function useResponsiveGrid({
 }: UseResponsiveGridOptions) {
   const containerRef = useRef<HTMLDivElement>(null);
   // Use small screen detection for responsive grid sizing
-  const { isSmall } = useIsSmallScreen();
+  const { isSmall } = useScreenSize();
   const [config, setConfig] = useState<ResponsiveGridConfig>({
     containerWidth: 0,
     columnCount: 1,
@@ -121,5 +121,6 @@ export function useResponsiveGrid({
     config,
     rowCount,
     gridContentWidth,
+    isSmall,
   };
 }
