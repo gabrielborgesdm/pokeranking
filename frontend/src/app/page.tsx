@@ -37,12 +37,8 @@ export default function Home() {
   } = useLeaderboard();
 
   const handleUserClick = useCallback(
-    (username: string, rankings: { _id: string }[]) => {
-      if (rankings.length === 1) {
-        router.push(routes.ranking(rankings[0]._id));
-      } else if (rankings.length > 1) {
-        router.push(routes.userRankings(username));
-      }
+    (username: string) => {
+      router.push(routes.userRankings(username));
     },
     [router]
   );
@@ -61,7 +57,7 @@ export default function Home() {
             variant={getVariantByIndex(index)}
             onClick={
               user.rankings.length > 0
-                ? () => handleUserClick(user.username, user.rankings)
+                ? () => handleUserClick(user.username)
                 : undefined
             }
           />
