@@ -17,7 +17,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
-import { useIsAdmin } from "@/hooks/use-is-admin";
+import { useIsAdmin } from "@/features/users";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useThemeContext } from "@/providers/theme-provider";
 import { useLanguage } from "@/providers/language-provider";

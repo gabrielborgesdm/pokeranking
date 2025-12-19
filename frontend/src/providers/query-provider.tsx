@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState, type ReactNode } from "react";
-import { useAuthSync } from "@/hooks/use-auth-sync";
+import { useAuthSync } from "@/features/auth";
 
 const CACHE_DISABLED = process.env.NEXT_PUBLIC_CACHE_DISABLED === "true";
 

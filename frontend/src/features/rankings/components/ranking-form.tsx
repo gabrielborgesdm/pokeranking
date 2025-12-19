@@ -20,7 +20,7 @@ import { CardThemePreview } from "./card-theme-preview";
 import { BackgroundPreview } from "./background-preview";
 import { ZonePicker } from "./zone-picker";
 import { ZonePreview } from "./zone-preview";
-import { useRankingForm, type RankingFormData } from "@/hooks/use-ranking-form";
+import { useRankingForm, type RankingFormData } from "../hooks/use-ranking-form";
 
 interface RankingFormProps {
   mode: "create" | "edit";

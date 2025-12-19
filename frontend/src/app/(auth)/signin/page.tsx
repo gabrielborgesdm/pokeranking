@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useSignIn } from "@/hooks/use-sign-in";
+import { useSignIn } from "@/features/auth";
 
 export default function SignInPage() {
   const { t } = useTranslation();

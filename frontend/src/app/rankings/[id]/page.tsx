@@ -7,8 +7,8 @@ import {
   RankingNavbar,
   RankingListing,
   RankingEditing,
+  useRankingPage,
 } from "@/features/rankings";
-import { useRankingPage } from "@/hooks/use-ranking-page";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;

@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useSupportForm } from "@/hooks/use-support-form";
+import { useSupportForm } from "@/features/support";
 
 export default function SupportPage() {
   const { t } = useTranslation();

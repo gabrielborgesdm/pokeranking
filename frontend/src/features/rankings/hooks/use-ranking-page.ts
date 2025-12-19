@@ -5,8 +5,8 @@ import {
   type PokemonResponseDto,
   type ZoneResponseDto,
 } from "@pokeranking/api-client";
-import { useIsOwner } from "@/hooks/use-is-owner";
-import { useRankingUpdate } from "@/features/rankings/hooks/use-ranking-update";
+import { useIsOwner } from "@/features/users";
+import { useRankingUpdate } from "./use-ranking-update";
 
 interface UseRankingPageOptions {
   id: string;

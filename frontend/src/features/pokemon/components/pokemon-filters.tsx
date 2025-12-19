@@ -14,7 +14,7 @@ import {
 import { TypesSelector, SelectedTypesBadges } from "./types-selector";
 import type { PokemonType } from "@pokeranking/shared";
 
-export type SortByOption = "name" | "createdAt" | "pokedexNumber";
+export type SortByOption = "name" | "createdAt";
 export type OrderOption = "asc" | "desc";
 
 const LIMIT_OPTIONS = [10, 20, 50, 100] as const;
@@ -116,7 +116,6 @@ export const PokemonFilters = memo(function PokemonFilters({
               <SelectValue placeholder={t("admin.pokemon.sortBy")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="pokedexNumber">{t("pokemonFilters.sortByPokedex")}</SelectItem>
               <SelectItem value="name">{t("admin.pokemon.sortByName")}</SelectItem>
               <SelectItem value="createdAt">{t("admin.pokemon.sortByDate")}</SelectItem>
             </SelectContent>

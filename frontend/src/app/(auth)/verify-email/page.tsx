@@ -21,7 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useVerifyEmail } from "@/hooks/use-verify-email";
+import { useVerifyEmail } from "@/features/auth";
 
 function VerifyEmailForm() {
   const { t } = useTranslation();

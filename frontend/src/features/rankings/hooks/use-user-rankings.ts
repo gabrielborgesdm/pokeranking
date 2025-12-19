@@ -1,8 +1,8 @@
 import { useMemo, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRankingsControllerFindByUsername } from "@pokeranking/api-client";
-import { useDeleteRanking } from "@/hooks/use-delete-ranking";
-import { useIsOwner } from "@/hooks/use-is-owner";
+import { useDeleteRanking } from "./use-delete-ranking";
+import { useIsOwner } from "@/features/users";
 import { routes } from "@/lib/routes";
 
 export function useUserRankings(username: string) {
