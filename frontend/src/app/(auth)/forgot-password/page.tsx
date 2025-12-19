@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForgotPassword } from "@/hooks/use-forgot-password";
+import { useForgotPassword } from "@/features/auth";
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation();

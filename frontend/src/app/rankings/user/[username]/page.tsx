@@ -8,12 +8,12 @@ import {
   RankingCard,
   RankingCardsSkeleton,
   RankingsError,
+  useUserRankings,
 } from "@/features/rankings";
 import { AnimatedList } from "@/components/animated-list";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
-import { useUserRankings } from "@/hooks/use-user-rankings";
 import { routes } from "@/lib/routes";
 
 interface UserRankingsPageProps {

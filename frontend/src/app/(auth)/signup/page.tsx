@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useSignUp } from "@/hooks/use-sign-up";
+import { useSignUp } from "@/features/auth";
 
 export default function SignUpPage() {
   const { t } = useTranslation();

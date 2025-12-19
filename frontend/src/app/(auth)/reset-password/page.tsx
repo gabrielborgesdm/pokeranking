@@ -21,7 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useResetPassword } from "@/hooks/use-reset-password";
+import { useResetPassword } from "@/features/auth";
 
 function ResetPasswordForm() {
   const { t } = useTranslation();
