@@ -10,7 +10,7 @@ import {
 } from "react";
 
 /** Breakpoint for small screen detection */
-const SMALL_SCREEN_BREAKPOINT = 1224;
+const SMALL_SCREEN_BREAKPOINT = 872;
 
 /** Breakpoint for mobile detection (matches Tailwind md: 768px) */
 const MOBILE_BREAKPOINT = 768;

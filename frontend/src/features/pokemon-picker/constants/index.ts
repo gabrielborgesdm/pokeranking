@@ -5,7 +5,7 @@ export const POKEMON_PICKER_DEFAULTS = {
   ROW_HEIGHT: 255,
   HEIGHT: 600,
   MIN_COLUMNS: 1,
-  MAX_COLUMNS: 8,
+  MAX_COLUMNS: 5,
 } as const;
 
 export const POKEMON_PICKER_COMPACT = {

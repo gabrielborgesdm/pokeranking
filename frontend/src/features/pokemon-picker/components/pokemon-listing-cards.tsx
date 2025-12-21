@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "@/lib/utils";
@@ -53,11 +53,21 @@ export const PokemonListingCards = memo(function PokemonListingCards({
     overscan: 3,
   });
 
+  // Re-measure virtualizer when grid config changes (resize)
+  useEffect(() => {
+    rowVirtualizer.measure();
+  }, [rowVirtualizer, config.columnCount, config.rowHeight, config.gap]);
+
   // Calculate total virtual height
   const totalHeight = rowVirtualizer.getTotalSize();
 
   // Padding for position badge overflow
   const paddingTop = 16;
+
+  // Calculate grid content width based on current config
+  const gridContentWidth =
+    config.columnCount * config.columnWidth +
+    (config.columnCount - 1) * config.gap;
 
   if (pokemon.length === 0) {
     return (
@@ -88,11 +98,12 @@ export const PokemonListingCards = memo(function PokemonListingCards({
         className="overflow-y-auto overflow-x-hidden px-1 md:px-4"
       >
         {/* Virtual container with full height + padding for badge overflow */}
-        <div
+        <div className="flex flex-col items-center"
           style={{
             height: totalHeight + paddingTop,
             width: "100%",
             position: "relative",
+            justifyContent: "center",
             paddingTop,
           }}
         >
@@ -110,11 +121,12 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                 style={{
                   position: "absolute",
                   top: virtualRow.start + paddingTop,
-                  width: "100%",
                   height: virtualRow.size,
                   display: "flex",
+                  width: gridContentWidth,
+                  marginRight: "20px",
                   gap: config.gap,
-                  justifyContent: "center",
+                  justifyContent: "left",
                 }}
               >
                 {rowPokemon.map((p, colIndex) => {

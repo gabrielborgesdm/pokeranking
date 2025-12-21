@@ -1,14 +1,14 @@
 "use client";
 
-import { use } from "react";
-import { notFound } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PokemonListingCards } from "@/features/pokemon-picker/components/pokemon-listing-cards";
 import {
-  RankingNavbar,
-  RankingListing,
   RankingEditing,
-  useRankingPage,
+  RankingNavbar,
+  useRankingPage
 } from "@/features/rankings";
+import { notFound } from "next/navigation";
+import { use } from "react";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;
@@ -67,10 +67,11 @@ export default function RankingPage({ params }: RankingPageProps) {
               positionColors={positionColors}
             />
           ) : (
-            <RankingListing
-              ranking={ranking}
+            <PokemonListingCards
               pokemon={pokemon}
               positionColors={positionColors}
+              showPositions={true}
+              className='py-8'
             />
           )}
         </div>
