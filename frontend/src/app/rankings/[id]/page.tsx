@@ -1,15 +1,14 @@
 "use client";
 
-import { use, useMemo } from "react";
-import { notFound } from "next/navigation";
-import { DndContext } from "@dnd-kit/core";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PokemonListingCards } from "@/features/pokemon-picker/components/pokemon-listing-cards";
 import {
-  PokemonDropzone,
-  PokemonBoxes,
-  PickerDropzoneLayout,
-} from "@/features/pokemon-picker";
-import { useRanking } from "@/hooks/use-ranking";
+  RankingEditing,
+  RankingNavbar,
+  useRankingPage
+} from "@/features/rankings";
+import { notFound } from "next/navigation";
+import { use } from "react";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;
@@ -22,68 +21,59 @@ export default function RankingPage({ params }: RankingPageProps) {
     ranking,
     pokemon,
     setPokemon,
-    initialPokemonIds,
     positionColors,
+    isOwner,
+    isEditMode,
+    handleEditClick,
+    handleDiscardClick,
+    handleSaveClick,
+    hasUnsavedChanges,
+    isSaving,
     isLoading,
     notFound: rankingNotFound,
-    sensors,
-  } = useRanking({ id });
-
-  // Derive filtered and disabled IDs from current pokemon state
-  const { filteredOutIds, disabledIds } = useMemo(() => {
-    const currentIds = pokemon.map((p) => p._id);
-
-    return {
-      // Saved Pokemon (from initial load) should be filtered out (hidden)
-      filteredOutIds: currentIds.filter((id) => initialPokemonIds.has(id)),
-      // Draft Pokemon (added after load) should be disabled (grayed out)
-      disabledIds: currentIds.filter((id) => !initialPokemonIds.has(id)),
-    };
-  }, [pokemon, initialPokemonIds]);
+  } = useRankingPage({ id });
 
   if (rankingNotFound) {
     notFound();
   }
 
   return (
-    <main className="container mx-auto px-4">
+    <main>
       {isLoading || !ranking ? (
-        <div className="space-y-4">
+        <div className="space-y-4 p-4">
           <Skeleton className="h-10 w-64" />
           <Skeleton className="h-6 w-48" />
           <Skeleton className="h-64 w-full" />
         </div>
       ) : (
-        <div className="space-y-8">
-          <div>
-            <h1 className="text-3xl font-bold">{ranking.title}</h1>
-            {ranking.user && (
-              <p className="text-muted-foreground">by {ranking.user.username}</p>
-            )}
-          </div>
+        <div className="space-y-4">
+          <RankingNavbar
+            title={ranking.title}
+            username={ranking.user?.username ?? ""}
+            isOwner={isOwner}
+            isEditMode={isEditMode}
+            hasUnsavedChanges={hasUnsavedChanges}
+            isSaving={isSaving}
+            onEditClick={handleEditClick}
+            onDiscardClick={handleDiscardClick}
+            onSaveClick={handleSaveClick}
+          />
 
-          <DndContext sensors={sensors}>
-            <PickerDropzoneLayout
-              dropzone={
-                <PokemonDropzone
-                  id="ranking-pokemon"
-                  pokemon={pokemon}
-                  onChange={setPokemon}
-                  positionColors={positionColors}
-                  maxColumns={5}
-                  maxHeight="75vh"
-                />
-              }
-              picker={
-                <PokemonBoxes
-                  disabledIds={disabledIds}
-                  filteredOutIds={filteredOutIds}
-                  maxColumns={5}
-                  height="75vh"
-                />
-              }
+          {isEditMode ? (
+            <RankingEditing
+              ranking={ranking}
+              pokemon={pokemon}
+              setPokemon={setPokemon}
+              positionColors={positionColors}
             />
-          </DndContext>
+          ) : (
+            <PokemonListingCards
+              pokemon={pokemon}
+              positionColors={positionColors}
+              showPositions={true}
+              className='py-8'
+            />
+          )}
         </div>
       )}
     </main>

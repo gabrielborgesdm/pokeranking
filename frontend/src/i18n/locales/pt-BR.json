@@ -137,6 +137,18 @@
     "deleteConfirmTitle": "Excluir Ranking",
     "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
   },
+  "userRankings": {
+    "title": "Rankings de {{username}}",
+    "description": "Tier lists de Pokemon por {{username}}",
+    "descriptionOwner": "Suas tier lists pessoais de Pokemon",
+    "noRankings": "{{username}} ainda não criou nenhum ranking.",
+    "noRankingsOwner": "Você ainda não criou nenhum ranking.",
+    "errorTitle": "Erro ao carregar rankings",
+    "errorDescription": "Por favor, tente novamente mais tarde.",
+    "createNew": "Criar Novo",
+    "deleteConfirmTitle": "Excluir Ranking",
+    "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
+  },
   "rankingForm": {
     "createTitle": "Criar Novo Ranking",
     "createDescription": "Configure sua nova tier list de Pokemon",
@@ -166,23 +178,23 @@
     "saveFailed": "Falha ao salvar ranking"
   },
   "zoneEditor": {
-    "label": "Zonas de Tier",
-    "description": "Defina zonas personalizadas para agrupar seus Pokemon ranqueados (opcional)",
-    "preview": "Prévia das Zonas",
-    "previewDescription": "Como as zonas aparecerão no seu ranking",
-    "addZone": "Adicionar Zona",
+    "label": "Tier Zones",
+    "description": "Defina tier zones personalizadas para agrupar seus Pokemon ranqueados (opcional)",
+    "preview": "Prévia das Tier Zones",
+    "previewDescription": "Como as tier zones aparecerão no seu ranking",
+    "addZone": "Adicionar Tier Zone",
     "removeZone": "Remover",
-    "zoneName": "Nome da Zona",
+    "zoneName": "Nome da Tier Zone",
     "zoneNamePlaceholder": "S-Tier",
     "startPosition": "Início",
     "endPosition": "Fim",
     "untilEnd": "Até o final",
     "color": "Cor",
-    "noZones": "Nenhuma zona definida",
+    "noZones": "Nenhuma tier zone definida",
     "defaultZones": "Usar Tiers Padrão",
     "unnamed": "Sem nome",
     "validation": {
-      "nameRequired": "Nome da zona é obrigatório",
+      "nameRequired": "Nome da tier zone é obrigatório",
       "invalidInterval": "Intervalo de posição inválido",
       "invalidColor": "Formato de cor inválido"
     }
@@ -197,7 +209,12 @@
     "allPokemon": "Todos os Pokemon",
     "dropPokemonHere": "Solte Pokemon aqui",
     "releaseToAdd": "Solte para adicionar!",
-    "emptyZone": "Nenhum Pokemon nesta zona"
+    "emptyZone": "Nenhum Pokemon nesta tier zone",
+    "emptyRanking": "Nenhum Pokemon neste ranking",
+    "edit": "Editar",
+    "discardChanges": "Descartar",
+    "discardConfirmTitle": "Descartar alterações?",
+    "discardConfirmDescription": "Você tem alterações não salvas. Tem certeza que deseja descartá-las? Esta ação não pode ser desfeita."
   },
   "boxSelector": {
     "title": "Suas Boxes",
@@ -214,7 +231,12 @@
   "pokemonFilters": {
     "allGenerations": "Todas Ger.",
     "generation": "Ger. {{gen}}",
-    "sortByPokedex": "Pokedex #"
+    "sortByPokedex": "Pokedex #",
+    "filters": "Filtros",
+    "type": "Tipo",
+    "sortBy": "Ordenar por",
+    "order": "Ordem",
+    "clearFilters": "Limpar filtros"
   },
   "support": {
     "title": "Suporte e Feedback",

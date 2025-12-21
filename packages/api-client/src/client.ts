@@ -4,17 +4,33 @@ let baseURL =
   (typeof process !== 'undefined' && process.env?.REACT_APP_API_URL) ||
   'http://localhost:3000';
 
-// Token storage
-let authToken: string | null = null;
+// Token storage key for localStorage
+const AUTH_TOKEN_KEY = 'pokeranking_auth_token';
+
+// Token storage - initialize from localStorage if available
+let authToken: string | null = (() => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem(AUTH_TOKEN_KEY);
+  }
+  return null;
+})();
 
 // Language storage for Accept-Language header
 let currentLanguage: string = 'en';
 
 /**
  * Set the authentication token for API requests
+ * Persists to localStorage for availability across page reloads
  */
 export const setAuthToken = (token: string | null) => {
   authToken = token;
+  if (typeof window !== 'undefined') {
+    if (token) {
+      localStorage.setItem(AUTH_TOKEN_KEY, token);
+    } else {
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+  }
 };
 
 /**

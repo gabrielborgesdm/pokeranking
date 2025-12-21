@@ -3,9 +3,8 @@
 import { use } from "react";
 import { useTranslation } from "react-i18next";
 import { notFound } from "next/navigation";
-import { RankingForm } from "@/features/rankings";
+import { RankingForm, useRankingEditData } from "@/features/rankings";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRankingEditData } from "@/hooks/use-ranking-edit-data";
 
 interface EditRankingPageProps {
   params: Promise<{ id: string }>;
@@ -15,8 +14,12 @@ export default function EditRankingPage({ params }: EditRankingPageProps) {
   const { id } = use(params);
   const { t } = useTranslation();
 
-  const { ranking, totalPokemon, isLoading, notFound: rankingNotFound } =
-    useRankingEditData({ rankingId: id });
+  const {
+    ranking,
+    totalPokemon,
+    isLoading,
+    notFound: rankingNotFound,
+  } = useRankingEditData({ rankingId: id });
 
   if (rankingNotFound) {
     notFound();

@@ -81,29 +81,31 @@ export function PokemonPickerShowcase() {
 
       {/* Select Mode Demo */}
       {mode === "select" && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Select Mode</h3>
-          <p className="text-sm text-muted-foreground">
-            Click a Pokemon to select/deselect. Disabled Pokemon (Skeledirge,
-            Meowscarada, Gholdengo) cannot be selected.
-          </p>
+        <DndContext sensors={sensors}>
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Select Mode</h3>
+            <p className="text-sm text-muted-foreground">
+              Click a Pokemon to select/deselect. Disabled Pokemon (Skeledirge,
+              Meowscarada, Gholdengo) cannot be selected.
+            </p>
 
-          {selectedPokemon && (
-            <div className="p-4 bg-muted rounded-lg">
-              <p className="font-medium">Selected: {selectedPokemon.name}</p>
-            </div>
-          )}
+            {selectedPokemon && (
+              <div className="p-4 bg-muted rounded-lg">
+                <p className="font-medium">Selected: {selectedPokemon.name}</p>
+              </div>
+            )}
 
-          <PokemonPicker
-            pokemon={samplePokemonData}
-            mode="select"
-            selectedId={selectedId}
-            disabledIds={originalDisabledIds}
-            onSelect={handleSelect}
-            maxColumns={4}
-            className="border rounded-lg p-4"
-          />
-        </div>
+            <PokemonPicker
+              pokemon={samplePokemonData}
+              mode="select"
+              selectedId={selectedId}
+              disabledIds={originalDisabledIds}
+              onSelect={handleSelect}
+              maxColumns={4}
+              className="border rounded-lg p-4"
+            />
+          </div>
+        </DndContext>
       )}
 
       {/* Drag Mode Demo */}

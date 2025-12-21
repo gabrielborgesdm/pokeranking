@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
+import { useSession } from "next-auth/react";
 import {
   useRankingsControllerCreate,
   useRankingsControllerUpdate,
@@ -17,6 +18,7 @@ import {
 } from "@pokeranking/api-client";
 import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { routes } from "@/lib/routes";
 
 function createZoneSchema(t: (key: string) => string) {
   return z.object({
@@ -65,8 +67,10 @@ export function useRankingForm({
   const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
   const [error, setError] = useState<string | null>(null);
   const { trackRankingCreate } = useAnalytics();
+  const username = session?.user?.username ?? "";
 
   const createMutation = useRankingsControllerCreate();
   const updateMutation = useRankingsControllerUpdate();
@@ -106,7 +110,7 @@ export function useRankingForm({
                 queryKey: getAuthControllerGetProfileQueryKey(),
               });
               onSuccess?.();
-              router.push("/rankings");
+              router.push(routes.userRankings(username));
             }
           },
           onError: (err) => {
@@ -134,7 +138,7 @@ export function useRankingForm({
                 queryKey: getAuthControllerGetProfileQueryKey(),
               });
               onSuccess?.();
-              router.push("/rankings");
+              router.push(routes.userRankings(username));
             }
           },
           onError: (err) => {

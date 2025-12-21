@@ -9,10 +9,7 @@ import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 import type { PokemonPickerProps } from "../types";
 
-/**
- * Internal component that uses useDndMonitor - must be inside DndContext
- */
-const DragModePicker = memo(function DragModePicker({
+export const PokemonPicker = memo(function PokemonPicker({
   pokemon,
   disabledIds = [],
   filteredOutIds = [],
@@ -24,7 +21,7 @@ const DragModePicker = memo(function DragModePicker({
   gap,
   rowHeight,
   height,
-}: Omit<PokemonPickerProps, "mode" | "selectedId" | "onSelect">) {
+}: PokemonPickerProps) {
   const [activePokemon, setActivePokemon] = useState<PokemonResponseDto | null>(
     null
   );
@@ -80,77 +77,6 @@ const DragModePicker = memo(function DragModePicker({
           </div>
         )}
       </DragOverlay>
-    </div>
-  );
-});
-
-/**
- * PokemonPicker component for selecting or dragging Pokemon.
- *
- * IMPORTANT: When using mode="drag", you must wrap this component with a DndContext
- * from @dnd-kit/core. The DndContext should be provided by the parent component
- * so that drop targets outside this component can receive the dragged items.
- *
- * Example:
- * ```tsx
- * <DndContext onDragEnd={handleDragEnd}>
- *   <DropZone />
- *   <PokemonPicker pokemon={list} mode="drag" />
- * </DndContext>
- * ```
- */
-export const PokemonPicker = memo(function PokemonPicker({
-  pokemon,
-  mode,
-  selectedId,
-  disabledIds = [],
-  filteredOutIds = [],
-  onSelect,
-  onDragStart,
-  onDragEnd,
-  className,
-  maxColumns,
-  minCardWidth,
-  gap,
-  rowHeight,
-  height,
-}: PokemonPickerProps) {
-  console.log('pokemon debug', pokemon)
-  // Use separate component for drag mode to isolate useDndMonitor hook
-  if (mode === "drag") {
-    return (
-      <DragModePicker
-        pokemon={pokemon}
-        disabledIds={disabledIds}
-        filteredOutIds={filteredOutIds}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
-        className={className}
-        maxColumns={maxColumns}
-        minCardWidth={minCardWidth}
-        gap={gap}
-        rowHeight={rowHeight}
-        height={height}
-      />
-    );
-  }
-
-  // Select mode - no DndContext needed
-  return (
-    <div className={cn("w-full", className)}>
-      <PokemonPickerGrid
-        pokemon={pokemon}
-        mode="select"
-        selectedId={selectedId}
-        disabledIds={disabledIds}
-        filteredOutIds={filteredOutIds}
-        onSelect={onSelect}
-        maxColumns={maxColumns}
-        minCardWidth={minCardWidth}
-        gap={gap}
-        rowHeight={rowHeight}
-        height={height}
-      />
     </div>
   );
 });
