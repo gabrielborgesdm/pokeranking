@@ -70,7 +70,7 @@ export const RankingNavbar = memo(function RankingNavbar({
   return (
     <nav
       className={cn(
-        "flex items-center justify-between gap-4 py-4 px-6 border-b border-border/40 rounded-lg bg-card/30",
+        "flex items-center justify-between gap-4 py-4 px-8 border-b border-border/40 bg-card/70",
         className
       )}
     >
