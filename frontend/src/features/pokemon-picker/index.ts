@@ -7,6 +7,7 @@ export { PickerDropzoneLayout } from "./components/picker-dropzone-layout";
 export { VirtualizedPokemonGrid } from "./components/virtualized-pokemon-grid";
 export { PokemonBoxes } from "./components/pokemon-boxes";
 export { BoxTabs } from "./components/box-tabs";
+export { PokemonListingCards } from "./components/pokemon-listing-cards";
 export { useResponsiveGrid } from "./hooks/use-responsive-grid";
 export { useBoxPokemon } from "./hooks/use-box-pokemon";
 export { POKEMON_PICKER_DEFAULTS } from "./constants";

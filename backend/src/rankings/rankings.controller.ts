@@ -32,6 +32,25 @@ import type { AuthenticatedRequest } from '../common/interfaces/authenticated-re
 export class RankingsController {
   constructor(private readonly rankingsService: RankingsService) {}
 
+  @Get('user/:username')
+  @Public()
+  @ApiOperation({ summary: 'Get rankings by username' })
+  @ApiParam({
+    name: 'username',
+    description: 'Username to fetch rankings for',
+    example: 'john_doe',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User rankings retrieved successfully',
+    type: [RankingResponseDto],
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async findByUsername(@Param('username') username: string) {
+    const rankings = await this.rankingsService.findByUsername(username);
+    return toDto(RankingResponseDto, rankings);
+  }
+
   @Get(':id')
   @Public()
   @ApiOperation({ summary: 'Get ranking by ID' })

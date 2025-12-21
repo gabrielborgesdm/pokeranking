@@ -175,6 +175,27 @@ export class RankingsService {
     return ranking;
   }
 
+  async findByUsername(username: string): Promise<Ranking[]> {
+    const user = await this.userModel
+      .findOne({ username, isActive: true })
+      .exec();
+
+    if (!user) {
+      throw new NotFoundException({
+        key: TK.USERS.NOT_FOUND,
+        args: { username },
+      });
+    }
+
+    const rankings = await this.rankingModel
+      .find({ user: user._id })
+      .populate('user', 'username profilePic')
+      .sort({ updatedAt: -1 })
+      .exec();
+
+    return rankings;
+  }
+
   async remove(id: string, userId: string): Promise<Ranking> {
     const deletedRanking = await withTransaction(
       this.connection,

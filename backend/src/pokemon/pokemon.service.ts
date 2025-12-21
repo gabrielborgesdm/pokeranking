@@ -134,7 +134,7 @@ export class PokemonService {
 
     const pokemon = await this.pokemonModel
       .find()
-      .select('name image types')
+      .select('name image types generation pokedexNumber')
       .lean()
       .exec();
     const dtos = toDto(PokemonResponseDto, pokemon);

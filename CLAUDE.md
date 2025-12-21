@@ -127,3 +127,11 @@ NEXT_PUBLIC_GITHUB_URL=<url>                      # GitHub repo link
 ## Database Notes
 
 MongoDB requires replica set mode for transaction support. The docker-compose setup handles this automatically with the `rs0` replica set.
+
+## Commit Guidelines
+
+When creating commits, do NOT include:
+- Co-authored-by lines
+- "Generated with Claude Code" or similar attribution lines
+
+Keep commit messages clean and focused on the changes made.

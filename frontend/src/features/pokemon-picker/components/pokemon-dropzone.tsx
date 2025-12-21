@@ -223,7 +223,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
       {pokemon.length === 0 ? (
         <div
           className={cn(
-            "absolute inset-0 flex items-center justify-center rounded-xl border-2 border-dashed transition-colors duration-200",
+            "absolute inset-0 flex items-center justify-left rounded-xl border-2 border-dashed transition-colors duration-200",
             isOver
               ? "border-primary bg-primary/5"
               : "border-muted-foreground/30"
@@ -253,8 +253,6 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                 width: "100%",
                 position: "relative",
                 paddingTop,
-                paddingLeft: paddingX,
-                paddingRight: paddingX,
               }}
             >
               {/* Only render visible rows */}
@@ -271,11 +269,9 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                     style={{
                       position: "absolute",
                       top: virtualRow.start + paddingTop,
-                      left: 0,
                       width: "100%",
                       height: virtualRow.size,
                       display: "flex",
-                      justifyContent: "center",
                       gap: config.gap,
                     }}
                   >

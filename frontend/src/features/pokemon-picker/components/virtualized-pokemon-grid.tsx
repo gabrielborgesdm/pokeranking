@@ -54,6 +54,7 @@ export const VirtualizedPokemonGrid = memo(function VirtualizedPokemonGrid({
     gap,
     rowHeight,
     itemCount: pokemon.length,
+    paddingX,
   });
 
   const rowVirtualizer = useVirtualizer({
@@ -85,8 +86,6 @@ export const VirtualizedPokemonGrid = memo(function VirtualizedPokemonGrid({
             width: "100%",
             position: "relative",
             paddingTop,
-            paddingLeft: paddingX,
-            paddingRight: paddingX,
           }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
@@ -102,22 +101,17 @@ export const VirtualizedPokemonGrid = memo(function VirtualizedPokemonGrid({
                 style={{
                   position: "absolute",
                   top: virtualRow.start + paddingTop,
-                  left: 0,
-                  width: "100%",
+                  left: paddingX,
+                  right: paddingX,
                   height: virtualRow.size,
-                  display: "flex",
-                  justifyContent: "center",
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${config.columnCount}, ${config.columnWidth}px)`,
                   gap: config.gap,
+                  justifyContent: "center",
                 }}
               >
                 {rowPokemon.map((p, colIndex) => (
-                  <div
-                    key={p._id}
-                    style={{
-                      width: config.columnWidth,
-                      flexShrink: 0,
-                    }}
-                  >
+                  <div key={p._id}>
                     {renderItem(p, startIndex + colIndex)}
                   </div>
                 ))}

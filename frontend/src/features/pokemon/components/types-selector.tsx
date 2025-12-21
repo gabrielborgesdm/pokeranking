@@ -24,6 +24,8 @@ interface TypesSelectorProps {
   className?: string;
   /** Custom button label. If not provided, uses default based on compact prop */
   buttonLabel?: string;
+  /** Custom class name for the trigger button */
+  buttonClassName?: string;
 }
 
 export const TypesSelector = memo(function TypesSelector({
@@ -34,6 +36,7 @@ export const TypesSelector = memo(function TypesSelector({
   compact = false,
   className,
   buttonLabel,
+  buttonClassName,
 }: TypesSelectorProps) {
   const { t } = useTranslation();
 
@@ -58,7 +61,7 @@ export const TypesSelector = memo(function TypesSelector({
             variant="outline"
             size={compact ? "sm" : "default"}
             disabled={disabled}
-            className={compact ? "h-7 text-xs" : "min-w-[120px]"}
+            className={buttonClassName ?? (compact ? "h-7 text-xs" : "min-w-[120px]")}
           >
             {buttonLabel ?? (compact ? t("admin.pokemon.selectTypes") : t("admin.pokemon.filterTypes"))}
             {selectedTypes.length > 0 && (

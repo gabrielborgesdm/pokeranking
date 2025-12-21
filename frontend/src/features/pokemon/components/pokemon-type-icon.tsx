@@ -2,11 +2,6 @@
 
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
   PokemonType,
@@ -32,7 +27,7 @@ export const PokemonTypeIcon = memo(function PokemonTypeIcon({
   const color = pokemonTypeColors[type];
   const label = t(`pokemonTypes.${type}`);
 
-  const icon = (
+  return (
     <div
       className={cn("flex-shrink-0", className)}
       style={{
@@ -50,19 +45,7 @@ export const PokemonTypeIcon = memo(function PokemonTypeIcon({
       }}
       role="img"
       aria-label={label}
+      title={showTooltip ? label : undefined}
     />
-  );
-
-  if (!showTooltip) {
-    return icon;
-  }
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>{icon}</TooltipTrigger>
-      <TooltipContent>
-        <span>{label}</span>
-      </TooltipContent>
-    </Tooltip>
   );
 });
