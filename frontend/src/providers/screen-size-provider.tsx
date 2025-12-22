@@ -16,7 +16,7 @@ const SMALL_SCREEN_BREAKPOINT = 872;
 const MOBILE_BREAKPOINT = 768;
 
 interface ScreenSizeContextValue {
-  /** True when viewport width < 1224px */
+  /** True when viewport width < 872px */
   isSmall: boolean;
   /** True when viewport width < 768px */
   isMobile: boolean;
