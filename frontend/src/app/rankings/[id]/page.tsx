@@ -8,6 +8,8 @@ import {
   RankingNavbar,
   useRankingPage
 } from "@/features/rankings";
+import { useScreenSize } from "@/providers/screen-size-provider";
+import { LoadingFallback } from "@/components/loading-fallback";
 import { notFound } from "next/navigation";
 import { use } from "react";
 
@@ -17,6 +19,7 @@ interface RankingPageProps {
 
 export default function RankingPage({ params }: RankingPageProps) {
   const { id } = use(params);
+  const { isResizing } = useScreenSize();
 
   const {
     ranking,
@@ -40,6 +43,10 @@ export default function RankingPage({ params }: RankingPageProps) {
 
   if (isLoading || !ranking) {
     return <PokemonListingCardsSkeleton count={15} isCompact={false} />;
+  }
+
+  if (isResizing) {
+    return <LoadingFallback />;
   }
 
   return (
