@@ -93,20 +93,34 @@ export function useResponsiveGrid({
     const container = containerRef.current;
     if (!container) return;
 
+    let resizeTimeout: NodeJS.Timeout | null = null;
+
     const resizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];
       if (entry) {
         const width = entry.contentRect.width;
-        setConfig(calculateGrid(width));
+
+        // Debounce resize calculations
+        if (resizeTimeout) {
+          clearTimeout(resizeTimeout);
+        }
+        resizeTimeout = setTimeout(() => {
+          setConfig(calculateGrid(width));
+        }, 100);
       }
     });
 
     resizeObserver.observe(container);
 
-    // Initial calculation
+    // Initial calculation (no debounce)
     setConfig(calculateGrid(container.clientWidth));
 
-    return () => resizeObserver.disconnect();
+    return () => {
+      resizeObserver.disconnect();
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+    };
   }, [calculateGrid]);
 
   const rowCount = Math.ceil(itemCount / config.columnCount);
