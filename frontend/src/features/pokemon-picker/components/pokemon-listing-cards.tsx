@@ -1,10 +1,11 @@
 "use client";
 
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
+import { PokemonDetailsDialog } from "@/features/pokemon/components/pokemon-details-dialog";
 import { useResponsiveGrid } from "../hooks/use-responsive-grid";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
@@ -36,6 +37,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
   const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { isSmall } = useScreenSize();
+  const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(null);
 
   // Use responsive grid hook to calculate layout
   const { containerRef, config, rowCount } = useResponsiveGrid({
@@ -124,7 +126,6 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                   height: virtualRow.size,
                   display: "flex",
                   width: gridContentWidth,
-                  marginRight: "20px",
                   gap: config.gap,
                   justifyContent: "left",
                 }}
@@ -148,6 +149,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                         position={showPositions ? position : undefined}
                         positionColor={color}
                         isCompact={isSmall}
+                        onClick={() => setSelectedPokemonId(p._id)}
                       />
                     </div>
                   );
@@ -157,6 +159,13 @@ export const PokemonListingCards = memo(function PokemonListingCards({
           })}
         </div>
       </div>
+
+      {/* Single dialog instance for performance */}
+      <PokemonDetailsDialog
+        pokemonId={selectedPokemonId}
+        open={!!selectedPokemonId}
+        onOpenChange={(open) => !open && setSelectedPokemonId(null)}
+      />
     </div>
   );
 });
