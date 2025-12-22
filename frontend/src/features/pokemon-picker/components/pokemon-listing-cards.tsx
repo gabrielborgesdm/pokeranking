@@ -124,7 +124,6 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                   height: virtualRow.size,
                   display: "flex",
                   width: gridContentWidth,
-                  marginRight: "20px",
                   gap: config.gap,
                   justifyContent: "left",
                 }}

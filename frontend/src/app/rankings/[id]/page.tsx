@@ -2,6 +2,7 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { PokemonListingCards } from "@/features/pokemon-picker/components/pokemon-listing-cards";
+import { MAX_GRID_CONTENT_WIDTH } from "@/features/pokemon-picker";
 import {
   RankingEditing,
   RankingNavbar,
@@ -57,6 +58,7 @@ export default function RankingPage({ params }: RankingPageProps) {
             onEditClick={handleEditClick}
             onDiscardClick={handleDiscardClick}
             onSaveClick={handleSaveClick}
+            maxContentWidth={MAX_GRID_CONTENT_WIDTH}
           />
 
           {isEditMode ? (
