@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Dialog,
@@ -9,9 +9,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PokemonImage } from "@/components/pokemon-image";
+import { FullscreenImageDialog } from "@/components/fullscreen-image-dialog";
 import { PokemonTypeIcon } from "./pokemon-type-icon";
 import { StatBar, getStatColor } from "./stat-bar";
 import { cn } from "@/lib/utils";
+import { normalizePokemonImageSrc } from "@/lib/image-utils";
 import { pokemonTypeGradients, type PokemonType } from "@/lib/pokemon-types";
 import { usePokemonControllerFindOne } from "@pokeranking/api-client";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -107,6 +109,8 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
   open,
   onOpenChange,
 }: PokemonDetailsDialogProps) {
+  const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
+
   const { data, isLoading } = usePokemonControllerFindOne(pokemonId ?? "", {
     query: {
       enabled: !!pokemonId && open,
@@ -171,9 +175,10 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
                 className={cn(
-                  "relative w-full aspect-square max-w-[200px] mx-auto rounded-full p-4",
+                  "relative w-full aspect-square max-w-[200px] mx-auto rounded-full p-4 cursor-zoom-in",
                   gradientClass
                 )}
+                onClick={() => setIsFullscreenOpen(true)}
               >
                 <div className="relative w-full h-full">
                   <PokemonImage
@@ -356,6 +361,13 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
           )}
         </AnimatePresence>
       </DialogContent>
+
+      <FullscreenImageDialog
+        src={pokemon?.image ? normalizePokemonImageSrc(pokemon.image) : null}
+        alt={pokemon?.name ?? "Pokemon"}
+        open={isFullscreenOpen}
+        onOpenChange={setIsFullscreenOpen}
+      />
     </Dialog>
   );
 });

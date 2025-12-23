@@ -31,6 +31,7 @@ const clientConfigSchema = z.object({
   githubUrl: z.string().url().optional(),
   stripePublishableKey: z.string().optional(),
   stripePriceId: z.string().optional(),
+  allowedImageDomains: z.array(z.string()),
 });
 
 export type ClientConfig = z.infer<typeof clientConfigSchema>;
@@ -42,6 +43,11 @@ export function getClientConfig(): ClientConfig {
     stripePublishableKey:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || undefined,
     stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || undefined,
+    allowedImageDomains: (
+      process.env.NEXT_PUBLIC_ALLOWED_IMAGE_DOMAINS || "ik.imagekit.io"
+    )
+      .split(",")
+      .map((d) => d.trim()),
   });
 
   if (!result.success) {

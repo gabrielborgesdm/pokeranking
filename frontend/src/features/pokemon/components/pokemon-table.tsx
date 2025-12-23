@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Edit, Trash2, Loader2 } from "lucide-react";
@@ -31,6 +31,8 @@ import { routes } from "@/lib/routes";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { getPokemonTypeColor } from "@/lib/pokemon-types";
 import { capitalize } from "@/lib/utils";
+import { FullscreenImageDialog } from "@/components/fullscreen-image-dialog";
+import { normalizePokemonImageSrc } from "@/lib/image-utils";
 
 interface PokemonTableProps {
   pokemon: PokemonResponseDto[];
@@ -48,6 +50,10 @@ export const PokemonTable = memo(function PokemonTable({
   skeletonRows = 10,
 }: PokemonTableProps) {
   const { t } = useTranslation();
+  const [fullscreenImage, setFullscreenImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
 
   if (isLoading) {
     return <PokemonTableSkeleton rows={skeletonRows} />;
@@ -76,13 +82,17 @@ export const PokemonTable = memo(function PokemonTable({
           {pokemon.map((p) => (
             <TableRow key={p._id}>
               <TableCell>
-                <div className="relative h-10 w-10">
+                <button
+                  type="button"
+                  className="relative h-10 w-10 cursor-zoom-in"
+                  onClick={() => setFullscreenImage({ src: p.image, alt: p.name })}
+                >
                   <PokemonImage
                     src={p.image}
                     alt={p.name}
                     fill
                   />
-                </div>
+                </button>
               </TableCell>
               <TableCell className="font-medium">{p.name}</TableCell>
               <TableCell>
@@ -146,6 +156,13 @@ export const PokemonTable = memo(function PokemonTable({
           ))}
         </TableBody>
       </Table>
+
+      <FullscreenImageDialog
+        src={normalizePokemonImageSrc(fullscreenImage?.src) ?? null}
+        alt={fullscreenImage?.alt}
+        open={!!fullscreenImage}
+        onOpenChange={(open) => !open && setFullscreenImage(null)}
+      />
     </div>
   );
 });

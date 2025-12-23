@@ -16,10 +16,16 @@ import {
   isApiError,
 } from "@pokeranking/api-client";
 import { routes } from "@/lib/routes";
+import {
+  isValidImageString,
+  getAllowedImageDomains,
+} from "@/lib/image-utils";
 
 const pokemonFormSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
-  image: z.string().url("Valid image URL required"),
+  image: z.string().refine(isValidImageString, {
+    message: `Must be a .png filename or URL from allowed domains (${getAllowedImageDomains().join(", ")})`,
+  }),
   types: z.array(z.string()),
   pokedexNumber: z.number().min(1).optional().nullable(),
   species: z.string().max(100).optional().nullable(),
