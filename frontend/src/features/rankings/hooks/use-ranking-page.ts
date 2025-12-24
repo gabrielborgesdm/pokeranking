@@ -107,6 +107,7 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
     pokemon,
     setPokemon: updateDraft,
     positionColors,
+    zones,
     isOwner,
     isEditMode,
     setIsEditMode,

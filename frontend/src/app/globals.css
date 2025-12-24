@@ -168,6 +168,51 @@
   }
 }
 
+/* Pokemon-themed scrollbar */
+:root {
+  --scrollbar-track: oklch(0.95 0.01 90);
+  --scrollbar-thumb: oklch(0.48 0.195 265);
+  --scrollbar-thumb-hover: oklch(0.55 0.195 265);
+}
+
+.dark {
+  --scrollbar-track: oklch(0.22 0.02 280);
+  --scrollbar-thumb: oklch(0.40 0.02 280);
+  --scrollbar-thumb-hover: oklch(0.50 0.175 27);
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 8px;
+  border: 2px solid var(--scrollbar-track);
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--scrollbar-track);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
 /* Pokemon Font */
 .font-pokemon {
   font-family: 'Pokemon Solid', sans-serif;
