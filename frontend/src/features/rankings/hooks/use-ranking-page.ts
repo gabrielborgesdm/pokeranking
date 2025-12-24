@@ -96,11 +96,17 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
   }, [discardDraft]);
 
   const handleSaveClick = useCallback(async () => {
+    const wasInitiallyEmpty = initialPokemon.length === 0;
     const success = await saveDraft();
     if (success) {
-      setIsEditMode(false);
+      if (wasInitiallyEmpty) {
+        // Full reload to fix grid rendering issue when going from empty to populated
+        window.location.reload();
+      } else {
+        setIsEditMode(false);
+      }
     }
-  }, [saveDraft]);
+  }, [saveDraft, initialPokemon.length]);
 
   return {
     ranking,
