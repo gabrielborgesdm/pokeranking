@@ -54,7 +54,7 @@ export const EmptyPokemonCard = ({ className }: { className?: string }) => {
         onClick={() => router.back()}
       >
         <ArrowLeft className="size-4" />
-        {t("common.goBack", "Go Back")}
+        {t("common.goBack")}
       </Button>
     </div>
   );

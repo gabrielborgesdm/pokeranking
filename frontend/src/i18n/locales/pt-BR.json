@@ -8,7 +8,8 @@
     "delete": "Excluir",
     "deleting": "Excluindo...",
     "save": "Salvar",
-    "saving": "Salvando..."
+    "saving": "Salvando...",
+    "goBack": "Voltar"
   },
   "pokemonTypes": {
     "bug": "Inseto",
