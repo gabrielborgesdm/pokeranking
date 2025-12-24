@@ -75,6 +75,7 @@ export default function RankingPage({ params }: RankingPageProps) {
           />
         ) : (
           <PokemonListingCards
+            key="listing-view"
             pokemon={pokemon}
             zones={zones}
             showPositions={true}

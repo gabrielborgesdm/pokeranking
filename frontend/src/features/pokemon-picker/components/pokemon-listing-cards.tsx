@@ -137,7 +137,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
           (containerRef as { current: HTMLDivElement | null }).current = node;
         }
       }}
-      className={cn("relative", className)}
+      className={cn("relative w-full", className)}
     >
       {/* Scroll container */}
       <div
