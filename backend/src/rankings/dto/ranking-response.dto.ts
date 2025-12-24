@@ -3,6 +3,7 @@ import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { ZoneResponseDto } from './zone-response.dto';
 import { transformObjectId } from '../../common/utils/transform.util';
 import { PokemonResponseDto } from '../../pokemon/dto/pokemon-response.dto';
+import { DEFAULT_ZONES } from '@pokeranking/shared';
 
 @Exclude()
 export class RankingUserResponseDto {
@@ -37,6 +38,7 @@ export class RankingResponseDto {
   pokemon: PokemonResponseDto[];
 
   @Expose()
+  @Transform(() => DEFAULT_ZONES)
   @Type(() => ZoneResponseDto)
   @ApiProperty({ type: [ZoneResponseDto] })
   zones: ZoneResponseDto[];

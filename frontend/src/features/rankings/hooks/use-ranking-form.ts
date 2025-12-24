@@ -64,26 +64,18 @@ export function useRankingForm({
   const updateMutation = useRankingsControllerUpdate();
 
   const form = useForm<RankingFormData>({
-    resolver: zodResolver(createRankingFormSchema(t)),
+    resolver: zodResolver(createRankingFormSchema()),
     defaultValues: {
       title: initialData?.title ?? "",
       theme: initialData?.theme ?? DEFAULT_THEME_ID,
       background: initialData?.background ?? undefined,
-      zones: initialData?.zones ?? [],
     },
   });
 
   async function onSubmit(data: RankingFormData) {
     setError(null);
 
-    // Transform zones to match API type (interval as number[] which can contain null)
-    const apiData = {
-      ...data,
-      zones: data.zones?.map((zone) => ({
-        ...zone,
-        interval: zone.interval as unknown as number[],
-      })),
-    } as CreateRankingDto | UpdateRankingDto;
+    const apiData = data as CreateRankingDto | UpdateRankingDto;
 
     if (mode === "create") {
       createMutation.mutate(

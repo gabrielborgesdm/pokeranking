@@ -2640,36 +2640,6 @@
           "failedCount"
         ]
       },
-      "ZoneDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "S-Tier"
-          },
-          "interval": {
-            "example": [
-              1,
-              5
-            ],
-            "description": "Position interval [start, end] where start >= 1. Use null for end to indicate \"until the end\" (unbounded)",
-            "type": "array",
-            "items": {
-              "type": "number"
-            }
-          },
-          "color": {
-            "type": "string",
-            "example": "#FF5733",
-            "description": "Hex color code"
-          }
-        },
-        "required": [
-          "name",
-          "interval",
-          "color"
-        ]
-      },
       "CreateRankingDto": {
         "type": "object",
         "properties": {
@@ -2687,13 +2657,6 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
-          },
-          "zones": {
-            "description": "Customizable zones with intervals and colors",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ZoneDto"
             }
           },
           "theme": {
@@ -2728,13 +2691,6 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
-          },
-          "zones": {
-            "description": "Customizable zones with intervals and colors",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ZoneDto"
             }
           },
           "theme": {

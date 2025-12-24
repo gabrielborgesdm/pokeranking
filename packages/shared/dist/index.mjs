@@ -182,6 +182,16 @@ var PokemonTypes = Object.fromEntries(
   POKEMON_TYPE_VALUES.map((t) => [t, t])
 );
 
-export { DEFAULT_THEME_ID, POKEMON_TYPE_VALUES, PokemonTypes, RANKING_THEMES, THEME_IDS, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };
+// src/zones/constants.ts
+var DEFAULT_ZONES = [
+  { name: "S", interval: [1, 10], color: "#ef4444" },
+  { name: "A", interval: [11, 150], color: "#f97316" },
+  { name: "B", interval: [151, 400], color: "#eab308" },
+  { name: "C", interval: [401, 700], color: "#22c55e" },
+  { name: "D", interval: [701, 1e3], color: "#3b82f6" },
+  { name: "F", interval: [1001, null], color: "#6b7280" }
+];
+
+export { DEFAULT_THEME_ID, DEFAULT_ZONES, POKEMON_TYPE_VALUES, PokemonTypes, RANKING_THEMES, THEME_IDS, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };
 //# sourceMappingURL=index.mjs.map
 //# sourceMappingURL=index.mjs.map

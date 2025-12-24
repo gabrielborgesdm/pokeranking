@@ -130,7 +130,6 @@ export class RankingsService {
 
     // Apply updates to get new values
     const updatedData = stripUndefined(updateRankingDto);
-    const newZones = updatedData.zones || ranking.zones;
     const newPokemon = updatedData.pokemon || ranking.pokemon;
 
     // Check if pokemon count changed
