@@ -20,17 +20,7 @@ import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { routes } from "@/lib/routes";
 
-function createZoneSchema(t: (key: string) => string) {
-  return z.object({
-    name: z.string().min(1, t("zoneEditor.validation.nameRequired")).max(50),
-    interval: z.tuple([z.number().min(1), z.number().nullable()]),
-    color: z
-      .string()
-      .regex(/^#[0-9A-Fa-f]{6}$/, t("zoneEditor.validation.invalidColor")),
-  });
-}
-
-function createRankingFormSchema(t: (key: string) => string) {
+function createRankingFormSchema() {
   return z.object({
     title: z.string().min(1).max(100),
     theme: z.string().refine((val) => THEME_IDS.includes(val), {
@@ -42,11 +32,9 @@ function createRankingFormSchema(t: (key: string) => string) {
         message: "Invalid background",
       })
       .optional(),
-    zones: z.array(createZoneSchema(t)).optional(),
   });
 }
 
-export type ZoneFormData = z.infer<ReturnType<typeof createZoneSchema>>;
 export type RankingFormData = z.infer<
   ReturnType<typeof createRankingFormSchema>
 >;

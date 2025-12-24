@@ -17,24 +17,13 @@ import { normalizePokemonImageSrc } from "@/lib/image-utils";
 import { pokemonTypeGradients, type PokemonType } from "@/lib/pokemon-types";
 import { usePokemonControllerFindOne } from "@pokeranking/api-client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatGeneration } from "@/lib/generation-utils";
 
 interface PokemonDetailsDialogProps {
   pokemonId: string | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-const GENERATION_NUMERALS: Record<number, string> = {
-  1: "I",
-  2: "II",
-  3: "III",
-  4: "IV",
-  5: "V",
-  6: "VI",
-  7: "VII",
-  8: "VIII",
-  9: "IX",
-};
 
 function DialogSkeleton() {
   return (
@@ -246,7 +235,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                     className="flex justify-center"
                   >
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/10 text-primary">
-                      Gen {GENERATION_NUMERALS[pokemon.generation] ?? pokemon.generation}
+                      {formatGeneration(pokemon.generation)}
                     </span>
                   </motion.div>
                 )}

@@ -26,6 +26,7 @@ export default function RankingPage({ params }: RankingPageProps) {
     pokemon,
     setPokemon,
     positionColors,
+    zones,
     isOwner,
     isEditMode,
     handleEditClick,
@@ -75,7 +76,7 @@ export default function RankingPage({ params }: RankingPageProps) {
         ) : (
           <PokemonListingCards
             pokemon={pokemon}
-            positionColors={positionColors}
+            zones={zones}
             showPositions={true}
             className='py-8'
           />

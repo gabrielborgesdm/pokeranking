@@ -4,15 +4,11 @@ import {
   IsNotEmpty,
   IsArray,
   IsOptional,
-  ValidateNested,
   MinLength,
   MaxLength,
   IsMongoId,
   Validate,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { ZoneDto } from './zone.dto';
-import { AreZonesNonOverlapping } from '../validators/non-overlapping-zones.validator';
 import { ValidTheme } from '../validators/valid-theme.validator';
 
 export class CreateRankingDto {
@@ -35,17 +31,6 @@ export class CreateRankingDto {
   @IsOptional()
   @IsMongoId({ each: true })
   pokemon?: string[];
-
-  @ApiPropertyOptional({
-    type: [ZoneDto],
-    description: 'Customizable zones with intervals and colors',
-  })
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => ZoneDto)
-  @AreZonesNonOverlapping()
-  zones?: ZoneDto[];
 
   @ApiPropertyOptional({
     example: 'fire',
