@@ -19,8 +19,8 @@ import {
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
-const ZONE_HEADER_HEIGHT = 48;
-const ZONE_HEADER_HEIGHT_COMPACT = 36;
+const ZONE_HEADER_HEIGHT = 80;
+const ZONE_HEADER_HEIGHT_COMPACT = 40;
 
 export interface PokemonListingCardsProps {
   /** Pokemon list to display */
