@@ -77,7 +77,7 @@ export const PokemonCard = memo(function PokemonCard({
     <div
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden shadow-lg transition-all duration-200 ease-out",
+        "relative overflow-hidden shadow-lg transition-all duration-200 ease-out select-none",
         isCompact ? "rounded-lg p-2 min-w-[100px]" : "rounded-xl p-4 min-w-[200px]",
         onClick && "cursor-pokeball hover:scale-[1.03] hover:-translate-y-1 hover:shadow-xl",
         gradientClass,
