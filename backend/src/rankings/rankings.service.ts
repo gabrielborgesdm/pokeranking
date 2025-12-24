@@ -28,7 +28,7 @@ export class RankingsService {
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
-  ) {}
+  ) { }
 
   async create(
     userId: string,
@@ -174,7 +174,41 @@ export class RankingsService {
     return ranking;
   }
 
-  async findByUsername(username: string): Promise<Ranking[]> {
+  async find(userId: string) {
+    const rankings = await this.rankingModel
+      .find({ user: new Types.ObjectId(userId) })
+      .sort({ updatedAt: -1 })
+      .lean()
+      .exec();
+
+    // Get first pokemon IDs from each ranking
+    const firstPokemonIds = rankings
+      .map((r) => r.pokemon?.[0])
+      .filter((id): id is Types.ObjectId => !!id);
+
+    // Fetch only the first pokemon images in a single query
+    const pokemonImages = await this.pokemonModel
+      .find({ _id: { $in: firstPokemonIds } })
+      .select('_id image')
+      .lean()
+      .exec();
+
+    const imageMap = new Map(
+      pokemonImages.map((p) => [p._id.toString(), p.image]),
+    );
+
+    console.log('Image Map:', imageMap);
+
+    return rankings.map((ranking) => ({
+      ...ranking,
+      image: ranking.pokemon?.[0]
+        ? (imageMap.get(ranking.pokemon[0].toString()) ?? null)
+        : null,
+      pokemonCount: ranking.pokemon?.length ?? 0,
+    }));
+  }
+
+  async findByUsername(username: string) {
     const user = await this.userModel
       .findOne({ username, isActive: true })
       .exec();
@@ -186,13 +220,7 @@ export class RankingsService {
       });
     }
 
-    const rankings = await this.rankingModel
-      .find({ user: user._id })
-      .populate('user', 'username profilePic')
-      .sort({ updatedAt: -1 })
-      .exec();
-
-    return rankings;
+    return this.find(user._id.toString());
   }
 
   async remove(id: string, userId: string): Promise<Ranking> {

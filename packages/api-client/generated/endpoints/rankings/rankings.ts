@@ -25,6 +25,7 @@ import type {
 
 import type {
   CreateRankingDto,
+  RankingListResponseDto,
   RankingResponseDto,
   UpdateRankingDto,
 } from "../../model";
@@ -37,7 +38,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary Get rankings by username
  */
 export type rankingsControllerFindByUsernameResponse200 = {
-  data: RankingResponseDto[];
+  data: RankingListResponseDto[];
   status: 200;
 };
 
