@@ -15,7 +15,7 @@ export { ThemePicker } from "./components/theme-picker";
 export { useDeleteRanking } from "./hooks/use-delete-ranking";
 export { useRanking } from "./hooks/use-ranking";
 export { useRankingEditData } from "./hooks/use-ranking-edit-data";
-export { useRankingForm, type RankingFormData, type ZoneFormData } from "./hooks/use-ranking-form";
+export { useRankingForm, type RankingFormData } from "./hooks/use-ranking-form";
 export { useRankingPage } from "./hooks/use-ranking-page";
 export { useRankingUpdate } from "./hooks/use-ranking-update";
 export { useUserRankings } from "./hooks/use-user-rankings";
