@@ -10,6 +10,7 @@ import { useResponsiveGrid } from "../hooks/use-responsive-grid";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
+import { EmptyPokemonCard } from "@/features/pokemon/empty-pokemon-card";
 
 export interface PokemonListingCardsProps {
   /** Pokemon list to display */
@@ -73,15 +74,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
 
   if (pokemon.length === 0) {
     return (
-      <div
-        ref={containerRef}
-        className={cn(
-          "flex items-center justify-center rounded-xl border-2 border-dashed border-muted-foreground/30 min-h-[200px]",
-          className
-        )}
-      >
-        <p className="text-muted-foreground">{t("rankingView.emptyRanking")}</p>
-      </div>
+      <EmptyPokemonCard />
     );
   }
 
