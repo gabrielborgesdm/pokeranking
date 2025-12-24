@@ -21,7 +21,10 @@ import {
 import { RankingsService } from './rankings.service';
 import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
-import { RankingResponseDto } from './dto/ranking-response.dto';
+import {
+  RankingResponseDto,
+  RankingListResponseDto,
+} from './dto/ranking-response.dto';
 import { toDto } from '../common/utils/transform.util';
 import { Public } from '../common/decorators/public.decorator';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
@@ -43,12 +46,12 @@ export class RankingsController {
   @ApiResponse({
     status: 200,
     description: 'User rankings retrieved successfully',
-    type: [RankingResponseDto],
+    type: [RankingListResponseDto],
   })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findByUsername(@Param('username') username: string) {
     const rankings = await this.rankingsService.findByUsername(username);
-    return toDto(RankingResponseDto, rankings);
+    return toDto(RankingListResponseDto, rankings);
   }
 
   @Get(':id')

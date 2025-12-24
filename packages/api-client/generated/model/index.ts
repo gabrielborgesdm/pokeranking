@@ -33,6 +33,7 @@ export * from "./pokemonCountResponseDto";
 export * from "./pokemonResponseDto";
 export * from "./pokemonResponseDtoTypesItem";
 export * from "./publicUserResponseDto";
+export * from "./rankingListResponseDto";
 export * from "./rankingResponseDto";
 export * from "./rankingUserResponseDto";
 export * from "./registerDto";

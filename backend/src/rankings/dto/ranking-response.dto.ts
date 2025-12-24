@@ -22,6 +22,49 @@ export class RankingUserResponseDto {
 }
 
 @Exclude()
+export class RankingListResponseDto {
+  @Expose()
+  @Transform(transformObjectId)
+  @ApiProperty({ example: '507f1f77bcf86cd799439011' })
+  _id: string;
+
+  @Expose()
+  @ApiProperty({ example: 'My Gen 1 Favorites' })
+  title: string;
+
+  @Expose()
+  @ApiProperty({
+    example: 'fire',
+    description: 'Theme ID for the ranking card',
+  })
+  theme: string;
+
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: 'https://example.com/pokemon.png',
+    description: 'Image URL of the first pokemon in the ranking',
+    nullable: true,
+  })
+  image: string | null;
+
+  @Expose()
+  @ApiProperty({
+    example: 151,
+    description: 'Number of pokemon in the ranking',
+  })
+  pokemonCount: number;
+
+  @Expose()
+  @ApiProperty({ example: '2024-01-15T10:30:00.000Z' })
+  createdAt: Date;
+
+  @Expose()
+  @ApiProperty({ example: '2024-01-20T15:45:00.000Z' })
+  updatedAt: Date;
+}
+
+@Exclude()
 export class RankingResponseDto {
   @Expose()
   @Transform(transformObjectId)

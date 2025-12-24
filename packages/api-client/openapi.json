@@ -1041,7 +1041,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RankingResponseDto"
+                    "$ref": "#/components/schemas/RankingListResponseDto"
                   }
                 }
               }
@@ -2638,6 +2638,54 @@
           "results",
           "successCount",
           "failedCount"
+        ]
+      },
+      "RankingListResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "title": {
+            "type": "string",
+            "example": "My Gen 1 Favorites"
+          },
+          "theme": {
+            "type": "string",
+            "example": "fire",
+            "description": "Theme ID for the ranking card"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://example.com/pokemon.png",
+            "description": "Image URL of the first pokemon in the ranking",
+            "nullable": true
+          },
+          "pokemonCount": {
+            "type": "number",
+            "example": 151,
+            "description": "Number of pokemon in the ranking"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-20T15:45:00.000Z"
+          }
+        },
+        "required": [
+          "_id",
+          "title",
+          "theme",
+          "image",
+          "pokemonCount",
+          "createdAt",
+          "updatedAt"
         ]
       },
       "CreateRankingDto": {
