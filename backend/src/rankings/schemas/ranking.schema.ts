@@ -43,6 +43,18 @@ export class Ranking extends Document {
   })
   background: string | null;
 
+  @Prop({
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }],
+    default: [],
+  })
+  likedBy: Types.ObjectId[];
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  likesCount: number;
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -52,3 +64,4 @@ export const RankingSchema = SchemaFactory.createForClass(Ranking);
 // Indexes for efficient queries
 RankingSchema.index({ user: 1, createdAt: -1 });
 RankingSchema.index({ title: 1 });
+RankingSchema.index({ likesCount: -1, createdAt: -1 });

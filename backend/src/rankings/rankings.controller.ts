@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   Request,
   HttpCode,
   HttpStatus,
@@ -17,14 +18,21 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiBody,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { RankingsService } from './rankings.service';
 import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
 import {
+  RankingQueryDto,
+  RANKING_SORTABLE_FIELDS,
+} from './dto/ranking-query.dto';
+import {
   RankingResponseDto,
   RankingListResponseDto,
 } from './dto/ranking-response.dto';
+import { PaginatedRankingsResponseDto } from './dto/paginated-rankings-response.dto';
+import { LikeResponseDto } from './dto/like-response.dto';
 import { toDto } from '../common/utils/transform.util';
 import { Public } from '../common/decorators/public.decorator';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
@@ -34,6 +42,31 @@ import type { AuthenticatedRequest } from '../common/interfaces/authenticated-re
 @Controller('rankings')
 export class RankingsController {
   constructor(private readonly rankingsService: RankingsService) {}
+
+  @Get()
+  @Public()
+  @ApiOperation({ summary: 'Browse all rankings with pagination' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'sortBy', required: false, enum: RANKING_SORTABLE_FIELDS })
+  @ApiQuery({ name: 'order', required: false, enum: ['asc', 'desc'] })
+  @ApiQuery({ name: 'search', required: false, type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Rankings retrieved successfully',
+    type: PaginatedRankingsResponseDto,
+  })
+  async findAll(
+    @Query() query: RankingQueryDto,
+  ): Promise<PaginatedRankingsResponseDto> {
+    const { rankings, total } = await this.rankingsService.findPaginated(query);
+    return {
+      data: toDto(RankingListResponseDto, rankings),
+      total,
+      page: query.page || 1,
+      limit: query.limit || 20,
+    };
+  }
 
   @Get('user/:username')
   @Public()
@@ -68,9 +101,39 @@ export class RankingsController {
     type: RankingResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Ranking not found' })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
     const ranking = await this.rankingsService.findOne(id);
-    return toDto(RankingResponseDto, ranking);
+    const response = toDto(RankingResponseDto, ranking);
+
+    // Add isLiked for the current user
+    response.isLiked = this.rankingsService.isLikedByUser(
+      ranking,
+      req.user?._id,
+    );
+
+    return response;
+  }
+
+  @Post(':id/like')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Toggle like on a ranking' })
+  @ApiParam({
+    name: 'id',
+    description: 'Ranking ID',
+    example: '507f1f77bcf86cd799439011',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Like toggled successfully',
+    type: LikeResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 404, description: 'Ranking not found' })
+  async toggleLike(
+    @Param('id') id: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<LikeResponseDto> {
+    return this.rankingsService.toggleLike(id, req.user._id);
   }
 
   @Post()

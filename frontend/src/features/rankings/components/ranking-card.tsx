@@ -1,9 +1,11 @@
 "use client";
 
 import { memo, useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { MoreVertical, Pencil, Trash2 } from "lucide-react";
+import { MoreVertical, Pencil, Trash2, Heart, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { routes } from "@/lib/routes";
 import { PokemonImage } from "@/components/pokemon-image";
 import { formatShortDate } from "@/lib/date-utils";
 import { getThemeById, DEFAULT_THEME_ID } from "@pokeranking/shared";
@@ -23,6 +25,10 @@ interface RankingCardProps {
   createdAt: string;
   updatedAt: string;
   theme?: string;
+  /** Like count (for public list view) */
+  likesCount?: number;
+  /** Username of the ranking owner (for public list view) */
+  username?: string;
   onClick?: () => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
@@ -36,13 +42,26 @@ export const RankingCard = memo(function RankingCard({
   pokemonCount,
   updatedAt,
   theme,
+  likesCount,
+  username,
   onClick,
   onEdit,
   onDelete,
   className,
 }: RankingCardProps) {
   const { t, i18n } = useTranslation();
+  const router = useRouter();
   const showActions = id && (onEdit || onDelete);
+
+  const handleUsernameClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      if (username) {
+        router.push(routes.userRankings(username));
+      }
+    },
+    [router, username]
+  );
 
   const handleEdit = useCallback(
     (e: React.MouseEvent) => {
@@ -75,7 +94,7 @@ export const RankingCard = memo(function RankingCard({
     <div
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105",
+        "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105 select-none",
         onClick && "hover:cursor-pointer",
         themeData.gradientClass,
         themeData.textColor === "light" ? "text-white" : "text-foreground",
@@ -96,11 +115,27 @@ export const RankingCard = memo(function RankingCard({
       {/* Content */}
       <div className="space-y-2">
         <h3 className="text-xl font-bold truncate">{title}</h3>
+        {username && (
+          <button
+            onClick={handleUsernameClick}
+            className="flex items-center gap-1 text-sm opacity-80 hover:opacity-100 hover:underline transition-opacity"
+          >
+            <User className="h-3 w-3" />
+            <span className="truncate">{username}</span>
+          </button>
+        )}
         <div className="flex items-center justify-between text-sm opacity-80">
           <span>
             {t("myRankings.pokemonCount", { count: pokemonCount })}
           </span>
-          <span>{formattedDate}</span>
+          {likesCount !== undefined ? (
+            <div className="flex items-center gap-1">
+              <Heart className="h-3 w-3" />
+              <span>{likesCount}</span>
+            </div>
+          ) : (
+            <span>{formattedDate}</span>
+          )}
         </div>
       </div>
 
