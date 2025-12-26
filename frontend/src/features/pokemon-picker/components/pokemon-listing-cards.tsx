@@ -149,7 +149,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
   const totalHeight = rowVirtualizer.getTotalSize();
 
   // Padding for position badge overflow
-  const paddingTop = 16;
+  const paddingTop = 0;
 
   // Calculate grid content width based on current config
   const gridContentWidth =

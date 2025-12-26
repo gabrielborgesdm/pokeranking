@@ -101,7 +101,6 @@ export default function RankingPage({ params }: RankingPageProps) {
               pokemon={pokemon}
               zones={zones}
               showPositions={true}
-              className="py-8"
               isOwner={isOwner}
               onAddPokemon={handleEditClick}
             />
