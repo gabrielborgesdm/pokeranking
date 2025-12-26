@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon, Users } from "lucide-react";
+import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon, Users, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -231,6 +231,7 @@ export function Navbar() {
   const desktopNavLinks: NavLink[] = [
     { href: routes.rankings, label: t("nav.browseRankings"), icon: Layers },
     { href: routes.users, label: t("nav.users"), icon: Users },
+    { href: routes.pokedex, label: t("nav.pokedex"), icon: BookOpen },
     { href: routes.contribute, label: t("nav.contribute"), icon: Heart },
   ];
 
@@ -242,6 +243,7 @@ export function Navbar() {
     ...(isAuthenticated && username
       ? [{ href: routes.userRankings(username), label: t("nav.myRankings"), icon: List }]
       : []),
+    { href: routes.pokedex, label: t("nav.pokedex"), icon: BookOpen },
     { href: routes.contribute, label: t("nav.contribute"), icon: Heart },
   ];
 

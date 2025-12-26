@@ -1,6 +1,7 @@
 export const routes = {
   home: "/rankings",
   users: "/users",
+  pokedex: "/pokedex",
   contribute: "/contribute",
   design: "/design",
   signin: "/signin",
@@ -25,6 +26,7 @@ export const routes = {
 export const publicPaths = [
   routes.home,
   routes.users,
+  routes.pokedex,
   routes.signin,
   routes.signup,
   routes.verifyEmail,

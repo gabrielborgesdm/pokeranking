@@ -13,7 +13,7 @@ export function Logo({ className, size = "default" }: LogoProps) {
   const width = size === "large" ? 199 : 142;
 
   return (
-    <Link href={routes.rankings} className={cn("flex items-center", className)}>
+    <Link href={routes.rankings} className={cn("flex shrink-0 items-center", className)}>
       <Image
         src='/images/logo.png'
         alt="Pokeranking"

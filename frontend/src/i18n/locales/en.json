@@ -263,6 +263,7 @@
     "users": "Users",
     "browseRankings": "Rankings",
     "myRankings": "My Rankings",
+    "pokedex": "Pokedex",
     "contribute": "Contribute",
     "design": "Design",
     "signIn": "Sign in",
@@ -282,6 +283,43 @@
     "admin": "Admin",
     "adminPokemon": "Manage Pokemon",
     "welcome": "Welcome"
+  },
+  "pokedex": {
+    "title": "Pokedex",
+    "description": "Explore Pokemon types, effectiveness, and browse all Pokemon",
+    "typeCalculator": {
+      "title": "Type Effectiveness Calculator",
+      "description": "Select up to 2 types to see their strengths and weaknesses",
+      "primaryType": "Primary Type",
+      "secondaryType": "Secondary Type",
+      "selectType": "Select type",
+      "clearAll": "Clear all",
+      "analyzing": "Analyzing:",
+      "emptyState": "Select a type above to see its strengths and weaknesses"
+    },
+    "typeEffectiveness": {
+      "defensive": "Defensive",
+      "offensive": "Offensive",
+      "weakTo": "Weak to",
+      "weakToHint": "Takes more damage from these types",
+      "resistantTo": "Resistant to",
+      "resistantToHint": "Takes less damage from these types",
+      "immuneTo": "Immune to",
+      "immuneToHint": "Takes no damage from these types",
+      "superEffective": "Super effective against",
+      "superEffectiveHint": "Deals more damage to these types",
+      "notVeryEffective": "Not very effective against",
+      "notVeryEffectiveHint": "Deals less damage to these types",
+      "noEffect": "No effect on",
+      "noEffectHint": "Deals no damage to these types",
+      "none": "None"
+    },
+    "pokemonList": {
+      "title": "Pokemon List",
+      "resultsCount_one": "{{count}} Pokemon found",
+      "resultsCount_other": "{{count}} Pokemon found",
+      "noPokemon": "No Pokemon match your filters"
+    }
   },
   "notFound": {
     "title": "Page not found!",
