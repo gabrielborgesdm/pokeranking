@@ -24,4 +24,10 @@ export interface RankingResponseDto {
   createdAt: string;
   updatedAt: string;
   user?: RankingUserResponseDto;
+  /** Number of likes */
+  likesCount: number;
+  /** Whether the current user has liked this ranking */
+  isLiked: boolean;
+  /** List of users who liked this ranking */
+  likedBy: RankingUserResponseDto[];
 }

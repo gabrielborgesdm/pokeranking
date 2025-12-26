@@ -184,7 +184,18 @@ var PokemonTypes = Object.fromEntries(
   POKEMON_TYPE_VALUES.map((t) => [t, t])
 );
 
+// src/zones/constants.ts
+var DEFAULT_ZONES = [
+  { name: "S", interval: [1, 10], color: "#ef4444" },
+  { name: "A", interval: [11, 150], color: "#f97316" },
+  { name: "B", interval: [151, 400], color: "#eab308" },
+  { name: "C", interval: [401, 700], color: "#22c55e" },
+  { name: "D", interval: [701, 1e3], color: "#3b82f6" },
+  { name: "F", interval: [1001, null], color: "#6b7280" }
+];
+
 exports.DEFAULT_THEME_ID = DEFAULT_THEME_ID;
+exports.DEFAULT_ZONES = DEFAULT_ZONES;
 exports.POKEMON_TYPE_VALUES = POKEMON_TYPE_VALUES;
 exports.PokemonTypes = PokemonTypes;
 exports.RANKING_THEMES = RANKING_THEMES;

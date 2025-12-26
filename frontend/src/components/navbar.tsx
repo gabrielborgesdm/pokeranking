@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, LogOut, User, Trophy, Heart, Palette, List, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon } from "lucide-react";
+import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon, Users, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -229,17 +229,21 @@ export function Navbar() {
 
   // Desktop nav links (without My Rankings - it uses the dropdown)
   const desktopNavLinks: NavLink[] = [
-    { href: routes.home, label: t("nav.leaderboard"), icon: Trophy },
+    { href: routes.rankings, label: t("nav.browseRankings"), icon: Layers },
+    { href: routes.users, label: t("nav.users"), icon: Users },
+    { href: routes.pokedex, label: t("nav.pokedex"), icon: BookOpen },
     { href: routes.contribute, label: t("nav.contribute"), icon: Heart },
   ];
 
   // Mobile nav links (includes My Rankings as simple link)
   const username = session?.user?.username ?? "";
   const mobileNavLinks: NavLink[] = [
-    { href: routes.home, label: t("nav.leaderboard"), icon: Trophy },
+    { href: routes.rankings, label: t("nav.browseRankings"), icon: Layers },
+    { href: routes.users, label: t("nav.users"), icon: Users },
     ...(isAuthenticated && username
       ? [{ href: routes.userRankings(username), label: t("nav.myRankings"), icon: List }]
       : []),
+    { href: routes.pokedex, label: t("nav.pokedex"), icon: BookOpen },
     { href: routes.contribute, label: t("nav.contribute"), icon: Heart },
   ];
 

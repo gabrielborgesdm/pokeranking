@@ -17,6 +17,8 @@ import {
   type PokemonFormData,
 } from "@/features/admin/hooks/use-pokemon-form";
 import type { PokemonType } from "@pokeranking/shared";
+import { normalize } from "path";
+import { normalizePokemonImageSrc } from "@/lib/image-utils";
 
 interface PokemonFormProps {
   mode: "create" | "edit";
@@ -71,7 +73,7 @@ export function PokemonForm({ mode, pokemonId, initialData }: PokemonFormProps) 
                 <div className="space-y-2">
                   <Label>{t("admin.pokemon.image")}</Label>
                   <ImageUpload
-                    value={field.value}
+                    value={field.value ?? null}
                     onChange={field.onChange}
                     disabled={isLoading}
                   />

@@ -110,4 +110,19 @@ interface PokemonStats {
     speed?: number;
 }
 
-export { DEFAULT_THEME_ID, POKEMON_TYPE_VALUES, type PokemonStats, type PokemonType, PokemonTypes, RANKING_THEMES, type RankingTheme, THEME_IDS, type ThemeTier, type ThemeUnlockProgress, type ThemeUnlockRequirement, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };
+/**
+ * Zone type for ranking tier display
+ */
+interface Zone {
+    name: string;
+    interval: [number, number | null];
+    color: string;
+}
+
+/**
+ * Default zones for ranking display
+ * Works well for ~1000+ Pokemon with 6 tiers
+ */
+declare const DEFAULT_ZONES: readonly Zone[];
+
+export { DEFAULT_THEME_ID, DEFAULT_ZONES, POKEMON_TYPE_VALUES, type PokemonStats, type PokemonType, PokemonTypes, RANKING_THEMES, type RankingTheme, THEME_IDS, type ThemeTier, type ThemeUnlockProgress, type ThemeUnlockRequirement, type Zone, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };

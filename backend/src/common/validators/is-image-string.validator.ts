@@ -33,7 +33,7 @@ function isValidWhitelistedUrl(value: string): boolean {
 
     // Get allowed domains from environment
     const allowedDomains =
-      process.env.ALLOWED_IMAGE_DOMAINS || 'res.cloudinary.com';
+      process.env.ALLOWED_IMAGE_DOMAINS || 'ik.imagekit.io';
     const domainList = allowedDomains.split(',').map((d) => d.trim());
 
     // Check if domain matches any in whitelist (support subdomain matching)
@@ -64,7 +64,7 @@ export function IsImageString(validationOptions?: ValidationOptions) {
         },
         defaultMessage(args: ValidationArguments) {
           const allowedDomains =
-            process.env.ALLOWED_IMAGE_DOMAINS || 'res.cloudinary.com';
+            process.env.ALLOWED_IMAGE_DOMAINS || 'ik.imagekit.io';
           return `${args.property} must be either a valid filename (${ALLOWED_EXTENSIONS.join(', ')}) without path traversal characters, or a URL from allowed domains (${allowedDomains})`;
         },
       },

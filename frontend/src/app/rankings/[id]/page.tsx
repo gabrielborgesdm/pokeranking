@@ -4,10 +4,12 @@ import { PokemonListingCards } from "@/features/pokemon-picker/components/pokemo
 import { PokemonListingCardsSkeleton } from "@/features/pokemon-picker/components/pokemon-listing-cards-skeleton";
 import { MAX_GRID_CONTENT_WIDTH } from "@/features/pokemon-picker";
 import {
+  RankingActionBar,
   RankingEditing,
-  RankingNavbar,
-  useRankingPage
+  RankingHero,
+  useRankingPage,
 } from "@/features/rankings";
+import { PokemonSearchProvider } from "@/features/pokemon-search/context/pokemon-search-context";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import { LoadingFallback } from "@/components/loading-fallback";
 import { notFound } from "next/navigation";
@@ -26,6 +28,7 @@ export default function RankingPage({ params }: RankingPageProps) {
     pokemon,
     setPokemon,
     positionColors,
+    zones,
     isOwner,
     isEditMode,
     handleEditClick,
@@ -35,6 +38,12 @@ export default function RankingPage({ params }: RankingPageProps) {
     isSaving,
     isLoading,
     notFound: rankingNotFound,
+    // Like functionality
+    likeCount,
+    isLiked,
+    toggleLike,
+    // Hero data
+    topPokemon,
   } = useRankingPage({ id });
 
   if (rankingNotFound) {
@@ -49,38 +58,55 @@ export default function RankingPage({ params }: RankingPageProps) {
     return <LoadingFallback />;
   }
 
-  return (
-    <main>
-      <div className="space-y-4">
-        <RankingNavbar
-          title={ranking.title}
-          username={ranking.user?.username ?? ""}
-          isOwner={isOwner}
-          isEditMode={isEditMode}
-          hasUnsavedChanges={hasUnsavedChanges}
-          isSaving={isSaving}
-          onEditClick={handleEditClick}
-          onDiscardClick={handleDiscardClick}
-          onSaveClick={handleSaveClick}
-          maxContentWidth={MAX_GRID_CONTENT_WIDTH}
-        />
+  const isSearchEnabled = pokemon.length > 0;
 
+  return (
+    <PokemonSearchProvider pokemon={pokemon} zones={zones}>
+      <main>
         {isEditMode ? (
+          // Edit mode: editing component with integrated controls
           <RankingEditing
             ranking={ranking}
             pokemon={pokemon}
             setPokemon={setPokemon}
             positionColors={positionColors}
+            hasUnsavedChanges={hasUnsavedChanges}
+            isSaving={isSaving}
+            onSave={handleSaveClick}
+            onDiscard={handleDiscardClick}
           />
         ) : (
-          <PokemonListingCards
-            pokemon={pokemon}
-            positionColors={positionColors}
-            showPositions={true}
-            className='py-8'
-          />
+          // View mode: Hero + Action bar + Pokemon listing
+          <div className="space-y-4">
+            <RankingHero
+              title={ranking.title}
+              username={ranking.user?.username ?? ""}
+              topPokemon={topPokemon}
+              pokemonCount={pokemon.length}
+              theme={ranking.background}
+              likeCount={likeCount}
+              isLiked={isLiked}
+              isOwner={isOwner}
+              onLikeClick={toggleLike}
+              maxContentWidth={MAX_GRID_CONTENT_WIDTH}
+            />
+            <RankingActionBar
+              isOwner={isOwner}
+              onEditClick={handleEditClick}
+              maxContentWidth={MAX_GRID_CONTENT_WIDTH}
+              isSearchEnabled={isSearchEnabled}
+            />
+            <PokemonListingCards
+              key="listing-view"
+              pokemon={pokemon}
+              zones={zones}
+              showPositions={true}
+              isOwner={isOwner}
+              onAddPokemon={handleEditClick}
+            />
+          </div>
         )}
-      </div>
-    </main>
+      </main>
+    </PokemonSearchProvider>
   );
 }

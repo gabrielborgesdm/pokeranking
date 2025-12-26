@@ -8,7 +8,8 @@
     "delete": "Excluir",
     "deleting": "Excluindo...",
     "save": "Salvar",
-    "saving": "Salvando..."
+    "saving": "Salvando...",
+    "goBack": "Voltar"
   },
   "pokemonTypes": {
     "bug": "Inseto",
@@ -31,8 +32,10 @@
     "water": "Água"
   },
   "nav": {
-    "leaderboard": "Ranking",
+    "users": "Usuários",
+    "browseRankings": "Rankings",
     "myRankings": "Meus Rankings",
+    "pokedex": "Pokedex",
     "contribute": "Contribuir",
     "design": "Design",
     "signIn": "Entrar",
@@ -137,6 +140,24 @@
     "deleteConfirmTitle": "Excluir Ranking",
     "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
   },
+  "rankings": {
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon"
+  },
+  "rankingsList": {
+    "title": "Explorar Rankings",
+    "description": "Explore tier lists de Pokemon da comunidade",
+    "noRankings": "Nenhum ranking encontrado.",
+    "errorTitle": "Erro ao carregar rankings",
+    "errorDescription": "Por favor, tente novamente mais tarde.",
+    "searchPlaceholder": "Buscar por título ou usuário...",
+    "sortBy": "Ordenar por",
+    "sortByLikes": "Mais Curtidos",
+    "sortByDate": "Mais Recentes",
+    "sortByPokemon": "Mais Pokemon",
+    "orderAsc": "Crescente",
+    "orderDesc": "Decrescente"
+  },
   "userRankings": {
     "title": "Rankings de {{username}}",
     "description": "Tier lists de Pokemon por {{username}}",
@@ -167,10 +188,10 @@
     },
     "cardPreview": "Prévia do Card",
     "cardPreviewDescription": "Como seu ranking aparece na página Meus Rankings",
-    "backgroundLabel": "Fundo da Página",
-    "backgroundDescription": "Escolha um tema de fundo para a visualização de página inteira do ranking",
-    "backgroundPreview": "Prévia do Fundo",
-    "backgroundPreviewDescription": "Como a página completa do ranking vai parecer",
+    "backgroundLabel": "Banner do Cabeçalho",
+    "backgroundDescription": "Escolha um tema para o banner no topo do seu ranking",
+    "backgroundPreview": "Prévia do Banner",
+    "backgroundPreviewDescription": "Como o banner do cabeçalho vai aparecer no topo do seu ranking",
     "sameAsCard": "Mesmo tema do card",
     "create": "Criar Ranking",
     "save": "Salvar Alterações",
@@ -211,10 +232,13 @@
     "releaseToAdd": "Solte para adicionar!",
     "emptyZone": "Nenhum Pokemon nesta tier zone",
     "emptyRanking": "Nenhum Pokemon neste ranking",
+    "addPokemon": "Adicionar Pokemon",
     "edit": "Editar",
     "discardChanges": "Descartar",
     "discardConfirmTitle": "Descartar alterações?",
-    "discardConfirmDescription": "Você tem alterações não salvas. Tem certeza que deseja descartá-las? Esta ação não pode ser desfeita."
+    "discardConfirmDescription": "Você tem alterações não salvas. Tem certeza que deseja descartá-las? Esta ação não pode ser desfeita.",
+    "yourRanking": "Seu Ranking",
+    "pokemonBox": "Box de Pokemon"
   },
   "boxSelector": {
     "title": "Suas Boxes",
@@ -263,12 +287,55 @@
       "description": "Faça uma doação única para ajudar a cobrir custos de servidor e desenvolvimento. Pague com Cartão ou Pix."
     }
   },
+  "pokedex": {
+    "title": "Pokedex",
+    "description": "Explore tipos de Pokemon, efetividade e navegue por todos os Pokemon",
+    "typeCalculator": {
+      "title": "Calculadora de Efetividade de Tipos",
+      "description": "Selecione até 2 tipos para ver suas forças e fraquezas",
+      "primaryType": "Tipo Primário",
+      "secondaryType": "Tipo Secundário",
+      "selectType": "Selecionar tipo",
+      "clearAll": "Limpar tudo",
+      "analyzing": "Analisando:",
+      "emptyState": "Selecione um tipo acima para ver suas forças e fraquezas"
+    },
+    "typeEffectiveness": {
+      "defensive": "Defensivo",
+      "offensive": "Ofensivo",
+      "weakTo": "Fraco contra",
+      "weakToHint": "Recebe mais dano desses tipos",
+      "resistantTo": "Resistente a",
+      "resistantToHint": "Recebe menos dano desses tipos",
+      "immuneTo": "Imune a",
+      "immuneToHint": "Não recebe dano desses tipos",
+      "superEffective": "Super efetivo contra",
+      "superEffectiveHint": "Causa mais dano a esses tipos",
+      "notVeryEffective": "Pouco efetivo contra",
+      "notVeryEffectiveHint": "Causa menos dano a esses tipos",
+      "noEffect": "Sem efeito em",
+      "noEffectHint": "Não causa dano a esses tipos",
+      "none": "Nenhum"
+    },
+    "pokemonList": {
+      "title": "Lista de Pokemon",
+      "resultsCount_one": "{{count}} Pokemon encontrado",
+      "resultsCount_other": "{{count}} Pokemon encontrados",
+      "noPokemon": "Nenhum Pokemon corresponde aos seus filtros"
+    }
+  },
   "notFound": {
     "title": "Página não encontrada!",
     "description": "Parece que esta página fugiu da batalha. Ela deve estar escondida na grama alta em algum lugar...",
     "goHome": "Ir para Início",
     "viewRankings": "Ver Rankings",
     "hint": "Dica: Tente usar \"Fly\" para navegar até um local conhecido!"
+  },
+  "search": {
+    "title": "Encontrar Pokemon",
+    "placeholder": "Buscar Pokemon...",
+    "noResults": "Nenhum Pokemon encontrado",
+    "startTyping": "Comece a digitar para buscar..."
   },
   "admin": {
     "pokemon": {
