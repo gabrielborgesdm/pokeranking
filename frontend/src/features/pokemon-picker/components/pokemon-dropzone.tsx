@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useState, useRef } from "react";
+import { memo, useCallback, useState, useRef, useEffect } from "react";
 import {
   useDroppable,
   DragOverlay,
@@ -19,6 +19,7 @@ import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { SortablePokemonCard } from "./sortable-pokemon-card";
 import { useResponsiveGrid } from "../hooks/use-responsive-grid";
 import { POKEMON_PICKER_DEFAULTS } from "../constants";
+import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -86,6 +87,10 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   const [isExternalDragging, setIsExternalDragging] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  // Optional search context integration
+  const searchContext = usePokemonSearchContextOptional();
+  const highlightedPokemonId = searchContext?.highlightedPokemonId ?? null;
+
   const { isOver, setNodeRef } = useDroppable({ id });
 
   // Use responsive grid hook to calculate layout
@@ -104,6 +109,23 @@ export const PokemonDropzone = memo(function PokemonDropzone({
     estimateSize: () => config.rowHeight + rowGap,
     overscan: 2, // Pre-render extra rows for smooth drag operations
   });
+
+  // Register scroll config with search context
+  useEffect(() => {
+    if (!searchContext) return;
+
+    searchContext.registerScrollConfig({
+      virtualizer: rowVirtualizer,
+      columnCount: config.columnCount,
+      pokemon,
+      virtualItems: undefined, // Dropzone uses flat view
+      scrollRef,
+    });
+
+    return () => {
+      searchContext.unregisterScrollConfig();
+    };
+  }, [searchContext, rowVirtualizer, config.columnCount, pokemon]);
 
   // Monitor drag events for internal sorting and external drops
   useDndMonitor({
@@ -244,7 +266,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
           {/* Scroll container - hidden scrollbar */}
           <div
             ref={scrollRef}
-            style={{ maxHeight: scrollHeight }}
+            style={{ maxHeight: scrollHeight, minHeight: scrollHeight }}
             className="overflow-y-auto overflow-x-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
             {/* Virtual container with full height + padding for badge overflow */}
@@ -294,6 +316,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                             position={showPositions ? position : undefined}
                             color={color}
                             isDropping={isDropping}
+                            isHighlighted={highlightedPokemonId === p._id}
                           />
                         </div>
                       );

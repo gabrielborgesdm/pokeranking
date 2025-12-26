@@ -163,6 +163,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -241,12 +242,21 @@
   opacity: 0.6;
 }
 
+/* Subtle dot pattern background for panels */
+.panel-dots {
+  background-color: hsl(var(--card));
+  background-image: radial-gradient(circle, rgba(128, 128, 128, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+  border-radius: var(--radius);
+}
+
 /* Hover animation utility */
 .hover-scale {
   transition: transform 200ms ease-out;
   will-change: transform;
   transform: translateZ(0);
 }
+
 .hover-scale:hover {
   transform: scale(1.02) translateZ(0);
 }
@@ -265,77 +275,61 @@
 /* Pokemon Gradient Utilities */
 @layer utilities {
   .gradient-pokemon-red {
-    background: linear-gradient(
-      135deg,
-      oklch(0.60 0.235 27) 0%,
-      oklch(0.50 0.205 27) 50%,
-      oklch(0.40 0.175 27) 100%
-    );
+    background: linear-gradient(135deg,
+        oklch(0.60 0.235 27) 0%,
+        oklch(0.50 0.205 27) 50%,
+        oklch(0.40 0.175 27) 100%);
   }
 
   .gradient-pokemon-yellow {
-    background: linear-gradient(
-      135deg,
-      oklch(0.90 0.175 93) 0%,
-      oklch(0.87 0.185 90) 50%,
-      oklch(0.80 0.175 88) 100%
-    );
+    background: linear-gradient(135deg,
+        oklch(0.90 0.175 93) 0%,
+        oklch(0.87 0.185 90) 50%,
+        oklch(0.80 0.175 88) 100%);
   }
 
   .gradient-pokemon-blue {
-    background: linear-gradient(
-      135deg,
-      oklch(0.55 0.195 265) 0%,
-      oklch(0.48 0.195 265) 50%,
-      oklch(0.40 0.175 265) 100%
-    );
+    background: linear-gradient(135deg,
+        oklch(0.55 0.195 265) 0%,
+        oklch(0.48 0.195 265) 50%,
+        oklch(0.40 0.175 265) 100%);
   }
 
   .gradient-pokeball {
-    background: linear-gradient(
-      180deg,
-      oklch(0.50 0.205 27) 0%,
-      oklch(0.50 0.205 27) 45%,
-      oklch(0.12 0 0) 45%,
-      oklch(0.12 0 0) 55%,
-      oklch(0.98 0 0) 55%,
-      oklch(0.98 0 0) 100%
-    );
+    background: linear-gradient(180deg,
+        oklch(0.50 0.205 27) 0%,
+        oklch(0.50 0.205 27) 45%,
+        oklch(0.12 0 0) 45%,
+        oklch(0.12 0 0) 55%,
+        oklch(0.98 0 0) 55%,
+        oklch(0.98 0 0) 100%);
   }
 
   .gradient-pokemon-sunset {
-    background: linear-gradient(
-      135deg,
-      oklch(0.87 0.185 90) 0%,
-      oklch(0.60 0.235 27) 100%
-    );
+    background: linear-gradient(135deg,
+        oklch(0.87 0.185 90) 0%,
+        oklch(0.60 0.235 27) 100%);
   }
 
   .gradient-pokemon-ocean {
-    background: linear-gradient(
-      135deg,
-      oklch(0.55 0.195 265) 0%,
-      oklch(0.20 0.02 280) 100%
-    );
+    background: linear-gradient(135deg,
+        oklch(0.55 0.195 265) 0%,
+        oklch(0.20 0.02 280) 100%);
   }
 
   .text-gradient-pokemon {
-    background: linear-gradient(
-      135deg,
-      oklch(0.87 0.185 90) 0%,
-      oklch(0.60 0.235 27) 100%
-    );
+    background: linear-gradient(135deg,
+        oklch(0.87 0.185 90) 0%,
+        oklch(0.60 0.235 27) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .text-gradient-pokemon-blue {
-    background: linear-gradient(
-      135deg,
-      oklch(0.55 0.195 265) 0%,
-      oklch(0.48 0.195 265) 100%
-    );
+    background: linear-gradient(135deg,
+        oklch(0.55 0.195 265) 0%,
+        oklch(0.48 0.195 265) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -448,15 +442,20 @@
 
 /* Pokeball wobble animation for drag overlay */
 @keyframes wobble {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(0deg) scale(1);
   }
+
   25% {
     transform: rotate(-15deg) scale(1.1);
   }
+
   50% {
     transform: rotate(0deg) scale(1);
   }
+
   75% {
     transform: rotate(15deg) scale(1.1);
   }
@@ -468,6 +467,7 @@
     transform: scale(1) rotate(0deg);
     opacity: 0.8;
   }
+
   100% {
     transform: scale(1.05) rotate(2deg);
     opacity: 1;
@@ -477,4 +477,34 @@
 /* Pokeball cursor */
 .cursor-pokeball {
   cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23fff' stroke='%231F2937' stroke-width='4'/%3E%3Cpath d='M 50 5 A 45 45 0 0 1 95 50 L 5 50 A 45 45 0 0 1 50 5' fill='%23EF4444' stroke='%231F2937' stroke-width='4'/%3E%3Crect x='5' y='46' width='90' height='8' fill='%231F2937'/%3E%3Ccircle cx='50' cy='50' r='12' fill='%23fff' stroke='%231F2937' stroke-width='4'/%3E%3Ccircle cx='50' cy='50' r='6' fill='%231F2937'/%3E%3C/svg%3E") 12 12, pointer;
+}
+
+/* Pokemon search highlight animation - scale + glow effect */
+@keyframes pokemon-highlight {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+
+  15% {
+    transform: scale(1.08);
+    box-shadow: 0 0 30px 10px rgba(255, 215, 0, 0.8);
+  }
+
+  30%,
+  60% {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px 8px rgba(255, 215, 0, 0.6);
+  }
+
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+  }
+}
+
+.pokemon-highlight {
+  animation: pokemon-highlight 1.5s ease-out forwards;
+  z-index: 50;
+  position: relative;
 }

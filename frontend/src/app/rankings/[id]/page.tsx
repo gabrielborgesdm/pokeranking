@@ -6,10 +6,10 @@ import { MAX_GRID_CONTENT_WIDTH } from "@/features/pokemon-picker";
 import {
   RankingActionBar,
   RankingEditing,
-  RankingEditHeader,
   RankingHero,
   useRankingPage,
 } from "@/features/rankings";
+import { PokemonSearchProvider } from "@/features/pokemon-search/context/pokemon-search-context";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import { LoadingFallback } from "@/components/loading-fallback";
 import { notFound } from "next/navigation";
@@ -58,57 +58,56 @@ export default function RankingPage({ params }: RankingPageProps) {
     return <LoadingFallback />;
   }
 
+  const isSearchEnabled = pokemon.length > 0;
+
   return (
-    <main>
-      {isEditMode ? (
-        // Edit mode: Simple header + editing component
-        <div className="space-y-4">
-          <RankingEditHeader
-            title={ranking.title}
-            hasUnsavedChanges={hasUnsavedChanges}
-            isSaving={isSaving}
-            onDiscardClick={handleDiscardClick}
-            onSaveClick={handleSaveClick}
-            maxContentWidth={MAX_GRID_CONTENT_WIDTH}
-          />
+    <PokemonSearchProvider pokemon={pokemon} zones={zones}>
+      <main>
+        {isEditMode ? (
+          // Edit mode: editing component with integrated controls
           <RankingEditing
             ranking={ranking}
             pokemon={pokemon}
             setPokemon={setPokemon}
             positionColors={positionColors}
+            hasUnsavedChanges={hasUnsavedChanges}
+            isSaving={isSaving}
+            onSave={handleSaveClick}
+            onDiscard={handleDiscardClick}
           />
-        </div>
-      ) : (
-        // View mode: Hero + Action bar + Pokemon listing
-        <div className="space-y-4">
-          <RankingHero
-            title={ranking.title}
-            username={ranking.user?.username ?? ""}
-            topPokemon={topPokemon}
-            pokemonCount={pokemon.length}
-            theme={ranking.background}
-            likeCount={likeCount}
-            isLiked={isLiked}
-            isOwner={isOwner}
-            onLikeClick={toggleLike}
-            maxContentWidth={MAX_GRID_CONTENT_WIDTH}
-          />
-          <RankingActionBar
-            isOwner={isOwner}
-            onEditClick={handleEditClick}
-            maxContentWidth={MAX_GRID_CONTENT_WIDTH}
-          />
-          <PokemonListingCards
-            key="listing-view"
-            pokemon={pokemon}
-            zones={zones}
-            showPositions={true}
-            className="py-8"
-            isOwner={isOwner}
-            onAddPokemon={handleEditClick}
-          />
-        </div>
-      )}
-    </main>
+        ) : (
+          // View mode: Hero + Action bar + Pokemon listing
+          <div className="space-y-4">
+            <RankingHero
+              title={ranking.title}
+              username={ranking.user?.username ?? ""}
+              topPokemon={topPokemon}
+              pokemonCount={pokemon.length}
+              theme={ranking.background}
+              likeCount={likeCount}
+              isLiked={isLiked}
+              isOwner={isOwner}
+              onLikeClick={toggleLike}
+              maxContentWidth={MAX_GRID_CONTENT_WIDTH}
+            />
+            <RankingActionBar
+              isOwner={isOwner}
+              onEditClick={handleEditClick}
+              maxContentWidth={MAX_GRID_CONTENT_WIDTH}
+              isSearchEnabled={isSearchEnabled}
+            />
+            <PokemonListingCards
+              key="listing-view"
+              pokemon={pokemon}
+              zones={zones}
+              showPositions={true}
+              className="py-8"
+              isOwner={isOwner}
+              onAddPokemon={handleEditClick}
+            />
+          </div>
+        )}
+      </main>
+    </PokemonSearchProvider>
   );
 }

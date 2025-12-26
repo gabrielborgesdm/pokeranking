@@ -211,7 +211,9 @@
     "edit": "Edit",
     "discardChanges": "Discard",
     "discardConfirmTitle": "Discard changes?",
-    "discardConfirmDescription": "You have unsaved changes. Are you sure you want to discard them? This action cannot be undone."
+    "discardConfirmDescription": "You have unsaved changes. Are you sure you want to discard them? This action cannot be undone.",
+    "yourRanking": "Your Ranking",
+    "pokemonBox": "Pokemon Box"
   },
   "boxSelector": {
     "title": "Your Boxes",
@@ -328,6 +330,12 @@
     "goHome": "Go to Homepage",
     "viewRankings": "View Rankings",
     "hint": "Hint: Try using \"Fly\" to navigate to a known location!"
+  },
+  "search": {
+    "title": "Find Pokemon",
+    "placeholder": "Search Pokemon...",
+    "noResults": "No Pokemon found",
+    "startTyping": "Start typing to search..."
   },
   "admin": {
     "pokemon": {

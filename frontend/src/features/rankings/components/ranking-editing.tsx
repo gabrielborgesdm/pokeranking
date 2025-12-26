@@ -1,10 +1,10 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 import { DndContext } from "@dnd-kit/core";
 import {
   PokemonDropzone,
-  PokemonBoxes,
+  PokemonBoxesWithFilters,
   PickerDropzoneLayout,
 } from "@/features/pokemon-picker";
 import { useRankingEditing } from "../hooks/use-ranking-editing";
@@ -19,6 +19,14 @@ interface RankingEditingProps {
   setPokemon: (pokemon: PokemonResponseDto[]) => void;
   /** Map of position (1-based) to zone color */
   positionColors: Map<number, string>;
+  /** Whether there are unsaved changes */
+  hasUnsavedChanges?: boolean;
+  /** Whether save is in progress */
+  isSaving?: boolean;
+  /** Called when save button is clicked */
+  onSave?: () => void;
+  /** Called when discard is confirmed */
+  onDiscard?: () => void;
 }
 
 /**
@@ -30,13 +38,25 @@ export const RankingEditing = memo(function RankingEditing({
   pokemon,
   setPokemon,
   positionColors,
+  hasUnsavedChanges,
+  isSaving,
+  onSave,
+  onDiscard,
 }: RankingEditingProps) {
   const { sensors, filteredOutIds, disabledIds } = useRankingEditing(pokemon);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [activeFilterCount, setActiveFilterCount] = useState(0);
 
   return (
     <DndContext sensors={sensors}>
       <PickerDropzoneLayout
-        className="h-[80vh] pt-4"
+        className="h-[92vh] pt-4"
+        hasUnsavedChanges={hasUnsavedChanges}
+        isSaving={isSaving}
+        onSave={onSave}
+        onDiscard={onDiscard}
+        activeFilterCount={activeFilterCount}
+        onOpenFilters={() => setFiltersOpen(true)}
         dropzone={
           <PokemonDropzone
             id="ranking-pokemon"
@@ -49,10 +69,13 @@ export const RankingEditing = memo(function RankingEditing({
           />
         }
         picker={
-          <PokemonBoxes
+          <PokemonBoxesWithFilters
             disabledIds={disabledIds}
             filteredOutIds={filteredOutIds}
             height="75vh"
+            filtersOpen={filtersOpen}
+            onCloseFilters={() => setFiltersOpen(false)}
+            onActiveFilterCountChange={setActiveFilterCount}
           />
         }
       />

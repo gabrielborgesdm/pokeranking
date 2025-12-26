@@ -236,7 +236,9 @@
     "edit": "Editar",
     "discardChanges": "Descartar",
     "discardConfirmTitle": "Descartar alterações?",
-    "discardConfirmDescription": "Você tem alterações não salvas. Tem certeza que deseja descartá-las? Esta ação não pode ser desfeita."
+    "discardConfirmDescription": "Você tem alterações não salvas. Tem certeza que deseja descartá-las? Esta ação não pode ser desfeita.",
+    "yourRanking": "Seu Ranking",
+    "pokemonBox": "Box de Pokemon"
   },
   "boxSelector": {
     "title": "Suas Boxes",
@@ -328,6 +330,12 @@
     "goHome": "Ir para Início",
     "viewRankings": "Ver Rankings",
     "hint": "Dica: Tente usar \"Fly\" para navegar até um local conhecido!"
+  },
+  "search": {
+    "title": "Encontrar Pokemon",
+    "placeholder": "Buscar Pokemon...",
+    "noResults": "Nenhum Pokemon encontrado",
+    "startTyping": "Comece a digitar para buscar..."
   },
   "admin": {
     "pokemon": {
