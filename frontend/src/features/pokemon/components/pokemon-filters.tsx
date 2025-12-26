@@ -18,7 +18,6 @@ export type SortByOption = "name" | "createdAt";
 export type OrderOption = "asc" | "desc";
 
 const LIMIT_OPTIONS = [10, 20, 50, 100] as const;
-const GENERATION_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 
 interface PokemonFiltersProps {
   searchValue: string;
@@ -91,24 +90,17 @@ export const PokemonFilters = memo(function PokemonFilters({
           />
 
           {generation !== undefined && onGenerationChange && (
-            <Select
-              value={generation?.toString() ?? "all"}
-              onValueChange={(value) =>
-                onGenerationChange(value === "all" ? null : Number(value))
-              }
-            >
-              <SelectTrigger className="flex-1 sm:flex-none sm:w-[120px]">
-                <SelectValue placeholder={t("admin.pokemon.generation")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t("pokemonFilters.allGenerations")}</SelectItem>
-                {GENERATION_OPTIONS.map((gen) => (
-                  <SelectItem key={gen} value={String(gen)}>
-                    {t("pokemonFilters.generation", { gen })}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              type="number"
+              min={1}
+              placeholder={t("pokemonFilters.allGenerations")}
+              value={generation ?? ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                onGenerationChange(value === "" ? null : Number(value));
+              }}
+              className="flex-1 sm:flex-none sm:w-[100px]"
+            />
           )}
 
           <Select value={sortBy} onValueChange={onSortByChange}>

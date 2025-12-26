@@ -87,14 +87,27 @@ export async function seedRankings(
   const rankingsCollection = connection.collection('rankings');
   const usersCollection = connection.collection('users');
 
-  const rankingsWithTimestamps = rankings.map((r) => ({
-    ...r,
-    user: r.user || userId || new Types.ObjectId(),
-    pokemon: r.pokemon || [],
-    zones: r.zones || [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+  const rankingsWithTimestamps = rankings.map((r, index) => {
+    const userValue = r.user || userId;
+    // Add small delay to ensure different timestamps for sorting tests
+    const timestamp = new Date(Date.now() + index);
+    return {
+      ...r,
+      user: userValue
+        ? typeof userValue === 'string'
+          ? new Types.ObjectId(userValue)
+          : userValue
+        : new Types.ObjectId(),
+      pokemon: (r.pokemon || []).map((id) =>
+        typeof id === 'string' ? new Types.ObjectId(id) : id,
+      ),
+      zones: r.zones || [],
+      likedBy: [],
+      likesCount: 0,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    };
+  });
 
   const result = await rankingsCollection.insertMany(rankingsWithTimestamps);
   const seededRankings = Object.values(result.insertedIds).map((id, index) => ({

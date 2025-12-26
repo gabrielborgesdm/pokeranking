@@ -12,6 +12,7 @@ import {
   useRankingsControllerCreate,
   useRankingsControllerUpdate,
   getAuthControllerGetProfileQueryKey,
+  getRankingsControllerFindByUsernameQueryKey,
   isApiError,
   type CreateRankingDto,
   type UpdateRankingDto,
@@ -20,17 +21,7 @@ import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { routes } from "@/lib/routes";
 
-function createZoneSchema(t: (key: string) => string) {
-  return z.object({
-    name: z.string().min(1, t("zoneEditor.validation.nameRequired")).max(50),
-    interval: z.tuple([z.number().min(1), z.number().nullable()]),
-    color: z
-      .string()
-      .regex(/^#[0-9A-Fa-f]{6}$/, t("zoneEditor.validation.invalidColor")),
-  });
-}
-
-function createRankingFormSchema(t: (key: string) => string) {
+function createRankingFormSchema() {
   return z.object({
     title: z.string().min(1).max(100),
     theme: z.string().refine((val) => THEME_IDS.includes(val), {
@@ -42,11 +33,9 @@ function createRankingFormSchema(t: (key: string) => string) {
         message: "Invalid background",
       })
       .optional(),
-    zones: z.array(createZoneSchema(t)).optional(),
   });
 }
 
-export type ZoneFormData = z.infer<ReturnType<typeof createZoneSchema>>;
 export type RankingFormData = z.infer<
   ReturnType<typeof createRankingFormSchema>
 >;
@@ -76,26 +65,18 @@ export function useRankingForm({
   const updateMutation = useRankingsControllerUpdate();
 
   const form = useForm<RankingFormData>({
-    resolver: zodResolver(createRankingFormSchema(t)),
+    resolver: zodResolver(createRankingFormSchema()),
     defaultValues: {
       title: initialData?.title ?? "",
       theme: initialData?.theme ?? DEFAULT_THEME_ID,
       background: initialData?.background ?? undefined,
-      zones: initialData?.zones ?? [],
     },
   });
 
   async function onSubmit(data: RankingFormData) {
     setError(null);
 
-    // Transform zones to match API type (interval as number[] which can contain null)
-    const apiData = {
-      ...data,
-      zones: data.zones?.map((zone) => ({
-        ...zone,
-        interval: zone.interval as unknown as number[],
-      })),
-    } as CreateRankingDto | UpdateRankingDto;
+    const apiData = data as CreateRankingDto | UpdateRankingDto;
 
     if (mode === "create") {
       createMutation.mutate(
@@ -105,9 +86,12 @@ export function useRankingForm({
             if (response.status === 201) {
               const createdRanking = response.data;
               trackRankingCreate(createdRanking._id, createdRanking.title);
-              // Invalidate profile query to refresh rankings list
+              // Invalidate queries to refresh rankings list
               queryClient.invalidateQueries({
                 queryKey: getAuthControllerGetProfileQueryKey(),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getRankingsControllerFindByUsernameQueryKey(username),
               });
               onSuccess?.();
               router.push(routes.userRankings(username));
@@ -133,9 +117,12 @@ export function useRankingForm({
         {
           onSuccess: (response) => {
             if (response.status === 200) {
-              // Invalidate profile query to refresh rankings list
+              // Invalidate queries to refresh rankings list
               queryClient.invalidateQueries({
                 queryKey: getAuthControllerGetProfileQueryKey(),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getRankingsControllerFindByUsernameQueryKey(username),
               });
               onSuccess?.();
               router.push(routes.userRankings(username));

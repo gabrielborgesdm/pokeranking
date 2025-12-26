@@ -14,12 +14,9 @@ export default function EditRankingPage({ params }: EditRankingPageProps) {
   const { id } = use(params);
   const { t } = useTranslation();
 
-  const {
-    ranking,
-    totalPokemon,
-    isLoading,
-    notFound: rankingNotFound,
-  } = useRankingEditData({ rankingId: id });
+  const { ranking, isLoading, notFound: rankingNotFound } = useRankingEditData({
+    rankingId: id,
+  });
 
   if (rankingNotFound) {
     notFound();
@@ -51,7 +48,6 @@ export default function EditRankingPage({ params }: EditRankingPageProps) {
               background: ranking.background ?? undefined,
             }}
             pokemonCount={ranking.pokemon.length}
-            totalPokemonInSystem={totalPokemon}
             topPokemonImage={ranking.pokemon[0]?.image}
           />
         )}

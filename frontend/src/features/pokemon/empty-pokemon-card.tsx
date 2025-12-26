@@ -7,7 +7,22 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
-export const EmptyPokemonCard = ({ className }: { className?: string }) => {
+interface EmptyPokemonCardProps {
+  className?: string;
+  /** Custom message to display. Defaults to "rankingView.emptyRanking" */
+  message?: string;
+  /** Optional action button. If not provided, shows "Go back" button */
+  action?: React.ReactNode;
+  /** Whether to show any action button. Defaults to true */
+  showAction?: boolean;
+}
+
+export const EmptyPokemonCard = ({
+  className,
+  message,
+  action,
+  showAction = true,
+}: EmptyPokemonCardProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -30,7 +45,7 @@ export const EmptyPokemonCard = ({ className }: { className?: string }) => {
 
       {/* Text content */}
       <p className="text-lg font-medium text-muted-foreground mb-2">
-        {t("rankingView.emptyRanking")}
+        {message ?? t("rankingView.emptyRanking")}
       </p>
 
       {/* Decorative pokeball divider */}
@@ -47,15 +62,19 @@ export const EmptyPokemonCard = ({ className }: { className?: string }) => {
         <div className="h-px w-12 bg-gradient-to-l from-transparent to-muted-foreground/30" />
       </div>
 
-      {/* Go back button */}
-      <Button
-        variant="outline"
-        className="mt-6"
-        onClick={() => router.back()}
-      >
-        <ArrowLeft className="size-4" />
-        {t("common.goBack", "Go Back")}
-      </Button>
+      {/* Action button */}
+      {showAction && (
+        action ?? (
+          <Button
+            variant="outline"
+            className="mt-6"
+            onClick={() => router.back()}
+          >
+            <ArrowLeft className="size-4" />
+            {t("common.goBack")}
+          </Button>
+        )
+      )}
     </div>
   );
 }
