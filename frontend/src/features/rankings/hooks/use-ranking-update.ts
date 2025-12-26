@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   useRankingsControllerUpdate,
   getRankingsControllerFindOneQueryKey,
+  getAuthControllerGetProfileQueryKey,
   type PokemonResponseDto,
 } from "@pokeranking/api-client";
 
@@ -220,6 +221,9 @@ export function useRankingUpdate({
       // Invalidate queries to refetch fresh data
       queryClient.invalidateQueries({
         queryKey: getRankingsControllerFindOneQueryKey(rankingId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: getAuthControllerGetProfileQueryKey(),
       });
 
       return true;

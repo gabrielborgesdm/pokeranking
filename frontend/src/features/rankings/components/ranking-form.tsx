@@ -18,13 +18,13 @@ import { BackgroundPicker } from "./background-picker";
 import { CardThemePreview } from "./card-theme-preview";
 import { BackgroundPreview } from "./background-preview";
 import { useRankingForm, type RankingFormData } from "../hooks/use-ranking-form";
+import { useUserRankedPokemonCount } from "../hooks/use-user-ranked-pokemon-count";
 
 interface RankingFormProps {
   mode: "create" | "edit";
   rankingId?: string;
   initialData?: Partial<RankingFormData>;
   pokemonCount?: number;
-  totalPokemonInSystem: number;
   topPokemonImage?: string;
   onSuccess?: () => void;
 }
@@ -34,10 +34,11 @@ export function RankingForm({
   rankingId,
   initialData,
   pokemonCount = 0,
-  totalPokemonInSystem,
   topPokemonImage,
   onSuccess,
 }: RankingFormProps) {
+  const { totalRankedPokemon, totalPokemonInSystem } =
+    useUserRankedPokemonCount();
   const { t } = useTranslation();
   const { form, error, isLoading, onSubmit } = useRankingForm({
     mode,
@@ -102,7 +103,7 @@ export function RankingForm({
                       <ThemePicker
                         value={field.value}
                         onChange={field.onChange}
-                        pokemonCount={pokemonCount}
+                        pokemonCount={totalRankedPokemon}
                         totalPokemonInSystem={totalPokemonInSystem}
                       />
                     </FormControl>
@@ -135,7 +136,7 @@ export function RankingForm({
                       <BackgroundPicker
                         value={field.value}
                         onChange={field.onChange}
-                        pokemonCount={pokemonCount}
+                        pokemonCount={totalRankedPokemon}
                         totalPokemonInSystem={totalPokemonInSystem}
                       />
                     </FormControl>
