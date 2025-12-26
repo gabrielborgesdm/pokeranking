@@ -223,15 +223,16 @@ export const PokemonDropzone = memo(function PokemonDropzone({
       {pokemon.length === 0 ? (
         <div
           className={cn(
-            "absolute inset-0 flex items-center justify-left rounded-xl border-2 border-dashed transition-colors duration-200",
+            "h-full w-full flex flex-col items-center justify-center rounded-xl border-2 border-dashed transition-colors duration-200",
             isOver
               ? "border-primary bg-primary/5"
               : "border-muted-foreground/30"
           )}
+          style={{ minHeight }}
         >
           <p
             className={cn(
-              "text-muted-foreground transition-colors",
+              "text-sm text-muted-foreground/70 transition-colors",
               isOver && "text-primary font-medium"
             )}
           >

@@ -36,7 +36,7 @@ export const RankingEditing = memo(function RankingEditing({
   return (
     <DndContext sensors={sensors}>
       <PickerDropzoneLayout
-        className="h-[80vh]"
+        className="h-[80vh] pt-4"
         dropzone={
           <PokemonDropzone
             id="ranking-pokemon"
