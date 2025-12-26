@@ -12,6 +12,7 @@ import {
   useRankingsControllerCreate,
   useRankingsControllerUpdate,
   getAuthControllerGetProfileQueryKey,
+  getRankingsControllerFindByUsernameQueryKey,
   isApiError,
   type CreateRankingDto,
   type UpdateRankingDto,
@@ -85,9 +86,12 @@ export function useRankingForm({
             if (response.status === 201) {
               const createdRanking = response.data;
               trackRankingCreate(createdRanking._id, createdRanking.title);
-              // Invalidate profile query to refresh rankings list
+              // Invalidate queries to refresh rankings list
               queryClient.invalidateQueries({
                 queryKey: getAuthControllerGetProfileQueryKey(),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getRankingsControllerFindByUsernameQueryKey(username),
               });
               onSuccess?.();
               router.push(routes.userRankings(username));
@@ -113,9 +117,12 @@ export function useRankingForm({
         {
           onSuccess: (response) => {
             if (response.status === 200) {
-              // Invalidate profile query to refresh rankings list
+              // Invalidate queries to refresh rankings list
               queryClient.invalidateQueries({
                 queryKey: getAuthControllerGetProfileQueryKey(),
+              });
+              queryClient.invalidateQueries({
+                queryKey: getRankingsControllerFindByUsernameQueryKey(username),
               });
               onSuccess?.();
               router.push(routes.userRankings(username));
