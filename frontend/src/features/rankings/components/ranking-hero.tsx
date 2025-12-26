@@ -67,28 +67,60 @@ export const RankingHero = memo(function RankingHero({
   return (
     <div
       className={cn(
-        "mx-4 mt-4 rounded-2xl p-6",
+        "relative mx-4 mt-4 rounded-2xl py-12 sm:py-16 px-6 overflow-hidden",
         gradientClass,
         className
       )}
     >
+      {/* Flowing wave decoration */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox="0 0 1200 200"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Background wave layers */}
+        <path
+          d="M0,120 C150,180 350,60 600,100 C850,140 1050,40 1200,80 L1200,200 L0,200 Z"
+          fill="rgba(0,0,0,0.08)"
+        />
+        <path
+          d="M0,140 C200,100 400,160 650,120 C900,80 1100,140 1200,100 L1200,200 L0,200 Z"
+          fill="rgba(0,0,0,0.06)"
+        />
+        <path
+          d="M0,160 C250,130 450,180 700,150 C950,120 1150,170 1200,140 L1200,200 L0,200 Z"
+          fill="rgba(0,0,0,0.04)"
+        />
+
+        {/* Sparkle/star elements */}
+        <circle cx="85%" cy="25%" r="2" fill="rgba(255,255,255,0.6)" />
+        <circle cx="90%" cy="40%" r="1.5" fill="rgba(255,255,255,0.4)" />
+        <circle cx="80%" cy="55%" r="1" fill="rgba(255,255,255,0.3)" />
+        <circle cx="92%" cy="65%" r="1.5" fill="rgba(255,255,255,0.5)" />
+        <circle cx="75%" cy="35%" r="1" fill="rgba(255,255,255,0.25)" />
+      </svg>
+
+      {/* Subtle gradient overlay for depth */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-white/5 via-transparent to-black/10" />
+
       <div
-        className="mx-auto flex items-center justify-between gap-4"
+        className="relative z-10 mx-auto flex items-center justify-between gap-6"
         style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
       >
         {/* Left section: Top Pokemon */}
         <div className="flex flex-col items-center gap-2">
           {/* Top Pokemon Image - falls back to "who.png" if no pokemon */}
-          <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+          <div className="relative w-24 h-24 sm:w-32 sm:h-32">
             <div className="relative w-full h-full">
               {/* Glow effect */}
-              <div className="absolute inset-0 rounded-full bg-white/20 blur-md" />
+              <div className="absolute inset-0 rounded-full bg-white/25 blur-xl" />
               <PokemonImage
                 src={topPokemon?.image}
                 alt={topPokemon?.name ?? "Pokemon"}
                 fill
-                className="drop-shadow-lg relative z-10 transition-transform hover:scale-105"
-                sizes="96px"
+                className="drop-shadow-2xl relative z-10 transition-transform hover:scale-105"
+                sizes="128px"
               />
             </div>
           </div>
@@ -96,13 +128,13 @@ export const RankingHero = memo(function RankingHero({
 
         {/* Center section: Title, username, pokemon count */}
         <div className="flex-1 min-w-0 text-center sm:text-left">
-          <h1 className="text-xl sm:text-2xl font-bold truncate">
+          <h1 className="text-2xl sm:text-3xl font-bold truncate drop-shadow-md">
             {title}
           </h1>
-          <div className="flex items-center justify-center sm:justify-start gap-2 text-sm opacity-80">
+          <div className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-base opacity-90 mt-1">
             <Link
               href={routes.userRankings(username)}
-              className="hover:underline"
+              className="hover:underline font-medium"
             >
               @{username}
             </Link>
@@ -118,17 +150,17 @@ export const RankingHero = memo(function RankingHero({
           <div className="flex items-center gap-2">
             <Button
               variant="ghost"
-              size="sm"
+              size="lg"
               onClick={onLikeClick}
               className={cn(
-                "gap-1.5 hover:bg-white/10",
+                "gap-2 hover:bg-white/15 text-lg",
                 isLiked && "text-red-500"
               )}
             >
               <Heart
-                className={cn("h-5 w-5", isLiked && "fill-current")}
+                className={cn("h-6 w-6", isLiked && "fill-current")}
               />
-              <span className="font-medium">{likeCount}</span>
+              <span className="font-semibold">{likeCount}</span>
             </Button>
           </div>
         )}
