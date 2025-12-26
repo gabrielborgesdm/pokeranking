@@ -9,7 +9,7 @@ export { PokemonBoxes } from "./components/pokemon-boxes";
 export { BoxTabs } from "./components/box-tabs";
 export { PokemonListingCards } from "./components/pokemon-listing-cards";
 export { useResponsiveGrid } from "./hooks/use-responsive-grid";
-export { useBoxPokemon } from "./hooks/use-box-pokemon";
+export { useAllPokemon } from "./hooks/use-all-pokemon";
 export { POKEMON_PICKER_DEFAULTS, MAX_GRID_CONTENT_WIDTH } from "./constants";
 export type {
   PokemonPickerProps,
@@ -19,4 +19,4 @@ export type {
 } from "./types";
 export type { PokemonDropzoneProps } from "./components/pokemon-dropzone";
 export type { VirtualizedPokemonGridProps } from "./components/virtualized-pokemon-grid";
-export type { BoxSortByOption, BoxOrderOption } from "./hooks/use-box-pokemon";
+export type { PokemonSortByOption, PokemonOrderOption } from "./hooks/use-all-pokemon";
