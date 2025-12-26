@@ -33,14 +33,9 @@ export const RankingActionBar = memo(function RankingActionBar({
   const { t } = useTranslation();
 
   return (
-    <div
-      className={cn(
-        "flex justify-center py-3 px-4 md:px-8 border-b border-border/40 bg-card/70",
-        className
-      )}
-    >
+    <div className={cn("flex justify-center px-4", className)}>
       <div
-        className="flex items-center justify-between gap-4 w-full"
+        className="flex items-center justify-between gap-4 w-full py-3 px-4 rounded-xl bg-card/70 border border-border/40"
         style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
       >
         {/* Search input (placeholder for future implementation) */}
