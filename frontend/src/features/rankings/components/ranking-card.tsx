@@ -78,6 +78,7 @@ export const RankingCard = memo(function RankingCard({
         "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105",
         onClick && "hover:cursor-pointer",
         themeData.gradientClass,
+        themeData.textColor === "light" ? "text-white" : "text-foreground",
         className
       )}
     >
@@ -104,8 +105,18 @@ export const RankingCard = memo(function RankingCard({
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-white/10" />
-      <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full bg-white/5" />
+      <div
+        className={cn(
+          "absolute -top-8 -right-8 w-24 h-24 rounded-full",
+          themeData.textColor === "light" ? "bg-white/10" : "bg-black/10"
+        )}
+      />
+      <div
+        className={cn(
+          "absolute -bottom-4 -left-4 w-16 h-16 rounded-full",
+          themeData.textColor === "light" ? "bg-white/5" : "bg-black/5"
+        )}
+      />
 
       {/* Actions Dropdown */}
       {showActions && (
@@ -115,7 +126,11 @@ export const RankingCard = memo(function RankingCard({
               <Button
                 variant="ghost"
                 size="icon-sm"
-                className="bg-black/20 hover:bg-black/40 text-white"
+                className={cn(
+                  themeData.textColor === "light"
+                    ? "bg-black/20 hover:bg-black/40 text-white"
+                    : "bg-white/40 hover:bg-white/60 text-foreground"
+                )}
               >
                 <MoreVertical className="h-4 w-4" />
                 <span className="sr-only">{t("common.actions")}</span>

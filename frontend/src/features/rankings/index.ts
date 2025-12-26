@@ -18,4 +18,5 @@ export { useRankingEditData } from "./hooks/use-ranking-edit-data";
 export { useRankingForm, type RankingFormData } from "./hooks/use-ranking-form";
 export { useRankingPage } from "./hooks/use-ranking-page";
 export { useRankingUpdate } from "./hooks/use-ranking-update";
+export { useUserRankedPokemonCount } from "./hooks/use-user-ranked-pokemon-count";
 export { useUserRankings } from "./hooks/use-user-rankings";

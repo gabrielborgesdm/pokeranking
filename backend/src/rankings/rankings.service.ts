@@ -47,6 +47,11 @@ export class RankingsService {
       });
     }
 
+    // Validate theme availability if theme provided (before transaction)
+    if (createRankingDto.theme) {
+      await this.validateThemeForUser(createRankingDto.theme, userId);
+    }
+
     const savedRanking = await withTransaction(
       this.connection,
       async (session) => {
@@ -55,17 +60,6 @@ export class RankingsService {
           user.rankings,
           createRankingDto.title,
         );
-
-        // Validate theme availability if theme provided
-        if (createRankingDto.theme) {
-          const pokemonCount = createRankingDto.pokemon?.length || 0;
-          const totalPokemon = await this.getTotalPokemonCount();
-          this.validateThemeAvailability(
-            createRankingDto.theme,
-            pokemonCount,
-            totalPokemon,
-          );
-        }
 
         const ranking = new this.rankingModel({
           ...createRankingDto,
@@ -139,12 +133,7 @@ export class RankingsService {
 
     // Validate theme availability if theme is being updated
     if (updateRankingDto.theme) {
-      const totalPokemon = await this.getTotalPokemonCount();
-      this.validateThemeAvailability(
-        updateRankingDto.theme,
-        newPokemon.length,
-        totalPokemon,
-      );
+      await this.validateThemeForUser(updateRankingDto.theme, userId);
     }
 
     // Apply updates
@@ -304,13 +293,28 @@ export class RankingsService {
     return this.pokemonModel.countDocuments().exec();
   }
 
-  // Helper: Validate theme availability based on Pokemon count
-  private validateThemeAvailability(
+  // Helper: Get user's total ranked Pokemon count across all rankings
+  private async getUserTotalRankedPokemon(userId: string): Promise<number> {
+    const rankings = await this.rankingModel
+      .find({ user: new Types.ObjectId(userId) })
+      .select('pokemon')
+      .lean()
+      .exec();
+
+    return rankings.reduce((sum, r) => sum + (r.pokemon?.length ?? 0), 0);
+  }
+
+  // Helper: Validate theme availability based on user's total ranked Pokemon
+  private async validateThemeForUser(
     themeId: string,
-    pokemonCount: number,
-    totalPokemon: number,
-  ): void {
-    if (!isThemeAvailable(themeId, pokemonCount, totalPokemon)) {
+    userId: string,
+  ): Promise<void> {
+    const [userTotalRanked, totalPokemonInSystem] = await Promise.all([
+      this.getUserTotalRankedPokemon(userId),
+      this.getTotalPokemonCount(),
+    ]);
+
+    if (!isThemeAvailable(themeId, userTotalRanked, totalPokemonInSystem)) {
       throw new BadRequestException({
         key: TK.RANKINGS.THEME_NOT_AVAILABLE,
         args: { themeId },
