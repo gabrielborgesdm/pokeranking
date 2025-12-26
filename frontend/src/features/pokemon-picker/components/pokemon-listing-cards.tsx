@@ -8,6 +8,9 @@ import { PokemonDetailsDialog } from "@/features/pokemon/components/pokemon-deta
 import { useResponsiveGrid } from "../hooks/use-responsive-grid";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import { EmptyPokemonCard } from "@/features/pokemon/empty-pokemon-card";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ZoneHeader } from "./zone-header";
 import {
   groupPokemonByZones,
@@ -30,6 +33,10 @@ export interface PokemonListingCardsProps {
   showPositions?: boolean;
   /** Optional class name */
   className?: string;
+  /** Whether the current user owns this ranking */
+  isOwner?: boolean;
+  /** Callback when user wants to add Pokemon (typically triggers edit mode) */
+  onAddPokemon?: () => void;
 }
 
 /**
@@ -44,6 +51,8 @@ export const PokemonListingCards = memo(function PokemonListingCards({
   zones,
   showPositions = true,
   className,
+  isOwner,
+  onAddPokemon,
 }: PokemonListingCardsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { isSmall } = useScreenSize();
@@ -124,8 +133,22 @@ export const PokemonListingCards = memo(function PokemonListingCards({
     config.columnCount * config.columnWidth +
     (config.columnCount - 1) * config.gap;
 
+  const { t } = useTranslation();
+
   if (pokemon.length === 0) {
-    return <EmptyPokemonCard />;
+    return (
+      <EmptyPokemonCard
+        action={
+          isOwner && onAddPokemon ? (
+            <Button variant="outline" className="mt-6" onClick={onAddPokemon}>
+              <Plus className="size-4" />
+              {t("rankingView.addPokemon")}
+            </Button>
+          ) : null
+        }
+        showAction={isOwner && !!onAddPokemon}
+      />
+    );
   }
 
   return (

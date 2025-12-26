@@ -104,6 +104,8 @@ export default function RankingPage({ params }: RankingPageProps) {
             zones={zones}
             showPositions={true}
             className="py-8"
+            isOwner={isOwner}
+            onAddPokemon={handleEditClick}
           />
         </div>
       )}
