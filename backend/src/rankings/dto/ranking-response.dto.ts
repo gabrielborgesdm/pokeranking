@@ -56,6 +56,18 @@ export class RankingListResponseDto {
   pokemonCount: number;
 
   @Expose()
+  @ApiProperty({
+    example: 42,
+    description: 'Number of likes',
+  })
+  likesCount: number;
+
+  @Expose()
+  @Type(() => RankingUserResponseDto)
+  @ApiPropertyOptional({ type: RankingUserResponseDto })
+  user?: RankingUserResponseDto;
+
+  @Expose()
   @ApiProperty({ example: '2024-01-15T10:30:00.000Z' })
   createdAt: Date;
 
@@ -114,4 +126,26 @@ export class RankingResponseDto {
   @Type(() => RankingUserResponseDto)
   @ApiPropertyOptional({ type: RankingUserResponseDto })
   user?: RankingUserResponseDto;
+
+  @Expose()
+  @ApiProperty({
+    example: 42,
+    description: 'Number of likes',
+  })
+  likesCount: number;
+
+  @Expose()
+  @ApiProperty({
+    example: false,
+    description: 'Whether the current user has liked this ranking',
+  })
+  isLiked: boolean;
+
+  @Expose()
+  @Type(() => RankingUserResponseDto)
+  @ApiProperty({
+    type: [RankingUserResponseDto],
+    description: 'List of users who liked this ranking',
+  })
+  likedBy: RankingUserResponseDto[];
 }

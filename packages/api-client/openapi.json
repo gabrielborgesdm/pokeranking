@@ -1018,6 +1018,138 @@
         ]
       }
     },
+    "/rankings": {
+      "get": {
+        "operationId": "RankingsController_findAll",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "default": 1,
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "maximum": 100,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Field to sort by",
+            "schema": {
+              "enum": [
+                "likesCount",
+                "createdAt",
+                "pokemonCount"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Filter by ranking title or username (partial match, case-insensitive)",
+            "schema": {
+              "example": "favorites",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rankings retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedRankingsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Browse all rankings with pagination",
+        "tags": [
+          "rankings"
+        ]
+      },
+      "post": {
+        "operationId": "RankingsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRankingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ranking created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RankingResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data or validation error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict - Ranking with this title already exists for user"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Create a new ranking",
+        "tags": [
+          "rankings"
+        ]
+      }
+    },
     "/rankings/user/{username}": {
       "get": {
         "operationId": "RankingsController_findByUsername",
@@ -1202,39 +1334,37 @@
         ]
       }
     },
-    "/rankings": {
+    "/rankings/{id}/like": {
       "post": {
-        "operationId": "RankingsController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRankingDto"
-              }
+        "operationId": "RankingsController_toggleLike",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "Ranking ID",
+            "schema": {
+              "example": "507f1f77bcf86cd799439011",
+              "type": "string"
             }
           }
-        },
+        ],
         "responses": {
-          "201": {
-            "description": "Ranking created successfully",
+          "200": {
+            "description": "Like toggled successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RankingResponseDto"
+                  "$ref": "#/components/schemas/LikeResponseDto"
                 }
               }
             }
           },
-          "400": {
-            "description": "Invalid data or validation error"
-          },
           "401": {
             "description": "Unauthorized"
           },
-          "409": {
-            "description": "Conflict - Ranking with this title already exists for user"
+          "404": {
+            "description": "Ranking not found"
           }
         },
         "security": [
@@ -1242,7 +1372,7 @@
             "JWT-auth": []
           }
         ],
-        "summary": "Create a new ranking",
+        "summary": "Toggle like on a ranking",
         "tags": [
           "rankings"
         ]
@@ -1937,6 +2067,23 @@
           },
           "user": {
             "$ref": "#/components/schemas/RankingUserResponseDto"
+          },
+          "likesCount": {
+            "type": "number",
+            "example": 42,
+            "description": "Number of likes"
+          },
+          "isLiked": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether the current user has liked this ranking"
+          },
+          "likedBy": {
+            "description": "List of users who liked this ranking",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankingUserResponseDto"
+            }
           }
         },
         "required": [
@@ -1947,7 +2094,10 @@
           "theme",
           "background",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "likesCount",
+          "isLiked",
+          "likedBy"
         ]
       },
       "UserResponseDto": {
@@ -2667,6 +2817,14 @@
             "example": 151,
             "description": "Number of pokemon in the ranking"
           },
+          "likesCount": {
+            "type": "number",
+            "example": 42,
+            "description": "Number of likes"
+          },
+          "user": {
+            "$ref": "#/components/schemas/RankingUserResponseDto"
+          },
           "createdAt": {
             "format": "date-time",
             "type": "string",
@@ -2684,8 +2842,60 @@
           "theme",
           "image",
           "pokemonCount",
+          "likesCount",
           "createdAt",
           "updatedAt"
+        ]
+      },
+      "PaginatedRankingsResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankingListResponseDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "example": 100,
+            "description": "Total number of rankings"
+          },
+          "page": {
+            "type": "number",
+            "example": 1,
+            "description": "Current page number"
+          },
+          "limit": {
+            "type": "number",
+            "example": 20,
+            "description": "Number of items per page"
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit"
+        ]
+      },
+      "LikeResponseDto": {
+        "type": "object",
+        "properties": {
+          "isLiked": {
+            "type": "boolean",
+            "example": true,
+            "description": "Whether the ranking is now liked"
+          },
+          "likesCount": {
+            "type": "number",
+            "example": 43,
+            "description": "Updated like count"
+          }
+        },
+        "required": [
+          "isLiked",
+          "likesCount"
         ]
       },
       "CreateRankingDto": {

@@ -7,6 +7,7 @@ import {
 } from "@pokeranking/api-client";
 import { useIsOwner } from "@/features/users";
 import { useRankingUpdate } from "./use-ranking-update";
+import { useRankingLike } from "./use-ranking-like";
 
 interface UseRankingPageOptions {
   id: string;
@@ -25,6 +26,9 @@ interface UseRankingPageOptions {
 export function useRankingPage({ id }: UseRankingPageOptions) {
   const { data, isLoading, error } = useRankingsControllerFindOne(id);
   const { data: allPokemonData } = usePokemonControllerFindAll();
+
+  // Like functionality (mock for now, prepared for backend)
+  const { likeCount, isLiked, toggleLike } = useRankingLike({ rankingId: id });
 
   const ranking = useMemo(() => data?.data, [data]);
   const allPokemon = useMemo<PokemonResponseDto[]>(() => {
@@ -108,6 +112,11 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
     }
   }, [saveDraft, initialPokemon.length]);
 
+  // Get top Pokemon for hero display
+  const topPokemon = pokemon[0]
+    ? { name: pokemon[0].name, image: pokemon[0].image }
+    : null;
+
   return {
     ranking,
     pokemon,
@@ -125,5 +134,11 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
     isLoading,
     error,
     notFound,
+    // Like functionality
+    likeCount,
+    isLiked,
+    toggleLike,
+    // Hero data
+    topPokemon,
   };
 }

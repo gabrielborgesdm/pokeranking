@@ -536,4 +536,426 @@ describe('Rankings (e2e)', () => {
       expect(response.body.rankings[0].zones).toHaveLength(1);
     });
   });
+
+  describe('POST /rankings/:id/like', () => {
+    beforeEach(async () => {
+      await clearDatabase(app);
+    });
+
+    it('should allow user to like a ranking', async () => {
+      const users = await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
+      const rankings = await seedRankings(
+        app,
+        [createRankingData()],
+        users[0]._id.toString(),
+      );
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .post(`/rankings/${rankings[0]._id.toString()}/like`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      expect(response.body.isLiked).toBe(true);
+      expect(response.body.likesCount).toBe(1);
+    });
+
+    it('should toggle like off when already liked', async () => {
+      const users = await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
+      const rankings = await seedRankings(
+        app,
+        [createRankingData()],
+        users[0]._id.toString(),
+      );
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      // Like
+      await request(app.getHttpServer())
+        .post(`/rankings/${rankings[0]._id.toString()}/like`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      // Unlike
+      const response = await request(app.getHttpServer())
+        .post(`/rankings/${rankings[0]._id.toString()}/like`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      expect(response.body.isLiked).toBe(false);
+      expect(response.body.likesCount).toBe(0);
+    });
+
+    it('should return 401 when not authenticated', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const rankings = await seedRankings(
+        app,
+        [createRankingData()],
+        users[0]._id.toString(),
+      );
+
+      await request(app.getHttpServer())
+        .post(`/rankings/${rankings[0]._id.toString()}/like`)
+        .expect(401);
+    });
+
+    it('should return 404 when ranking not found', async () => {
+      await seedUsers(app, [REGULAR_USER]);
+      const token = await loginUser(app, {
+        identifier: REGULAR_USER.username,
+        password: REGULAR_USER.password,
+      });
+
+      const fakeId = '507f1f77bcf86cd799439011';
+
+      await request(app.getHttpServer())
+        .post(`/rankings/${fakeId}/like`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404);
+    });
+  });
+
+  describe('GET /rankings', () => {
+    beforeEach(async () => {
+      await clearDatabase(app);
+    });
+
+    it('should return paginated rankings sorted by likesCount by default', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            title: 'Ranking 1',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+          createRankingData({
+            title: 'Ranking 2',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(2);
+      expect(response.body.total).toBe(2);
+      expect(response.body.page).toBe(1);
+      expect(response.body.limit).toBe(20);
+    });
+
+    it('should filter by search term (title)', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            title: 'Fire Types',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+          createRankingData({
+            title: 'Water Types',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .query({ search: 'Fire' })
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].title).toBe('Fire Types');
+    });
+
+    it('should filter by search term (username)', async () => {
+      const users = await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            title: 'User1 Ranking',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            title: 'Admin Ranking',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[1]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .query({ search: REGULAR_USER.username })
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].user.username).toBe(REGULAR_USER.username);
+    });
+
+    it('should sort by createdAt', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            title: 'Older',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+          createRankingData({
+            title: 'Newer',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .query({ sortBy: 'createdAt', order: 'asc' })
+        .expect(200);
+
+      expect(response.body.data[0].title).toBe('Older');
+      expect(response.body.data[1].title).toBe('Newer');
+    });
+
+    it('should not show empty rankings', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            title: 'With Pokemon',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+          createRankingData({ title: 'Empty Ranking' }), // No pokemon
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].title).toBe('With Pokemon');
+    });
+
+    it('should handle pagination correctly', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            title: 'Ranking 1',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+          createRankingData({
+            title: 'Ranking 2',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+          createRankingData({
+            title: 'Ranking 3',
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .query({ page: 1, limit: 2 })
+        .expect(200);
+
+      expect(response.body.data).toHaveLength(2);
+      expect(response.body.total).toBe(3);
+      expect(response.body.page).toBe(1);
+      expect(response.body.limit).toBe(2);
+    });
+
+    it('should include likesCount in response', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .expect(200);
+
+      expect(response.body.data[0]).toHaveProperty('likesCount');
+      expect(response.body.data[0].likesCount).toBe(0);
+    });
+
+    it('should include user info with only username in response', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .expect(200);
+
+      expect(response.body.data[0].user).toHaveProperty('username');
+      expect(response.body.data[0].user.username).toBe(REGULAR_USER.username);
+      // Should not include other user fields
+      expect(response.body.data[0].user).not.toHaveProperty('_id');
+      expect(response.body.data[0].user).not.toHaveProperty('profilePic');
+      expect(response.body.data[0].user).not.toHaveProperty('email');
+    });
+
+    it('should include ranking image from first pokemon', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const pokemon = await seedPokemon(app, [PIKACHU, CHARIZARD]);
+      await seedRankings(
+        app,
+        [
+          createRankingData({
+            pokemon: pokemon.map((p) => p._id.toString()),
+          }),
+        ],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get('/rankings')
+        .expect(200);
+
+      expect(response.body.data[0]).toHaveProperty('image');
+      expect(response.body.data[0].image).toBe(PIKACHU.image);
+    });
+  });
+
+  describe('GET /rankings/:id (like fields)', () => {
+    beforeEach(async () => {
+      await clearDatabase(app);
+    });
+
+    it('should include likesCount in response', async () => {
+      const users = await seedUsers(app, [REGULAR_USER]);
+      const rankings = await seedRankings(
+        app,
+        [createRankingData()],
+        users[0]._id.toString(),
+      );
+
+      const response = await request(app.getHttpServer())
+        .get(`/rankings/${rankings[0]._id.toString()}`)
+        .expect(200);
+
+      expect(response.body).toHaveProperty('likesCount');
+      expect(response.body.likesCount).toBe(0);
+    });
+
+    it('should include isLiked=true for authenticated user who liked', async () => {
+      const users = await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
+      const rankings = await seedRankings(
+        app,
+        [createRankingData()],
+        users[0]._id.toString(),
+      );
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      // Like the ranking
+      await request(app.getHttpServer())
+        .post(`/rankings/${rankings[0]._id.toString()}/like`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      // Get ranking with auth
+      const response = await request(app.getHttpServer())
+        .get(`/rankings/${rankings[0]._id.toString()}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      expect(response.body.isLiked).toBe(true);
+    });
+
+    it('should include isLiked=false for authenticated user who has not liked', async () => {
+      const users = await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
+      const rankings = await seedRankings(
+        app,
+        [createRankingData()],
+        users[0]._id.toString(),
+      );
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      const response = await request(app.getHttpServer())
+        .get(`/rankings/${rankings[0]._id.toString()}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      expect(response.body.isLiked).toBe(false);
+    });
+
+    it('should include likedBy array with user info', async () => {
+      const users = await seedUsers(app, [REGULAR_USER, ADMIN_USER]);
+      const rankings = await seedRankings(
+        app,
+        [createRankingData()],
+        users[0]._id.toString(),
+      );
+      const token = await loginUser(app, {
+        identifier: ADMIN_USER.username,
+        password: ADMIN_USER.password,
+      });
+
+      // Like the ranking
+      await request(app.getHttpServer())
+        .post(`/rankings/${rankings[0]._id.toString()}/like`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      const response = await request(app.getHttpServer())
+        .get(`/rankings/${rankings[0]._id.toString()}`)
+        .expect(200);
+
+      expect(response.body.likedBy).toHaveLength(1);
+      expect(response.body.likedBy[0].username).toBe(ADMIN_USER.username);
+    });
+  });
 });

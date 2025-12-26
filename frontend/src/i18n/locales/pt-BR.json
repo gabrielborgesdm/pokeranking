@@ -32,7 +32,8 @@
     "water": "Água"
   },
   "nav": {
-    "leaderboard": "Ranking",
+    "users": "Usuários",
+    "browseRankings": "Rankings",
     "myRankings": "Meus Rankings",
     "contribute": "Contribuir",
     "design": "Design",
@@ -137,6 +138,24 @@
     "delete": "Excluir",
     "deleteConfirmTitle": "Excluir Ranking",
     "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
+  },
+  "rankings": {
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon"
+  },
+  "rankingsList": {
+    "title": "Explorar Rankings",
+    "description": "Explore tier lists de Pokemon da comunidade",
+    "noRankings": "Nenhum ranking encontrado.",
+    "errorTitle": "Erro ao carregar rankings",
+    "errorDescription": "Por favor, tente novamente mais tarde.",
+    "searchPlaceholder": "Buscar por título ou usuário...",
+    "sortBy": "Ordenar por",
+    "sortByLikes": "Mais Curtidos",
+    "sortByDate": "Mais Recentes",
+    "sortByPokemon": "Mais Pokemon",
+    "orderAsc": "Crescente",
+    "orderDesc": "Decrescente"
   },
   "userRankings": {
     "title": "Rankings de {{username}}",

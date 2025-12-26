@@ -1,5 +1,6 @@
 export const routes = {
-  home: "/",
+  home: "/rankings",
+  users: "/users",
   contribute: "/contribute",
   design: "/design",
   signin: "/signin",
@@ -23,6 +24,7 @@ export const routes = {
 
 export const publicPaths = [
   routes.home,
+  routes.users,
   routes.signin,
   routes.signup,
   routes.verifyEmail,

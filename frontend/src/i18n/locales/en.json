@@ -115,6 +115,24 @@
     "deleteConfirmTitle": "Delete Ranking",
     "deleteConfirmDescription": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
   },
+  "rankings": {
+    "pokemonCount_one": "{{count}} Pokemon",
+    "pokemonCount_other": "{{count}} Pokemon"
+  },
+  "rankingsList": {
+    "title": "Browse Rankings",
+    "description": "Explore Pokemon tier lists from the community",
+    "noRankings": "No rankings found.",
+    "errorTitle": "Error loading rankings",
+    "errorDescription": "Please try again later.",
+    "searchPlaceholder": "Search by title or username...",
+    "sortBy": "Sort by",
+    "sortByLikes": "Most Liked",
+    "sortByDate": "Newest",
+    "sortByPokemon": "Most Pokemon",
+    "orderAsc": "Ascending",
+    "orderDesc": "Descending"
+  },
   "userRankings": {
     "title": "{{username}}'s Rankings",
     "description": "Pokemon tier lists by {{username}}",
@@ -242,7 +260,8 @@
     }
   },
   "nav": {
-    "leaderboard": "Leaderboard",
+    "users": "Users",
+    "browseRankings": "Rankings",
     "myRankings": "My Rankings",
     "contribute": "Contribute",
     "design": "Design",

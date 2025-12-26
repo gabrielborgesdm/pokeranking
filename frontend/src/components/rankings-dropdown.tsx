@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession } from "next-auth/react";
-import { List, Plus, ChevronDown } from "lucide-react";
+import { Trophy, Plus, ChevronDown } from "lucide-react";
 import { useAuthControllerGetProfile } from "@pokeranking/api-client";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,7 +44,7 @@ export function RankingsDropdown() {
               : "text-muted-foreground hover:text-foreground"
           )}
         >
-          <List className="h-5 w-5" />
+          <Trophy className="h-5 w-5" />
           {t("nav.myRankings")}
           <ChevronDown className="h-4 w-4" />
         </Button>
@@ -52,7 +52,7 @@ export function RankingsDropdown() {
       <DropdownMenuContent align="start" className="w-56">
         <DropdownMenuItem asChild>
           <Link href={userRankingsPath} className="font-medium">
-            <List className="mr-2 h-4 w-4" />
+            <Trophy className="mr-2 h-4 w-4" />
             {t("nav.viewAll")}
           </Link>
         </DropdownMenuItem>

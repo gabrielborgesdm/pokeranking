@@ -5,6 +5,7 @@
  * API for managing Pokemon and user rankings
  * OpenAPI spec version: 1.0
  */
+import type { RankingUserResponseDto } from "./rankingUserResponseDto";
 
 export interface RankingListResponseDto {
   _id: string;
@@ -18,6 +19,9 @@ export interface RankingListResponseDto {
   image: string | null;
   /** Number of pokemon in the ranking */
   pokemonCount: number;
+  /** Number of likes */
+  likesCount: number;
+  user?: RankingUserResponseDto;
   createdAt: string;
   updatedAt: string;
 }

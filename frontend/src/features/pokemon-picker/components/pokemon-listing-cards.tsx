@@ -1,7 +1,6 @@
 "use client";
 
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
@@ -46,7 +45,6 @@ export const PokemonListingCards = memo(function PokemonListingCards({
   showPositions = true,
   className,
 }: PokemonListingCardsProps) {
-  const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { isSmall } = useScreenSize();
   const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(
@@ -137,7 +135,10 @@ export const PokemonListingCards = memo(function PokemonListingCards({
           (containerRef as { current: HTMLDivElement | null }).current = node;
         }
       }}
-      className={cn("relative w-full", className)}
+      className={cn(
+        "relative w-full",
+        className
+      )}
     >
       {/* Scroll container */}
       <div
