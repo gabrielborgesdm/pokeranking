@@ -7,7 +7,6 @@ export { RankingCard } from "./components/ranking-card";
 export { RankingCardSkeleton } from "./components/ranking-card-skeleton";
 export { RankingCardsSkeleton } from "./components/ranking-cards-skeleton";
 export { RankingEditing } from "./components/ranking-editing";
-export { RankingEditHeader } from "./components/ranking-edit-header";
 export { RankingForm } from "./components/ranking-form";
 export { RankingHero } from "./components/ranking-hero";
 export { RankingsError } from "./components/rankings-error";

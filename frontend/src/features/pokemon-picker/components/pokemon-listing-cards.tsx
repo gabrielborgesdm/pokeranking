@@ -18,6 +18,7 @@ import {
   type Zone,
   type VirtualItem,
 } from "../utils/zone-grouping";
+import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -60,6 +61,10 @@ export const PokemonListingCards = memo(function PokemonListingCards({
     null
   );
 
+  // Optional search context integration
+  const searchContext = usePokemonSearchContextOptional();
+  const highlightedPokemonId = searchContext?.highlightedPokemonId ?? null;
+
   // Use responsive grid hook to calculate layout
   const { containerRef, config, rowCount } = useResponsiveGrid({
     itemCount: pokemon.length,
@@ -99,7 +104,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
   const zoneVirtualizer = useVirtualizer({
     count: virtualItems?.length ?? 0,
     getScrollElement: () => scrollRef.current,
-    estimateSize: (index) => {
+    estimateSize: (index: number) => {
       if (!virtualItems) return config.rowHeight + rowGap;
       return getItemSize(virtualItems[index]);
     },
@@ -121,6 +126,24 @@ export const PokemonListingCards = memo(function PokemonListingCards({
   useEffect(() => {
     rowVirtualizer.measure();
   }, [rowVirtualizer, config.columnCount, config.rowHeight, config.gap]);
+
+  // Register scroll config with search context
+  useEffect(() => {
+    if (!searchContext) return;
+
+    searchContext.registerScrollConfig({
+      virtualizer: rowVirtualizer,
+      columnCount: config.columnCount,
+      pokemon,
+      virtualItems: virtualItems ?? undefined,
+      scrollRef,
+      isWindowVirtualizer: false,
+    });
+
+    return () => {
+      searchContext.unregisterScrollConfig();
+    };
+  }, [searchContext, rowVirtualizer, config.columnCount, pokemon, virtualItems]);
 
   // Calculate total virtual height
   const totalHeight = rowVirtualizer.getTotalSize();
@@ -245,6 +268,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                           position={showPositions ? position : undefined}
                           positionColor={color}
                           isCompact={isSmall}
+                          isHighlighted={highlightedPokemonId === p._id}
                           onClick={() => setSelectedPokemonId(p._id)}
                         />
                       </div>
@@ -291,6 +315,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                           types={p.types as PokemonType[]}
                           position={showPositions ? position : undefined}
                           isCompact={isSmall}
+                          isHighlighted={highlightedPokemonId === p._id}
                           onClick={() => setSelectedPokemonId(p._id)}
                         />
                       </div>
