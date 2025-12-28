@@ -5,6 +5,7 @@ import { DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { PokemonPickerGrid } from "./pokemon-picker-grid";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 import type { PokemonPickerProps } from "../types";
@@ -22,6 +23,7 @@ export const PokemonPicker = memo(function PokemonPicker({
   rowHeight,
   height,
 }: PokemonPickerProps) {
+  const { isMobile } = useScreenSize();
   const [activePokemon, setActivePokemon] = useState<PokemonResponseDto | null>(
     null
   );
@@ -64,13 +66,20 @@ export const PokemonPicker = memo(function PokemonPicker({
           <div className="cursor-grabbing animate-[lift_0.2s_ease-out_forwards]">
             <div className="relative">
               {/* Glow effect */}
-              <div className="absolute -inset-2 bg-primary/30 rounded-2xl blur-xl animate-pulse" />
+              <div className={cn(
+                "absolute bg-primary/30 blur-xl animate-pulse",
+                isMobile ? "-inset-1 rounded-xl" : "-inset-2 rounded-2xl"
+              )} />
               {/* Card with shadow */}
-              <div className="relative shadow-2xl rounded-xl">
+              <div className={cn(
+                "relative shadow-2xl",
+                isMobile ? "rounded-lg" : "rounded-xl"
+              )}>
                 <PokemonCard
                   name={activePokemon.name}
                   image={activePokemon.image}
                   types={activePokemon.types as PokemonType[]}
+                  isCompact={isMobile}
                 />
               </div>
             </div>

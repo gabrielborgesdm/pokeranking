@@ -82,9 +82,9 @@ export function PickerDropzoneLayout({
         )}
       >
         {/* Dropzone - left on desktop, top on mobile */}
-        <div className="min-h-0 overflow-hidden max-h-[40vh] md:max-h-none flex flex-col">
+        <div className="min-h-0 overflow-hidden max-h-[45vh] md:max-h-none flex flex-col">
           {/* Section header with search and edit controls */}
-          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
+          <div className="flex items-center justify-between gap-3 px-4 py-1 md:px-8 md:py-2 border-b border-border/40 h-10 md:h-[52px]">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
                 {t("rankingView.yourRanking", "Your Ranking")}
@@ -169,7 +169,7 @@ export function PickerDropzoneLayout({
         {/* Picker - right on desktop, bottom on mobile */}
         <div className="min-h-0 overflow-hidden max-h-[40vh] md:max-h-none flex flex-col">
           {/* Section header with filter button */}
-          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
+          <div className="flex items-center justify-between gap-3 px-4 py-1 md:px-8 md:py-2 border-b border-border/40 h-10 md:h-[52px]">
             <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
               {t("rankingView.pokemonBox", "Pokemon Box")}
             </h2>
