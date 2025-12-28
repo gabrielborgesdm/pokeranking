@@ -67,10 +67,11 @@ export const RankingHero = memo(function RankingHero({
   return (
     <div
       className={cn(
-        "relative mx-4 mt-4 rounded-2xl py-12 sm:py-16 px-6 overflow-hidden",
+        "relative  mt-4 rounded-2xl py-12 sm:py-16 px-6 overflow-hidden",
         gradientClass,
         className
       )}
+
     >
       {/* Flowing wave decoration */}
       <svg
