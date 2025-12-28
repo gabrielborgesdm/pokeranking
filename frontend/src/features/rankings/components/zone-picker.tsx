@@ -24,12 +24,12 @@ interface ZonePickerProps {
 }
 
 const DEFAULT_ZONES: Zone[] = [
-  { name: "S", interval: [1, 10], color: "#ef4444" },
-  { name: "A", interval: [11, 150], color: "#f97316" },
-  { name: "B", interval: [151, 300], color: "#eab308" },
-  { name: "C", interval: [301, 500], color: "#22c55e" },
-  { name: "D", interval: [501, 750], color: "#3b82f6" },
-  { name: "F", interval: [751, null], color: "#6b7280" },
+  { name: "S", interval: [1, 10], color: "#e07065" },
+  { name: "A", interval: [11, 150], color: "#e8956a" },
+  { name: "B", interval: [151, 300], color: "#c9b458" },
+  { name: "C", interval: [301, 500], color: "#7cb078" },
+  { name: "D", interval: [501, 750], color: "#5a9fd4" },
+  { name: "F", interval: [751, null], color: "#7a8899" },
 ];
 
 // Get next available color that's not already used

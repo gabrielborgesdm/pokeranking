@@ -246,12 +246,14 @@
     "shareTwitter": "Compartilhar no Twitter",
     "shareFacebook": "Compartilhar no Facebook",
     "shareWhatsapp": "Compartilhar no WhatsApp",
+    "shareMessageTwitter": "Confira minha tier list de Pokemon: {{title}} - Crie a sua no Pokeranking!",
+    "shareMessageWhatsapp": "Confira minha tier list de Pokemon: {{title}}\n\nCrie seus rankings no Pokeranking!",
     "export": "Exportar",
     "exportCsv": "Exportar como CSV",
     "exportJson": "Exportar como JSON",
     "exportSuccess": "Ranking exportado!",
     "rankPokemon": "Ranquear Pokemon",
-    "editSettings": "Editar"
+    "editSettings": "Editar ranking"
   },
   "boxSelector": {
     "title": "Suas Boxes",

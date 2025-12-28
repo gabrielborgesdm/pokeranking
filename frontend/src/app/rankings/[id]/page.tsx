@@ -77,9 +77,7 @@ export default function RankingPage({ params }: RankingPageProps) {
           />
         ) : (
           // View mode: Hero + Action bar + Pokemon listing
-          <div className="mx-auto" style={{
-            maxWidth: MAX_GRID_CONTENT_WIDTH
-          }}>
+          <div>
             <RankingHero
               title={ranking.title}
               username={ranking.user?.username ?? ""}
