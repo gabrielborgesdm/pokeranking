@@ -214,14 +214,12 @@ export const PokemonListingCards = memo(function PokemonListingCards({
 
                 return (
                   <div
-                    className="lg:ml-6"
                     key={`header-${item.zone.name}`}
                     style={{
                       position: "absolute",
                       top: virtualRow.start + paddingTop + zoneHeaderGap,
                       height: virtualRow.size - rowGap - zoneHeaderGap,
                       display: "flex",
-                      width: headerWidth,
                       justifyContent: "left",
                     }}
                   >

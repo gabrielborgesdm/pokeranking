@@ -40,7 +40,7 @@ export const RankingActionBar = memo(function RankingActionBar({
 
   return (
     <>
-      <div className={cn("flex justify-center px-4", className)}>
+      <div className={cn("flex justify-center", className)}>
         <div
           className="flex items-center justify-between gap-4 w-full py-3 mt-8 px-4 rounded-xl bg-card/70 border border-border/40"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}

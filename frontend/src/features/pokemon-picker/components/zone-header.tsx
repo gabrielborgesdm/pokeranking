@@ -36,7 +36,7 @@ export const ZoneHeader = memo(function ZoneHeader({
           isCompact ? "px-2 py-2" : "px-4 py-8"
         )}
         style={{
-          width,
+          width: width - 20,
           backgroundColor: `${zone.color}12`,
           borderLeft: `4px solid ${zone.color}`,
         }}
@@ -110,7 +110,7 @@ export const ZoneHeader = memo(function ZoneHeader({
         >
           <BarChart3 className={cn(isCompact ? "h-3.5 w-3.5" : "h-4 w-4")} />
         </Button>
-      </div>
+      </div >
 
       <ZoneStatsDialog
         zone={zone}
