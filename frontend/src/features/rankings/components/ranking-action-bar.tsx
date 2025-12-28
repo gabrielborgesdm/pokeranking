@@ -63,13 +63,13 @@ export const RankingActionBar = memo(function RankingActionBar({
 
   return (
     <>
-      <div className={cn("flex justify-center ", className)}>
+      <div className={cn("flex justify-center px-4 sm:px-0", className)}>
         <div
-          className="flex items-center justify-between w-full py-5 mt-8 px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-4 sm:py-5 mt-6 sm:mt-8 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
         >
           {/* Search input - opens search overlay */}
-          <div className="flex-1 max-w-sm relative">
+          <div className="flex-1 sm:max-w-sm relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
               type="text"
@@ -82,7 +82,7 @@ export const RankingActionBar = memo(function RankingActionBar({
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             {/* Owner-only actions */}
             {isOwner && (
               <>
@@ -131,8 +131,6 @@ export const RankingActionBar = memo(function RankingActionBar({
 
             {/* Export button - visible to all */}
             <ExportButton rankingTitle={rankingTitle} pokemon={pokemon} />
-
-
           </div>
         </div>
       </div>
