@@ -65,14 +65,13 @@ export const RankingEditing = memo(function RankingEditing({
             positionColors={positionColors}
             maxColumns={5}
             maxHeight="80vh"
-            className="pl-20"
           />
         }
         picker={
           <PokemonBoxesWithFilters
             disabledIds={disabledIds}
             filteredOutIds={filteredOutIds}
-            height="75vh"
+            height="80vh"
             filtersOpen={filtersOpen}
             onCloseFilters={() => setFiltersOpen(false)}
             onActiveFilterCountChange={setActiveFilterCount}
