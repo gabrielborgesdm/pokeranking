@@ -69,7 +69,7 @@ export const RankingHero = memo(function RankingHero({
   return (
     <div
       className={cn(
-        "relative  mt-4 rounded-2xl py-12 sm:py-16 px-6 overflow-hidden mx-auto",
+        "relative mt-4 mx-4 sm:mx-auto rounded-2xl py-8 sm:py-16 px-4 sm:px-6 overflow-hidden",
         gradientClass,
         className
       )}
@@ -111,15 +111,15 @@ export const RankingHero = memo(function RankingHero({
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-white/5 via-transparent to-black/10" />
 
       <div
-        className="relative z-10 mx-auto flex items-center justify-between gap-6"
+        className="relative z-10 mx-auto flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-6"
         style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
       >
         {/* Left section: Top Pokemon */}
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 shrink-0">
           {/* Top Pokemon Image - falls back to "who.png" if no pokemon */}
           <div
             className={cn(
-              "relative w-24 h-24 sm:w-32 sm:h-32",
+              "relative w-20 h-20 sm:w-32 sm:h-32",
               topPokemon?.id && "cursor-pokeball"
             )}
             onClick={() => topPokemon?.id && setIsDetailsOpen(true)}
@@ -132,7 +132,7 @@ export const RankingHero = memo(function RankingHero({
                 alt={topPokemon?.name ?? "Pokemon"}
                 fill
                 className="drop-shadow-2xl relative z-10 transition-transform hover:scale-105"
-                sizes="128px"
+                sizes="(max-width: 640px) 80px, 128px"
               />
             </div>
           </div>
@@ -140,7 +140,7 @@ export const RankingHero = memo(function RankingHero({
 
         {/* Center section: Title, username, pokemon count */}
         <div className="flex-1 min-w-0 text-center sm:text-left">
-          <h1 className="text-2xl sm:text-3xl font-bold truncate drop-shadow-md">
+          <h1 className="text-xl sm:text-3xl font-bold truncate drop-shadow-md">
             {title}
           </h1>
           <div className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-base opacity-90 mt-1">
@@ -159,7 +159,7 @@ export const RankingHero = memo(function RankingHero({
 
         {/* Right section: Like button (hidden for owner) */}
         {!isOwner && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <Button
               variant="ghost"
               size="lg"
@@ -170,7 +170,7 @@ export const RankingHero = memo(function RankingHero({
               )}
             >
               <Heart
-                className={cn("h-6 w-6", isLiked && "fill-current")}
+                className={cn("h-5 w-5 sm:h-6 sm:w-6", isLiked && "fill-current")}
               />
               <span className="font-semibold">{likeCount}</span>
             </Button>
