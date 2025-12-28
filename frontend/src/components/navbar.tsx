@@ -126,6 +126,7 @@ interface NavLink {
   href: string;
   label: string;
   icon: LucideIcon;
+  className?: string;
 }
 
 interface NavLinksProps {
@@ -148,7 +149,8 @@ function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
                 "flex items-center gap-1.5 text-sm font-medium transition-colors hover-scale",
                 isActive
                   ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
+                link.className
               )}
             >
               <link.icon className="h-5 w-5" />
@@ -232,7 +234,7 @@ export function Navbar() {
     { href: routes.rankings, label: t("nav.browseRankings"), icon: Layers },
     { href: routes.users, label: t("nav.users"), icon: Users },
     { href: routes.pokedex, label: t("nav.pokedex"), icon: BookOpen },
-    { href: routes.contribute, label: t("nav.contribute"), icon: Heart },
+    { href: routes.contribute, label: t("nav.contribute"), icon: Heart, className: "hidden lg:flex" },
   ];
 
   // Mobile nav links (includes My Rankings as simple link)

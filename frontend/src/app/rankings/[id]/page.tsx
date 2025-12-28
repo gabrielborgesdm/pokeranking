@@ -77,7 +77,7 @@ export default function RankingPage({ params }: RankingPageProps) {
           />
         ) : (
           // View mode: Hero + Action bar + Pokemon listing
-          <div className="space-y-4">
+          <div>
             <RankingHero
               title={ranking.title}
               username={ranking.user?.username ?? ""}
@@ -91,8 +91,11 @@ export default function RankingPage({ params }: RankingPageProps) {
               maxContentWidth={MAX_GRID_CONTENT_WIDTH}
             />
             <RankingActionBar
+              rankingId={id}
+              rankingTitle={ranking.title}
+              pokemon={pokemon}
               isOwner={isOwner}
-              onEditClick={handleEditClick}
+              onRankClick={handleEditClick}
               maxContentWidth={MAX_GRID_CONTENT_WIDTH}
               isSearchEnabled={isSearchEnabled}
             />

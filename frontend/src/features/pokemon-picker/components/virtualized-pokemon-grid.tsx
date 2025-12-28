@@ -43,7 +43,7 @@ export const VirtualizedPokemonGrid = memo(function VirtualizedPokemonGrid({
   rowHeight,
   height = POKEMON_PICKER_DEFAULTS.HEIGHT,
   className,
-  paddingTop = 0,
+  paddingTop = 16,
   paddingX = 0,
 }: VirtualizedPokemonGridProps) {
   const scrollRef = useRef<HTMLDivElement>(null);

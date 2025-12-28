@@ -213,7 +213,22 @@
     "discardConfirmTitle": "Discard changes?",
     "discardConfirmDescription": "You have unsaved changes. Are you sure you want to discard them? This action cannot be undone.",
     "yourRanking": "Your Ranking",
-    "pokemonBox": "Pokemon Box"
+    "pokemonBox": "Pokemon Box",
+    "searchPlaceholder": "Find Pokemon in this ranking...",
+    "share": "Share",
+    "copyUrl": "Copy URL",
+    "urlCopied": "URL copied to clipboard!",
+    "shareTwitter": "Share on Twitter",
+    "shareFacebook": "Share on Facebook",
+    "shareWhatsapp": "Share on WhatsApp",
+    "shareMessageTwitter": "Check out my Pokemon tier list: {{title}} - Create your own at Pokeranking!",
+    "shareMessageWhatsapp": "Check out my Pokemon tier list: {{title}}\n\nCreate your own rankings at Pokeranking!",
+    "export": "Export",
+    "exportCsv": "Export as CSV",
+    "exportJson": "Export as JSON",
+    "exportSuccess": "Ranking exported!",
+    "rankPokemon": "Rank Pokemon",
+    "editSettings": "Edit ranking"
   },
   "boxSelector": {
     "title": "Your Boxes",

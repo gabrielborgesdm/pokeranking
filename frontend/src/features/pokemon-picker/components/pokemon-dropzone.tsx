@@ -20,6 +20,7 @@ import { SortablePokemonCard } from "./sortable-pokemon-card";
 import { useResponsiveGrid } from "../hooks/use-responsive-grid";
 import { POKEMON_PICKER_DEFAULTS } from "../constants";
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -82,6 +83,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   showPositions = true,
   isDropping: isDroppingProp,
 }: PokemonDropzoneProps) {
+  const { isMobile } = useScreenSize();
   const [activeItem, setActiveItem] = useState<PokemonResponseDto | null>(null);
   // Track when an external drag (from picker) is in progress
   const [isExternalDragging, setIsExternalDragging] = useState(false);
@@ -292,10 +294,13 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                     style={{
                       position: "absolute",
                       top: virtualRow.start + paddingTop,
-                      width: "100%",
+                      left: paddingX,
+                      right: paddingX,
                       height: virtualRow.size,
-                      display: "flex",
+                      display: "grid",
+                      gridTemplateColumns: `repeat(${config.columnCount}, ${config.columnWidth}px)`,
                       gap: config.gap,
+                      justifyContent: "center",
                     }}
                   >
                     {rowPokemon.map((p, colIndex) => {
@@ -303,13 +308,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                       const color = positionColors?.get(position);
 
                       return (
-                        <div
-                          key={p._id}
-                          style={{
-                            width: config.columnWidth,
-                            flexShrink: 0,
-                          }}
-                        >
+                        <div key={p._id}>
                           <SortablePokemonCard
                             pokemon={p}
                             onRemove={handleRemove}
@@ -334,12 +333,19 @@ export const PokemonDropzone = memo(function PokemonDropzone({
         {activeItem && (
           <div className="scale-105 rotate-2 cursor-grabbing">
             <div className="relative">
-              <div className="absolute -inset-2 bg-primary/20 rounded-2xl blur-lg" />
-              <div className="relative shadow-2xl rounded-xl">
+              <div className={cn(
+                "absolute bg-primary/20 blur-lg",
+                isMobile ? "-inset-1 rounded-xl" : "-inset-2 rounded-2xl"
+              )} />
+              <div className={cn(
+                "relative shadow-2xl",
+                isMobile ? "rounded-lg" : "rounded-xl"
+              )}>
                 <PokemonCard
                   name={activeItem.name}
                   image={activeItem.image}
                   types={activeItem.types as PokemonType[]}
+                  isCompact={isMobile}
                 />
               </div>
             </div>

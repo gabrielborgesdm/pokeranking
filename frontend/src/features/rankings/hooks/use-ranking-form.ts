@@ -13,6 +13,7 @@ import {
   useRankingsControllerUpdate,
   getAuthControllerGetProfileQueryKey,
   getRankingsControllerFindByUsernameQueryKey,
+  getRankingsControllerFindOneQueryKey,
   isApiError,
   type CreateRankingDto,
   type UpdateRankingDto,
@@ -117,15 +118,18 @@ export function useRankingForm({
         {
           onSuccess: (response) => {
             if (response.status === 200) {
-              // Invalidate queries to refresh rankings list
+              // Invalidate queries to refresh rankings list and ranking detail
               queryClient.invalidateQueries({
                 queryKey: getAuthControllerGetProfileQueryKey(),
               });
               queryClient.invalidateQueries({
                 queryKey: getRankingsControllerFindByUsernameQueryKey(username),
               });
+              queryClient.invalidateQueries({
+                queryKey: getRankingsControllerFindOneQueryKey(rankingId),
+              });
               onSuccess?.();
-              router.push(routes.userRankings(username));
+              router.back();
             }
           },
           onError: (err) => {
