@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, AlertCircle, Trash2, X, Save } from "lucide-react";
+import { Search, Trash2, X, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
@@ -79,55 +84,81 @@ export function PickerDropzoneLayout({
         {/* Dropzone - left on desktop, top on mobile */}
         <div className="min-h-0 overflow-hidden max-h-[40vh] md:max-h-none flex flex-col">
           {/* Section header with search and edit controls */}
-          <div className="flex items-center justify-between gap-3 px-4 py-2 border-b border-border/40 h-[52px]">
-            <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
-              {t("rankingView.yourRanking", "Your Ranking")}
-            </h2>
+          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
+                {t("rankingView.yourRanking", "Your Ranking")}
+              </h2>
+              {/* Unsaved changes indicator */}
+              {isEditMode && hasUnsavedChanges && (
+                <span className="text-xs text-amber-500 whitespace-nowrap">
+                  {t("rankingView.unsavedChanges", "Unsaved changes")}
+                </span>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               {/* Search button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                disabled={!isSearchEnabled}
-                onClick={isSearchEnabled ? searchContext?.openSearch : undefined}
-                className="h-8 w-8"
-              >
-                <Search className="h-4 w-4" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={!isSearchEnabled}
+                    onClick={isSearchEnabled ? searchContext?.openSearch : undefined}
+                    className="h-8 w-8"
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {t("rankingView.searchPokemon", "Search Pokemon")}
+                </TooltipContent>
+              </Tooltip>
 
               {/* Edit mode controls */}
               {isEditMode && (
                 <>
-                  {/* Unsaved changes indicator */}
-                  {hasUnsavedChanges && (
-                    <AlertCircle className="h-4 w-4 text-amber-500" />
-                  )}
-
                   {/* Discard button */}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={handleDiscardClick}
-                    disabled={isSaving}
-                    className="h-8 w-8"
-                  >
-                    {hasUnsavedChanges ? (
-                      <Trash2 className="h-4 w-4" />
-                    ) : (
-                      <X className="h-4 w-4" />
-                    )}
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleDiscardClick}
+                        disabled={isSaving}
+                        className="h-8 w-8"
+                      >
+                        {hasUnsavedChanges ? (
+                          <Trash2 className="h-4 w-4" />
+                        ) : (
+                          <X className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {hasUnsavedChanges
+                        ? t("rankingView.discardChanges", "Discard changes")
+                        : t("rankingView.close", "Close")}
+                    </TooltipContent>
+                  </Tooltip>
 
                   {/* Save button */}
-                  <Button
-                    variant="default"
-                    size="icon"
-                    onClick={onSave}
-                    disabled={isSaving || !hasUnsavedChanges}
-                    className="h-8 w-8"
-                  >
-                    <Save className="h-4 w-4" />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="default"
+                        size="icon"
+                        onClick={onSave}
+                        disabled={isSaving || !hasUnsavedChanges}
+                        className="h-8 w-8"
+                      >
+                        <Save className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {t("rankingView.saveChanges", "Save changes")}
+                    </TooltipContent>
+                  </Tooltip>
                 </>
               )}
             </div>
@@ -138,7 +169,7 @@ export function PickerDropzoneLayout({
         {/* Picker - right on desktop, bottom on mobile */}
         <div className="min-h-0 overflow-hidden max-h-[40vh] md:max-h-none flex flex-col">
           {/* Section header with filter button */}
-          <div className="flex items-center justify-between gap-3 px-4 py-2 border-b border-border/40 h-[52px]">
+          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
             <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
               {t("rankingView.pokemonBox", "Pokemon Box")}
             </h2>
