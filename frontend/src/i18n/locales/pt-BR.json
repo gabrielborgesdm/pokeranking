@@ -238,7 +238,20 @@
     "discardConfirmTitle": "Descartar alterações?",
     "discardConfirmDescription": "Você tem alterações não salvas. Tem certeza que deseja descartá-las? Esta ação não pode ser desfeita.",
     "yourRanking": "Seu Ranking",
-    "pokemonBox": "Box de Pokemon"
+    "pokemonBox": "Box de Pokemon",
+    "searchPlaceholder": "Encontrar Pokemon neste ranking...",
+    "share": "Compartilhar",
+    "copyUrl": "Copiar URL",
+    "urlCopied": "URL copiada!",
+    "shareTwitter": "Compartilhar no Twitter",
+    "shareFacebook": "Compartilhar no Facebook",
+    "shareWhatsapp": "Compartilhar no WhatsApp",
+    "export": "Exportar",
+    "exportCsv": "Exportar como CSV",
+    "exportJson": "Exportar como JSON",
+    "exportSuccess": "Ranking exportado!",
+    "rankPokemon": "Ranquear Pokemon",
+    "editSettings": "Editar"
   },
   "boxSelector": {
     "title": "Suas Boxes",
