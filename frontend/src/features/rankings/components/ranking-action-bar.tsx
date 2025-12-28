@@ -83,12 +83,6 @@ export const RankingActionBar = memo(function RankingActionBar({
 
           {/* Action buttons */}
           <div className="flex items-center gap-2">
-            {/* Share button - visible to all */}
-            <ShareButton rankingId={rankingId} rankingTitle={rankingTitle} />
-
-            {/* Export button - visible to all */}
-            <ExportButton rankingTitle={rankingTitle} pokemon={pokemon} />
-
             {/* Owner-only actions */}
             {isOwner && (
               <>
@@ -131,6 +125,14 @@ export const RankingActionBar = memo(function RankingActionBar({
                 </Tooltip>
               </>
             )}
+
+            {/* Share button - visible to all */}
+            <ShareButton rankingId={rankingId} rankingTitle={rankingTitle} />
+
+            {/* Export button - visible to all */}
+            <ExportButton rankingTitle={rankingTitle} pokemon={pokemon} />
+
+
           </div>
         </div>
       </div>

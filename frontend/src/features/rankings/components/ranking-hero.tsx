@@ -1,11 +1,12 @@
 "use client";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PokemonImage } from "@/components/pokemon-image";
+import { PokemonDetailsDialog } from "@/features/pokemon/components/pokemon-details-dialog";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { getThemeById } from "@pokeranking/shared";
@@ -16,7 +17,7 @@ interface RankingHeroProps {
   /** Username of the ranking owner */
   username: string;
   /** Top #1 Pokemon in the ranking */
-  topPokemon?: { name: string; image: string } | null;
+  topPokemon?: { name: string; image: string; id?: string } | null;
   /** Total number of Pokemon in this ranking */
   pokemonCount: number;
   /** Theme ID for the background */
@@ -55,6 +56,7 @@ export const RankingHero = memo(function RankingHero({
   className,
 }: RankingHeroProps) {
   const { t } = useTranslation();
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   // Get theme data for styling
   const themeData = useMemo(() => {
@@ -67,10 +69,13 @@ export const RankingHero = memo(function RankingHero({
   return (
     <div
       className={cn(
-        "relative  mt-4 rounded-2xl py-12 sm:py-16 px-6 overflow-hidden",
+        "relative  mt-4 rounded-2xl py-12 sm:py-16 px-6 overflow-hidden mx-auto",
         gradientClass,
         className
       )}
+      style={{
+        maxWidth: maxContentWidth
+      }}
 
     >
       {/* Flowing wave decoration */}
@@ -112,7 +117,13 @@ export const RankingHero = memo(function RankingHero({
         {/* Left section: Top Pokemon */}
         <div className="flex flex-col items-center gap-2">
           {/* Top Pokemon Image - falls back to "who.png" if no pokemon */}
-          <div className="relative w-24 h-24 sm:w-32 sm:h-32">
+          <div
+            className={cn(
+              "relative w-24 h-24 sm:w-32 sm:h-32",
+              topPokemon?.id && "cursor-pokeball"
+            )}
+            onClick={() => topPokemon?.id && setIsDetailsOpen(true)}
+          >
             <div className="relative w-full h-full">
               {/* Glow effect */}
               <div className="absolute inset-0 rounded-full bg-white/25 blur-xl" />
@@ -166,6 +177,13 @@ export const RankingHero = memo(function RankingHero({
           </div>
         )}
       </div>
+
+      {/* Pokemon details dialog */}
+      <PokemonDetailsDialog
+        pokemonId={topPokemon?.id ?? null}
+        open={isDetailsOpen}
+        onOpenChange={setIsDetailsOpen}
+      />
     </div>
   );
 });

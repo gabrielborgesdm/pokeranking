@@ -67,10 +67,12 @@ export const ShareButton = memo(function ShareButton({
 
   const handleShareTwitter = useCallback(() => {
     const url = getShareUrl();
-    const text = encodeURIComponent(rankingTitle);
+    const text = encodeURIComponent(
+      t("rankingView.shareMessageTwitter", { title: rankingTitle })
+    );
     const shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
     window.open(shareUrl, "_blank", "noopener,noreferrer");
-  }, [getShareUrl, rankingTitle]);
+  }, [getShareUrl, rankingTitle, t]);
 
   const handleShareFacebook = useCallback(() => {
     const url = getShareUrl();
@@ -80,10 +82,11 @@ export const ShareButton = memo(function ShareButton({
 
   const handleShareWhatsapp = useCallback(() => {
     const url = getShareUrl();
-    const text = encodeURIComponent(`${rankingTitle} - ${url}`);
+    const message = t("rankingView.shareMessageWhatsapp", { title: rankingTitle });
+    const text = encodeURIComponent(`${message}\n\n${url}`);
     const shareUrl = `https://wa.me/?text=${text}`;
     window.open(shareUrl, "_blank", "noopener,noreferrer");
-  }, [getShareUrl, rankingTitle]);
+  }, [getShareUrl, rankingTitle, t]);
 
   return (
     <DropdownMenu>
