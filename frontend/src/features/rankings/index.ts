@@ -2,8 +2,10 @@
 export { BackgroundPicker } from "./components/background-picker";
 export { BackgroundPreview } from "./components/background-preview";
 export { CardThemePreview } from "./components/card-theme-preview";
+export { ExportButton } from "./components/export-button";
 export { RankingActionBar } from "./components/ranking-action-bar";
 export { RankingCard } from "./components/ranking-card";
+export { ShareButton } from "./components/share-button";
 export { RankingCardSkeleton } from "./components/ranking-card-skeleton";
 export { RankingCardsSkeleton } from "./components/ranking-cards-skeleton";
 export { RankingEditing } from "./components/ranking-editing";

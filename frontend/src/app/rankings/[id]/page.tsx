@@ -93,8 +93,11 @@ export default function RankingPage({ params }: RankingPageProps) {
               maxContentWidth={MAX_GRID_CONTENT_WIDTH}
             />
             <RankingActionBar
+              rankingId={id}
+              rankingTitle={ranking.title}
+              pokemon={pokemon}
               isOwner={isOwner}
-              onEditClick={handleEditClick}
+              onRankClick={handleEditClick}
               maxContentWidth={MAX_GRID_CONTENT_WIDTH}
               isSearchEnabled={isSearchEnabled}
             />
