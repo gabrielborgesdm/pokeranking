@@ -292,10 +292,13 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                     style={{
                       position: "absolute",
                       top: virtualRow.start + paddingTop,
-                      width: "100%",
+                      left: paddingX,
+                      right: paddingX,
                       height: virtualRow.size,
-                      display: "flex",
+                      display: "grid",
+                      gridTemplateColumns: `repeat(${config.columnCount}, ${config.columnWidth}px)`,
                       gap: config.gap,
+                      justifyContent: "center",
                     }}
                   >
                     {rowPokemon.map((p, colIndex) => {
@@ -303,13 +306,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
                       const color = positionColors?.get(position);
 
                       return (
-                        <div
-                          key={p._id}
-                          style={{
-                            width: config.columnWidth,
-                            flexShrink: 0,
-                          }}
-                        >
+                        <div key={p._id}>
                           <SortablePokemonCard
                             pokemon={p}
                             onRemove={handleRemove}
