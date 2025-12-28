@@ -178,7 +178,7 @@ export class RankingsService {
   async findOne(id: string): Promise<Ranking> {
     const ranking = await this.rankingModel
       .findById(id)
-      .populate('pokemon')
+      .populate('pokemon', '_id name image types pokedexNumber')
       .populate('user')
       .populate('likedBy', 'username profilePic')
       .exec();

@@ -8,6 +8,7 @@ import {
   PickerDropzoneLayout,
 } from "@/features/pokemon-picker";
 import { useRankingEditing } from "../hooks/use-ranking-editing";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto, RankingResponseDto } from "@pokeranking/api-client";
 
 interface RankingEditingProps {
@@ -44,13 +45,18 @@ export const RankingEditing = memo(function RankingEditing({
   onDiscard,
 }: RankingEditingProps) {
   const { sensors, filteredOutIds, disabledIds } = useRankingEditing(pokemon);
+  const { isMobile } = useScreenSize();
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeFilterCount, setActiveFilterCount] = useState(0);
+
+  // Mobile: use smaller heights that fit within layout constraints (45dvh dropzone, 40dvh picker)
+  // Desktop: use full 85vh for both
+  const dropzoneHeight = isMobile ? "calc(45dvh - 40px)" : "85vh";
+  const pickerHeight = isMobile ? "calc(40dvh - 40px)" : "85vh";
 
   return (
     <DndContext sensors={sensors}>
       <PickerDropzoneLayout
-        className="h-[92vh] pt-4"
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={onSave}
@@ -64,15 +70,14 @@ export const RankingEditing = memo(function RankingEditing({
             onChange={setPokemon}
             positionColors={positionColors}
             maxColumns={5}
-            maxHeight="80vh"
-            className="pl-20"
+            maxHeight={dropzoneHeight}
           />
         }
         picker={
           <PokemonBoxesWithFilters
             disabledIds={disabledIds}
             filteredOutIds={filteredOutIds}
-            height="75vh"
+            height={pickerHeight}
             filtersOpen={filtersOpen}
             onCloseFilters={() => setFiltersOpen(false)}
             onActiveFilterCountChange={setActiveFilterCount}

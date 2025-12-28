@@ -114,7 +114,7 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
 
   // Get top Pokemon for hero display
   const topPokemon = pokemon[0]
-    ? { name: pokemon[0].name, image: pokemon[0].image }
+    ? { name: pokemon[0].name, image: pokemon[0].image, id: pokemon[0]._id }
     : null;
 
   return {
