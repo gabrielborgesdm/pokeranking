@@ -50,7 +50,6 @@ export const RankingEditing = memo(function RankingEditing({
   return (
     <DndContext sensors={sensors}>
       <PickerDropzoneLayout
-        className="h-[92vh] pt-4"
         hasUnsavedChanges={hasUnsavedChanges}
         isSaving={isSaving}
         onSave={onSave}
@@ -64,14 +63,14 @@ export const RankingEditing = memo(function RankingEditing({
             onChange={setPokemon}
             positionColors={positionColors}
             maxColumns={5}
-            maxHeight="80vh"
+            maxHeight="85vh"
           />
         }
         picker={
           <PokemonBoxesWithFilters
             disabledIds={disabledIds}
             filteredOutIds={filteredOutIds}
-            height="80vh"
+            height="85vh"
             filtersOpen={filtersOpen}
             onCloseFilters={() => setFiltersOpen(false)}
             onActiveFilterCountChange={setActiveFilterCount}
