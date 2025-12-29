@@ -47,9 +47,9 @@ export function PokemonListingCardsSkeleton({
 
       {/* Action Bar Skeleton */}
       <div className="flex justify-center px-4 sm:px-0">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 max-w-[1044px]">
+        <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 max-w-[1044px]">
           {/* Search input */}
-          <div className="flex-1 sm:max-w-sm">
+          <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-sm">
             <Skeleton className="h-9 w-full" />
           </div>
 
