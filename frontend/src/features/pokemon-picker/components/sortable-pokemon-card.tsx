@@ -21,6 +21,8 @@ interface SortablePokemonCardProps {
   style?: React.CSSProperties;
   /** Whether a drag operation is in progress (shows drop overlay) */
   isDropping?: boolean;
+  /** Whether this card is highlighted (from search) */
+  isHighlighted?: boolean;
 }
 
 export const SortablePokemonCard = memo(function SortablePokemonCard({
@@ -30,6 +32,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
   color,
   style: virtualStyle,
   isDropping,
+  isHighlighted,
 }: SortablePokemonCardProps) {
   const { isSmall } = useScreenSize();
 
@@ -84,6 +87,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
         positionColor={color}
         isDropping={isDropping}
         isCompact={isSmall}
+        isHighlighted={isHighlighted}
       />
     </div>
   );

@@ -2,15 +2,13 @@
 
 import { memo } from "react";
 import { PokemonListingCards } from "@/features/pokemon-picker";
-import type { PokemonResponseDto, RankingResponseDto } from "@pokeranking/api-client";
+import type { PokemonResponseDto, ZoneResponseDto } from "@pokeranking/api-client";
 
 interface RankingListingProps {
-  /** Ranking data */
-  ranking: RankingResponseDto;
   /** Pokemon list to display */
   pokemon: PokemonResponseDto[];
-  /** Map of position (1-based) to zone color */
-  positionColors: Map<number, string>;
+  /** Zones for grouping pokemon with headers */
+  zones: ZoneResponseDto[];
 }
 
 /**
@@ -20,12 +18,12 @@ interface RankingListingProps {
  */
 export const RankingListing = memo(function RankingListing({
   pokemon,
-  positionColors,
+  zones,
 }: RankingListingProps) {
   return (
     <PokemonListingCards
       pokemon={pokemon}
-      positionColors={positionColors}
+      zones={zones}
       showPositions
     />
   );

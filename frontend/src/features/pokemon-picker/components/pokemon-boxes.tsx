@@ -2,39 +2,20 @@
 
 import { memo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, SlidersHorizontal, ChevronDown, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
-  Collapsible,
-  CollapsibleContent,
-} from "@/components/ui/collapsible";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetFooter,
-} from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { TypesSelector, SelectedTypesBadges } from "@/features/pokemon";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { PokemonSearchFilters } from "@/features/pokemon";
 import { PokemonPicker } from "./pokemon-picker";
-import { useBoxPokemon, type BoxSortByOption, type BoxOrderOption } from "../hooks/use-box-pokemon";
-import { useResponsiveGrid } from "../hooks/use-responsive-grid";
+import { useAllPokemon } from "../hooks/use-all-pokemon";
 import { useScreenSize } from "@/providers/screen-size-provider";
-import type { PokemonType } from "@pokeranking/shared";
 import { cn } from "@/lib/utils";
-
-const GENERATION_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
-const GRID_PADDING_X = 16;
 
 interface PokemonBoxesProps {
   /** IDs of Pokemon that should appear disabled/unavailable (grayed out but visible) */
@@ -49,14 +30,11 @@ interface PokemonBoxesProps {
   height?: number | string;
 }
 
-export const PokemonBoxes = memo(function PokemonBoxes({
-  disabledIds,
-  filteredOutIds,
-  className,
-  maxColumns,
-  height,
-}: PokemonBoxesProps) {
-  const { t } = useTranslation();
+/**
+ * Hook that exposes the Pokemon filter state and handlers.
+ * Use this to render PickerHeaderFilters in an external header.
+ */
+export function usePokemonBoxFilters() {
   const {
     pokemon,
     isLoading,
@@ -70,48 +48,64 @@ export const PokemonBoxes = memo(function PokemonBoxes({
     handleGenerationChange,
     handleSortByChange,
     handleOrderChange,
-  } = useBoxPokemon();
+  } = useAllPokemon();
 
-  // Use the same responsive grid calculation as the picker to get matching width
-  // Note: minCardWidth, gap, rowHeight are auto-detected based on mobile/desktop
-  const { containerRef, gridContentWidth } = useResponsiveGrid({
-    maxColumns,
-    itemCount: pokemon.length || 1, // At least 1 to avoid division by zero
-    paddingX: GRID_PADDING_X,
-  });
+  return {
+    pokemon,
+    isLoading,
+    search,
+    selectedTypes,
+    generation,
+    sortBy,
+    order,
+    handleSearchChange,
+    handleTypesChange,
+    handleGenerationChange,
+    handleSortByChange,
+    handleOrderChange,
+  };
+}
 
-  // Use viewport-based mobile detection to match CSS breakpoints
+interface PokemonBoxesWithFiltersProps extends PokemonBoxesProps {
+  /** Whether filters panel is open (controlled) */
+  filtersOpen: boolean;
+  /** Called when filters panel should close */
+  onCloseFilters: () => void;
+  /** Called when active filter count changes */
+  onActiveFilterCountChange?: (count: number) => void;
+}
+
+/**
+ * PokemonBoxes with controlled filter panel.
+ * Filter button is rendered externally, this component renders the filter popup.
+ */
+export const PokemonBoxesWithFilters = memo(function PokemonBoxesWithFilters({
+  disabledIds,
+  filteredOutIds,
+  className,
+  maxColumns,
+  height,
+  filtersOpen,
+  onCloseFilters,
+  onActiveFilterCountChange,
+}: PokemonBoxesWithFiltersProps) {
+  const { t } = useTranslation();
   const { isMobile } = useScreenSize();
 
-  // Local state for debounced search
-  const [inputValue, setInputValue] = useState(search);
-  const [filtersOpen, setFiltersOpen] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (inputValue !== search) {
-        handleSearchChange(inputValue);
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [inputValue, search, handleSearchChange]);
-
-  useEffect(() => {
-    setInputValue(search);
-  }, [search]);
-
-  const handleTypeRemove = (type: PokemonType) => {
-    handleTypesChange(selectedTypes.filter((t) => t !== type));
-  };
-
-  const handleClearFilters = () => {
-    setInputValue("");
-    handleSearchChange("");
-    handleTypesChange([]);
-    handleGenerationChange(null);
-    handleSortByChange("pokedexNumber");
-    handleOrderChange("asc");
-  };
+  const {
+    pokemon,
+    isLoading,
+    search,
+    selectedTypes,
+    generation,
+    sortBy,
+    order,
+    handleSearchChange,
+    handleTypesChange,
+    handleGenerationChange,
+    handleSortByChange,
+    handleOrderChange,
+  } = useAllPokemon();
 
   // Count active filters (excluding defaults)
   const activeFilterCount = [
@@ -122,221 +116,47 @@ export const PokemonBoxes = memo(function PokemonBoxes({
     order !== "asc",
   ].filter(Boolean).length;
 
-  // Search input component shared between desktop header and mobile sheet
-  const searchInput = (
-    <div className="relative flex-1">
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-      <Input
-        type="text"
-        placeholder={t("admin.pokemon.searchPlaceholder")}
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        className="pl-9 h-10"
-      />
-    </div>
-  );
+  const handleClearFilters = () => {
+    handleSearchChange("");
+    handleTypesChange([]);
+    handleGenerationChange(null);
+    handleSortByChange("pokedexNumber");
+    handleOrderChange("asc");
+  };
 
-  // Filter content shared between desktop collapsible and mobile sheet
-  const filterContent = (
-    <div className="space-y-4">
-      {/* Filter grid - responsive: 1 col on small, 2 cols on medium, 4 cols on large */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-3">
-        {/* Type filter - spans full width on lg screens */}
-        <div className="space-y-1.5 lg:col-span-2 xl:col-span-1">
-          <label className="text-xs font-medium text-muted-foreground">
-            {t("pokemonFilters.type")}
-          </label>
-          <TypesSelector
-            selectedTypes={selectedTypes}
-            onTypesChange={handleTypesChange}
-            compact
-            buttonClassName="w-full h-9"
-          />
-        </div>
+  // Report active filter count changes to parent
+  useEffect(() => {
+    onActiveFilterCountChange?.(activeFilterCount);
+  }, [activeFilterCount, onActiveFilterCountChange]);
 
-        {/* Generation filter */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-medium text-muted-foreground">
-            {t("admin.pokemon.generation")}
-          </label>
-          <Select
-            value={generation?.toString() ?? "all"}
-            onValueChange={(value) =>
-              handleGenerationChange(value === "all" ? null : Number(value))
-            }
-          >
-            <SelectTrigger className="w-full h-9">
-              <SelectValue placeholder={t("admin.pokemon.generation")} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t("pokemonFilters.allGenerations")}</SelectItem>
-              {GENERATION_OPTIONS.map((gen) => (
-                <SelectItem key={gen} value={String(gen)}>
-                  {t("pokemonFilters.generation", { gen })}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Sort by */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-medium text-muted-foreground">
-            {t("pokemonFilters.sortBy")}
-          </label>
-          <Select value={sortBy} onValueChange={(value) => handleSortByChange(value as BoxSortByOption)}>
-            <SelectTrigger className="w-full h-9">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="pokedexNumber">{t("pokemonFilters.sortByPokedex")}</SelectItem>
-              <SelectItem value="name">{t("admin.pokemon.sortByName")}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Order */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-medium text-muted-foreground">
-            {t("pokemonFilters.order")}
-          </label>
-          <Select value={order} onValueChange={(value) => handleOrderChange(value as BoxOrderOption)}>
-            <SelectTrigger className="w-full h-9">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="asc">{t("admin.pokemon.orderAsc")}</SelectItem>
-              <SelectItem value="desc">{t("admin.pokemon.orderDesc")}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      {/* Selected type badges - inside filter content */}
-      {selectedTypes.length > 0 && (
-        <SelectedTypesBadges
-          selectedTypes={selectedTypes}
-          onTypeRemove={handleTypeRemove}
-        />
-      )}
-    </div>
-  );
+  // Convert height to CSS value
+  const heightStyle = typeof height === "number" ? `${height}px` : height;
 
   return (
-    <div ref={containerRef} className={cn("w-full", className)}>
-      <div className="space-y-3">
-        {/* Desktop: Search bar with filter toggle - width matches grid, centered */}
-        <div
-          className="hidden md:flex items-center gap-2 mx-auto"
-          style={{
-            width: gridContentWidth > 0 ? gridContentWidth : `calc(100% - ${GRID_PADDING_X * 2}px)`,
-          }}
-        >
-          {searchInput}
-
-          {/* Filter toggle button */}
-          <Button
-            variant={filtersOpen ? "secondary" : "outline"}
-            size="default"
-            onClick={() => setFiltersOpen(!filtersOpen)}
-            className="gap-2 h-10 shrink-0"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            <span>{t("pokemonFilters.filters")}</span>
-            {activeFilterCount > 0 && (
-              <Badge variant="default" className="ml-1 h-5 w-5 p-0 justify-center text-xs">
-                {activeFilterCount}
-              </Badge>
-            )}
-            <ChevronDown className={cn(
-              "h-4 w-4 transition-transform duration-200",
-              filtersOpen && "rotate-180"
-            )} />
-          </Button>
-        </div>
-
-        {/* Desktop: Expandable filters section */}
-        <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen} className="hidden md:block">
-          <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapse data-[state=open]:animate-expand">
-            <div
-              className="mx-auto"
-              style={{
-                width: gridContentWidth > 0 ? gridContentWidth : `calc(100% - ${GRID_PADDING_X * 2}px)`,
-              }}
-            >
-              <div className="rounded-lg border bg-card/50 p-4 space-y-4">
-                {filterContent}
-
-                {/* Clear filters button */}
-                {activeFilterCount > 0 && (
-                  <div className="flex justify-end pt-2 border-t border-border/50">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={handleClearFilters}
-                      className="text-muted-foreground hover:text-foreground gap-1.5"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                      {t("pokemonFilters.clearFilters")}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Mobile: Bottom sheet for filters - only render on mobile to avoid overlay on desktop */}
-        {isMobile && (
-          <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
-            <SheetContent side="bottom" className="h-full">
-              <SheetHeader>
-                <SheetTitle>{t("pokemonFilters.filters")}</SheetTitle>
-              </SheetHeader>
-              <div className="overflow-y-auto flex-1 px-4 space-y-4">
-                {/* Search input in mobile sheet */}
-                {searchInput}
-                {filterContent}
-              </div>
-              {activeFilterCount > 0 && (
-                <SheetFooter>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleClearFilters}
-                    className="text-muted-foreground hover:text-foreground gap-1.5"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                    {t("pokemonFilters.clearFilters")}
-                  </Button>
-                </SheetFooter>
-              )}
-            </SheetContent>
-          </Sheet>
-        )}
-
-        {/* Mobile: Floating filter button */}
-        <Button
-          variant="default"
-          size="icon"
-          onClick={() => setFiltersOpen(true)}
-          className="fixed bottom-4 right-4 z-40 h-14 w-14 rounded-full shadow-lg md:hidden"
-        >
-          <SlidersHorizontal className="h-6 w-6" />
-          {activeFilterCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 p-0 justify-center text-xs"
-            >
-              {activeFilterCount}
-            </Badge>
-          )}
-        </Button>
-
+    <div className="relative w-full" style={{ height: heightStyle }}>
+      {/* Pokemon picker container */}
+      <div className={cn("w-full h-full overflow-hidden", className)}>
         {/* Pokemon picker */}
         {isLoading ? (
           <div className="space-y-4">
             <Skeleton className="h-64 w-full" />
+          </div>
+        ) : pokemon.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center p-8">
+            <p className="text-muted-foreground">
+              {t("pokedex.pokemonList.noPokemon")}
+            </p>
+            {activeFilterCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearFilters}
+                className="mt-4 text-muted-foreground hover:text-foreground gap-1.5"
+              >
+                <X className="h-3.5 w-3.5" />
+                {t("pokemonFilters.clearFilters")}
+              </Button>
+            )}
           </div>
         ) : (
           <PokemonPicker
@@ -349,6 +169,224 @@ export const PokemonBoxes = memo(function PokemonBoxes({
           />
         )}
       </div>
+
+      {/* Desktop: Bottom overlay for filters (no backdrop) */}
+      {filtersOpen && !isMobile && (
+        <div className="flex absolute inset-x-0 bottom-0 z-50 bg-background border-t border-border shadow-lg mr-3 max-h-[60%] flex-col">
+          <div className="flex items-center justify-between px-4 py-2 border-b border-border/50">
+            <h3 className="text-sm font-semibold">
+              {t("pokemonFilters.filters")}
+            </h3>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onCloseFilters}
+              className="h-7 w-7"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="overflow-y-auto flex-1 p-4">
+            <PokemonSearchFilters
+              search={search}
+              selectedTypes={selectedTypes}
+              generation={generation}
+              sortBy={sortBy}
+              order={order}
+              onSearchChange={handleSearchChange}
+              onTypesChange={handleTypesChange}
+              onGenerationChange={handleGenerationChange}
+              onSortByChange={handleSortByChange}
+              onOrderChange={handleOrderChange}
+            />
+          </div>
+
+        </div>
+      )}
+
+      {/* Mobile: Full screen dialog for filters */}
+      {isMobile && (
+        <Dialog open={filtersOpen} onOpenChange={(open) => !open && onCloseFilters()}>
+          <DialogContent className="h-[100dvh] max-h-[100dvh] w-screen max-w-full rounded-none p-0 flex flex-col [&>button]:hidden">
+            <DialogHeader className="px-4 py-3 border-b border-border/50 shrink-0">
+              <div className="flex items-center justify-between">
+                <DialogTitle>{t("pokemonFilters.filters")}</DialogTitle>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onCloseFilters}
+                  className="h-7 w-7"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </DialogHeader>
+            <div className="overflow-y-auto flex-1 p-4">
+              <PokemonSearchFilters
+                search={search}
+                selectedTypes={selectedTypes}
+                generation={generation}
+                sortBy={sortBy}
+                order={order}
+                onSearchChange={handleSearchChange}
+                onTypesChange={handleTypesChange}
+                onGenerationChange={handleGenerationChange}
+                onSortByChange={handleSortByChange}
+                onOrderChange={handleOrderChange}
+              />
+            </div>
+            {activeFilterCount > 0 && (
+              <div className="px-4 py-3 border-t border-border/50 shrink-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleClearFilters}
+                  className="text-muted-foreground hover:text-foreground gap-1.5"
+                >
+                  <X className="h-3.5 w-3.5" />
+                  {t("pokemonFilters.clearFilters")}
+                </Button>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+      )}
+    </div>
+  );
+});
+
+/**
+ * Simple PokemonBoxes with filter button in its own internal header.
+ * For use cases where an external header is not available.
+ */
+export const PokemonBoxes = memo(function PokemonBoxes({
+  disabledIds,
+  filteredOutIds,
+  className,
+  maxColumns,
+  height,
+}: PokemonBoxesProps) {
+  const { t } = useTranslation();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const {
+    pokemon,
+    isLoading,
+    search,
+    selectedTypes,
+    generation,
+    sortBy,
+    order,
+    handleSearchChange,
+    handleTypesChange,
+    handleGenerationChange,
+    handleSortByChange,
+    handleOrderChange,
+  } = useAllPokemon();
+
+  // Count active filters (excluding defaults)
+  const activeFilterCount = [
+    search.length > 0,
+    selectedTypes.length > 0,
+    generation !== null,
+    sortBy !== "pokedexNumber",
+    order !== "asc",
+  ].filter(Boolean).length;
+
+  const handleClearFilters = () => {
+    handleSearchChange("");
+    handleTypesChange([]);
+    handleGenerationChange(null);
+    handleSortByChange("pokedexNumber");
+    handleOrderChange("asc");
+  };
+
+  // Convert height to CSS value
+  const heightStyle = typeof height === "number" ? `${height}px` : height;
+
+  return (
+    <div className="relative w-full" style={{ height: heightStyle }}>
+      {/* Pokemon picker container */}
+      <div className={cn("w-full h-full overflow-hidden", className)}>
+        {/* Pokemon picker */}
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-64 w-full" />
+          </div>
+        ) : pokemon.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center p-8">
+            <p className="text-muted-foreground">
+              {t("pokedex.pokemonList.noPokemon")}
+            </p>
+            {activeFilterCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearFilters}
+                className="mt-4 text-muted-foreground hover:text-foreground gap-1.5"
+              >
+                <X className="h-3.5 w-3.5" />
+                {t("pokemonFilters.clearFilters")}
+              </Button>
+            )}
+          </div>
+        ) : (
+          <PokemonPicker
+            pokemon={pokemon}
+            mode="drag"
+            disabledIds={disabledIds}
+            filteredOutIds={filteredOutIds}
+            maxColumns={maxColumns}
+            height={height}
+          />
+        )}
+      </div>
+
+      {/* Bottom overlay for filters - outside overflow-hidden container */}
+      {filtersOpen && (
+        <div className="absolute inset-x-0 bottom-0 z-50 bg-background border-t border-border shadow-lg mr-3 max-h-[60%] flex flex-col">
+          <div className="flex items-center justify-between px-4 py-2 border-b border-border/50">
+            <h3 className="text-sm font-semibold">
+              {t("pokemonFilters.filters")}
+            </h3>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setFiltersOpen(false)}
+              className="h-7 w-7"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="overflow-y-auto flex-1 p-4">
+            <PokemonSearchFilters
+              search={search}
+              selectedTypes={selectedTypes}
+              generation={generation}
+              sortBy={sortBy}
+              order={order}
+              onSearchChange={handleSearchChange}
+              onTypesChange={handleTypesChange}
+              onGenerationChange={handleGenerationChange}
+              onSortByChange={handleSortByChange}
+              onOrderChange={handleOrderChange}
+            />
+          </div>
+          {activeFilterCount > 0 && (
+            <div className="px-4 py-2 border-t border-border/50">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleClearFilters}
+                className="text-muted-foreground hover:text-foreground gap-1.5"
+              >
+                <X className="h-3.5 w-3.5" />
+                {t("pokemonFilters.clearFilters")}
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 });

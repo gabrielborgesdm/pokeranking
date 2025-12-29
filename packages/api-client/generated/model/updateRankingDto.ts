@@ -5,15 +5,12 @@
  * API for managing Pokemon and user rankings
  * OpenAPI spec version: 1.0
  */
-import type { ZoneDto } from "./zoneDto";
 
 export interface UpdateRankingDto {
   /** Title of the ranking list */
   title?: string;
   /** Ordered array of Pokemon IDs (position = rank) */
   pokemon?: string[];
-  /** Customizable zones with intervals and colors */
-  zones?: ZoneDto[];
   /** Theme ID for the ranking card appearance */
   theme?: string;
   /** Background theme ID for the full-page ranking view */

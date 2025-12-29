@@ -15,6 +15,7 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/lib/routes";
+import { normalizePokemonImageSrc } from "@/lib/image-utils";
 
 interface UserRankingsPageProps {
   params: Promise<{ username: string }>;
@@ -47,8 +48,8 @@ export default function UserRankingsPage({ params }: UserRankingsPageProps) {
           key={ranking._id}
           id={ranking._id}
           title={ranking.title}
-          topPokemonImage={ranking.pokemon[0]?.image}
-          pokemonCount={ranking.pokemon.length}
+          topPokemonImage={normalizePokemonImageSrc(ranking?.image)}
+          pokemonCount={ranking.pokemonCount}
           createdAt={ranking.createdAt}
           updatedAt={ranking.updatedAt}
           theme={ranking.theme}

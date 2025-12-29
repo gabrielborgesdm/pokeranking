@@ -7,16 +7,16 @@ import {
 } from "@pokeranking/api-client";
 import type { PokemonType } from "@pokeranking/shared";
 
-export type BoxSortByOption = "pokedexNumber" | "name";
-export type BoxOrderOption = "asc" | "desc";
+export type PokemonSortByOption = "pokedexNumber" | "name";
+export type PokemonOrderOption = "asc" | "desc";
 
-export function useBoxPokemon() {
+export function useAllPokemon() {
   // Filter state
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<PokemonType[]>([]);
   const [generation, setGeneration] = useState<number | null>(null);
-  const [sortBy, setSortBy] = useState<BoxSortByOption>("pokedexNumber");
-  const [order, setOrder] = useState<BoxOrderOption>("asc");
+  const [sortBy, setSortBy] = useState<PokemonSortByOption>("pokedexNumber");
+  const [order, setOrder] = useState<PokemonOrderOption>("asc");
 
   // Fetch all pokemon
   const {
@@ -83,11 +83,11 @@ export function useBoxPokemon() {
     setGeneration(gen);
   }, []);
 
-  const handleSortByChange = useCallback((value: BoxSortByOption) => {
+  const handleSortByChange = useCallback((value: PokemonSortByOption) => {
     setSortBy(value);
   }, []);
 
-  const handleOrderChange = useCallback((value: BoxOrderOption) => {
+  const handleOrderChange = useCallback((value: PokemonOrderOption) => {
     setOrder(value);
   }, []);
 

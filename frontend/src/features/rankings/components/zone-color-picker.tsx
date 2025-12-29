@@ -8,24 +8,24 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-// Pokemon-themed color palette
+// Refined color palette with softer, more elegant tones
 export const ZONE_COLORS = [
-  { id: "red", hex: "#ef4444", name: "Red" },
-  { id: "orange", hex: "#f97316", name: "Orange" },
-  { id: "amber", hex: "#f59e0b", name: "Amber" },
-  { id: "yellow", hex: "#eab308", name: "Yellow" },
-  { id: "lime", hex: "#84cc16", name: "Lime" },
-  { id: "green", hex: "#22c55e", name: "Green" },
-  { id: "teal", hex: "#14b8a6", name: "Teal" },
-  { id: "cyan", hex: "#06b6d4", name: "Cyan" },
-  { id: "blue", hex: "#3b82f6", name: "Blue" },
-  { id: "indigo", hex: "#6366f1", name: "Indigo" },
-  { id: "purple", hex: "#a855f7", name: "Purple" },
-  { id: "pink", hex: "#ec4899", name: "Pink" },
-  { id: "rose", hex: "#f43f5e", name: "Rose" },
-  { id: "gray", hex: "#6b7280", name: "Gray" },
-  { id: "slate", hex: "#64748b", name: "Slate" },
-  { id: "brown", hex: "#a16207", name: "Brown" },
+  { id: "coral", hex: "#e07065", name: "Coral" },
+  { id: "peach", hex: "#e8956a", name: "Peach" },
+  { id: "amber", hex: "#d4a054", name: "Amber" },
+  { id: "gold", hex: "#c9b458", name: "Gold" },
+  { id: "sage", hex: "#7cb078", name: "Sage" },
+  { id: "mint", hex: "#5db8a3", name: "Mint" },
+  { id: "teal", hex: "#4aa8b8", name: "Teal" },
+  { id: "sky", hex: "#5a9fd4", name: "Sky" },
+  { id: "azure", hex: "#6889d4", name: "Azure" },
+  { id: "periwinkle", hex: "#8080d0", name: "Periwinkle" },
+  { id: "lavender", hex: "#a078c0", name: "Lavender" },
+  { id: "orchid", hex: "#c86ca8", name: "Orchid" },
+  { id: "rose", hex: "#d4707a", name: "Rose" },
+  { id: "slate", hex: "#7a8899", name: "Slate" },
+  { id: "graphite", hex: "#6a7380", name: "Graphite" },
+  { id: "bronze", hex: "#a08060", name: "Bronze" },
 ] as const;
 
 export type ZoneColorId = (typeof ZONE_COLORS)[number]["id"];
