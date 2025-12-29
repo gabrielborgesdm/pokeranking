@@ -67,11 +67,11 @@ export const RankingActionBar = memo(function RankingActionBar({
     <>
       <div className={cn("flex justify-center px-4 sm:px-0", className)}>
         <div
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
+          className="flex flex-row items-center justify-between gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
         >
           {/* Search input - opens search overlay */}
-          <div className="flex-1 sm:max-w-sm relative">
+          <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-sm relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
               type="text"
@@ -79,7 +79,7 @@ export const RankingActionBar = memo(function RankingActionBar({
               readOnly
               disabled={!isSearchEnabled}
               onClick={isSearchEnabled ? openSearch : undefined}
-              className="w-full pl-9 cursor-pointer bg-background/50"
+              className="w-full pl-9 cursor-pointer bg-background/50 truncate"
             />
           </div>
 
