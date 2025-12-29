@@ -12,6 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { routes } from "@/lib/routes";
 import { usePokemonSearchContext } from "@/features/pokemon-search/context/pokemon-search-context";
 import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
 import { ShareButton } from "./share-button";
@@ -27,8 +28,6 @@ interface RankingActionBarProps {
   pokemon: PokemonResponseDto[];
   /** Whether the current user is the owner */
   isOwner: boolean;
-  /** Called when rank pokemon button is clicked */
-  onRankClick?: () => void;
   /** Maximum width for content alignment */
   maxContentWidth?: number;
   /** Optional class name */
@@ -48,7 +47,6 @@ export const RankingActionBar = memo(function RankingActionBar({
   rankingTitle,
   pokemon,
   isOwner,
-  onRankClick,
   maxContentWidth,
   className,
   isSearchEnabled = false,
@@ -58,18 +56,22 @@ export const RankingActionBar = memo(function RankingActionBar({
   const router = useRouter();
 
   const handleEditSettings = () => {
-    router.push(`/rankings/${rankingId}/edit`);
+    router.push(routes.rankingEdit(rankingId));
+  };
+
+  const handleRankPokemon = () => {
+    router.push(routes.rankingRank(rankingId));
   };
 
   return (
     <>
       <div className={cn("flex justify-center px-4 sm:px-0", className)}>
         <div
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-4 sm:py-5 mt-6 sm:mt-8 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
+          className="flex flex-row items-center justify-between gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
         >
           {/* Search input - opens search overlay */}
-          <div className="flex-1 sm:max-w-sm relative">
+          <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-sm relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
               type="text"
@@ -77,7 +79,7 @@ export const RankingActionBar = memo(function RankingActionBar({
               readOnly
               disabled={!isSearchEnabled}
               onClick={isSearchEnabled ? openSearch : undefined}
-              className="w-full pl-9 cursor-pointer bg-background/50"
+              className="w-full pl-9 cursor-pointer bg-background/50 truncate"
             />
           </div>
 
@@ -93,7 +95,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                       variant="outline"
                       size="icon"
                       className="h-9 w-9"
-                      onClick={onRankClick}
+                      onClick={handleRankPokemon}
                     >
                       <ListOrdered className="h-4 w-4" />
                       <span className="sr-only">

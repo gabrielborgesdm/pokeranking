@@ -23,7 +23,7 @@ import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
 const ZONE_HEADER_HEIGHT = 80;
-const ZONE_HEADER_HEIGHT_COMPACT = 40;
+const ZONE_HEADER_HEIGHT_COMPACT = 56;
 
 export interface PokemonListingCardsProps {
   /** Pokemon list to display */
@@ -182,7 +182,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
         }
       }}
       className={cn(
-        "relative w-full",
+        "relative w-full mt-6",
         className
       )}
     >
