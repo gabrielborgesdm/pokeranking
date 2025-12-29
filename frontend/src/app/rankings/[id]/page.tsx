@@ -24,6 +24,7 @@ export default function RankingPage({ params }: RankingPageProps) {
   const { id } = use(params);
   const { isResizing } = useScreenSize();
   const router = useRouter();
+  const { isMobile } = useScreenSize();
 
   const {
     ranking,
@@ -50,7 +51,8 @@ export default function RankingPage({ params }: RankingPageProps) {
     return <PokemonListingCardsSkeleton count={15} isCompact={false} />;
   }
 
-  if (isResizing) {
+  // mobile has some issue with this fallback, so we skip it there
+  if (isResizing && !isMobile) {
     return <LoadingFallback />;
   }
 
