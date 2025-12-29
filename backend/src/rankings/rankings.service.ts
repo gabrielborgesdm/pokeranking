@@ -8,16 +8,35 @@ import {
 } from '@nestjs/common';
 import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
-import { Model, Types, Connection } from 'mongoose';
+import { Model, Types, Connection, PipelineStage } from 'mongoose';
 import { Ranking } from './schemas/ranking.schema';
 import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
+import { RankingQueryDto, LIKES_COUNT } from './dto/ranking-query.dto';
 import { stripUndefined } from '../common/utils/transform.util';
 import { User } from '../users/schemas/user.schema';
 import { Pokemon } from '../pokemon/schemas/pokemon.schema';
 import { withTransaction } from '../common/utils/transaction.util';
 import { UsersService } from '../users/users.service';
+import { CacheService } from '../common/services/cache.service';
 import { isThemeAvailable } from '@pokeranking/shared';
+
+const RANKINGS_LIST_DEFAULT_CACHE_KEY = 'rankings:list:default';
+const RANKINGS_LIST_CACHE_TTL_SECONDS = 15 * 60; // 15 minutes
+
+interface RankingListItem {
+  _id: Types.ObjectId;
+  title: string;
+  theme: string;
+  image: string | null;
+  pokemonCount: number;
+  likesCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+  user: {
+    username: string;
+  };
+}
 
 @Injectable()
 export class RankingsService {
@@ -28,6 +47,7 @@ export class RankingsService {
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+    private readonly cacheService: CacheService,
   ) {}
 
   async create(
@@ -47,6 +67,11 @@ export class RankingsService {
       });
     }
 
+    // Validate theme availability if theme provided (before transaction)
+    if (createRankingDto.theme) {
+      await this.validateThemeForUser(createRankingDto.theme, userId);
+    }
+
     const savedRanking = await withTransaction(
       this.connection,
       async (session) => {
@@ -55,17 +80,6 @@ export class RankingsService {
           user.rankings,
           createRankingDto.title,
         );
-
-        // Validate theme availability if theme provided
-        if (createRankingDto.theme) {
-          const pokemonCount = createRankingDto.pokemon?.length || 0;
-          const totalPokemon = await this.getTotalPokemonCount();
-          this.validateThemeAvailability(
-            createRankingDto.theme,
-            pokemonCount,
-            totalPokemon,
-          );
-        }
 
         const ranking = new this.rankingModel({
           ...createRankingDto,
@@ -89,6 +103,9 @@ export class RankingsService {
     // Update user's rankedPokemonCount
     const fullUser = await this.usersService.findOne(userId);
     await this.usersService.updateRankedPokemonCount(fullUser);
+
+    // Invalidate rankings list cache
+    await this.invalidateRankingsListCache();
 
     return savedRanking;
   }
@@ -130,7 +147,6 @@ export class RankingsService {
 
     // Apply updates to get new values
     const updatedData = stripUndefined(updateRankingDto);
-    const newZones = updatedData.zones || ranking.zones;
     const newPokemon = updatedData.pokemon || ranking.pokemon;
 
     // Check if pokemon count changed
@@ -140,12 +156,7 @@ export class RankingsService {
 
     // Validate theme availability if theme is being updated
     if (updateRankingDto.theme) {
-      const totalPokemon = await this.getTotalPokemonCount();
-      this.validateThemeAvailability(
-        updateRankingDto.theme,
-        newPokemon.length,
-        totalPokemon,
-      );
+      await this.validateThemeForUser(updateRankingDto.theme, userId);
     }
 
     // Apply updates
@@ -158,14 +169,18 @@ export class RankingsService {
       await this.usersService.updateRankedPokemonCount(user);
     }
 
+    // Invalidate rankings list cache
+    await this.invalidateRankingsListCache();
+
     return savedRanking;
   }
 
   async findOne(id: string): Promise<Ranking> {
     const ranking = await this.rankingModel
       .findById(id)
-      .populate('pokemon')
+      .populate('pokemon', '_id name image types pokedexNumber')
       .populate('user')
+      .populate('likedBy', 'username profilePic')
       .exec();
 
     if (!ranking) {
@@ -175,7 +190,41 @@ export class RankingsService {
     return ranking;
   }
 
-  async findByUsername(username: string): Promise<Ranking[]> {
+  async find(userId: string) {
+    const rankings = await this.rankingModel
+      .find({ user: new Types.ObjectId(userId) })
+      .sort({ updatedAt: -1 })
+      .lean()
+      .exec();
+
+    // Get first pokemon IDs from each ranking
+    const firstPokemonIds = rankings
+      .map((r) => r.pokemon?.[0])
+      .filter((id): id is Types.ObjectId => !!id);
+
+    // Fetch only the first pokemon images in a single query
+    const pokemonImages = await this.pokemonModel
+      .find({ _id: { $in: firstPokemonIds } })
+      .select('_id image')
+      .lean()
+      .exec();
+
+    const imageMap = new Map(
+      pokemonImages.map((p) => [p._id.toString(), p.image]),
+    );
+
+    console.log('Image Map:', imageMap);
+
+    return rankings.map((ranking) => ({
+      ...ranking,
+      image: ranking.pokemon?.[0]
+        ? (imageMap.get(ranking.pokemon[0].toString()) ?? null)
+        : null,
+      pokemonCount: ranking.pokemon?.length ?? 0,
+    }));
+  }
+
+  async findByUsername(username: string) {
     const user = await this.userModel
       .findOne({ username, isActive: true })
       .exec();
@@ -187,13 +236,7 @@ export class RankingsService {
       });
     }
 
-    const rankings = await this.rankingModel
-      .find({ user: user._id })
-      .populate('user', 'username profilePic')
-      .sort({ updatedAt: -1 })
-      .exec();
-
-    return rankings;
+    return this.find(user._id.toString());
   }
 
   async remove(id: string, userId: string): Promise<Ranking> {
@@ -231,6 +274,9 @@ export class RankingsService {
     // Update user's rankedPokemonCount
     const user = await this.usersService.findOne(userId);
     await this.usersService.updateRankedPokemonCount(user);
+
+    // Invalidate rankings list cache
+    await this.invalidateRankingsListCache();
 
     return deletedRanking;
   }
@@ -277,17 +323,243 @@ export class RankingsService {
     return this.pokemonModel.countDocuments().exec();
   }
 
-  // Helper: Validate theme availability based on Pokemon count
-  private validateThemeAvailability(
+  // Helper: Get user's total ranked Pokemon count across all rankings
+  private async getUserTotalRankedPokemon(userId: string): Promise<number> {
+    const rankings = await this.rankingModel
+      .find({ user: new Types.ObjectId(userId) })
+      .select('pokemon')
+      .lean()
+      .exec();
+
+    return rankings.reduce((sum, r) => sum + (r.pokemon?.length ?? 0), 0);
+  }
+
+  // Helper: Validate theme availability based on user's total ranked Pokemon
+  private async validateThemeForUser(
     themeId: string,
-    pokemonCount: number,
-    totalPokemon: number,
-  ): void {
-    if (!isThemeAvailable(themeId, pokemonCount, totalPokemon)) {
+    userId: string,
+  ): Promise<void> {
+    const [userTotalRanked, totalPokemonInSystem] = await Promise.all([
+      this.getUserTotalRankedPokemon(userId),
+      this.getTotalPokemonCount(),
+    ]);
+
+    if (!isThemeAvailable(themeId, userTotalRanked, totalPokemonInSystem)) {
       throw new BadRequestException({
         key: TK.RANKINGS.THEME_NOT_AVAILABLE,
         args: { themeId },
       });
     }
+  }
+
+  /**
+   * Toggle like status for a ranking
+   */
+  async toggleLike(
+    rankingId: string,
+    userId: string,
+  ): Promise<{ isLiked: boolean; likesCount: number }> {
+    const ranking = await this.rankingModel.findById(rankingId).exec();
+
+    if (!ranking) {
+      throw new NotFoundException({
+        key: TK.RANKINGS.NOT_FOUND,
+        args: { id: rankingId },
+      });
+    }
+
+    const userObjectId = new Types.ObjectId(userId);
+    const isCurrentlyLiked = ranking.likedBy.some((id) =>
+      id.equals(userObjectId),
+    );
+
+    if (isCurrentlyLiked) {
+      // Unlike
+      await this.rankingModel.findByIdAndUpdate(rankingId, {
+        $pull: { likedBy: userObjectId },
+        $inc: { likesCount: -1 },
+      });
+      await this.userModel.findByIdAndUpdate(userId, {
+        $pull: { likedRankings: ranking._id },
+      });
+    } else {
+      // Like
+      await this.rankingModel.findByIdAndUpdate(rankingId, {
+        $addToSet: { likedBy: userObjectId },
+        $inc: { likesCount: 1 },
+      });
+      await this.userModel.findByIdAndUpdate(userId, {
+        $addToSet: { likedRankings: ranking._id },
+      });
+    }
+
+    // Invalidate cache
+    await this.invalidateRankingsListCache();
+
+    const updatedRanking = await this.rankingModel
+      .findById(rankingId)
+      .select('likesCount')
+      .exec();
+
+    return {
+      isLiked: !isCurrentlyLiked,
+      likesCount: updatedRanking?.likesCount ?? 0,
+    };
+  }
+
+  /**
+   * Check if a user has liked a ranking (utility - no fetch)
+   */
+  isLikedByUser(ranking: Ranking, userId: string | undefined): boolean {
+    if (!userId) return false;
+    return ranking.likedBy.some((id) => id.toString() === userId);
+  }
+
+  /**
+   * Browse all rankings with pagination
+   */
+  async findPaginated(
+    query: RankingQueryDto,
+  ): Promise<{ rankings: RankingListItem[]; total: number }> {
+    const {
+      page = 1,
+      limit = 20,
+      sortBy = LIKES_COUNT,
+      order = 'desc',
+      search,
+    } = query;
+
+    // Check if this is the default query (cacheable)
+    const isDefaultQuery =
+      page === 1 &&
+      limit === 20 &&
+      sortBy === LIKES_COUNT &&
+      order === 'desc' &&
+      !search;
+
+    // Try cache for default query
+    if (isDefaultQuery) {
+      const cached = await this.cacheService.get<{
+        rankings: RankingListItem[];
+        total: number;
+      }>(RANKINGS_LIST_DEFAULT_CACHE_KEY);
+      if (cached) {
+        return cached;
+      }
+    }
+
+    // Build aggregation pipeline
+    const pipeline: PipelineStage[] = [];
+
+    // Filter out empty rankings (no pokemon)
+    pipeline.push({
+      $match: {
+        $expr: { $gt: [{ $size: { $ifNull: ['$pokemon', []] } }, 0] },
+      },
+    });
+
+    // Lookup user data for username only
+    pipeline.push({
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'userData',
+        pipeline: [{ $project: { username: 1 } }],
+      },
+    });
+
+    // Unwind user data
+    pipeline.push({ $unwind: '$userData' });
+
+    // Apply search filter (title or username)
+    if (search) {
+      pipeline.push({
+        $match: {
+          $or: [
+            { title: { $regex: search, $options: 'i' } },
+            { 'userData.username': { $regex: search, $options: 'i' } },
+          ],
+        },
+      });
+    }
+
+    // Add pokemonCount field
+    pipeline.push({
+      $addFields: {
+        pokemonCount: { $size: { $ifNull: ['$pokemon', []] } },
+      },
+    });
+
+    // Sort
+    const sortField = sortBy === 'pokemonCount' ? 'pokemonCount' : sortBy;
+    pipeline.push({
+      $sort: { [sortField]: order === 'asc' ? 1 : -1, _id: -1 },
+    });
+
+    // Count total before pagination
+    const countPipeline: PipelineStage[] = [...pipeline, { $count: 'total' }];
+    const countResult = await this.rankingModel
+      .aggregate<{ total: number }>(countPipeline)
+      .exec();
+    const total = countResult[0]?.total ?? 0;
+
+    // Pagination
+    pipeline.push({ $skip: (page - 1) * limit });
+    pipeline.push({ $limit: limit });
+
+    // Get first pokemon image
+    pipeline.push({
+      $lookup: {
+        from: 'pokemon',
+        let: { firstPokemon: { $arrayElemAt: ['$pokemon', 0] } },
+        pipeline: [
+          { $match: { $expr: { $eq: ['$_id', '$$firstPokemon'] } } },
+          { $project: { image: 1 } },
+        ],
+        as: 'firstPokemonData',
+      },
+    });
+
+    // Project final shape
+    pipeline.push({
+      $project: {
+        _id: 1,
+        title: 1,
+        theme: 1,
+        image: { $arrayElemAt: ['$firstPokemonData.image', 0] },
+        pokemonCount: 1,
+        likesCount: 1,
+        createdAt: 1,
+        updatedAt: 1,
+        user: {
+          username: '$userData.username',
+        },
+      },
+    });
+
+    const rankings = await this.rankingModel
+      .aggregate<RankingListItem>(pipeline)
+      .exec();
+
+    const result = { rankings, total };
+
+    // Cache default query results
+    if (isDefaultQuery) {
+      await this.cacheService.set(
+        RANKINGS_LIST_DEFAULT_CACHE_KEY,
+        result,
+        RANKINGS_LIST_CACHE_TTL_SECONDS,
+      );
+    }
+
+    return result;
+  }
+
+  /**
+   * Invalidate the rankings list cache
+   */
+  async invalidateRankingsListCache(): Promise<void> {
+    await this.cacheService.del(RANKINGS_LIST_DEFAULT_CACHE_KEY);
   }
 }

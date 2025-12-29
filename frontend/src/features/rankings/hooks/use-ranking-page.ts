@@ -7,6 +7,7 @@ import {
 } from "@pokeranking/api-client";
 import { useIsOwner } from "@/features/users";
 import { useRankingUpdate } from "./use-ranking-update";
+import { useRankingLike } from "./use-ranking-like";
 
 interface UseRankingPageOptions {
   id: string;
@@ -25,6 +26,9 @@ interface UseRankingPageOptions {
 export function useRankingPage({ id }: UseRankingPageOptions) {
   const { data, isLoading, error } = useRankingsControllerFindOne(id);
   const { data: allPokemonData } = usePokemonControllerFindAll();
+
+  // Like functionality (mock for now, prepared for backend)
+  const { likeCount, isLiked, toggleLike } = useRankingLike({ rankingId: id });
 
   const ranking = useMemo(() => data?.data, [data]);
   const allPokemon = useMemo<PokemonResponseDto[]>(() => {
@@ -96,17 +100,29 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
   }, [discardDraft]);
 
   const handleSaveClick = useCallback(async () => {
+    const wasInitiallyEmpty = initialPokemon.length === 0;
     const success = await saveDraft();
     if (success) {
-      setIsEditMode(false);
+      if (wasInitiallyEmpty) {
+        // Full reload to fix grid rendering issue when going from empty to populated
+        window.location.reload();
+      } else {
+        setIsEditMode(false);
+      }
     }
-  }, [saveDraft]);
+  }, [saveDraft, initialPokemon.length]);
+
+  // Get top Pokemon for hero display
+  const topPokemon = pokemon[0]
+    ? { name: pokemon[0].name, image: pokemon[0].image, id: pokemon[0]._id }
+    : null;
 
   return {
     ranking,
     pokemon,
     setPokemon: updateDraft,
     positionColors,
+    zones,
     isOwner,
     isEditMode,
     setIsEditMode,
@@ -118,5 +134,11 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
     isLoading,
     error,
     notFound,
+    // Like functionality
+    likeCount,
+    isLiked,
+    toggleLike,
+    // Hero data
+    topPokemon,
   };
 }

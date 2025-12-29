@@ -50,6 +50,12 @@ export class User extends Document {
   boxes: Types.ObjectId[];
 
   @Prop({
+    type: [{ type: Types.ObjectId, ref: 'Ranking' }],
+    default: [],
+  })
+  likedRankings: Types.ObjectId[];
+
+  @Prop({
     type: String,
     enum: UserRole,
     default: UserRole.Member,

@@ -52,7 +52,12 @@ export class ImageKitProvider extends BaseImageProvider {
         publicId: result.fileId,
       };
     } catch (error) {
-      this.logger.error('ImageKit upload failed', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      const errorCode = (error as { code?: string })?.code;
+      this.logger.error(
+        `ImageKit upload failed: ${errorMessage}${errorCode ? ` (${errorCode})` : ''}`,
+      );
       throw new Error('Failed to upload image');
     }
   }
