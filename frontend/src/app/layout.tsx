@@ -86,9 +86,9 @@ export default function RootLayout({
         <Providers>
           <ConditionalNavbar />
           {children}
+          <GoogleAnalytics />
         </Providers>
         <Toaster richColors position="top-right" />
-        <GoogleAnalytics />
       </body>
     </html>
   );

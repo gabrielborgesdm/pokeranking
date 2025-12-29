@@ -26,5 +26,13 @@ export function useAnalytics() {
       track({ name: "donation_start", params: { method } }),
     trackDonationComplete: (method: "stripe" | "github") =>
       track({ name: "donation_complete", params: { method } }),
+    trackGithubReminderShown: () =>
+      track({ name: "github_reminder_shown", params: {} }),
+    trackGithubReminderStarClick: () =>
+      track({ name: "github_reminder_star_click", params: {} }),
+    trackGithubReminderContributeClick: () =>
+      track({ name: "github_reminder_contribute_click", params: {} }),
+    trackGithubReminderDismissed: () =>
+      track({ name: "github_reminder_dismissed", params: {} }),
   };
 }

@@ -12,6 +12,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { routes } from "@/lib/routes";
 import { usePokemonSearchContext } from "@/features/pokemon-search/context/pokemon-search-context";
 import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
 import { ShareButton } from "./share-button";
@@ -27,8 +28,6 @@ interface RankingActionBarProps {
   pokemon: PokemonResponseDto[];
   /** Whether the current user is the owner */
   isOwner: boolean;
-  /** Called when rank pokemon button is clicked */
-  onRankClick?: () => void;
   /** Maximum width for content alignment */
   maxContentWidth?: number;
   /** Optional class name */
@@ -48,7 +47,6 @@ export const RankingActionBar = memo(function RankingActionBar({
   rankingTitle,
   pokemon,
   isOwner,
-  onRankClick,
   maxContentWidth,
   className,
   isSearchEnabled = false,
@@ -58,7 +56,11 @@ export const RankingActionBar = memo(function RankingActionBar({
   const router = useRouter();
 
   const handleEditSettings = () => {
-    router.push(`/rankings/${rankingId}/edit`);
+    router.push(routes.rankingEdit(rankingId));
+  };
+
+  const handleRankPokemon = () => {
+    router.push(routes.rankingRank(rankingId));
   };
 
   return (
@@ -93,7 +95,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                       variant="outline"
                       size="icon"
                       className="h-9 w-9"
-                      onClick={onRankClick}
+                      onClick={handleRankPokemon}
                     >
                       <ListOrdered className="h-4 w-4" />
                       <span className="sr-only">
