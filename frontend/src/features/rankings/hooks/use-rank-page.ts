@@ -1,4 +1,7 @@
-import { useMemo, useState, useCallback } from "react";
+"use client";
+
+import { useMemo, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   useRankingsControllerFindOne,
   usePokemonControllerFindAll,
@@ -7,28 +10,25 @@ import {
 } from "@pokeranking/api-client";
 import { useIsOwner } from "@/features/users";
 import { useRankingUpdate } from "./use-ranking-update";
-import { useRankingLike } from "./use-ranking-like";
+import { routes } from "@/lib/routes";
 
-interface UseRankingPageOptions {
+interface UseRankPageOptions {
   id: string;
 }
 
 /**
- * Hook for managing the ranking page state
+ * Hook for managing the rank page (Pokemon editing) state
  *
  * Handles:
  * - Fetching ranking data
- * - Managing pokemon state
- * - Calculating isOwner
- * - Managing isEditMode
- * - Calculating positionColors from zones
+ * - Managing pokemon state via useRankingUpdate
+ * - Owner authorization (redirects non-owners)
+ * - Navigation after save/discard
  */
-export function useRankingPage({ id }: UseRankingPageOptions) {
+export function useRankPage({ id }: UseRankPageOptions) {
+  const router = useRouter();
   const { data, isLoading, error } = useRankingsControllerFindOne(id);
   const { data: allPokemonData } = usePokemonControllerFindAll();
-
-  // Like functionality (mock for now, prepared for backend)
-  const { likeCount, isLiked, toggleLike } = useRankingLike({ rankingId: id });
 
   const ranking = useMemo(() => data?.data, [data]);
   const allPokemon = useMemo<PokemonResponseDto[]>(() => {
@@ -39,8 +39,6 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
   }, [allPokemonData]);
 
   const isOwner = useIsOwner(ranking?.user?.username);
-
-  const [isEditMode, setIsEditMode] = useState(false);
 
   // Initial pokemon from the ranking
   const initialPokemon = useMemo<PokemonResponseDto[]>(
@@ -62,9 +60,6 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
     allPokemon,
   });
 
-  // Use draft pokemon when in edit mode, otherwise use initial
-  const pokemon = isEditMode ? draftPokemon : initialPokemon;
-
   const zones = useMemo<ZoneResponseDto[]>(
     () => ranking?.zones ?? [],
     [ranking]
@@ -73,7 +68,7 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
   // Build position -> color map based on zones and pokemon count
   const positionColors = useMemo(() => {
     const map = new Map<number, string>();
-    const pokemonCount = pokemon.length;
+    const pokemonCount = draftPokemon.length;
 
     for (let pos = 1; pos <= pokemonCount; pos++) {
       for (const zone of zones) {
@@ -86,59 +81,50 @@ export function useRankingPage({ id }: UseRankingPageOptions) {
     }
 
     return map;
-  }, [zones, pokemon.length]);
+  }, [zones, draftPokemon.length]);
 
   const notFound = error || (data && data.status === 404);
 
-  const handleEditClick = useCallback(() => {
-    setIsEditMode(true);
-  }, []);
+  // Redirect non-owners to view page
+  const isUnauthorized = !isLoading && ranking && !isOwner;
 
-  const handleDiscardClick = useCallback(() => {
-    discardDraft();
-    setIsEditMode(false);
-  }, [discardDraft]);
+  useEffect(() => {
+    if (isUnauthorized) {
+      router.replace(routes.ranking(id));
+    }
+  }, [isUnauthorized, router, id]);
 
-  const handleSaveClick = useCallback(async () => {
+  const handleSave = useCallback(async () => {
     const wasInitiallyEmpty = initialPokemon.length === 0;
     const success = await saveDraft();
     if (success) {
       if (wasInitiallyEmpty) {
         // Full reload to fix grid rendering issue when going from empty to populated
-        window.location.reload();
+        window.location.href = routes.ranking(id);
       } else {
-        setIsEditMode(false);
+        router.push(routes.ranking(id));
       }
     }
-  }, [saveDraft, initialPokemon.length]);
+  }, [saveDraft, router, id, initialPokemon.length]);
 
-  // Get top Pokemon for hero display
-  const topPokemon = pokemon[0]
-    ? { name: pokemon[0].name, image: pokemon[0].image, id: pokemon[0]._id }
-    : null;
+  const handleDiscard = useCallback(() => {
+    discardDraft();
+    router.push(routes.ranking(id));
+  }, [discardDraft, router, id]);
 
   return {
     ranking,
-    pokemon,
+    pokemon: draftPokemon,
     setPokemon: updateDraft,
     positionColors,
     zones,
-    isOwner,
-    isEditMode,
-    setIsEditMode,
-    handleEditClick,
-    handleDiscardClick,
-    handleSaveClick,
     hasUnsavedChanges: isDirty,
     isSaving,
+    handleSave,
+    handleDiscard,
     isLoading,
     error,
     notFound,
-    // Like functionality
-    likeCount,
-    isLiked,
-    toggleLike,
-    // Hero data
-    topPokemon,
+    isUnauthorized,
   };
 }

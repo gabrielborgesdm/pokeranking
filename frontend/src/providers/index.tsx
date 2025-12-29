@@ -8,6 +8,7 @@ import { LanguageProvider } from "./language-provider";
 import { ThemeProvider } from "./theme-provider";
 import { ScreenSizeProvider } from "./screen-size-provider";
 import { InitialLoad } from "@/components/initial-load";
+import { GithubReminderToast } from "@/components/github-reminder-toast";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
@@ -17,7 +18,10 @@ export function Providers({ children }: { children: ReactNode }) {
           <QueryProvider>
             <InitialLoad />
             <I18nProvider>
-              <LanguageProvider>{children}</LanguageProvider>
+              <LanguageProvider>
+                {children}
+                <GithubReminderToast />
+              </LanguageProvider>
             </I18nProvider>
           </QueryProvider>
         </ScreenSizeProvider>

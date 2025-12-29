@@ -438,5 +438,11 @@
       "showDetails": "More details",
       "hideDetails": "Hide details"
     }
+  },
+  "githubReminder": {
+    "title": "Enjoying Pokeranking?",
+    "description": "Support the project by giving us a star on GitHub or contributing in other ways!",
+    "starButton": "Star on GitHub",
+    "contributeButton": "Other ways to help"
   }
 }

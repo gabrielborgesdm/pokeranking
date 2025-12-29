@@ -13,6 +13,7 @@ export const routes = {
   rankings: "/rankings",
   ranking: (id: string) => `/rankings/${id}` as const,
   rankingEdit: (id: string) => `/rankings/${id}/edit` as const,
+  rankingRank: (id: string) => `/rankings/${id}/rank` as const,
   rankingNew: "/rankings/new",
   userRankings: (username: string) => `/rankings/user/${username}` as const,
   support: "/support",
