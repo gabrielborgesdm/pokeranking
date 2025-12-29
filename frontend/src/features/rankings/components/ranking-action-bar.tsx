@@ -67,7 +67,7 @@ export const RankingActionBar = memo(function RankingActionBar({
     <>
       <div className={cn("flex justify-center px-4 sm:px-0", className)}>
         <div
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-4 sm:py-5 mt-6 sm:mt-8 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
         >
           {/* Search input - opens search overlay */}

@@ -22,7 +22,7 @@ export function PokemonListingCardsSkeleton({
   return (
     <main className={cn("space-y-0", className)}>
       {/* Hero Skeleton */}
-      <div className="mt-4 mx-4 sm:mx-auto max-w-[1044px] rounded-2xl py-8 sm:py-16 px-4 sm:px-6 bg-muted/50">
+      <div className="mt-6 mx-4 sm:mx-auto max-w-[1044px] rounded-2xl py-8 sm:py-12 px-4 sm:px-6 bg-muted/50">
         <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-6">
           {/* Left: Top Pokemon Image */}
           <div className="shrink-0">
@@ -47,7 +47,7 @@ export function PokemonListingCardsSkeleton({
 
       {/* Action Bar Skeleton */}
       <div className="flex justify-center px-4 sm:px-0">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-4 sm:py-5 mt-6 sm:mt-8 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 max-w-[1044px]">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 max-w-[1044px]">
           {/* Search input */}
           <div className="flex-1 sm:max-w-sm">
             <Skeleton className="h-9 w-full" />
@@ -64,7 +64,7 @@ export function PokemonListingCardsSkeleton({
       </div>
 
       {/* Pokemon Cards with Zone Headers */}
-      <div className="flex justify-center px-1 md:px-4 pt-6">
+      <div className="flex justify-center px-1 md:px-4 mt-6">
         <div className="w-full max-w-[1044px] space-y-6">
           {/* First Zone (S-Tier) */}
           <div className="space-y-4">
@@ -77,7 +77,7 @@ export function PokemonListingCardsSkeleton({
                 "grid",
                 isCompact
                   ? "grid-cols-3 gap-3.5"
-                  : "grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-9"
+                  : "grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 md:gap-6 lg:gap-9"
               )}
             >
               {Array.from({ length: firstZoneCount }).map((_, i) => (
@@ -98,7 +98,7 @@ export function PokemonListingCardsSkeleton({
                   "grid",
                   isCompact
                     ? "grid-cols-3 gap-3.5"
-                    : "grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-9"
+                    : "grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4 md:gap-6 lg:gap-9"
                 )}
               >
                 {Array.from({ length: secondZoneCount }).map((_, i) => (
