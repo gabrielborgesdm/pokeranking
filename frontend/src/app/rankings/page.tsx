@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
@@ -14,10 +14,12 @@ import { ErrorMessage } from "@/components/error-message";
 import { AnimatedList } from "@/components/animated-list";
 import { normalizePokemonImageSrc } from "@/lib/image-utils";
 import { routes } from "@/lib/routes";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function RankingsListPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const { trackPageView, trackPaginationChange, trackSortChange } = useAnalytics();
   const {
     currentPage,
     search,
@@ -36,11 +38,39 @@ export default function RankingsListPage() {
     ITEMS_PER_PAGE,
   } = useRankingsList();
 
+  useEffect(() => {
+    trackPageView("rankings", "Rankings List");
+  }, [trackPageView]);
+
   const handleRankingClick = useCallback(
     (id: string) => {
       router.push(routes.ranking(id));
     },
     [router]
+  );
+
+  const handlePageChangeWithTracking = useCallback(
+    (page: number) => {
+      handlePageChange(page);
+      trackPaginationChange("rankings", page);
+    },
+    [handlePageChange, trackPaginationChange]
+  );
+
+  const handleSortByChangeWithTracking = useCallback(
+    (newSortBy: typeof sortBy) => {
+      handleSortByChange(newSortBy);
+      trackSortChange("rankings", newSortBy, order);
+    },
+    [handleSortByChange, trackSortChange, order]
+  );
+
+  const handleOrderChangeWithTracking = useCallback(
+    (newOrder: typeof order) => {
+      handleOrderChange(newOrder);
+      trackSortChange("rankings", sortBy, newOrder);
+    },
+    [handleOrderChange, trackSortChange, sortBy]
   );
 
   const rankingCards = useMemo(
@@ -90,8 +120,8 @@ export default function RankingsListPage() {
           sortBy={sortBy}
           order={order}
           onSearchChange={handleSearchChange}
-          onSortByChange={handleSortByChange}
-          onOrderChange={handleOrderChange}
+          onSortByChange={handleSortByChangeWithTracking}
+          onOrderChange={handleOrderChangeWithTracking}
         />
 
         {isLoading ? (
@@ -120,7 +150,7 @@ export default function RankingsListPage() {
               totalPages={totalPages}
               total={total}
               limit={ITEMS_PER_PAGE}
-              onPageChange={handlePageChange}
+              onPageChange={handlePageChangeWithTracking}
             />
           </>
         )}

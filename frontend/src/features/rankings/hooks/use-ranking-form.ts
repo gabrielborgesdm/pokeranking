@@ -59,7 +59,7 @@ export function useRankingForm({
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [error, setError] = useState<string | null>(null);
-  const { trackRankingCreate } = useAnalytics();
+  const { trackRankingCreate, trackRankingEdit } = useAnalytics();
   const username = session?.user?.username ?? "";
 
   const createMutation = useRankingsControllerCreate();
@@ -118,6 +118,7 @@ export function useRankingForm({
         {
           onSuccess: (response) => {
             if (response.status === 200) {
+              trackRankingEdit(rankingId, data.title);
               // Invalidate queries to refresh rankings list and ranking detail
               queryClient.invalidateQueries({
                 queryKey: getAuthControllerGetProfileQueryKey(),

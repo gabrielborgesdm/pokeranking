@@ -26,6 +26,7 @@ import { RankingsDropdown } from "@/components/rankings-dropdown";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 function NavbarSkeleton() {
   return (
@@ -223,6 +224,19 @@ export function Navbar() {
   const isAuthenticated = status === "authenticated";
   const isAdmin = useIsAdmin();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { trackNavbarMenuOpen, trackThemeToggle } = useAnalytics();
+
+  const handleMobileMenuChange = (open: boolean) => {
+    setMobileMenuOpen(open);
+    if (open) {
+      trackNavbarMenuOpen();
+    }
+  };
+
+  const handleThemeToggle = () => {
+    toggleTheme();
+    trackThemeToggle(isDark ? "light" : "dark");
+  };
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -272,12 +286,12 @@ export function Navbar() {
                 isAdmin={isAdmin}
                 isDark={isDark}
                 ThemeIcon={ThemeIcon}
-                toggleTheme={toggleTheme}
+                toggleTheme={handleThemeToggle}
               />
             </>
           ) : (
             <>
-              <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              <Button variant="ghost" size="icon" onClick={handleThemeToggle}>
                 <ThemeIcon className="h-5 w-5" />
                 <span className="sr-only">{t("nav.toggleTheme")}</span>
               </Button>
@@ -293,7 +307,7 @@ export function Navbar() {
 
         {/* Mobile Menu */}
         <div className="flex flex-1 items-center justify-end md:hidden">
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+          <Sheet open={mobileMenuOpen} onOpenChange={handleMobileMenuChange}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
@@ -377,7 +391,7 @@ export function Navbar() {
                 <div className="mb-4 flex items-center justify-between gap-2">
                   {/* Theme toggle */}
                   <button
-                    onClick={toggleTheme}
+                    onClick={handleThemeToggle}
                     className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
                   >
                     {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}

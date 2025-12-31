@@ -167,6 +167,10 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  a {
+    cursor: pointer;
+  }
 }
 
 /* Pokemon-themed scrollbar */
@@ -507,4 +511,11 @@
   animation: pokemon-highlight 1.5s ease-out forwards;
   z-index: 50;
   position: relative;
+}
+
+/* Stripe Checkout Styling */
+.stripe-checkout-container {
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--card);
 }

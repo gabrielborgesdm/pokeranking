@@ -132,7 +132,7 @@ export const RankingActionBar = memo(function RankingActionBar({
             <ShareButton rankingId={rankingId} rankingTitle={rankingTitle} />
 
             {/* Export button - visible to all */}
-            <ExportButton rankingTitle={rankingTitle} pokemon={pokemon} />
+            <ExportButton rankingId={rankingId} rankingTitle={rankingTitle} pokemon={pokemon} />
           </div>
         </div>
       </div>

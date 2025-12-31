@@ -17,8 +17,10 @@ import {
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 interface ExportButtonProps {
+  rankingId: string;
   rankingTitle: string;
   pokemon: PokemonResponseDto[];
 }
@@ -31,10 +33,12 @@ interface ExportPokemon {
 }
 
 export const ExportButton = memo(function ExportButton({
+  rankingId,
   rankingTitle,
   pokemon,
 }: ExportButtonProps) {
   const { t } = useTranslation();
+  const { trackRankingExport } = useAnalytics();
 
   const prepareExportData = useCallback((): ExportPokemon[] => {
     return pokemon.map((p, index) => ({
@@ -86,8 +90,9 @@ export const ExportButton = memo(function ExportButton({
 
     const filename = `${sanitizeFilename(rankingTitle)}-ranking.csv`;
     downloadFile(csvContent, filename, "text/csv;charset=utf-8");
+    trackRankingExport(rankingId, "csv");
     toast.success(t("rankingView.exportSuccess"));
-  }, [prepareExportData, sanitizeFilename, rankingTitle, downloadFile, t]);
+  }, [prepareExportData, sanitizeFilename, rankingTitle, downloadFile, t, trackRankingExport, rankingId]);
 
   const handleExportJson = useCallback(() => {
     const data = prepareExportData();
@@ -100,8 +105,9 @@ export const ExportButton = memo(function ExportButton({
     const jsonContent = JSON.stringify(exportObject, null, 2);
     const filename = `${sanitizeFilename(rankingTitle)}-ranking.json`;
     downloadFile(jsonContent, filename, "application/json");
+    trackRankingExport(rankingId, "json");
     toast.success(t("rankingView.exportSuccess"));
-  }, [prepareExportData, sanitizeFilename, rankingTitle, downloadFile, t]);
+  }, [prepareExportData, sanitizeFilename, rankingTitle, downloadFile, t, trackRankingExport, rankingId]);
 
   return (
     <DropdownMenu>

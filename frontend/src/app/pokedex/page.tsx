@@ -1,14 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BookOpen } from "lucide-react";
 import {
   TypeEffectivenessCalculator,
   PokemonListSection,
 } from "@/features/pokemon";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function PokedexPage() {
   const { t } = useTranslation();
+  const { trackPageView } = useAnalytics();
+
+  useEffect(() => {
+    trackPageView("pokedex", "Pokedex");
+  }, [trackPageView]);
 
   return (
     <main className="container mx-auto px-4 py-8">
