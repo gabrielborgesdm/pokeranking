@@ -272,9 +272,15 @@
       "description": "Giving a star is like giving a thumbs up! It helps more people discover Pokeranking and shows your support. It's free and takes just one click.",
       "button": "Give a Star"
     },
+    "pix": {
+      "title": "Pix (Brazil)",
+      "description": "Quick and easy donation via Pix - instant Brazilian payment method.",
+      "scanQrCode": "Scan QR Code",
+      "pixKey": "Pix Key (Copy & Paste)"
+    },
     "stripe": {
-      "title": "Support Us",
-      "description": "Make a one-time donation to help cover server costs and development. Pay with Card or Pix."
+      "title": "Credit Card",
+      "description": "Make a one-time donation to help cover server costs and development."
     }
   },
   "nav": {

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useAuthControllerResetPassword, isApiError } from "@pokeranking/api-client";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const resetPasswordSchema = z
   .object({
@@ -28,6 +29,7 @@ export function useResetPassword() {
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { trackResetPasswordSubmit } = useAnalytics();
 
   const resetPasswordMutation = useAuthControllerResetPassword();
 
@@ -46,6 +48,7 @@ export function useResetPassword() {
       { data: { token, password: data.password } },
       {
         onSuccess: () => {
+          trackResetPasswordSubmit();
           setSuccess(true);
           setTimeout(() => {
             router.push("/signin");

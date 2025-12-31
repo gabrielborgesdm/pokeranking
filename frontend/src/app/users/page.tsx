@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
@@ -14,10 +14,12 @@ import { ErrorMessage } from "@/components/error-message";
 import { getVariantByIndex } from "@/lib/utils";
 import { AnimatedList } from "@/components/animated-list";
 import { routes } from "@/lib/routes";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function UsersPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const { trackPageView, trackPaginationChange, trackLeaderboardUserClick } = useAnalytics();
   const {
     currentPage,
     searchUsername,
@@ -36,11 +38,24 @@ export default function UsersPage() {
     ITEMS_PER_PAGE,
   } = useLeaderboard();
 
+  useEffect(() => {
+    trackPageView("leaderboard", "Leaderboard");
+  }, [trackPageView]);
+
   const handleUserClick = useCallback(
-    (username: string) => {
+    (userId: string, username: string) => {
+      trackLeaderboardUserClick(userId, username);
       router.push(routes.userRankings(username));
     },
-    [router]
+    [router, trackLeaderboardUserClick]
+  );
+
+  const handlePageChangeWithTracking = useCallback(
+    (page: number) => {
+      handlePageChange(page);
+      trackPaginationChange("leaderboard", page);
+    },
+    [handlePageChange, trackPaginationChange]
   );
 
   const userCards = useMemo(
@@ -57,7 +72,7 @@ export default function UsersPage() {
             variant={getVariantByIndex(index)}
             onClick={
               user.rankings.length > 0
-                ? () => handleUserClick(user.username)
+                ? () => handleUserClick(user.username, user.username)
                 : undefined
             }
           />
@@ -119,7 +134,7 @@ export default function UsersPage() {
               totalPages={totalPages}
               total={total}
               limit={ITEMS_PER_PAGE}
-              onPageChange={handlePageChange}
+              onPageChange={handlePageChangeWithTracking}
             />
           </>
         )}

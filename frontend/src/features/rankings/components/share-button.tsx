@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 interface ShareButtonProps {
   rankingId: string;
@@ -49,6 +50,7 @@ export const ShareButton = memo(function ShareButton({
   rankingTitle,
 }: ShareButtonProps) {
   const { t } = useTranslation();
+  const { trackRankingShare } = useAnalytics();
 
   const getShareUrl = useCallback(() => {
     if (typeof window === "undefined") return "";
@@ -59,11 +61,12 @@ export const ShareButton = memo(function ShareButton({
     const url = getShareUrl();
     try {
       await navigator.clipboard.writeText(url);
+      trackRankingShare(rankingId, "copy_url");
       toast.success(t("rankingView.urlCopied"));
     } catch {
       toast.error(t("common.error"));
     }
-  }, [getShareUrl, t]);
+  }, [getShareUrl, t, trackRankingShare, rankingId]);
 
   const handleShareTwitter = useCallback(() => {
     const url = getShareUrl();
@@ -71,22 +74,25 @@ export const ShareButton = memo(function ShareButton({
       t("rankingView.shareMessageTwitter", { title: rankingTitle })
     );
     const shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
+    trackRankingShare(rankingId, "twitter");
     window.open(shareUrl, "_blank", "noopener,noreferrer");
-  }, [getShareUrl, rankingTitle, t]);
+  }, [getShareUrl, rankingTitle, t, trackRankingShare, rankingId]);
 
   const handleShareFacebook = useCallback(() => {
     const url = getShareUrl();
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    trackRankingShare(rankingId, "facebook");
     window.open(shareUrl, "_blank", "noopener,noreferrer");
-  }, [getShareUrl]);
+  }, [getShareUrl, trackRankingShare, rankingId]);
 
   const handleShareWhatsapp = useCallback(() => {
     const url = getShareUrl();
     const message = t("rankingView.shareMessageWhatsapp", { title: rankingTitle });
     const text = encodeURIComponent(`${message}\n\n${url}`);
     const shareUrl = `https://wa.me/?text=${text}`;
+    trackRankingShare(rankingId, "whatsapp");
     window.open(shareUrl, "_blank", "noopener,noreferrer");
-  }, [getShareUrl, rankingTitle, t]);
+  }, [getShareUrl, rankingTitle, t, trackRankingShare, rankingId]);
 
   return (
     <DropdownMenu>

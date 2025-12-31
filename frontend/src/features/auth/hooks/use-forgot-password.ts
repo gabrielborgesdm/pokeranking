@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useAuthControllerForgotPassword, isApiError } from "@pokeranking/api-client";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email(),
@@ -17,6 +18,7 @@ export function useForgotPassword() {
   const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { trackForgotPasswordSubmit } = useAnalytics();
 
   const forgotPasswordMutation = useAuthControllerForgotPassword();
 
@@ -35,6 +37,7 @@ export function useForgotPassword() {
       { data },
       {
         onSuccess: () => {
+          trackForgotPasswordSubmit();
           setSuccess(true);
         },
         onError: (err) => {
