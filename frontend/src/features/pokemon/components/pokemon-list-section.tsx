@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useMemo, useEffect } from "react";
+import { memo, useState, useMemo, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import type { PokemonType } from "@pokeranking/shared";
 import { PokemonSearchFilters } from "./pokemon-search-filters";
@@ -10,6 +10,7 @@ import { PokemonDetailsDialog } from "./pokemon-details-dialog";
 import { EmptyPokemonCard } from "../empty-pokemon-card";
 import { Pagination } from "@/components/pagination";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const ITEMS_PER_PAGE = 24;
 
@@ -19,6 +20,7 @@ export const PokemonListSection = memo(function PokemonListSection() {
     null
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const { trackPokemonDetailsView, trackPokedexFilterChange, trackPaginationChange } = useAnalytics();
 
   const {
     pokemon,
@@ -40,6 +42,17 @@ export const PokemonListSection = memo(function PokemonListSection() {
     setCurrentPage(1);
   }, [search, selectedTypes, generation, sortBy, order]);
 
+  // Track filter changes
+  useEffect(() => {
+    if (selectedTypes.length > 0 || generation || sortBy !== "pokedexNumber") {
+      trackPokedexFilterChange({
+        types: selectedTypes.length > 0 ? selectedTypes.join(",") : undefined,
+        generation: generation ? String(generation) : undefined,
+        sort_by: sortBy !== "pokedexNumber" ? sortBy : undefined,
+      });
+    }
+  }, [selectedTypes, generation, sortBy, trackPokedexFilterChange]);
+
   const totalPages = Math.ceil(pokemon.length / ITEMS_PER_PAGE);
 
   const paginatedPokemon = useMemo(() => {
@@ -47,6 +60,16 @@ export const PokemonListSection = memo(function PokemonListSection() {
     const end = start + ITEMS_PER_PAGE;
     return pokemon.slice(start, end);
   }, [pokemon, currentPage]);
+
+  const handlePokemonClick = useCallback((pokemonItem: typeof pokemon[0]) => {
+    setSelectedPokemonId(pokemonItem._id);
+    trackPokemonDetailsView(pokemonItem._id, pokemonItem.name);
+  }, [trackPokemonDetailsView]);
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    trackPaginationChange("pokedex", page);
+  }, [trackPaginationChange]);
 
   return (
     <div className="space-y-6">
@@ -90,7 +113,7 @@ export const PokemonListSection = memo(function PokemonListSection() {
               name={p.name}
               image={p.image}
               types={p.types as PokemonType[]}
-              onClick={() => setSelectedPokemonId(p._id)}
+              onClick={() => handlePokemonClick(p)}
               className="min-w-0"
             />
           ))}
@@ -102,7 +125,7 @@ export const PokemonListSection = memo(function PokemonListSection() {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={setCurrentPage}
+          onPageChange={handlePageChange}
         />
       )}
 

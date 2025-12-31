@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const signInSchema = z.object({
   email: z.string().email(),
@@ -20,6 +21,7 @@ export function useSignIn() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { trackSignInSuccess, trackSignInError } = useAnalytics();
 
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
@@ -42,10 +44,12 @@ export function useSignIn() {
     setIsLoading(false);
 
     if (result?.error) {
+      trackSignInError(result.error);
       setError(t("auth.invalidCredentials"));
       return;
     }
 
+    trackSignInSuccess("credentials");
     router.push("/");
     router.refresh();
   }

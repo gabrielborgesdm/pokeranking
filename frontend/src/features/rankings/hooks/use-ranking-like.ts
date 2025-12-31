@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRankingsControllerToggleLike } from "@pokeranking/api-client";
 import { useQueryClient } from "@tanstack/react-query";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 interface UseRankingLikeOptions {
   /** Ranking ID */
@@ -38,6 +39,7 @@ export function useRankingLike({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [isLoading, setIsLoading] = useState(false);
+  const { trackRankingLike, trackRankingUnlike } = useAnalytics();
 
   const { mutateAsync: toggleLikeMutation } =
     useRankingsControllerToggleLike();
@@ -57,6 +59,12 @@ export function useRankingLike({
       if (response.status === 200) {
         setIsLiked(response.data.isLiked);
         setLikeCount(response.data.likesCount);
+        // Track like/unlike based on final server state
+        if (response.data.isLiked) {
+          trackRankingLike(rankingId);
+        } else {
+          trackRankingUnlike(rankingId);
+        }
       }
       // Invalidate rankings list cache
       void queryClient.invalidateQueries({ queryKey: ["/rankings"] });
@@ -75,6 +83,8 @@ export function useRankingLike({
     isLoading,
     toggleLikeMutation,
     queryClient,
+    trackRankingLike,
+    trackRankingUnlike,
   ]);
 
   return {
