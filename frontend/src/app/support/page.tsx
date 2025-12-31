@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { MessageSquare } from "lucide-react";
 import {
@@ -21,10 +22,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useSupportForm } from "@/features/support";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function SupportPage() {
   const { t } = useTranslation();
   const { form, error, isLoading, onSubmit } = useSupportForm();
+  const { trackPageView } = useAnalytics();
+
+  useEffect(() => {
+    trackPageView("support", "Support");
+  }, [trackPageView]);
 
   const messageValue = form.watch("message");
   const characterCount = messageValue?.length || 0;

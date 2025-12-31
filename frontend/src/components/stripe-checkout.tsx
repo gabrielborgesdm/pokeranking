@@ -20,7 +20,7 @@ export function StripeCheckout() {
   }
 
   return (
-    <div id="checkout">
+    <div id="checkout" className="stripe-checkout-container">
       <EmbeddedCheckoutProvider
         stripe={stripePromise}
         options={{ fetchClientSecret }}

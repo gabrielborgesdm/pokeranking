@@ -10,6 +10,7 @@ import {
   useSupportControllerCreate,
   isApiError,
 } from "@pokeranking/api-client";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const supportFormSchema = z.object({
   message: z.string().min(10).max(2000),
@@ -20,6 +21,7 @@ export type SupportFormData = z.infer<typeof supportFormSchema>;
 export function useSupportForm() {
   const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
+  const { trackSupportSubmitSuccess, trackSupportSubmitError } = useAnalytics();
 
   const mutation = useSupportControllerCreate();
 
@@ -38,6 +40,7 @@ export function useSupportForm() {
       {
         onSuccess: (response) => {
           if (response.status === 201) {
+            trackSupportSubmitSuccess();
             toast.success(t("support.successTitle"), {
               description: t("support.successMessage"),
             });
@@ -46,8 +49,10 @@ export function useSupportForm() {
         },
         onError: (err) => {
           if (isApiError(err)) {
+            trackSupportSubmitError(err.message);
             setError(err.message);
           } else {
+            trackSupportSubmitError("unknown_error");
             setError(t("support.errorMessage"));
           }
         },

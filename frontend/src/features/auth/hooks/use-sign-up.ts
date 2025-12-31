@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useAuthControllerRegister, isApiError } from "@pokeranking/api-client";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const signUpSchema = z.object({
   email: z.string().email(),
@@ -21,6 +22,7 @@ export function useSignUp() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const registerMutation = useAuthControllerRegister();
+  const { trackSignUpSuccess, trackSignUpError } = useAnalytics();
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
@@ -39,6 +41,7 @@ export function useSignUp() {
       {
         onSuccess: (response) => {
           if (response.status === 201) {
+            trackSignUpSuccess();
             router.push(
               `/verify-email?email=${encodeURIComponent(data.email)}`
             );
@@ -46,8 +49,10 @@ export function useSignUp() {
         },
         onError: (err) => {
           if (isApiError(err)) {
+            trackSignUpError(err.message);
             setError(err.message);
           } else {
+            trackSignUpError("unknown_error");
             setError(t("auth.registrationFailed"));
           }
         },

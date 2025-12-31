@@ -297,9 +297,15 @@
       "description": "Dar uma estrela é como dar um joinha! Ajuda mais pessoas a descobrirem o Pokeranking e mostra seu apoio. É grátis e leva apenas um clique.",
       "button": "Dar uma Estrela"
     },
+    "pix": {
+      "title": "Pix",
+      "description": "Doação rápida e fácil via Pix - pagamento instantâneo.",
+      "scanQrCode": "Escaneie o QR Code",
+      "pixKey": "Chave Pix (Copiar e Colar)"
+    },
     "stripe": {
-      "title": "Nos Apoie",
-      "description": "Faça uma doação única para ajudar a cobrir custos de servidor e desenvolvimento. Pague com Cartão ou Pix."
+      "title": "Cartão de Crédito",
+      "description": "Faça uma doação única para ajudar a cobrir custos de servidor e desenvolvimento."
     }
   },
   "pokedex": {

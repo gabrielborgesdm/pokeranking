@@ -14,7 +14,8 @@ import { LoadingFallback } from "@/components/loading-fallback";
 import { notFound } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { routes } from "@/lib/routes";
-import { use, useCallback } from "react";
+import { use, useCallback, useEffect, useRef } from "react";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;
@@ -25,6 +26,9 @@ export default function RankingPage({ params }: RankingPageProps) {
   const { isResizing } = useScreenSize();
   const router = useRouter();
   const { isMobile } = useScreenSize();
+
+  const { trackRankingView } = useAnalytics();
+  const hasTrackedRef = useRef(false);
 
   const {
     ranking,
@@ -38,6 +42,14 @@ export default function RankingPage({ params }: RankingPageProps) {
     toggleLike,
     topPokemon,
   } = useRankingViewPage({ id });
+
+  // Track ranking view once when ranking data is loaded
+  useEffect(() => {
+    if (ranking && !hasTrackedRef.current) {
+      hasTrackedRef.current = true;
+      trackRankingView(id, ranking.title);
+    }
+  }, [ranking, id, trackRankingView]);
 
   const handleAddPokemon = useCallback(() => {
     router.push(routes.rankingRank(id));

@@ -8,6 +8,7 @@ import {
   getAuthControllerGetProfileQueryKey,
   type PokemonResponseDto,
 } from "@pokeranking/api-client";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const DRAFT_KEY_PREFIX = "ranking-draft:";
 const DEBOUNCE_MS = 500;
@@ -106,6 +107,7 @@ export function useRankingUpdate({
 }: UseRankingUpdateOptions): UseRankingUpdateReturn {
   const queryClient = useQueryClient();
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const { trackRankingUpdate } = useAnalytics();
 
   // Track initial pokemon IDs for dirty checking
   const initialPokemonIdsRef = useRef<string[]>([]);
@@ -211,6 +213,8 @@ export function useRankingUpdate({
         data: { pokemon: pokemonIds },
       });
 
+      trackRankingUpdate(rankingId);
+
       // Clear draft from localStorage
       clearDraftFromStorage(rankingId);
       setHasDraft(false);
@@ -233,7 +237,7 @@ export function useRankingUpdate({
     } finally {
       setIsSaving(false);
     }
-  }, [draftPokemon, rankingId, updateRanking, queryClient]);
+  }, [draftPokemon, rankingId, updateRanking, queryClient, trackRankingUpdate]);
 
   const discardDraft = useCallback(() => {
     // Cancel any pending debounced save
