@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, Trash2, X, Save } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { DndContext, type SensorDescriptor, type SensorOptions } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
@@ -13,48 +14,54 @@ import {
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
-import { PickerHeaderFilters } from "./picker-header-filters";
+import { PokemonDropzone, PokemonPicker } from "@/features/pokemon-picker";
+import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
+import { DesktopFilterPanel } from "@/features/pokemon-picker/components/desktop/desktop-filter-panel";
+import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
+import { useFilterState } from "@/features/pokemon-picker/hooks/use-filter-state";
+import type { PokemonResponseDto } from "@pokeranking/api-client";
 
-interface PickerDropzoneLayoutProps {
-  dropzone: React.ReactNode;
-  picker: React.ReactNode;
-  /** Number of active filters to show on badge */
-  activeFilterCount?: number;
-  /** Called when filter button is clicked */
-  onOpenFilters?: () => void;
-  /** Whether there are unsaved changes (shows indicator + enables save) */
+interface DesktopRankingEditingProps {
+  pokemon: PokemonResponseDto[];
+  setPokemon: (pokemon: PokemonResponseDto[]) => void;
+  positionColors: Map<number, string>;
   hasUnsavedChanges?: boolean;
-  /** Whether save is in progress */
   isSaving?: boolean;
-  /** Called when save button is clicked */
   onSave?: () => void;
-  /** Called when discard is confirmed */
   onDiscard?: () => void;
-  className?: string;
+  sensors: SensorDescriptor<SensorOptions>[];
+  filteredOutIds: string[];
+  disabledIds: string[];
 }
 
 /**
- * Responsive layout for PokemonDropzone and PokemonPicker.
- * - Desktop (md+): Two-column grid with dropzone left, picker right
- * - Mobile: Full-width stacked sections
- * - Includes section headers with search for ranking Pokemon
+ * Desktop ranking editor with two-column layout.
+ * Left side: dropzone with ranked Pokemon
+ * Right side: Pokemon picker with filter panel
  */
-export function PickerDropzoneLayout({
-  dropzone,
-  picker,
-  activeFilterCount = 0,
-  onOpenFilters,
+export const DesktopRankingEditing = memo(function DesktopRankingEditing({
+  pokemon,
+  setPokemon,
+  positionColors,
   hasUnsavedChanges = false,
   isSaving = false,
   onSave,
   onDiscard,
-  className,
-}: PickerDropzoneLayoutProps) {
+  sensors,
+  filteredOutIds,
+  disabledIds,
+}: DesktopRankingEditingProps) {
   const { t } = useTranslation();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
   const searchContext = usePokemonSearchContextOptional();
   const isSearchEnabled = searchContext !== null;
   const isEditMode = onSave !== undefined || onDiscard !== undefined;
+
+  // Pokemon data for picker
+  const { pokemon: pickerPokemon, isLoading: pickerLoading } = useAllPokemon();
+  const filterState = useFilterState();
 
   const handleDiscardClick = () => {
     if (hasUnsavedChanges) {
@@ -70,26 +77,16 @@ export function PickerDropzoneLayout({
   };
 
   return (
-    <>
-      <div
-        className={cn(
-          "grid gap-4",
-          // Mobile: single column, auto rows that fit content
-          "grid-cols-1 auto-rows-min",
-          // Desktop: two equal columns, single row
-          "md:grid-cols-2 md:grid-rows-1",
-          className
-        )}
-      >
-        {/* Dropzone - left on desktop, top on mobile */}
-        <div className="min-h-0 overflow-hidden max-h-[45dvh] md:max-h-none flex flex-col">
-          {/* Section header with search and edit controls */}
-          <div className="flex items-center justify-between gap-3 px-4 py-1 md:px-8 md:py-2 border-b border-border/40 h-10 md:h-[52px]">
+    <DndContext sensors={sensors}>
+      <div className="grid gap-4 grid-cols-2">
+        {/* Left: Dropzone section */}
+        <div className="min-h-0 overflow-hidden flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
             <div className="flex items-center gap-2">
               <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
                 {t("rankingView.yourRanking", "Your Ranking")}
               </h2>
-              {/* Unsaved changes indicator */}
               {isEditMode && hasUnsavedChanges && (
                 <span className="text-xs text-amber-500 whitespace-nowrap">
                   {t("rankingView.unsavedChanges", "Unsaved changes")}
@@ -163,28 +160,78 @@ export function PickerDropzoneLayout({
               )}
             </div>
           </div>
-          <div className="flex-1 min-h-0">{dropzone}</div>
+
+          {/* Dropzone content */}
+          <div className="flex-1 min-h-0">
+            <PokemonDropzone
+              id="ranking-pokemon"
+              pokemon={pokemon}
+              onChange={setPokemon}
+              positionColors={positionColors}
+              maxColumns={5}
+              maxHeight="85vh"
+            />
+          </div>
         </div>
 
-        {/* Picker - right on desktop, bottom on mobile */}
-        <div className="min-h-0 overflow-hidden max-h-[40dvh] md:max-h-none flex flex-col">
-          {/* Section header with filter button */}
-          <div className="flex items-center justify-between gap-3 px-4 py-1 md:px-8 md:py-2 border-b border-border/40 h-10 md:h-[52px]">
+        {/* Right: Picker section */}
+        <div className="min-h-0 overflow-hidden flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
             <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
               {t("rankingView.pokemonBox", "Pokemon Box")}
             </h2>
-            {onOpenFilters && (
-              <PickerHeaderFilters
-                activeFilterCount={activeFilterCount}
-                onOpenFilters={onOpenFilters}
+            <PickerHeaderFilters
+              activeFilterCount={filterState.activeFilterCount}
+              onOpenFilters={() => setFiltersOpen(true)}
+            />
+          </div>
+
+          {/* Picker content */}
+          <div className="flex-1 min-h-0 relative">
+            {pickerLoading ? (
+              <div className="space-y-4 p-4">
+                <Skeleton className="h-64 w-full" />
+              </div>
+            ) : pickerPokemon.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                <p className="text-muted-foreground">
+                  {t("pokedex.pokemonList.noPokemon")}
+                </p>
+                {filterState.activeFilterCount > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={filterState.handleClearFilters}
+                    className="mt-4 text-muted-foreground hover:text-foreground gap-1.5"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    {t("pokemonFilters.clearFilters")}
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <PokemonPicker
+                pokemon={pickerPokemon}
+                mode="drag"
+                disabledIds={disabledIds}
+                filteredOutIds={filteredOutIds}
+                maxColumns={5}
+                height="85vh"
               />
             )}
+
+            {/* Filter panel */}
+            <DesktopFilterPanel
+              isOpen={filtersOpen}
+              onClose={() => setFiltersOpen(false)}
+              filterState={filterState}
+            />
           </div>
-          <div className="flex-1 min-h-0">{picker}</div>
         </div>
       </div>
 
-      {/* Search overlay dialog */}
+      {/* Search overlay */}
       {isSearchEnabled && <PokemonSearchOverlay />}
 
       {/* Discard confirmation dialog */}
@@ -197,6 +244,6 @@ export function PickerDropzoneLayout({
         variant="destructive"
         onConfirm={handleConfirmDiscard}
       />
-    </>
+    </DndContext>
   );
-}
+});
