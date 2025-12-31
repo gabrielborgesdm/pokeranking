@@ -19,6 +19,7 @@ import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker
 import { DesktopFilterPanel } from "@/features/pokemon-picker/components/desktop/desktop-filter-panel";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
 import { useFilterState } from "@/features/pokemon-picker/hooks/use-filter-state";
+import { DesktopDropzoneEmptyState } from "./desktop-dropzone-empty-state";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 
 interface DesktopRankingEditingProps {
@@ -170,6 +171,9 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
               positionColors={positionColors}
               maxColumns={5}
               maxHeight="85vh"
+              renderEmptyState={(isOver) => (
+                <DesktopDropzoneEmptyState isOver={isOver} minHeight="85vh" />
+              )}
             />
           </div>
         </div>

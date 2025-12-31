@@ -32,6 +32,9 @@ import {
   MOBILE_TAB_BAR_HEIGHT,
   type MobileRankingTab,
 } from "./mobile-ranking-tab-bar";
+import { MobileRankingTutorial } from "./mobile-ranking-tutorial";
+import { MobileDropzoneEmptyState } from "./mobile-dropzone-empty-state";
+import { useMobileRankingTutorial } from "./use-mobile-ranking-tutorial";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -84,6 +87,9 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
   const searchContext = usePokemonSearchContextOptional();
   const isSearchEnabled = searchContext !== null;
   const isEditMode = onSave !== undefined || onDiscard !== undefined;
+
+  // Tutorial state
+  const { isOpen: isTutorialOpen, openTutorial, closeTutorial } = useMobileRankingTutorial();
 
   // Pokemon data for picker
   const { pokemon: pickerPokemon, isLoading: pickerLoading } = useAllPokemon();
@@ -218,6 +224,13 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
               positionColors={positionColors}
               maxColumns={5}
               maxHeight={contentHeight}
+              renderEmptyState={(isOver) => (
+                <MobileDropzoneEmptyState
+                  isOver={isOver}
+                  onShowTutorial={openTutorial}
+                  minHeight={contentHeight}
+                />
+              )}
             />
           </div>
         </div>
@@ -307,6 +320,12 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
         confirmLabel={t("rankingView.discardChanges")}
         variant="destructive"
         onConfirm={handleConfirmDiscard}
+      />
+
+      {/* Tutorial overlay */}
+      <MobileRankingTutorial
+        isOpen={isTutorialOpen}
+        onComplete={closeTutorial}
       />
     </DndContext>
   );

@@ -255,6 +255,9 @@
     "rankPokemon": "Ranquear Pokemon",
     "editSettings": "Editar ranking"
   },
+  "desktopRankingHint": {
+    "dragFromBox": "Arraste Pokemon do box à direita para começar a construir seu ranking"
+  },
   "boxSelector": {
     "title": "Suas Boxes",
     "allPokemon": "Todos os Pokemon",
@@ -450,5 +453,22 @@
     "description": "Apoie o projeto dando uma estrela no GitHub ou contribuindo de outras formas!",
     "starButton": "Estrela no GitHub",
     "contributeButton": "Outras formas de ajudar"
+  },
+  "mobileRankingTutorial": {
+    "title": "Como Ranquear Pokemon",
+    "showTutorial": "Como funciona",
+    "step1Title": "Duas Visualizações",
+    "step1Desc": "Alterne entre seu ranking e o box de Pokemon tocando nas abas na parte inferior",
+    "step2Title": "Adicionar Pokemon",
+    "step2Desc": "Vá para a aba 'Box de Pokemon', pressione e segure um card e depois arraste para adicionar ao ranking",
+    "step3Title": "Troca Automática",
+    "step3Desc": "Quando você arrasta um Pokemon, a aba do ranking abre automaticamente para você soltar",
+    "step4Title": "Reordenar",
+    "step4Desc": "Pressione e segure os cards de Pokemon e arraste para cima ou para baixo para mudar as posições",
+    "step5Title": "Remover",
+    "step5Desc": "Toque no botão X em qualquer card para removê-lo do seu ranking",
+    "skip": "Pular",
+    "next": "Próximo",
+    "done": "Entendi!"
   }
 }
