@@ -68,7 +68,7 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
         isDragging && "opacity-40 scale-95 transition-all duration-150",
         mode === "drag" &&
           !isDisabled &&
-          "touch-none cursor-grab active:cursor-grabbing",
+          "cursor-grab active:cursor-grabbing touch-manipulation",
         isDisabled && "opacity-40 cursor-not-allowed"
       )}
     >

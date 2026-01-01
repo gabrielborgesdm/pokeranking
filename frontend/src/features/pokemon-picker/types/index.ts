@@ -32,6 +32,8 @@ export interface PokemonPickerProps {
   rowHeight?: number;
   /** Height of the picker container (default: 600). Accepts number for px or string for CSS value like "75vh" */
   height?: number | string;
+  /** Optional filter component to render above the cards */
+  filterSlot?: React.ReactNode;
 }
 
 export interface PokemonPickerItemProps {

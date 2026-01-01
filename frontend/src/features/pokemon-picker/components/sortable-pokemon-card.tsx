@@ -61,7 +61,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
       {...attributes}
       {...listeners}
       className={cn(
-        "relative group cursor-grab active:cursor-grabbing touch-none",
+        "relative group cursor-grab active:cursor-grabbing touch-manipulation",
         isDragging && "z-50 opacity-50"
       )}
     >
