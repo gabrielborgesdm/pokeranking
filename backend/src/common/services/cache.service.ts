@@ -10,7 +10,6 @@ export class CacheService {
 
   constructor(private configService: ConfigService) {
     this.disabled = this.configService.get<boolean>('CACHE_DISABLED', false);
-    console.log('isDisabled', this.disabled);
 
     if (this.isEnabled()) {
       const url = this.configService.get<string>('UPSTASH_REDIS_URL');
@@ -23,7 +22,11 @@ export class CacheService {
         this.disabled = true;
         this.redis = null;
       } else {
-        this.redis = new Redis({ url, token });
+        this.redis = new Redis({
+          url,
+          token,
+          enableAutoPipelining: false,
+        });
         this.logger.log('Cache service initialized with Redis');
       }
     } else {
@@ -49,11 +52,8 @@ export class CacheService {
    */
   async get<T>(key: string): Promise<T | null> {
     if (!this.redis) {
-      this.logger.warn('Cache is disabled');
-      console.log(this.redis);
       return null;
     }
-    console.log(this.redis);
     try {
       const value = await this.redis.get<T>(key);
       if (value === null) {
@@ -76,7 +76,6 @@ export class CacheService {
     if (!this.redis) {
       return;
     }
-    console.log(this.redis);
     try {
       const options = ttlSeconds ? { ex: ttlSeconds } : undefined;
       await this.redis.set(key, value, options);
