@@ -26,7 +26,6 @@ import { PokemonDropzone, PokemonPicker } from "@/features/pokemon-picker";
 import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
 import { MobileFilterDialog } from "@/features/pokemon-picker/components/mobile/mobile-filter-dialog";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
-import { useFilterState } from "@/features/pokemon-picker/hooks/use-filter-state";
 import {
   MobileRankingTabBar,
   MOBILE_TAB_BAR_HEIGHT,
@@ -91,9 +90,53 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
   // Tutorial state
   const { isOpen: isTutorialOpen, openTutorial, closeTutorial } = useMobileRankingTutorial();
 
-  // Pokemon data for picker
-  const { pokemon: pickerPokemon, isLoading: pickerLoading } = useAllPokemon();
-  const filterState = useFilterState();
+  // Pokemon data for picker - use single useAllPokemon call for both data and filters
+  const {
+    pokemon: pickerPokemon,
+    isLoading: pickerLoading,
+    search,
+    selectedTypes,
+    generation,
+    sortBy,
+    order,
+    handleSearchChange,
+    handleTypesChange,
+    handleGenerationChange,
+    handleSortByChange,
+    handleOrderChange,
+  } = useAllPokemon();
+
+  // Compute filter state values
+  const activeFilterCount = [
+    search.length > 0,
+    selectedTypes.length > 0,
+    generation !== null,
+    sortBy !== "pokedexNumber",
+    order !== "asc",
+  ].filter(Boolean).length;
+
+  const handleClearFilters = () => {
+    handleSearchChange("");
+    handleTypesChange([]);
+    handleGenerationChange(null);
+    handleSortByChange("pokedexNumber");
+    handleOrderChange("asc");
+  };
+
+  const filterState = {
+    search,
+    selectedTypes,
+    generation,
+    sortBy,
+    order,
+    activeFilterCount,
+    handleSearchChange,
+    handleTypesChange,
+    handleGenerationChange,
+    handleSortByChange,
+    handleOrderChange,
+    handleClearFilters,
+  };
 
   const handleDiscardClick = () => {
     if (hasUnsavedChanges) {

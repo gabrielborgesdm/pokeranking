@@ -247,7 +247,8 @@
   },
   "pokemonFilters": {
     "allGenerations": "All Gens",
-    "generation": "Gen {{gen}}",
+    "generation": "Generation",
+    "generationNumber": "Generation {{number}}",
     "sortByPokedex": "Pokedex #",
     "filters": "Filters",
     "type": "Type",

@@ -1,11 +1,23 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { X } from "lucide-react";
+import { Search, X, RotateCcw } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { PokemonSearchFilters } from "@/features/pokemon";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { TypesSelector } from "@/features/pokemon/components/types-selector";
 import type { UseFilterStateReturn } from "../../hooks/use-filter-state";
+import type {
+  PokemonSortByOption,
+  PokemonOrderOption,
+} from "@/features/pokemon/components/pokemon-search-filters.types";
 
 interface DesktopFilterPanelProps {
   isOpen: boolean;
@@ -15,7 +27,7 @@ interface DesktopFilterPanelProps {
 
 /**
  * Desktop filter panel - bottom overlay within the picker container.
- * No backdrop, scrollable content, stays open while interacting.
+ * Contains inline filter controls with a close button.
  */
 export const DesktopFilterPanel = memo(function DesktopFilterPanel({
   isOpen,
@@ -24,36 +36,154 @@ export const DesktopFilterPanel = memo(function DesktopFilterPanel({
 }: DesktopFilterPanelProps) {
   const { t } = useTranslation();
 
+  // Local state for debounced search
+  const [inputValue, setInputValue] = useState(filterState.search);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputValue !== filterState.search) {
+        filterState.handleSearchChange(inputValue);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [inputValue, filterState]);
+
+  useEffect(() => {
+    setInputValue(filterState.search);
+  }, [filterState.search]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="flex absolute inset-x-0 bottom-0 z-50 bg-background border-t border-border shadow-lg mr-3 max-h-[60%] flex-col">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border/50">
-        <h3 className="text-sm font-semibold">
-          {t("pokemonFilters.filters")}
-        </h3>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="h-7 w-7"
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
-      <div className="overflow-y-auto flex-1 p-4">
-        <PokemonSearchFilters
-          search={filterState.search}
-          selectedTypes={filterState.selectedTypes}
-          generation={filterState.generation}
-          sortBy={filterState.sortBy}
-          order={filterState.order}
-          onSearchChange={filterState.handleSearchChange}
-          onTypesChange={filterState.handleTypesChange}
-          onGenerationChange={filterState.handleGenerationChange}
-          onSortByChange={filterState.handleSortByChange}
-          onOrderChange={filterState.handleOrderChange}
-        />
+    <div className="absolute inset-x-0 bottom-0 z-50 bg-background border-t border-border shadow-lg">
+      <div className="p-3 space-y-3">
+        {/* Header with title, clear button, and close button */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">
+            {t("pokemonFilters.filters")}
+          </span>
+          <div className="flex items-center gap-1">
+            {filterState.activeFilterCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={filterState.handleClearFilters}
+                className="h-7 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                {t("pokemonFilters.clearFilters")}
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground hover:bg-muted"
+              aria-label={t("common.close")}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder={t("admin.pokemon.searchPlaceholder")}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            className="pl-10 h-10"
+          />
+        </div>
+
+        {/* Filters grid */}
+        <div className="grid grid-cols-4 gap-3">
+          {/* Type filter */}
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">
+              {t("pokemonFilters.type")}
+            </label>
+            <TypesSelector
+              selectedTypes={filterState.selectedTypes}
+              onTypesChange={filterState.handleTypesChange}
+              compact
+              buttonClassName="h-9 text-sm w-full justify-start"
+            />
+          </div>
+
+          {/* Generation filter */}
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">
+              {t("pokemonFilters.generation")}
+            </label>
+            <Input
+              type="number"
+              min={1}
+              max={9}
+              placeholder={t("pokemonFilters.allGenerations")}
+              value={filterState.generation ?? ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                filterState.handleGenerationChange(
+                  value === "" ? null : Number(value)
+                );
+              }}
+              className="h-9"
+            />
+          </div>
+
+          {/* Sort by */}
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">
+              {t("pokemonFilters.sortBy")}
+            </label>
+            <Select
+              value={filterState.sortBy}
+              onValueChange={(value) =>
+                filterState.handleSortByChange(value as PokemonSortByOption)
+              }
+            >
+              <SelectTrigger className="h-9 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pokedexNumber">
+                  {t("pokemonFilters.sortByPokedex")}
+                </SelectItem>
+                <SelectItem value="name">
+                  {t("admin.pokemon.sortByName")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Order */}
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">
+              {t("pokemonFilters.order")}
+            </label>
+            <Select
+              value={filterState.order}
+              onValueChange={(value) =>
+                filterState.handleOrderChange(value as PokemonOrderOption)
+              }
+            >
+              <SelectTrigger className="h-9 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">
+                  {t("admin.pokemon.orderAsc")}
+                </SelectItem>
+                <SelectItem value="desc">
+                  {t("admin.pokemon.orderDesc")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </div>
     </div>
   );

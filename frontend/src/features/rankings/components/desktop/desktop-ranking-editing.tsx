@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, Trash2, X, Save } from "lucide-react";
 import { DndContext, type SensorDescriptor, type SensorOptions } from "@dnd-kit/core";
@@ -18,9 +18,9 @@ import { PokemonDropzone, PokemonPicker } from "@/features/pokemon-picker";
 import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
 import { DesktopFilterPanel } from "@/features/pokemon-picker/components/desktop/desktop-filter-panel";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
-import { useFilterState } from "@/features/pokemon-picker/hooks/use-filter-state";
 import { DesktopDropzoneEmptyState } from "./desktop-dropzone-empty-state";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
+import type { UseFilterStateReturn } from "@/features/pokemon-picker/hooks/use-filter-state";
 
 interface DesktopRankingEditingProps {
   pokemon: PokemonResponseDto[];
@@ -60,9 +60,41 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
   const isSearchEnabled = searchContext !== null;
   const isEditMode = onSave !== undefined || onDiscard !== undefined;
 
-  // Pokemon data for picker
-  const { pokemon: pickerPokemon, isLoading: pickerLoading } = useAllPokemon();
-  const filterState = useFilterState();
+  // Pokemon data for picker - using single hook instance for both data and filter state
+  const allPokemonHook = useAllPokemon();
+  const { pokemon: pickerPokemon, isLoading: pickerLoading } = allPokemonHook;
+
+  // Create filter state object from the hook
+  const filterState: UseFilterStateReturn = useMemo(() => {
+    const activeFilterCount = [
+      allPokemonHook.search.length > 0,
+      allPokemonHook.selectedTypes.length > 0,
+      allPokemonHook.generation !== null,
+      allPokemonHook.sortBy !== "pokedexNumber",
+      allPokemonHook.order !== "asc",
+    ].filter(Boolean).length;
+
+    return {
+      search: allPokemonHook.search,
+      selectedTypes: allPokemonHook.selectedTypes,
+      generation: allPokemonHook.generation,
+      sortBy: allPokemonHook.sortBy,
+      order: allPokemonHook.order,
+      activeFilterCount,
+      handleSearchChange: allPokemonHook.handleSearchChange,
+      handleTypesChange: allPokemonHook.handleTypesChange,
+      handleGenerationChange: allPokemonHook.handleGenerationChange,
+      handleSortByChange: allPokemonHook.handleSortByChange,
+      handleOrderChange: allPokemonHook.handleOrderChange,
+      handleClearFilters: () => {
+        allPokemonHook.handleSearchChange("");
+        allPokemonHook.handleTypesChange([]);
+        allPokemonHook.handleGenerationChange(null);
+        allPokemonHook.handleSortByChange("pokedexNumber");
+        allPokemonHook.handleOrderChange("asc");
+      },
+    };
+  }, [allPokemonHook]);
 
   const handleDiscardClick = () => {
     if (hasUnsavedChanges) {
