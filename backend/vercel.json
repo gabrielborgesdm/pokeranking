@@ -5,7 +5,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "dist/main.js",
+            "dest": "dist/src/main.js",
             "methods": [
                 "GET",
                 "POST",
