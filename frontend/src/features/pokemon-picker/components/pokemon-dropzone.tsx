@@ -51,6 +51,8 @@ export interface PokemonDropzoneProps {
   showPositions?: boolean;
   /** Whether a drag operation is in progress (shows drop overlay on cards) */
   isDropping?: boolean;
+  /** Custom empty state component (replaces default empty state) */
+  renderEmptyState?: (isOver: boolean) => React.ReactNode;
 }
 
 // Helper to extract pokemon ID from sortable ID (removes "dropzone-" prefix)
@@ -82,6 +84,7 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   positionColors,
   showPositions = true,
   isDropping: isDroppingProp,
+  renderEmptyState,
 }: PokemonDropzoneProps) {
   const { isMobile } = useScreenSize();
   const [activeItem, setActiveItem] = useState<PokemonResponseDto | null>(null);
@@ -245,24 +248,28 @@ export const PokemonDropzone = memo(function PokemonDropzone({
       className={cn("relative", className)}
     >
       {pokemon.length === 0 ? (
-        <div
-          className={cn(
-            "h-full w-full flex flex-col items-center justify-center rounded-xl border-2 border-dashed transition-colors duration-200",
-            isOver
-              ? "border-primary bg-primary/5"
-              : "border-muted-foreground/30"
-          )}
-          style={{ minHeight }}
-        >
-          <p
+        renderEmptyState ? (
+          renderEmptyState(isOver)
+        ) : (
+          <div
             className={cn(
-              "text-sm text-muted-foreground/70 transition-colors",
-              isOver && "text-primary font-medium"
+              "h-full w-full flex flex-col items-center justify-center rounded-xl border-2 border-dashed transition-colors duration-200",
+              isOver
+                ? "border-primary bg-primary/5"
+                : "border-muted-foreground/30"
             )}
+            style={{ minHeight }}
           >
-            {isOver ? "Release to drop!" : placeholder}
-          </p>
-        </div>
+            <p
+              className={cn(
+                "text-sm text-muted-foreground/70 transition-colors",
+                isOver && "text-primary font-medium"
+              )}
+            >
+              {isOver ? "Release to drop!" : placeholder}
+            </p>
+          </div>
+        )
       ) : (
         <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
           {/* Scroll container - hidden scrollbar */}

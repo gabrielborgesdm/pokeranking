@@ -230,6 +230,9 @@
     "rankPokemon": "Rank Pokemon",
     "editSettings": "Edit ranking"
   },
+  "desktopRankingHint": {
+    "dragFromBox": "Drag Pokemon from the box on the right to start building your ranking"
+  },
   "boxSelector": {
     "title": "Your Boxes",
     "allPokemon": "All Pokemon",
@@ -244,7 +247,8 @@
   },
   "pokemonFilters": {
     "allGenerations": "All Gens",
-    "generation": "Gen {{gen}}",
+    "generation": "Generation",
+    "generationNumber": "Generation {{number}}",
     "sortByPokedex": "Pokedex #",
     "filters": "Filters",
     "type": "Type",
@@ -450,5 +454,22 @@
     "description": "Support the project by giving us a star on GitHub or contributing in other ways!",
     "starButton": "Star on GitHub",
     "contributeButton": "Other ways to help"
+  },
+  "mobileRankingTutorial": {
+    "title": "How to Rank Pokemon",
+    "showTutorial": "How it works",
+    "step1Title": "Two Views",
+    "step1Desc": "Switch between your ranking and the Pokemon box by tapping the tabs at the bottom",
+    "step2Title": "Add Pokemon",
+    "step2Desc": "Long press on a Pokemon card in the 'Pokemon Box' tab, then drag it to add to your ranking",
+    "step3Title": "Auto Switch",
+    "step3Desc": "When you drag a Pokemon, the ranking tab opens automatically so you can drop it",
+    "step4Title": "Reorder",
+    "step4Desc": "Long press and drag Pokemon cards up or down to change their positions",
+    "step5Title": "Remove",
+    "step5Desc": "Tap the X button on any card to remove it from your ranking",
+    "skip": "Skip",
+    "next": "Next",
+    "done": "Got it!"
   }
 }
