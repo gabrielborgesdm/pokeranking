@@ -13,8 +13,8 @@ import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { PokemonResponseDto } from './dto/pokemon-response.dto';
 import { PokemonQueryDto } from './dto/pokemon-query.dto';
 import { BulkCreatePokemonItemDto } from './dto/bulk-create-pokemon-response.dto';
-import { stripUndefined, toDto } from 'src/common/utils/transform.util';
-import { CacheService } from 'src/common/services/cache.service';
+import { stripUndefined, toDto } from '../common/utils/transform.util';
+import { CacheService } from '../common/services/cache.service';
 import { UploadService } from '../upload/upload.service';
 import type { FilterQuery } from 'mongoose';
 
