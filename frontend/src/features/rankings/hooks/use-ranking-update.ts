@@ -110,7 +110,9 @@ export function useRankingUpdate({
   const { trackRankingUpdate } = useAnalytics();
 
   // Track initial pokemon IDs for dirty checking
-  const initialPokemonIdsRef = useRef<string[]>([]);
+  const initialPokemonIdsRef = useRef<string[]>(
+    initialPokemon.map((p) => p._id)
+  );
 
   // Initialize state from localStorage or initial data
   const [draftPokemon, setDraftPokemon] = useState<PokemonResponseDto[]>(() => {
