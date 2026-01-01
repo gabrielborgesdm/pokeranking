@@ -11,12 +11,11 @@ import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RANKED_POKEMON_COUNT, UserQueryDto } from './dto/user-query.dto';
-import { stripUndefined } from 'src/common/utils/transform.util';
-import { SessionOptions } from 'src/common/utils/transaction.util';
-import { CacheService } from 'src/common/services/cache.service';
-import { Ranking } from 'src/rankings/schemas/ranking.schema';
-
-import { Pokemon } from 'src/pokemon/schemas/pokemon.schema';
+import { stripUndefined } from '../common/utils/transform.util';
+import { SessionOptions } from '../common/utils/transaction.util';
+import { CacheService } from '../common/services/cache.service';
+import { Ranking } from '../rankings/schemas/ranking.schema';
+import { Pokemon } from '../pokemon/schemas/pokemon.schema';
 
 /** Ranking with populated pokemon (after .populate('pokemon')) */
 type RankingWithPopulatedPokemon = Omit<Ranking, 'pokemon'> & {
