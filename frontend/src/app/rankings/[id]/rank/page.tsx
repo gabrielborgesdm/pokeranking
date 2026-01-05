@@ -15,7 +15,8 @@ interface RankPageProps {
 
 export default function RankPage({ params }: RankPageProps) {
   const { id } = use(params);
-  const { isResizing } = useScreenSize();
+  const { isResizing, isMobile } = useScreenSize();
+
 
   const {
     ranking,
@@ -39,10 +40,6 @@ export default function RankPage({ params }: RankPageProps) {
   // Unauthorized is handled inside the hook with redirect
   if (isUnauthorized || isLoading || !ranking) {
     return <RankPageSkeleton />;
-  }
-
-  if (isResizing) {
-    return <LoadingFallback />;
   }
 
   return (
