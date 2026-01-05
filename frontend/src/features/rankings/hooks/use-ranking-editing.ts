@@ -8,7 +8,7 @@ import {
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 
 /** Long press delay for touch drag on mobile (ms) */
-const MOBILE_TOUCH_DELAY = 250;
+const MOBILE_TOUCH_DELAY = 350;
 
 /** Short delay for desktop touch (ms) */
 const DESKTOP_TOUCH_DELAY = 50;
