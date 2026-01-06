@@ -176,8 +176,8 @@
 /* Pokemon-themed scrollbar */
 :root {
   --scrollbar-track: oklch(0.95 0.01 90);
-  --scrollbar-thumb: oklch(0.48 0.195 265);
-  --scrollbar-thumb-hover: oklch(0.55 0.195 265);
+  --scrollbar-thumb: oklch(0.75 0.02 280);
+  --scrollbar-thumb-hover: oklch(0.60 0.02 280);
 }
 
 .dark {
