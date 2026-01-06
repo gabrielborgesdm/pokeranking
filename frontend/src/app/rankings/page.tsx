@@ -75,7 +75,7 @@ export default function RankingsListPage() {
 
   const rankingCards = useMemo(
     () =>
-      rankings.map((ranking) => (
+      rankings.map((ranking, index) => (
         <RankingCard
           key={ranking._id}
           id={ranking._id}
