@@ -10,17 +10,17 @@ interface LogoProps {
 
 export function Logo({ className, size = "default" }: LogoProps) {
   const height = size === "large" ? 56 : 40;
-  const width = size === "large" ? 199 : 142;
 
   return (
     <Link href={routes.rankings} className={cn("flex shrink-0 items-center", className)}>
       <Image
         src='/images/logo.png'
         alt="Pokeranking"
-        width={width}
-        height={height}
+        width={0}
+        height={0}
         priority
         style={{ width: "auto", height: `${height}px` }}
+        sizes="100vw"
         className="translate-y-[2px]"
       />
     </Link>
