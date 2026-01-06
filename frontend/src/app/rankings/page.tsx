@@ -87,7 +87,6 @@ export default function RankingsListPage() {
           theme={ranking.theme}
           likesCount={ranking.likesCount}
           username={ranking.user?.username}
-          priority={index < 4}
           onClick={() => handleRankingClick(ranking._id)}
         />
       )),

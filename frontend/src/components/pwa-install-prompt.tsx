@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -9,6 +10,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt() {
+  const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -88,7 +90,7 @@ export function PWAInstallPrompt() {
       <button
         onClick={handleDismiss}
         className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
-        aria-label="Dismiss"
+        aria-label={t("pwa.dismiss")}
       >
         <X className="h-4 w-4" />
       </button>
@@ -101,28 +103,28 @@ export function PWAInstallPrompt() {
         />
         <div className="flex-1">
           <h3 className="font-semibold text-sm mb-1 text-foreground">
-            Install Pokeranking
+            {t("pwa.title")}
           </h3>
 
           {isIOS ? (
             <div className="text-xs text-muted-foreground space-y-2">
-              <p>Install this app on your iPhone:</p>
+              <p>{t("pwa.ios.instruction")}</p>
               <ol className="list-decimal list-inside space-y-1">
-                <li>Tap the Share button (square with arrow)</li>
-                <li>Scroll and tap "Add to Home Screen"</li>
-                <li>Tap "Add" to confirm</li>
+                <li>{t("pwa.ios.step1")}</li>
+                <li>{t("pwa.ios.step2")}</li>
+                <li>{t("pwa.ios.step3")}</li>
               </ol>
             </div>
           ) : (
             <>
               <p className="text-xs text-muted-foreground mb-3">
-                Quick access, offline support, and better performance
+                {t("pwa.description")}
               </p>
               <button
                 onClick={handleInstallClick}
                 className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
               >
-                Install App
+                {t("pwa.installButton")}
               </button>
             </>
           )}

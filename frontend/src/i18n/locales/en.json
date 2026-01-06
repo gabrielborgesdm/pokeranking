@@ -471,5 +471,17 @@
     "skip": "Skip",
     "next": "Next",
     "done": "Got it!"
+  },
+  "pwa": {
+    "title": "Install Pokeranking",
+    "description": "Quick access, offline support, and better performance",
+    "installButton": "Install App",
+    "dismiss": "Dismiss",
+    "ios": {
+      "instruction": "Install this app on your iPhone:",
+      "step1": "Tap the Share button (square with arrow)",
+      "step2": "Scroll and tap \"Add to Home Screen\"",
+      "step3": "Tap \"Add\" to confirm"
+    }
   }
 }
