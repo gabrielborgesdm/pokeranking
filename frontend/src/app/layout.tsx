@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { ConditionalNavbar } from "@/components/conditional-navbar";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,7 +18,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://pokeranking.com.br"),
   title: {
     default: "Pokeranking - Rank your Pokemon",
     template: "%s | Pokeranking",
@@ -33,10 +43,25 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Gabriel Borges", url: "https://github.com/gabrielborgesdm" }],
   creator: "Gabriel Borges",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Pokeranking",
+  },
   icons: {
-    icon: "/ico.png",
-    shortcut: "/ico.png",
-    apple: "/ico.png",
+    icon: [
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon/web-app-manifest-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/favicon/web-app-manifest-512x512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon/favicon.ico",
+    apple: [
+      { url: "/favicon/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  formatDetection: {
+    telephone: false,
   },
   openGraph: {
     type: "website",
@@ -79,14 +104,20 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/pokemon-solid"
           rel="stylesheet"
         />
+        <meta name="theme-color" content="#4476da" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#5e8fe3" media="(prefers-color-scheme: dark)" />
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://ik.imagekit.io" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ServiceWorkerRegister />
         <Providers>
           <ConditionalNavbar />
           {children}
           <GoogleAnalytics />
+          <PWAInstallPrompt />
         </Providers>
         <Toaster richColors position="top-right" />
       </body>
