@@ -104,8 +104,8 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/pokemon-solid"
           rel="stylesheet"
         />
-        <meta name="theme-color" content="#4476da" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#5e8fe3" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1a1d2e" media="(prefers-color-scheme: dark)" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://ik.imagekit.io" />
       </head>

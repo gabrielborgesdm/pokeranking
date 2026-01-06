@@ -125,7 +125,7 @@ export default function RankingsListPage() {
         />
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
             {Array.from({ length: ITEMS_PER_PAGE }).map((_, index) => (
               <RankingCardSkeleton key={index} />
             ))}
@@ -140,7 +140,7 @@ export default function RankingsListPage() {
           <>
             <AnimatedList
               key={currentPage}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
+              className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
             >
               {rankingCards}
             </AnimatedList>
