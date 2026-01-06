@@ -47,8 +47,8 @@ export const PokemonImage = React.memo(function PokemonImage({
         src={imgSrc}
         alt={alt}
         fill
+        loading="eager"
         sizes={sizes}
-        priority={priority}
         className={cn("object-contain", className)}
         onError={handleError}
       />

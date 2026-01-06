@@ -471,5 +471,17 @@
     "skip": "Pular",
     "next": "Próximo",
     "done": "Entendi!"
+  },
+  "pwa": {
+    "title": "Instalar Pokeranking",
+    "description": "Acesso rápido, suporte offline e melhor desempenho",
+    "installButton": "Instalar App",
+    "dismiss": "Dispensar",
+    "ios": {
+      "instruction": "Instale este app no seu iPhone:",
+      "step1": "Toque no botão Compartilhar (quadrado com seta)",
+      "step2": "Role e toque em \"Adicionar à Tela de Início\"",
+      "step3": "Toque em \"Adicionar\" para confirmar"
+    }
   }
 }
