@@ -94,7 +94,7 @@ export const RankingCard = memo(function RankingCard({
     <div
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden rounded-xl p-6 min-w-[280px] shadow-lg transition-transform hover:scale-105 select-none",
+        "relative overflow-hidden rounded-xl p-3 sm:p-6 min-w-0 shadow-lg transition-transform hover:scale-105 select-none",
         onClick && "hover:cursor-pointer",
         themeData.gradientClass,
         themeData.textColor === "light" ? "text-white" : "text-foreground",
@@ -113,28 +113,28 @@ export const RankingCard = memo(function RankingCard({
       </div>
 
       {/* Content */}
-      <div className="space-y-2">
+      <div className="space-y-2 min-w-0">
         <h3 className="text-xl font-bold truncate">{title}</h3>
         {username && (
           <button
             onClick={handleUsernameClick}
-            className="flex items-center gap-1 text-sm opacity-80 hover:opacity-100 hover:underline transition-opacity"
+            className="flex items-center gap-1 text-sm opacity-80 hover:opacity-100 hover:underline transition-opacity min-w-0 w-full"
           >
-            <User className="h-3 w-3" />
+            <User className="h-3 w-3 flex-shrink-0" />
             <span className="truncate">{username}</span>
           </button>
         )}
-        <div className="flex items-center justify-between text-sm opacity-80">
+        <div className="flex items-center justify-between sm:text-sm opacity-80">
           <span>
             {t("myRankings.pokemonCount", { count: pokemonCount })}
           </span>
           {likesCount !== undefined ? (
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 flex-shrink-0">
               <Heart className="h-3 w-3" />
               <span>{likesCount}</span>
             </div>
           ) : (
-            <span>{formattedDate}</span>
+            <span className="hidden sm:inline flex-shrink-0">{formattedDate}</span>
           )}
         </div>
       </div>
