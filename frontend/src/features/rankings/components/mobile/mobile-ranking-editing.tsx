@@ -152,7 +152,7 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
   };
 
   // Calculate content height (full screen minus header and tab bar)
-  const contentHeight = `calc(100dvh - ${HEADER_HEIGHT}px - ${MOBILE_TAB_BAR_HEIGHT}px)`;
+  const contentHeight = `calc(92dvh - ${HEADER_HEIGHT}px - ${MOBILE_TAB_BAR_HEIGHT}px)`;
 
   return (
     <DndContext sensors={sensors}>
@@ -164,7 +164,7 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
       />
 
       <div
-        className="relative h-[100dvh]"
+        className="relative h-[92dvh]"
         style={{ paddingBottom: MOBILE_TAB_BAR_HEIGHT }}
       >
         {/* Ranking Tab */}

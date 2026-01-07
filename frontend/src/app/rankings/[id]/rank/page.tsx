@@ -41,18 +41,18 @@ export default function RankPage({ params }: RankPageProps) {
 
   return (
     <PokemonSearchProvider pokemon={pokemon} zones={zones}>
-      <main>
-        <RankingEditing
-          ranking={ranking}
-          pokemon={pokemon}
-          setPokemon={setPokemon}
-          positionColors={positionColors}
-          hasUnsavedChanges={hasUnsavedChanges}
-          isSaving={isSaving}
-          onSave={handleSave}
-          onDiscard={handleDiscard}
-        />
-      </main>
+
+      <RankingEditing
+        ranking={ranking}
+        pokemon={pokemon}
+        setPokemon={setPokemon}
+        positionColors={positionColors}
+        hasUnsavedChanges={hasUnsavedChanges}
+        isSaving={isSaving}
+        onSave={handleSave}
+        onDiscard={handleDiscard}
+      />
+
     </PokemonSearchProvider>
   );
 }
