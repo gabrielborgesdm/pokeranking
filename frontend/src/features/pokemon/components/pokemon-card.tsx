@@ -38,7 +38,7 @@ const PositionBadge = memo(function PositionBadge({
   const isFourDigit = position >= 1000;
 
   const textSize = isCompact
-    ? (isFourDigit ? "text-sm" : isThreeDigit ? "text-base" : "text-lg")
+    ? (isFourDigit ? "text-[10px]" : isThreeDigit ? "text-xs" : "text-sm")
     : (isFourDigit ? "text-xl" : isThreeDigit ? "text-2xl" : "text-3xl");
 
   const marginLeft = isCompact
