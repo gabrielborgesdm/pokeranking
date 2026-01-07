@@ -10,11 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { useAnalytics } from "@/hooks/use-analytics";
 
@@ -96,17 +91,13 @@ export const ShareButton = memo(function ShareButton({
 
   return (
     <DropdownMenu>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="h-9 w-9">
-              <Share2 className="h-4 w-4" />
-              <span className="sr-only">{t("rankingView.share")}</span>
-            </Button>
-          </DropdownMenuTrigger>
-        </TooltipTrigger>
-        <TooltipContent>{t("rankingView.share")}</TooltipContent>
-      </Tooltip>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="gap-2 h-10 sm:w-auto">
+          <Share2 className="h-4 w-4 shrink-0" />
+          <span className="truncate sm:hidden lg:inline">{t("rankingView.share")}</span>
+          <span className="sr-only sm:not-sr-only lg:sr-only">{t("rankingView.share")}</span>
+        </Button>
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={handleCopyUrl}>
           <Link className="h-4 w-4" />

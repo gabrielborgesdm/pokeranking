@@ -15,12 +15,16 @@ const SMALL_SCREEN_BREAKPOINT = 872;
 /** Breakpoint for mobile detection (matches Tailwind md: 768px) */
 const MOBILE_BREAKPOINT = 768;
 
+const MEDIUM_SCREEN_BREAKPOINT = 1536;
+
 /** Debounce delay for resize detection (ms) */
 const RESIZE_DEBOUNCE_DELAY = 100;
 
 interface ScreenSizeContextValue {
   /** True when viewport width < 872px */
   isSmall: boolean;
+
+  isMedium: boolean;
   /** True when viewport width < 768px */
   isMobile: boolean;
   /** True when the window is being resized (debounced) */
@@ -61,6 +65,7 @@ export function ScreenSizeProvider({ children }: { children: ReactNode }) {
     return {
       isSmall: width < SMALL_SCREEN_BREAKPOINT,
       isMobile: width < MOBILE_BREAKPOINT,
+      isMedium: width < MEDIUM_SCREEN_BREAKPOINT,
       isResizing,
     };
   }, [width, isResizing]);

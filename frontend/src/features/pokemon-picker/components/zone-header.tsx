@@ -32,7 +32,7 @@ export const ZoneHeader = memo(function ZoneHeader({
     <>
       <div
         className={cn(
-          "flex items-center gap-2 sm:gap-3 rounded-xl transition-colors bg-card border border-border/50",
+          "flex items-center gap-2 sm:gap-3 rounded-md transition-colors bg-card border border-border/50",
           isCompact ? "px-3 py-2.5" : "px-4 py-6 mx-5"
         )}
         style={{
