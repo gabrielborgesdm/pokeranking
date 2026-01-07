@@ -6,8 +6,8 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Pokeranking",
     description:
       "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
-    start_url: "/rankings",
-    id: "/rankings",
+    start_url: "/",
+    id: "/",
     scope: "/",
     display: "standalone",
     background_color: "#0f1419",
@@ -56,6 +56,12 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
     screenshots: [
+      {
+        src: "/screenshots/mobile-rankings.png",
+        sizes: "540x1174",
+        type: "image/png",
+        form_factor: "narrow",
+      },
       {
         src: "/screenshots/leaderboard.png",
         sizes: "1212x914",
