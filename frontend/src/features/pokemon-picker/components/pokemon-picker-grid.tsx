@@ -1,16 +1,14 @@
 "use client";
 
-import { memo, useMemo, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { VirtualizedPokemonGrid } from "./virtualized-pokemon-grid";
-import { PokemonPickerItem } from "./pokemon-picker-item";
-import { POKEMON_PICKER_DEFAULTS } from "../constants";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
-import type { PokemonPickerMode } from "../types";
+import { memo, useCallback, useMemo } from "react";
+import { POKEMON_PICKER_DEFAULTS } from "../constants";
+import { PokemonPickerItem } from "./pokemon-picker-item";
+import { VirtualizedPokemonGrid } from "./virtualized-pokemon-grid";
 
 interface PokemonPickerGridProps {
   pokemon: PokemonResponseDto[];
-  mode: PokemonPickerMode;
   selectedId?: string | null;
   disabledIds?: string[];
   filteredOutIds?: string[];
@@ -25,7 +23,6 @@ interface PokemonPickerGridProps {
 
 export const PokemonPickerGrid = memo(function PokemonPickerGrid({
   pokemon,
-  mode,
   selectedId,
   disabledIds = [],
   filteredOutIds = [],
@@ -52,13 +49,12 @@ export const PokemonPickerGrid = memo(function PokemonPickerGrid({
     (poke: PokemonResponseDto) => (
       <PokemonPickerItem
         pokemon={poke}
-        mode={mode}
         isSelected={selectedId === poke._id}
         isDisabled={disabledSet.has(poke._id)}
         onSelect={onSelect}
       />
     ),
-    [mode, selectedId, disabledSet, onSelect]
+    [selectedId, disabledSet, onSelect]
   );
 
   return (

@@ -9,11 +9,9 @@ import { Check } from "lucide-react";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
-import type { PokemonPickerMode } from "../types";
 
 interface PokemonPickerItemProps {
   pokemon: PokemonResponseDto;
-  mode: PokemonPickerMode;
   isSelected: boolean;
   isDisabled: boolean;
   onSelect?: (pokemon: PokemonResponseDto | null) => void;
@@ -21,7 +19,6 @@ interface PokemonPickerItemProps {
 
 export const PokemonPickerItem = memo(function PokemonPickerItem({
   pokemon,
-  mode,
   isSelected,
   isDisabled,
   onSelect,
@@ -33,7 +30,6 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
     useDraggable({
       id: pokemon._id,
       data: { pokemon },
-      disabled: mode !== "drag" || isDisabled,
     });
 
   // Don't apply transform when dragging - the DragOverlay handles the visual
@@ -41,12 +37,12 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
   const dragTransform =
     transform && !isDragging
       ? {
-          transform: CSS.Translate.toString(transform),
-        }
+        transform: CSS.Translate.toString(transform),
+      }
       : undefined;
 
   const handleClick = () => {
-    if (mode === "select" && !isDisabled) {
+    if (!isDisabled) {
       onSelect?.(isSelected ? null : pokemon);
     }
   };
@@ -62,13 +58,13 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
         zIndex: isDragging ? 1000 : undefined,
         position: isDragging ? "relative" : undefined,
       }}
-      {...(mode === "drag" ? { ...attributes, ...listeners } : {})}
+      {...listeners}
+      {...attributes}
       className={cn(
         "relative",
         isDragging && "opacity-40 scale-95 transition-all duration-150",
-        mode === "drag" &&
-          !isDisabled &&
-          "cursor-grab active:cursor-grabbing touch-manipulation",
+        !isDisabled &&
+        "cursor-grab active:cursor-grabbing touch-manipulation",
         isDisabled && "opacity-40 cursor-not-allowed"
       )}
     >
@@ -88,7 +84,6 @@ export const PokemonPickerItem = memo(function PokemonPickerItem({
         className={cn(
           "!min-w-0", // Override min-width for grid layout
           isSelected && "ring-4 ring-primary shadow-lg shadow-primary/30",
-          mode === "select" && !isDisabled && "cursor-pointer"
         )}
       />
     </div>

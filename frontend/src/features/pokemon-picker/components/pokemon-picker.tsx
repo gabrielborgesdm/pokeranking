@@ -50,7 +50,6 @@ export const PokemonPicker = memo(function PokemonPicker({
     <div className={cn("w-full", className)}>
       <PokemonPickerGrid
         pokemon={pokemon}
-        mode="drag"
         disabledIds={disabledIds}
         filteredOutIds={filteredOutIds}
         maxColumns={maxColumns}
