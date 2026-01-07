@@ -16,6 +16,7 @@ export function PWAInstallPrompt() {
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     // Check if already installed
@@ -25,6 +26,16 @@ export function PWAInstallPrompt() {
     // Detect iOS
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
     setIsIOS(ios);
+
+    // Detect mobile device
+    const mobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      ) || window.matchMedia("(max-width: 768px)").matches;
+    setIsMobile(mobile);
+
+    // Exit early if not on mobile
+    if (!mobile) return;
 
     // Check localStorage to avoid pestering users
     const promptDismissed = localStorage.getItem("pwa-prompt-dismissed");
@@ -78,6 +89,9 @@ export function PWAInstallPrompt() {
     setShowPrompt(false);
     localStorage.setItem("pwa-prompt-dismissed", new Date().toISOString());
   };
+
+  // Don't show if not on mobile
+  if (!isMobile) return null;
 
   // Don't show if already installed
   if (isStandalone) return null;

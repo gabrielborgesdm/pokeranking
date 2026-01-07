@@ -5,12 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Pencil, Search, ListOrdered } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 import { usePokemonSearchContext } from "@/features/pokemon-search/context/pokemon-search-context";
@@ -49,7 +43,7 @@ export const RankingActionBar = memo(function RankingActionBar({
   isOwner,
   maxContentWidth,
   className,
-  isSearchEnabled = false,
+  isSearchEnabled = true,
 }: RankingActionBarProps) {
   const { t } = useTranslation();
   const { openSearch } = usePokemonSearchContext();
@@ -67,64 +61,56 @@ export const RankingActionBar = memo(function RankingActionBar({
     <>
       <div className={cn("flex justify-center px-4 sm:px-0", className)}>
         <div
-          className="flex flex-row items-center justify-between gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-md bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
         >
           {/* Search input - opens search overlay */}
-          <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-sm relative">
+          <div className="relative w-full sm:flex-1 sm:min-w-[180px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <Input
+            <input
               type="text"
-              placeholder={t("rankingView.searchPlaceholder")}
               readOnly
-              disabled={!isSearchEnabled}
               onClick={isSearchEnabled ? openSearch : undefined}
-              className="w-full pl-9 cursor-pointer bg-background/50 truncate"
+              disabled={!isSearchEnabled}
+              placeholder={t("rankingView.searchPlaceholder")}
+              className="w-full h-10 pl-9 pr-3 rounded-md border bg-background shadow-xs dark:bg-input/30 dark:border-input text-sm font-normal outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer disabled:cursor-default"
             />
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center justify-end gap-2">
+          {/* Action buttons - grid on mobile, flex on desktop */}
+          <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
             {/* Owner-only actions */}
             {isOwner && (
               <>
                 {/* Rank Pokemon - enters drag-and-drop mode */}
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-9 w-9"
-                      onClick={handleRankPokemon}
-                    >
-                      <ListOrdered className="h-4 w-4" />
-                      <span className="sr-only">
-                        {t("rankingView.rankPokemon")}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>{t("rankingView.rankPokemon")}</TooltipContent>
-                </Tooltip>
+                <Button
+                  variant="outline"
+                  onClick={handleRankPokemon}
+                  className="gap-2 h-10 sm:w-auto"
+                >
+                  <ListOrdered className="h-4 w-4 shrink-0" />
+                  <span className="truncate sm:hidden lg:inline">
+                    {t("rankingView.rankPokemon")}
+                  </span>
+                  <span className="sr-only sm:not-sr-only lg:sr-only">
+                    {t("rankingView.rankPokemon")}
+                  </span>
+                </Button>
 
                 {/* Edit settings - goes to edit page */}
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-9 w-9"
-                      onClick={handleEditSettings}
-                    >
-                      <Pencil className="h-4 w-4" />
-                      <span className="sr-only">
-                        {t("rankingView.editSettings")}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
+                <Button
+                  variant="outline"
+                  onClick={handleEditSettings}
+                  className="gap-2 h-10 sm:w-auto"
+                >
+                  <Pencil className="h-4 w-4 shrink-0" />
+                  <span className="truncate sm:hidden lg:inline">
                     {t("rankingView.editSettings")}
-                  </TooltipContent>
-                </Tooltip>
+                  </span>
+                  <span className="sr-only sm:not-sr-only lg:sr-only">
+                    {t("rankingView.editSettings")}
+                  </span>
+                </Button>
               </>
             )}
 

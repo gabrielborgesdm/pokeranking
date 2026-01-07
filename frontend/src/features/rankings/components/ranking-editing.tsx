@@ -40,10 +40,10 @@ export const RankingEditing = memo(function RankingEditing({
   onSave,
   onDiscard,
 }: RankingEditingProps) {
-  const { isMobile } = useScreenSize();
+  const { isMedium } = useScreenSize();
   const { sensors, filteredOutIds, disabledIds } = useRankingEditing(
     pokemon,
-    isMobile
+    isMedium
   );
 
   const commonProps = {
@@ -59,7 +59,7 @@ export const RankingEditing = memo(function RankingEditing({
     disabledIds,
   };
 
-  if (isMobile) {
+  if (isMedium) {
     return <MobileRankingEditing {...commonProps} />;
   }
 
