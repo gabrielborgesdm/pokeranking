@@ -10,11 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
@@ -111,17 +106,13 @@ export const ExportButton = memo(function ExportButton({
 
   return (
     <DropdownMenu>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="h-9 w-9">
-              <Download className="h-4 w-4" />
-              <span className="sr-only">{t("rankingView.export")}</span>
-            </Button>
-          </DropdownMenuTrigger>
-        </TooltipTrigger>
-        <TooltipContent>{t("rankingView.export")}</TooltipContent>
-      </Tooltip>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="gap-2 h-10 sm:w-auto">
+          <Download className="h-4 w-4 shrink-0" />
+          <span className="truncate sm:hidden lg:inline">{t("rankingView.export")}</span>
+          <span className="sr-only sm:not-sr-only lg:sr-only">{t("rankingView.export")}</span>
+        </Button>
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={handleExportCsv}>
           <FileSpreadsheet className="h-4 w-4" />

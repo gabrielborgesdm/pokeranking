@@ -21,6 +21,7 @@ import {
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
+import { ScrollToButton } from "./scroll-to-button";
 
 const ZONE_HEADER_HEIGHT = 80;
 const ZONE_HEADER_HEIGHT_COMPACT = 56;
@@ -331,6 +332,9 @@ export const PokemonListingCards = memo(function PokemonListingCards({
         open={!!selectedPokemonId}
         onOpenChange={(open) => !open && setSelectedPokemonId(null)}
       />
+
+      {/* Floating scroll button - uses window scroll */}
+      <ScrollToButton />
     </div>
   );
 });

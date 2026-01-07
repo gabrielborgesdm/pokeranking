@@ -12,6 +12,7 @@ import { useAuthSync, handleSessionExpired } from "@/features/auth";
 import { isApiError } from "@pokeranking/api-client";
 
 const CACHE_DISABLED = process.env.NEXT_PUBLIC_CACHE_DISABLED === "true";
+const DEV_TOOLS_DISABLED = process.env.NEXT_PUBLIC_DEV_TOOLS_DISABLED === "true";
 
 function AuthSyncWrapper({ children }: { children: ReactNode }) {
   useAuthSync();
@@ -54,7 +55,7 @@ export function QueryProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthSyncWrapper>{children}</AuthSyncWrapper>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {!DEV_TOOLS_DISABLED && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }
