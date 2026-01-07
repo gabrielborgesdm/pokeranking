@@ -126,7 +126,10 @@ export const RankingCard = memo(function RankingCard({
         )}
         <div className="flex items-center justify-between sm:text-sm opacity-80">
           <span>
-            {t("myRankings.pokemonCount", { count: pokemonCount })}
+            <span className="sm:hidden">{pokemonCount} PK</span>
+            <span className="hidden sm:inline">
+              {t("myRankings.pokemonCount", { count: pokemonCount })}
+            </span>
           </span>
           {likesCount !== undefined ? (
             <div className="flex items-center gap-1 flex-shrink-0">
