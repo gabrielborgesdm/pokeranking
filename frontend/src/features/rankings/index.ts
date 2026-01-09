@@ -1,5 +1,4 @@
 // Components
-export { BackgroundPicker } from "./components/background-picker";
 export { BackgroundPreview } from "./components/background-preview";
 export { CardThemePreview } from "./components/card-theme-preview";
 export { ExportButton } from "./components/export-button";

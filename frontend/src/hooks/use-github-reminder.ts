@@ -7,17 +7,20 @@ import { getClientConfig } from "@/lib/config";
 const STORAGE_KEY = "pokeranking:github-reminder";
 const REMINDER_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const MIN_VISIT_COUNT = 2;
+const VISIT_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours between visit counts
 
 interface ReminderState {
   visitCount: number;
   permanentlyDismissed: boolean;
   lastDismissedAt: number | null;
+  lastVisitAt: number | null;
 }
 
 const DEFAULT_STATE: ReminderState = {
   visitCount: 0,
   permanentlyDismissed: false,
   lastDismissedAt: null,
+  lastVisitAt: null,
 };
 
 interface UseGithubReminderReturn {
@@ -43,12 +46,21 @@ export function useGithubReminder(): UseGithubReminderReturn {
   useEffect(() => {
     if (!isLoaded || hasIncrementedVisit.current) return;
 
-    hasIncrementedVisit.current = true;
-    setState((prev) => ({
-      ...prev,
-      visitCount: prev.visitCount + 1,
-    }));
-  }, [isLoaded, setState]);
+    const now = Date.now();
+    const lastVisit = state.lastVisitAt;
+
+    // Only count as a new visit if 24 hours have passed since last visit
+    if (!lastVisit || now - lastVisit >= VISIT_COOLDOWN_MS) {
+      hasIncrementedVisit.current = true;
+      setState((prev) => ({
+        ...prev,
+        visitCount: prev.visitCount + 1,
+        lastVisitAt: now,
+      }));
+    } else {
+      hasIncrementedVisit.current = true; // Prevent re-checking during this session
+    }
+  }, [isLoaded, setState, state.lastVisitAt]);
 
   const calculateShouldShow = useCallback((): boolean => {
     if (!isLoaded) return false;

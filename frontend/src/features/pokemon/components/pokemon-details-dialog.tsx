@@ -13,6 +13,7 @@ import { FullscreenImageDialog } from "@/components/fullscreen-image-dialog";
 import { PokemonTypeIcon } from "./pokemon-type-icon";
 import { StatBar, getStatColor } from "./stat-bar";
 import { TypeEffectivenessDisplay } from "./type-effectiveness-display";
+import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 import { cn } from "@/lib/utils";
 import { normalizePokemonImageSrc } from "@/lib/image-utils";
 import { pokemonTypeGradients, type PokemonType } from "@/lib/pokemon-types";
@@ -153,6 +154,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
   onOpenChange,
 }: PokemonDetailsDialogProps) {
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
+  useBackButtonDialog(open, () => onOpenChange(false));
 
   const { data, isLoading } = usePokemonControllerFindOne(pokemonId ?? "", {
     query: {
