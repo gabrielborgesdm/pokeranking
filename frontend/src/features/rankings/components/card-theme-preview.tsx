@@ -30,7 +30,7 @@ export const CardThemePreview = memo(function CardThemePreview({
       <p className="text-sm text-muted-foreground mb-3">
         {t("rankingForm.cardPreviewDescription")}
       </p>
-      <div className="flex justify-start lg:justify-center lg:mt-14">
+      <div className="flex justify-center lg:justify-center lg:mt-14">
         <RankingCard
           title={title || t("rankingForm.titlePlaceholder")}
           topPokemonImage={topPokemonImage}
