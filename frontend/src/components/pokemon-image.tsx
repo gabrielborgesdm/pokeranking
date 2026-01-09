@@ -15,7 +15,6 @@ interface PokemonImageProps {
   width?: number;
   height?: number;
   sizes?: string;
-  priority?: boolean;
   className?: string;
   draggable?: boolean;
 }
@@ -27,7 +26,6 @@ export const PokemonImage = React.memo(function PokemonImage({
   width,
   height,
   sizes,
-  priority,
   className,
   draggable = false,
 }: PokemonImageProps) {
@@ -65,7 +63,7 @@ export const PokemonImage = React.memo(function PokemonImage({
       width={width ?? 200}
       height={height ?? 200}
       sizes={sizes}
-      priority={priority}
+      loading="eager"
       className={cn("object-contain", className)}
       onError={handleError}
       draggable={draggable}
