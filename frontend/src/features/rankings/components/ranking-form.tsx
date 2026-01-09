@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ThemePicker } from "./theme-picker";
-import { BackgroundPicker } from "./background-picker";
 import { CardThemePreview } from "./card-theme-preview";
 import { BackgroundPreview } from "./background-preview";
 import { useRankingForm, type RankingFormData } from "../hooks/use-ranking-form";
@@ -62,8 +61,8 @@ export function RankingForm({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={onSubmit} className="space-y-6">
+        <Form {...form} >
+          <form onSubmit={onSubmit} className="space-y-8">
             {error && (
               <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
                 {error}
@@ -88,8 +87,14 @@ export function RankingForm({
               )}
             />
 
-            {/* Card Theme Section - Picker on left, Preview on right */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+              {/* Card Theme Preview */}
+              <CardThemePreview
+                title={watchedTitle}
+                theme={watchedTheme}
+                topPokemonImage={topPokemonImage}
+                pokemonCount={pokemonCount}
+              />
               <FormField
                 control={form.control}
                 name="theme"
@@ -111,18 +116,15 @@ export function RankingForm({
                   </FormItem>
                 )}
               />
-
-              {/* Card Theme Preview */}
-              <CardThemePreview
-                title={watchedTitle}
-                theme={watchedTheme}
-                topPokemonImage={topPokemonImage}
-                pokemonCount={pokemonCount}
-              />
             </div>
 
             {/* Background Section - Picker on left, Preview on right */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start pt-4">
+              {/* Background Preview */}
+              <BackgroundPreview
+                background={watchedBackground}
+                theme={watchedTheme}
+              />
               <FormField
                 control={form.control}
                 name="background"
@@ -133,11 +135,12 @@ export function RankingForm({
                       {t("rankingForm.backgroundDescription")}
                     </FormDescription>
                     <FormControl>
-                      <BackgroundPicker
+                      <ThemePicker
                         value={field.value}
                         onChange={field.onChange}
                         pokemonCount={totalRankedPokemon}
                         totalPokemonInSystem={totalPokemonInSystem}
+                        showSameAsCard
                       />
                     </FormControl>
                     <FormMessage />
@@ -145,11 +148,7 @@ export function RankingForm({
                 )}
               />
 
-              {/* Background Preview */}
-              <BackgroundPreview
-                background={watchedBackground}
-                theme={watchedTheme}
-              />
+
             </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
