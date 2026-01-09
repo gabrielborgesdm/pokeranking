@@ -10,6 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { MobilePokemonSearchFilters } from "@/features/pokemon";
+import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 import type { UseFilterStateReturn } from "../../hooks/use-filter-state";
 
 interface MobileFilterDialogProps {
@@ -27,6 +28,7 @@ export const MobileFilterDialog = memo(function MobileFilterDialog({
   filterState,
 }: MobileFilterDialogProps) {
   const { t } = useTranslation();
+  useBackButtonDialog(isOpen, onClose);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>

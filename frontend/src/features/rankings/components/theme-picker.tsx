@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Lock } from "lucide-react";
+import { Lock, Link2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   RANKING_THEMES,
@@ -21,10 +21,11 @@ import { Progress } from "@/components/ui/progress";
 
 interface ThemePickerProps {
   value?: string;
-  onChange: (themeId: string) => void;
+  onChange: (themeId: string | undefined) => void;
   pokemonCount: number;
   totalPokemonInSystem: number;
   className?: string;
+  showSameAsCard?: boolean;
 }
 
 const TIER_ORDER: ThemeTier[] = ["starter", "intermediate", "advanced", "premium"];
@@ -35,6 +36,7 @@ export const ThemePicker = memo(function ThemePicker({
   pokemonCount,
   totalPokemonInSystem,
   className,
+  showSameAsCard = false,
 }: ThemePickerProps) {
   const { t } = useTranslation();
 
@@ -52,6 +54,31 @@ export const ThemePicker = memo(function ThemePicker({
 
     return groups;
   }, []);
+
+  const renderSameAsCardButton = () => {
+    const isSelected = !value;
+
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            onClick={() => onChange(undefined)}
+            className={cn(
+              "relative w-10 h-10 sm:w-16 sm:h-16 rounded-md sm:rounded-lg transition-all border-2 border-dashed border-muted-foreground/30 bg-muted/50 flex items-center justify-center",
+              isSelected &&
+                "ring-2 ring-primary ring-offset-2 ring-offset-background border-primary",
+              "cursor-pointer hover:scale-105 hover:border-muted-foreground/50"
+            )}
+            aria-label={t("rankingForm.sameAsCard")}
+          >
+            <Link2 className="w-3 h-3 sm:w-5 sm:h-5 text-muted-foreground" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>{t("rankingForm.sameAsCard")}</TooltipContent>
+      </Tooltip>
+    );
+  };
 
   const renderThemeButton = (theme: RankingTheme) => {
     const available = isThemeAvailable(
@@ -73,7 +100,7 @@ export const ThemePicker = memo(function ThemePicker({
         onClick={() => available && onChange(theme.id)}
         disabled={!available}
         className={cn(
-          "relative w-16 h-16 rounded-lg transition-all border-2 border-transparent",
+          "relative w-10 h-10 sm:w-16 sm:h-16 rounded-md sm:rounded-lg transition-all border-2 border-transparent",
           theme.gradientClass,
           isSelected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
           available
@@ -83,8 +110,8 @@ export const ThemePicker = memo(function ThemePicker({
         aria-label={theme.displayName}
       >
         {!available && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
-            <Lock className="w-5 h-5 text-white" />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-md sm:rounded-lg">
+            <Lock className="w-3 h-3 sm:w-5 sm:h-5 text-white" />
           </div>
         )}
       </button>
@@ -120,6 +147,16 @@ export const ThemePicker = memo(function ThemePicker({
 
   return (
     <div className={cn("space-y-4", className)}>
+      {/* Same as card option */}
+      {showSameAsCard && (
+        <div className="space-y-2">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            {renderSameAsCardButton()}
+          </div>
+        </div>
+      )}
+
+      {/* Theme options grouped by tier */}
       {TIER_ORDER.map((tier) => {
         const themes = groupedThemes[tier];
         if (themes.length === 0) return null;
@@ -129,7 +166,7 @@ export const ThemePicker = memo(function ThemePicker({
             <h4 className="text-sm font-medium text-muted-foreground capitalize">
               {t(`rankingForm.themeTier.${tier}`)}
             </h4>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {themes.map(renderThemeButton)}
             </div>
           </div>

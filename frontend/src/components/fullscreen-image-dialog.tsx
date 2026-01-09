@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 
 interface FullscreenImageDialogProps {
   src: string | null;
@@ -22,6 +23,8 @@ export function FullscreenImageDialog({
   onOpenChange,
   alt = "Fullscreen image",
 }: FullscreenImageDialogProps) {
+  useBackButtonDialog(open, () => onOpenChange(false));
+
   if (!src) return null;
 
   return (
