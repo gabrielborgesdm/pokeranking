@@ -27,6 +27,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 
 function NavbarSkeleton() {
   return (
@@ -224,13 +225,12 @@ export function Navbar() {
   const isAuthenticated = status === "authenticated";
   const isAdmin = useIsAdmin();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { trackNavbarMenuOpen, trackThemeToggle } = useAnalytics();
+  const { trackThemeToggle } = useAnalytics();
+  useBackButtonDialog(mobileMenuOpen, () => setMobileMenuOpen(false));
 
   const handleMobileMenuChange = (open: boolean) => {
     setMobileMenuOpen(open);
-    if (open) {
-      trackNavbarMenuOpen();
-    }
+
   };
 
   const handleThemeToggle = () => {
