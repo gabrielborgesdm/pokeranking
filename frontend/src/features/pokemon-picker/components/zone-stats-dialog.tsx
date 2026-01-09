@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PokemonTypeIcon } from "@/features/pokemon/components/pokemon-type-icon";
+import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 import { cn } from "@/lib/utils";
 import { formatGeneration } from "@/lib/generation-utils";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
@@ -29,6 +30,7 @@ export const ZoneStatsDialog = memo(function ZoneStatsDialog({
   onOpenChange,
 }: ZoneStatsDialogProps) {
   const stats = useMemo(() => calculateZoneStats(pokemon), [pokemon]);
+  useBackButtonDialog(open, () => onOpenChange(false));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

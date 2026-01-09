@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { buttonVariants } from "@/components/ui/button";
+import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 import { cn } from "@/lib/utils";
 
 interface ConfirmDialogProps {
@@ -38,6 +39,7 @@ export function ConfirmDialog({
   isLoading = false,
 }: ConfirmDialogProps) {
   const { t } = useTranslation();
+  useBackButtonDialog(open, () => onOpenChange(false));
 
   const handleConfirm = () => {
     onConfirm();
