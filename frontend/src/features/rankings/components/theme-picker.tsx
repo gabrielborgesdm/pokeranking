@@ -28,7 +28,7 @@ interface ThemePickerProps {
   showSameAsCard?: boolean;
 }
 
-const TIER_ORDER: ThemeTier[] = ["starter", "intermediate", "advanced", "premium"];
+const TIER_ORDER: ThemeTier[] = ["starter", "wild", "elite", "legendary", "master"];
 
 export const ThemePicker = memo(function ThemePicker({
   value = DEFAULT_THEME_ID,
@@ -43,9 +43,10 @@ export const ThemePicker = memo(function ThemePicker({
   const groupedThemes = useMemo(() => {
     const groups: Record<ThemeTier, RankingTheme[]> = {
       starter: [],
-      intermediate: [],
-      advanced: [],
-      premium: [],
+      wild: [],
+      elite: [],
+      legendary: [],
+      master: [],
     };
 
     RANKING_THEMES.forEach((theme) => {
@@ -67,7 +68,7 @@ export const ThemePicker = memo(function ThemePicker({
             className={cn(
               "relative w-10 h-10 sm:w-16 sm:h-16 rounded-md sm:rounded-lg transition-all border-2 border-dashed border-muted-foreground/30 bg-muted/50 flex items-center justify-center",
               isSelected &&
-                "ring-2 ring-primary ring-offset-2 ring-offset-background border-primary",
+              "ring-2 ring-primary ring-offset-2 ring-offset-background border-primary",
               "cursor-pointer hover:scale-105 hover:border-muted-foreground/50"
             )}
             aria-label={t("rankingForm.sameAsCard")}
@@ -97,8 +98,7 @@ export const ThemePicker = memo(function ThemePicker({
       <button
         key={theme.id}
         type="button"
-        onClick={() => available && onChange(theme.id)}
-        disabled={!available}
+        onClick={() => onChange(theme.id)}
         className={cn(
           "relative w-10 h-10 sm:w-16 sm:h-16 rounded-md sm:rounded-lg transition-all border-2 border-transparent",
           theme.gradientClass,

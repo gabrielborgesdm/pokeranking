@@ -61,7 +61,7 @@ export const RankingActionBar = memo(function RankingActionBar({
     <>
       <div className={cn("flex justify-center px-4 sm:px-0", className)}>
         <div
-          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-md bg-card/80 border border-border/50 shadow-sm backdrop-blur-sm"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full sm:py-4 mt-8 px-3 sm:px-4 rounded-lg bg-card border border-border/50 "
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
         >
           {/* Search input - opens search overlay */}
@@ -86,7 +86,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                 <Button
                   variant="outline"
                   onClick={handleRankPokemon}
-                  className="gap-2 h-10 sm:w-auto"
+                  className="gap-2 h-10 sm:w-auto font-normal"
                 >
                   <ListOrdered className="h-4 w-4 shrink-0" />
                   <span className="truncate sm:hidden lg:inline">
@@ -101,7 +101,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                 <Button
                   variant="outline"
                   onClick={handleEditSettings}
-                  className="gap-2 h-10 sm:w-auto"
+                  className="gap-2 h-10 sm:w-auto font-normal"
                 >
                   <Pencil className="h-4 w-4 shrink-0" />
                   <span className="truncate sm:hidden lg:inline">

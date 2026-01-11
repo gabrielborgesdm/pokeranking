@@ -1,24 +1,16 @@
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 
-export type PokemonPickerMode = "select" | "drag";
-
-export interface PokemonPickerProps {
+export interface DraggablePokemonGalleryProps {
   /** List of Pokemon to display */
   pokemon: PokemonResponseDto[];
-  /** Operating mode - select for single-select, drag for DnD */
-  mode: PokemonPickerMode;
-  /** Currently selected Pokemon ID (select mode only) */
-  selectedId?: string | null;
   /** IDs of Pokemon that should appear disabled/unavailable (grayed out but visible) */
   disabledIds?: string[];
   /** IDs of Pokemon that should be completely hidden from the picker */
   filteredOutIds?: string[];
-  /** Callback when a Pokemon is selected (select mode) */
-  onSelect?: (pokemon: PokemonResponseDto | null) => void;
-  /** Callback when drag starts (drag mode) */
+  /** Callback when drag starts */
   onDragStart?: (event: DragStartEvent, pokemon: PokemonResponseDto) => void;
-  /** Callback when drag ends (drag mode) */
+  /** Callback when drag ends */
   onDragEnd?: (event: DragEndEvent, pokemon: PokemonResponseDto | null) => void;
   /** Optional class name for the container */
   className?: string;
@@ -35,6 +27,14 @@ export interface PokemonPickerProps {
   /** Optional filter component to render above the cards */
   filterSlot?: React.ReactNode;
 }
+
+// Backwards compatibility - deprecated, use DraggablePokemonGalleryProps
+export type PokemonPickerMode = "select" | "drag";
+export type PokemonPickerProps = DraggablePokemonGalleryProps & {
+  mode?: PokemonPickerMode;
+  selectedId?: string | null;
+  onSelect?: (pokemon: PokemonResponseDto | null) => void;
+};
 
 export interface PokemonPickerItemProps {
   pokemon: PokemonResponseDto;

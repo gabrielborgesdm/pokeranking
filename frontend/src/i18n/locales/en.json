@@ -157,9 +157,10 @@
     "unlockRequirement": "{{current}}/{{required}} Pokemon to unlock",
     "themeTier": {
       "starter": "Starter Themes",
-      "intermediate": "Intermediate Themes",
-      "advanced": "Advanced Themes",
-      "premium": "Premium Themes"
+      "wild": "Wild Themes",
+      "elite": "Elite Themes",
+      "legendary": "Legendary Themes",
+      "master": "Master Themes"
     },
     "cardPreview": "Card Preview",
     "cardPreviewDescription": "How your ranking appears on the My Rankings page",
@@ -195,8 +196,17 @@
       "invalidColor": "Invalid color format"
     }
   },
+  "pokemonPicker": {
+    "selectableGallery": {
+      "searchLabel": "Search Pokemon",
+      "searchPlaceholder": "Search by name...",
+      "noResults": "No Pokemon found matching your search.",
+      "noPokemon": "No Pokemon available."
+    }
+  },
   "rankingView": {
     "editRanking": "Edit Ranking",
+    "back": "Back",
     "pokemonCount_one": "{{count}} Pokemon",
     "pokemonCount_other": "{{count}} Pokemon",
     "pokemon_one": "Pokemon",
@@ -209,6 +219,9 @@
     "emptyRanking": "No Pokemon in this ranking",
     "addPokemon": "Add Pokemon",
     "edit": "Edit",
+    "saveChanges": "Save changes",
+    "searchPokemon": "Search Pokemon",
+    "filters": "Filters",
     "discardChanges": "Discard",
     "discardConfirmTitle": "Discard changes?",
     "discardConfirmDescription": "You have unsaved changes. Are you sure you want to discard them? This action cannot be undone.",
@@ -482,6 +495,122 @@
       "step1": "Tap the Share button (square with arrow)",
       "step2": "Scroll and tap \"Add to Home Screen\"",
       "step3": "Tap \"Add\" to confirm"
+    }
+  },
+  "zoneStats": {
+    "title": "{{zoneName}}-Tier Stats",
+    "totalPokemon": "Total Pokemon",
+    "typeDistribution": "Type Distribution",
+    "generationDistribution": "Generation Distribution",
+    "moreTypes": "+{{count}} more types"
+  },
+  "pokemonDetails": {
+    "loadingPokemon": "Loading Pokemon",
+    "species": "Species",
+    "height": "Height",
+    "weight": "Weight",
+    "abilities": "Abilities",
+    "baseStats": "Base Stats",
+    "hp": "HP",
+    "attack": "Attack",
+    "defense": "Defense",
+    "specialAttack": "Sp. Atk",
+    "specialDefense": "Sp. Def",
+    "speed": "Speed",
+    "total": "Total"
+  },
+  "design": {
+    "title": "Pokeranking Design System",
+    "subtitle": "Pokemon-inspired colors, gradients, and components",
+    "sections": {
+      "buttons": {
+        "title": "Buttons",
+        "variants": "Variants",
+        "sizes": "Sizes",
+        "pokemonThemed": "Pokemon Themed",
+        "primary": "Primary (Default)",
+        "secondary": "Secondary",
+        "destructive": "Destructive",
+        "outline": "Outline",
+        "ghost": "Ghost",
+        "link": "Link",
+        "small": "Small",
+        "default": "Default",
+        "large": "Large",
+        "catchPokemon": "Catch Pokemon",
+        "waterType": "Water Type",
+        "electricType": "Electric Type"
+      },
+      "colorPalette": {
+        "title": "Color Palette",
+        "pokerankingColors": "Pokeranking Colors",
+        "semanticColors": "Semantic Colors"
+      },
+      "pokemonPicker": {
+        "title": "Pokemon Picker",
+        "description": "Virtualized grid component with drag-and-drop functionality. Supports fixed columns and drag-and-drop with positioning.",
+        "instructions": "Drag Pokemon to the drop zone. Drop on a specific Pokemon to insert before it. Reorder by dragging within the zone. Already dropped Pokemon are disabled in the picker.",
+        "dropZone": "Drop Zone",
+        "pokemonCount_one": "{{count}} Pokemon",
+        "pokemonCount_other": "{{count}} Pokemon",
+        "clearAll": "Clear All",
+        "placeholder": "Drag Pokemon here to add them"
+      },
+      "selectableGallery": {
+        "title": "Selectable Pokemon Gallery",
+        "description": "Single-select gallery with real API data and search functionality. Click any Pokemon to select it.",
+        "selectedPokemon": "Selected Pokemon",
+        "deselect": "Deselect"
+      },
+      "forms": {
+        "title": "Form Components",
+        "inputs": "Inputs",
+        "togglesChoices": "Toggles & Choices",
+        "pokemonName": "Pokemon Name",
+        "pokemonNamePlaceholder": "Enter Pokemon name...",
+        "description": "Description",
+        "descriptionPlaceholder": "Describe your Pokemon...",
+        "pokemonType": "Pokemon Type",
+        "selectType": "Select a type",
+        "fire": "Fire",
+        "water": "Water",
+        "grass": "Grass",
+        "electric": "Electric",
+        "shinyPokemon": "Shiny Pokemon",
+        "enableNotifications": "Enable notifications",
+        "starterPokemon": "Starter Pokemon",
+        "bulbasaur": "Bulbasaur",
+        "charmander": "Charmander",
+        "squirtle": "Squirtle"
+      },
+      "gradients": {
+        "title": "Gradients",
+        "typeGradients": "Pokemon Type Gradients",
+        "typeGradientsDescription": "For ranking cards and type indicators",
+        "pokerankingGradients": "Brand Gradients",
+        "pokemonRed": "Pokemon Red",
+        "pokemonRedDescription": "Light to dark red",
+        "pokemonYellow": "Pokemon Yellow",
+        "pokemonYellowDescription": "Light to dark yellow",
+        "pokemonBlue": "Pokemon Blue",
+        "pokemonBlueDescription": "Light to dark blue",
+        "pokeball": "Pokeball",
+        "pokeballDescription": "Classic Pokeball design",
+        "sunset": "Sunset",
+        "sunsetDescription": "Yellow to red",
+        "ocean": "Ocean",
+        "oceanDescription": "Blue to navy",
+        "grassType": "Grass Type",
+        "grassTypeDescription": "Emerald to green",
+        "waterType": "Water Type",
+        "waterTypeDescription": "Blue to cyan",
+        "fireType": "Fire Type",
+        "fireTypeDescription": "Orange to red",
+        "electricType": "Electric Type",
+        "electricTypeDescription": "Yellow to amber",
+        "special": "Special",
+        "specialDescription": "Red to pink"
+      }
     }
   }
 }

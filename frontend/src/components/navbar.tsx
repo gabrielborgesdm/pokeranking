@@ -148,7 +148,7 @@ function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
               key={link.href}
               href={link.href}
               className={cn(
-                "flex items-center gap-1.5 text-sm font-medium transition-colors hover-scale",
+                "flex items-center gap-1.5 text-sm font-medium transition-colors",
                 isActive
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground",

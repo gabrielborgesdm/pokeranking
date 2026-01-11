@@ -182,9 +182,10 @@
     "unlockRequirement": "{{current}}/{{required}} Pokemon para desbloquear",
     "themeTier": {
       "starter": "Temas Iniciais",
-      "intermediate": "Temas Intermediários",
-      "advanced": "Temas Avançados",
-      "premium": "Temas Premium"
+      "wild": "Temas Selvagens",
+      "elite": "Temas de Elite",
+      "legendary": "Temas Lendários",
+      "master": "Temas Mestre Pokemon"
     },
     "cardPreview": "Prévia do Card",
     "cardPreviewDescription": "Como seu ranking aparece na página Meus Rankings",
@@ -220,8 +221,17 @@
       "invalidColor": "Formato de cor inválido"
     }
   },
+  "pokemonPicker": {
+    "selectableGallery": {
+      "searchLabel": "Buscar Pokemon",
+      "searchPlaceholder": "Buscar por nome...",
+      "noResults": "Nenhum Pokemon encontrado na sua busca.",
+      "noPokemon": "Nenhum Pokemon disponível."
+    }
+  },
   "rankingView": {
     "editRanking": "Editar Ranking",
+    "back": "Voltar",
     "pokemonCount_one": "{{count}} Pokemon",
     "pokemonCount_other": "{{count}} Pokemon",
     "pokemon_one": "Pokemon",
@@ -234,6 +244,9 @@
     "emptyRanking": "Nenhum Pokemon neste ranking",
     "addPokemon": "Adicionar Pokemon",
     "edit": "Editar",
+    "saveChanges": "Salvar alterações",
+    "searchPokemon": "Buscar Pokemon",
+    "filters": "Filtros",
     "discardChanges": "Descartar",
     "discardConfirmTitle": "Descartar alterações?",
     "discardConfirmDescription": "Você tem alterações não salvas. Tem certeza que deseja descartá-las? Esta ação não pode ser desfeita.",
@@ -482,6 +495,122 @@
       "step1": "Toque no botão Compartilhar (quadrado com seta)",
       "step2": "Role e toque em \"Adicionar à Tela de Início\"",
       "step3": "Toque em \"Adicionar\" para confirmar"
+    }
+  },
+  "zoneStats": {
+    "title": "Estatísticas do Tier {{zoneName}}",
+    "totalPokemon": "Total de Pokemon",
+    "typeDistribution": "Distribuição de Tipos",
+    "generationDistribution": "Distribuição de Gerações",
+    "moreTypes": "+{{count}} tipos a mais"
+  },
+  "pokemonDetails": {
+    "loadingPokemon": "Carregando Pokemon",
+    "species": "Espécie",
+    "height": "Altura",
+    "weight": "Peso",
+    "abilities": "Habilidades",
+    "baseStats": "Atributos Base",
+    "hp": "HP",
+    "attack": "Ataque",
+    "defense": "Defesa",
+    "specialAttack": "Atq. Esp.",
+    "specialDefense": "Def. Esp.",
+    "speed": "Velocidade",
+    "total": "Total"
+  },
+  "design": {
+    "title": "Sistema de Design Pokeranking",
+    "subtitle": "Cores, gradientes e componentes inspirados em Pokemon",
+    "sections": {
+      "buttons": {
+        "title": "Botões",
+        "variants": "Variações",
+        "sizes": "Tamanhos",
+        "pokemonThemed": "Tema Pokemon",
+        "primary": "Primário (Padrão)",
+        "secondary": "Secundário",
+        "destructive": "Destrutivo",
+        "outline": "Contorno",
+        "ghost": "Fantasma",
+        "link": "Link",
+        "small": "Pequeno",
+        "default": "Padrão",
+        "large": "Grande",
+        "catchPokemon": "Capturar Pokemon",
+        "waterType": "Tipo Água",
+        "electricType": "Tipo Elétrico"
+      },
+      "colorPalette": {
+        "title": "Paleta de Cores",
+        "pokerankingColors": "Cores do Pokeranking",
+        "semanticColors": "Cores Semânticas"
+      },
+      "pokemonPicker": {
+        "title": "Seletor de Pokemon",
+        "description": "Componente de grade virtualizada com funcionalidade de arrastar e soltar. Suporta colunas fixas e posicionamento por arrastar e soltar.",
+        "instructions": "Arraste Pokemon para a zona de soltar. Solte em um Pokemon específico para inserir antes dele. Reordene arrastando dentro da zona. Pokemon já soltos ficam desabilitados no seletor.",
+        "dropZone": "Zona de Soltar",
+        "pokemonCount_one": "{{count}} Pokemon",
+        "pokemonCount_other": "{{count}} Pokemon",
+        "clearAll": "Limpar Tudo",
+        "placeholder": "Arraste Pokemon aqui para adicioná-los"
+      },
+      "selectableGallery": {
+        "title": "Galeria Selecionável de Pokemon",
+        "description": "Galeria de seleção única com dados reais da API e funcionalidade de busca. Clique em qualquer Pokemon para selecioná-lo.",
+        "selectedPokemon": "Pokemon Selecionado",
+        "deselect": "Desselecionar"
+      },
+      "forms": {
+        "title": "Componentes de Formulário",
+        "inputs": "Entradas",
+        "togglesChoices": "Alternadores e Escolhas",
+        "pokemonName": "Nome do Pokemon",
+        "pokemonNamePlaceholder": "Digite o nome do Pokemon...",
+        "description": "Descrição",
+        "descriptionPlaceholder": "Descreva seu Pokemon...",
+        "pokemonType": "Tipo do Pokemon",
+        "selectType": "Selecione um tipo",
+        "fire": "Fogo",
+        "water": "Água",
+        "grass": "Planta",
+        "electric": "Elétrico",
+        "shinyPokemon": "Pokemon Shiny",
+        "enableNotifications": "Ativar notificações",
+        "starterPokemon": "Pokemon Inicial",
+        "bulbasaur": "Bulbasaur",
+        "charmander": "Charmander",
+        "squirtle": "Squirtle"
+      },
+      "gradients": {
+        "title": "Gradientes",
+        "typeGradients": "Gradientes de Tipo Pokemon",
+        "typeGradientsDescription": "Para cartas de ranking e indicadores de tipo",
+        "pokerankingGradients": "Gradientes do Pokeranking",
+        "pokemonRed": "Pokemon Vermelho",
+        "pokemonRedDescription": "Vermelho claro a escuro",
+        "pokemonYellow": "Pokemon Amarelo",
+        "pokemonYellowDescription": "Amarelo claro a escuro",
+        "pokemonBlue": "Pokemon Azul",
+        "pokemonBlueDescription": "Azul claro a escuro",
+        "pokeball": "Pokebola",
+        "pokeballDescription": "Design clássico da Pokebola",
+        "sunset": "Pôr do Sol",
+        "sunsetDescription": "Amarelo a vermelho",
+        "ocean": "Oceano",
+        "oceanDescription": "Azul a marinho",
+        "grassType": "Tipo Planta",
+        "grassTypeDescription": "Esmeralda a verde",
+        "waterType": "Tipo Água",
+        "waterTypeDescription": "Azul a ciano",
+        "fireType": "Tipo Fogo",
+        "fireTypeDescription": "Laranja a vermelho",
+        "electricType": "Tipo Elétrico",
+        "electricTypeDescription": "Amarelo a âmbar",
+        "special": "Especial",
+        "specialDescription": "Vermelho a rosa"
+      }
     }
   }
 }

@@ -3,6 +3,7 @@
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { RankingCard } from "./ranking-card";
+import { cn } from "@/lib/utils";
 
 interface CardThemePreviewProps {
   title: string;
@@ -22,6 +23,7 @@ export const CardThemePreview = memo(function CardThemePreview({
   const { t } = useTranslation();
   const now = new Date().toISOString();
 
+
   return (
     <div className={className}>
       <h4 className="text-sm font-medium">
@@ -38,7 +40,7 @@ export const CardThemePreview = memo(function CardThemePreview({
           createdAt={now}
           updatedAt={now}
           theme={theme}
-          className="w-[240px] pointer-events-none shadow-xl"
+          className={cn("w-48 sm:w-60 lg:w-72")}
         />
       </div>
     </div>
