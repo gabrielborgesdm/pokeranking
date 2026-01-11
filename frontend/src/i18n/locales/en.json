@@ -491,5 +491,20 @@
     "typeDistribution": "Type Distribution",
     "generationDistribution": "Generation Distribution",
     "moreTypes": "+{{count}} more types"
+  },
+  "pokemonDetails": {
+    "loadingPokemon": "Loading Pokemon",
+    "species": "Species",
+    "height": "Height",
+    "weight": "Weight",
+    "abilities": "Abilities",
+    "baseStats": "Base Stats",
+    "hp": "HP",
+    "attack": "Attack",
+    "defense": "Defense",
+    "specialAttack": "Sp. Atk",
+    "specialDefense": "Sp. Def",
+    "speed": "Speed",
+    "total": "Total"
   }
 }

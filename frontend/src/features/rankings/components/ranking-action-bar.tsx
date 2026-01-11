@@ -86,7 +86,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                 <Button
                   variant="outline"
                   onClick={handleRankPokemon}
-                  className="gap-2 h-10 sm:w-auto"
+                  className="gap-2 h-10 sm:w-auto font-normal"
                 >
                   <ListOrdered className="h-4 w-4 shrink-0" />
                   <span className="truncate sm:hidden lg:inline">
@@ -101,7 +101,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                 <Button
                   variant="outline"
                   onClick={handleEditSettings}
-                  className="gap-2 h-10 sm:w-auto"
+                  className="gap-2 h-10 sm:w-auto font-normal"
                 >
                   <Pencil className="h-4 w-4 shrink-0" />
                   <span className="truncate sm:hidden lg:inline">
