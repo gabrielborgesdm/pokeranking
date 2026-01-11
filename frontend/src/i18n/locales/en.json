@@ -197,6 +197,7 @@
   },
   "rankingView": {
     "editRanking": "Edit Ranking",
+    "back": "Back",
     "pokemonCount_one": "{{count}} Pokemon",
     "pokemonCount_other": "{{count}} Pokemon",
     "pokemon_one": "Pokemon",
@@ -483,5 +484,12 @@
       "step2": "Scroll and tap \"Add to Home Screen\"",
       "step3": "Tap \"Add\" to confirm"
     }
+  },
+  "zoneStats": {
+    "title": "{{zoneName}}-Tier Stats",
+    "totalPokemon": "Total Pokemon",
+    "typeDistribution": "Type Distribution",
+    "generationDistribution": "Generation Distribution",
+    "moreTypes": "+{{count}} more types"
   }
 }

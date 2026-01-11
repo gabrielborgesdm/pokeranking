@@ -222,6 +222,7 @@
   },
   "rankingView": {
     "editRanking": "Editar Ranking",
+    "back": "Voltar",
     "pokemonCount_one": "{{count}} Pokemon",
     "pokemonCount_other": "{{count}} Pokemon",
     "pokemon_one": "Pokemon",
@@ -483,5 +484,12 @@
       "step2": "Role e toque em \"Adicionar à Tela de Início\"",
       "step3": "Toque em \"Adicionar\" para confirmar"
     }
+  },
+  "zoneStats": {
+    "title": "Estatísticas do Tier {{zoneName}}",
+    "totalPokemon": "Total de Pokemon",
+    "typeDistribution": "Distribuição de Tipos",
+    "generationDistribution": "Distribuição de Gerações",
+    "moreTypes": "+{{count}} tipos a mais"
   }
 }

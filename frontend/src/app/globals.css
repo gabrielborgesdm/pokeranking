@@ -254,17 +254,6 @@
   border-radius: var(--radius);
 }
 
-/* Hover animation utility */
-.hover-scale {
-  transition: transform 200ms ease-out;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-.hover-scale:hover {
-  transform: scale(1.02) translateZ(0);
-}
-
 /* Link utility */
 @layer utilities {
   .link {
