@@ -24,7 +24,7 @@ var RANKING_THEMES = [
     displayName: "Grass",
     gradientClass: "gradient-type-grass",
     textColor: "#ffffff",
-    unlockRequirement: { type: "fixed", count: 0 },
+    unlockRequirement: { type: "fixed", count: 50 },
     tier: "starter"
   },
   {

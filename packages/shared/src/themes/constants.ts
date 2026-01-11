@@ -26,7 +26,7 @@ export const RANKING_THEMES: readonly RankingTheme[] = [
     displayName: "Grass",
     gradientClass: "gradient-type-grass",
     textColor: "#ffffff",
-    unlockRequirement: { type: "fixed", count: 0 },
+    unlockRequirement: { type: "fixed", count: 50 },
     tier: "starter",
   },
   {
