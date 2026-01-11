@@ -2,7 +2,7 @@
 
 import { memo, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Trash2, X, Save } from "lucide-react";
+import { Search, Trash2, X, Save, ArrowLeft } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
-import { PokemonDropzone, PokemonPicker } from "@/features/pokemon-picker";
+import { PokemonDropzone, DraggablePokemonGallery } from "@/features/pokemon-picker";
 import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
 import { MobileFilterDialog } from "@/features/pokemon-picker/components/mobile/mobile-filter-dialog";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
@@ -225,14 +225,14 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
                         {hasUnsavedChanges ? (
                           <Trash2 className="h-4 w-4" />
                         ) : (
-                          <X className="h-4 w-4" />
+                          <ArrowLeft className="h-4 w-4" />
                         )}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                       {hasUnsavedChanges
                         ? t("rankingView.discardChanges", "Discard changes")
-                        : t("rankingView.close", "Close")}
+                        : t("rankingView.back", "Back")}
                     </TooltipContent>
                   </Tooltip>
 
@@ -324,9 +324,8 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
                 )}
               </div>
             ) : (
-              <PokemonPicker
+              <DraggablePokemonGallery
                 pokemon={pickerPokemon}
-                mode="drag"
                 disabledIds={disabledIds}
                 filteredOutIds={filteredOutIds}
                 maxColumns={5}

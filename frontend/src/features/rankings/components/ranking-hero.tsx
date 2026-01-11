@@ -10,6 +10,7 @@ import { PokemonDetailsDialog } from "@/features/pokemon/components/pokemon-deta
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { getThemeById } from "@pokeranking/shared";
+import { add } from "@dnd-kit/utilities";
 
 interface RankingHeroProps {
   /** Ranking title */
@@ -64,17 +65,21 @@ export const RankingHero = memo(function RankingHero({
     return getThemeById(theme);
   }, [theme]);
 
-  const gradientClass = themeData?.gradientClass ?? "gradient-type-normal";
+  const gradientClass = themeData?.gradientClass ?? "gradient-type-fire";
+  const textColor = themeData?.textColor ?? "#ffffff";
+  const textShadow = themeData?.textShadow;
 
   return (
     <div
       className={cn(
-        "relative mt-6 mx-4 sm:mx-auto rounded-2xl py-8 sm:py-12 px-4 sm:px-6 overflow-hidden",
+        "relative mt-6 mx-4 sm:mx-auto rounded-lg py-8 sm:py-12 px-4 sm:px-6 overflow-hidden",
         gradientClass,
         className
       )}
       style={{
-        maxWidth: maxContentWidth
+        maxWidth: maxContentWidth,
+        color: textColor,
+        textShadow: textShadow
       }}
 
     >

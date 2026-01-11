@@ -1,9 +1,6 @@
 "use client";
 
-import { memo, useState, useMemo, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { Search, Trash2, X, Save } from "lucide-react";
-import { DndContext, type SensorDescriptor, type SensorOptions } from "@dnd-kit/core";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -11,16 +8,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ConfirmDialog } from "@/components/confirm-dialog";
-import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
-import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
-import { PokemonDropzone, PokemonPicker } from "@/features/pokemon-picker";
-import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
+import { PokemonDropzone, DraggablePokemonGallery } from "@/features/pokemon-picker";
 import { DesktopFilterPanel } from "@/features/pokemon-picker/components/desktop/desktop-filter-panel";
+import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
-import { DesktopDropzoneEmptyState } from "./desktop-dropzone-empty-state";
-import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { UseFilterStateReturn } from "@/features/pokemon-picker/hooks/use-filter-state";
+import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
+import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
+import { DndContext, type SensorDescriptor, type SensorOptions } from "@dnd-kit/core";
+import type { PokemonResponseDto } from "@pokeranking/api-client";
+import { ArrowLeft, Save, Search, Trash2, X } from "lucide-react";
+import { memo, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { DesktopDropzoneEmptyState } from "./desktop-dropzone-empty-state";
 
 interface DesktopRankingEditingProps {
   pokemon: PokemonResponseDto[];
@@ -161,14 +161,14 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
                         {hasUnsavedChanges ? (
                           <Trash2 className="h-4 w-4" />
                         ) : (
-                          <X className="h-4 w-4" />
+                          <ArrowLeft className="h-4 w-4" />
                         )}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                       {hasUnsavedChanges
                         ? t("rankingView.discardChanges", "Discard changes")
-                        : t("rankingView.close", "Close")}
+                        : t("rankingView.back", "Back")}
                     </TooltipContent>
                   </Tooltip>
 
@@ -247,9 +247,8 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
                 )}
               </div>
             ) : (
-              <PokemonPicker
+              <DraggablePokemonGallery
                 pokemon={pickerPokemon}
-                mode="drag"
                 disabledIds={disabledIds}
                 filteredOutIds={filteredOutIds}
                 maxColumns={5}

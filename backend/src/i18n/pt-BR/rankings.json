@@ -2,5 +2,5 @@
   "notFound": "Ranking com ID {id} não encontrado",
   "titleExists": "Você já tem um ranking com título \"{title}\"",
   "cannotModifyOthers": "Você só pode modificar seus próprios rankings",
-  "themeNotAvailable": "O tema \"{themeId}\" não está disponível. Classifique mais Pokemon para desbloqueá-lo."
+  "themeNotAvailable": "O tema \"{themeId}\" não está disponível. Ranqueie mais Pokemon para desbloqueá-lo."
 }
