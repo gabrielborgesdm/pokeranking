@@ -15,6 +15,7 @@ import { formatGeneration } from "@/lib/generation-utils";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { calculateZoneStats } from "../utils/zone-stats";
 import type { Zone } from "../utils/zone-grouping";
+import { useTranslation } from "react-i18next";
 
 interface ZoneStatsDialogProps {
   zone: Zone;
@@ -29,6 +30,7 @@ export const ZoneStatsDialog = memo(function ZoneStatsDialog({
   open,
   onOpenChange,
 }: ZoneStatsDialogProps) {
+  const { t } = useTranslation();
   const stats = useMemo(() => calculateZoneStats(pokemon), [pokemon]);
   useBackButtonDialog(open, () => onOpenChange(false));
 
@@ -46,7 +48,7 @@ export const ZoneStatsDialog = memo(function ZoneStatsDialog({
             >
               {zone.name}
             </div>
-            <span>{zone.name}-Tier Stats</span>
+            <span>{t("zoneStats.title", { zoneName: zone.name })}</span>
           </DialogTitle>
         </DialogHeader>
 
@@ -59,14 +61,16 @@ export const ZoneStatsDialog = memo(function ZoneStatsDialog({
             <p className="text-3xl font-bold" style={{ color: zone.color }}>
               {stats.totalCount}
             </p>
-            <p className="text-sm text-muted-foreground">Total Pokemon</p>
+            <p className="text-sm text-muted-foreground">
+              {t("zoneStats.totalPokemon")}
+            </p>
           </div>
 
           {/* Type Distribution */}
           {stats.topTypes.length > 0 && (
             <div className="space-y-3">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                Type Distribution
+                {t("zoneStats.typeDistribution")}
               </h3>
               <div className="space-y-2">
                 {stats.topTypes.slice(0, 8).map((item, index) => (
@@ -99,7 +103,9 @@ export const ZoneStatsDialog = memo(function ZoneStatsDialog({
                 ))}
                 {stats.topTypes.length > 8 && (
                   <p className="text-xs text-muted-foreground text-center pt-1">
-                    +{stats.topTypes.length - 8} more types
+                    {t("zoneStats.moreTypes", {
+                      count: stats.topTypes.length - 8,
+                    })}
                   </p>
                 )}
               </div>
@@ -110,7 +116,7 @@ export const ZoneStatsDialog = memo(function ZoneStatsDialog({
           {stats.topGenerations.length > 0 && (
             <div className="space-y-3">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                Generation Distribution
+                {t("zoneStats.generationDistribution")}
               </h3>
               <div className="grid grid-cols-3 gap-2">
                 {stats.topGenerations.map((item, index) => (

@@ -183,7 +183,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
         }
       }}
       className={cn(
-        "relative w-full mt-6",
+        "relative w-full mt-2",
         className
       )}
     >

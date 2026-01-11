@@ -38,7 +38,7 @@ export function RankingsDropdown() {
         <Button
           variant="ghost"
           className={cn(
-            "flex items-center gap-1.5 text-sm font-medium hover-scale",
+            "flex items-center gap-1.5 text-sm font-medium",
             isActive
               ? "text-foreground"
               : "text-muted-foreground hover:text-foreground"
