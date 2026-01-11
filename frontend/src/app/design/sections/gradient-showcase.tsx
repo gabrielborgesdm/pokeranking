@@ -1,85 +1,97 @@
-const brandGradients = [
+"use client";
+
+import { useTranslation } from "react-i18next";
+
+const pokerankingGradients = [
   {
-    name: "Pokemon Red",
+    nameKey: "pokemonRed",
+    descriptionKey: "pokemonRedDescription",
     class: "gradient-pokemon-red",
-    description: "Light to dark red",
   },
   {
-    name: "Pokemon Yellow",
+    nameKey: "pokemonYellow",
+    descriptionKey: "pokemonYellowDescription",
     class: "gradient-pokemon-yellow",
-    description: "Light to dark yellow",
   },
   {
-    name: "Pokemon Blue",
+    nameKey: "pokemonBlue",
+    descriptionKey: "pokemonBlueDescription",
     class: "gradient-pokemon-blue",
-    description: "Light to dark blue",
   },
   {
-    name: "Pokeball",
+    nameKey: "pokeball",
+    descriptionKey: "pokeballDescription",
     class: "gradient-pokeball",
-    description: "Classic Pokeball design",
   },
   {
-    name: "Sunset",
+    nameKey: "sunset",
+    descriptionKey: "sunsetDescription",
     class: "gradient-pokemon-sunset",
-    description: "Yellow to red",
   },
   {
-    name: "Ocean",
+    nameKey: "ocean",
+    descriptionKey: "oceanDescription",
     class: "gradient-pokemon-ocean",
-    description: "Blue to navy",
   },
 ];
 
 const typeGradients = [
   {
-    name: "Grass Type",
+    nameKey: "grassType",
+    descriptionKey: "grassTypeDescription",
     class: "gradient-type-grass",
-    description: "Emerald to green",
   },
   {
-    name: "Water Type",
+    nameKey: "waterType",
+    descriptionKey: "waterTypeDescription",
     class: "gradient-type-water",
-    description: "Blue to cyan",
   },
   {
-    name: "Fire Type",
+    nameKey: "fireType",
+    descriptionKey: "fireTypeDescription",
     class: "gradient-type-fire",
-    description: "Orange to red",
   },
   {
-    name: "Electric Type",
+    nameKey: "electricType",
+    descriptionKey: "electricTypeDescription",
     class: "gradient-type-electric",
-    description: "Yellow to amber",
   },
   {
-    name: "Special",
+    nameKey: "special",
+    descriptionKey: "specialDescription",
     class: "gradient-type-special",
-    description: "Red to pink",
   },
 ];
 
 export function GradientShowcase() {
+  const { t } = useTranslation();
+
   return (
     <section className="space-y-8">
-      <h2 className="text-2xl font-semibold">Gradients</h2>
+      <h2 className="text-2xl font-semibold">
+        {t("design.sections.gradients.title")}
+      </h2>
 
       <div className="space-y-6">
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Pokemon Type Gradients</h3>
+          <h3 className="text-lg font-medium">
+            {t("design.sections.gradients.typeGradients")}
+          </h3>
           <p className="text-sm text-muted-foreground">
-            For ranking cards and type indicators
+            {t("design.sections.gradients.typeGradientsDescription")}
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {typeGradients.map((gradient) => (
-              <div key={gradient.name} className="space-y-2">
+              <div key={gradient.nameKey} className="space-y-2">
                 <div
                   className={`${gradient.class} h-24 rounded-xl shadow-lg flex items-end p-3`}
                 >
                   <span className="font-semibold text-sm">#1</span>
                 </div>
                 <div className="text-sm">
-                  <p className="font-medium">{gradient.name}</p>
+                  <p className="font-medium">
+                    {t(`design.sections.gradients.${gradient.nameKey}`)}
+                  </p>
                   <p className="text-muted-foreground font-mono text-xs">
                     .{gradient.class}
                   </p>
@@ -90,16 +102,22 @@ export function GradientShowcase() {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-lg font-medium">Brand Gradients</h3>
+          <h3 className="text-lg font-medium">
+            {t("design.sections.gradients.pokerankingGradients")}
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {brandGradients.map((gradient) => (
-              <div key={gradient.name} className="space-y-2">
+            {pokerankingGradients.map((gradient) => (
+              <div key={gradient.nameKey} className="space-y-2">
                 <div
                   className={`${gradient.class} h-32 rounded-lg shadow-md`}
                 />
                 <div className="text-sm">
-                  <p className="font-medium">{gradient.name}</p>
-                  <p className="text-muted-foreground">{gradient.description}</p>
+                  <p className="font-medium">
+                    {t(`design.sections.gradients.${gradient.nameKey}`)}
+                  </p>
+                  <p className="text-muted-foreground">
+                    {t(`design.sections.gradients.${gradient.descriptionKey}`)}
+                  </p>
                   <p className="text-muted-foreground font-mono text-xs">
                     .{gradient.class}
                   </p>

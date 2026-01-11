@@ -11,6 +11,7 @@ import {
 import { DraggablePokemonGallery, PokemonDropzone } from "@/features/pokemon-picker";
 import { SAMPLE_POKEMON, toApiFormat } from "@/data/sample-pokemon";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 
 const samplePokemonData = SAMPLE_POKEMON.map(
@@ -45,32 +46,31 @@ export function PokemonPickerShowcase() {
     return [...originalDisabledIds, ...droppedIds];
   }, [droppedPokemon]);
 
+  const { t } = useTranslation();
+
   return (
     <section className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold mb-2">Pokemon Picker</h2>
+        <h2 className="text-2xl font-bold mb-2">{t("design.sections.pokemonPicker.title")}</h2>
         <p className="text-muted-foreground">
-          Virtualized grid component with drag-and-drop functionality. Supports
-          fixed columns and drag-and-drop with positioning.
+          {t("design.sections.pokemonPicker.description")}
         </p>
       </div>
 
       <DndContext sensors={sensors}>
         <div className="space-y-6">
           <p className="text-sm text-muted-foreground">
-            Drag Pokemon to the drop zone. Drop on a specific Pokemon to
-            insert before it. Reorder by dragging within the zone. Already
-            dropped Pokemon are disabled in the picker.
+            {t("design.sections.pokemonPicker.instructions")}
           </p>
 
           {/* Drop Zone */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="font-medium">
-                Drop Zone{" "}
+                {t("design.sections.pokemonPicker.dropZone")}{" "}
                 {droppedPokemon.length > 0 && (
                   <span className="text-muted-foreground font-normal">
-                    ({droppedPokemon.length} Pokemon)
+                    ({t("design.sections.pokemonPicker.pokemonCount", { count: droppedPokemon.length })})
                   </span>
                 )}
               </h4>
@@ -80,7 +80,7 @@ export function PokemonPickerShowcase() {
                   size="sm"
                   onClick={() => setDroppedPokemon([])}
                 >
-                  Clear All
+                  {t("design.sections.pokemonPicker.clearAll")}
                 </Button>
               )}
             </div>
@@ -90,7 +90,7 @@ export function PokemonPickerShowcase() {
               onChange={setDroppedPokemon}
               allPokemon={samplePokemonData}
               maxColumns={4}
-              placeholder="Drag Pokemon here to add them"
+              placeholder={t("design.sections.pokemonPicker.placeholder")}
             />
           </div>
 

@@ -9,6 +9,7 @@ export { VirtualizedPokemonGrid } from "./components/virtualized-pokemon-grid";
 export { PickerHeaderFilters } from "./components/picker-header-filters";
 export { BoxTabs } from "./components/box-tabs";
 export { PokemonListingCards } from "./components/pokemon-listing-cards";
+export { SelectablePokemonGallery } from "./components/selectable-pokemon-gallery";
 export { DesktopFilterPanel } from "./components/desktop/desktop-filter-panel";
 export { MobileFilterDialog } from "./components/mobile/mobile-filter-dialog";
 export { useResponsiveGrid } from "./hooks/use-responsive-grid";
@@ -24,5 +25,6 @@ export type {
 } from "./types";
 export type { PokemonDropzoneProps } from "./components/pokemon-dropzone";
 export type { VirtualizedPokemonGridProps } from "./components/virtualized-pokemon-grid";
+export type { SelectablePokemonGalleryProps } from "./components/selectable-pokemon-gallery";
 export type { PokemonSortByOption, PokemonOrderOption } from "./hooks/use-all-pokemon";
 export type { UseFilterStateReturn, FilterState } from "./hooks/use-filter-state";
