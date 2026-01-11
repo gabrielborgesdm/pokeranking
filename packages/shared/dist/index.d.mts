@@ -11,7 +11,7 @@ type ThemeUnlockRequirement = {
 /**
  * Theme tier for grouping in the UI
  */
-type ThemeTier = "starter" | "intermediate" | "advanced" | "premium";
+type ThemeTier = "starter" | "wild" | "elite" | "legendary" | "master";
 /**
  * Ranking theme configuration
  */
@@ -22,8 +22,10 @@ interface RankingTheme {
     displayName: string;
     /** CSS class for the gradient (defined in globals.css) */
     gradientClass: string;
-    /** Text color for contrast - 'light' for white text, 'dark' for dark text */
-    textColor: "light" | "dark";
+    /** Text color as CSS color value (e.g., '#ffffff', 'rgb(255,255,255)') */
+    textColor: string;
+    /** Optional text shadow for better contrast */
+    textShadow?: string;
     /** Requirement to unlock this theme */
     unlockRequirement: ThemeUnlockRequirement;
     /** Tier grouping for UI display */

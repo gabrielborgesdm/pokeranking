@@ -63,11 +63,7 @@ export function RankingForm({
       <CardContent>
         <Form {...form} >
           <form onSubmit={onSubmit} className="space-y-8">
-            {error && (
-              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-                {error}
-              </div>
-            )}
+
 
             {/* Title Field */}
             <FormField
@@ -140,7 +136,7 @@ export function RankingForm({
                         onChange={field.onChange}
                         pokemonCount={totalRankedPokemon}
                         totalPokemonInSystem={totalPokemonInSystem}
-                        showSameAsCard
+
                       />
                     </FormControl>
                     <FormMessage />
@@ -150,6 +146,11 @@ export function RankingForm({
 
 
             </div>
+            {error && (
+              <div className=" p-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
 
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading
@@ -158,6 +159,7 @@ export function RankingForm({
                   ? t("rankingForm.create")
                   : t("rankingForm.save")}
             </Button>
+
           </form>
         </Form>
       </CardContent>

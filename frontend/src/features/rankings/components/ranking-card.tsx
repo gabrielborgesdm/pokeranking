@@ -90,6 +90,24 @@ export const RankingCard = memo(function RankingCard({
     return foundTheme ?? getThemeById(DEFAULT_THEME_ID)!;
   }, [theme]);
 
+  // Determine if text is light or dark based on color value for decorative elements
+  const isLightText = useMemo(() => {
+    const color = themeData.textColor.toLowerCase();
+    // Check if it's a light color (white or light grays/colors)
+    if (color === "#ffffff" || color === "#fff") return true;
+    // Check luminance for other colors - simple heuristic
+    if (color.startsWith("#")) {
+      const hex = color.replace("#", "");
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      // Calculate relative luminance
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      return luminance > 0.5;
+    }
+    return true; // Default to light
+  }, [themeData.textColor]);
+
   return (
     <div
       onClick={onClick}
@@ -97,9 +115,12 @@ export const RankingCard = memo(function RankingCard({
         "relative overflow-hidden rounded-xl p-3 sm:p-6 min-w-0 shadow-lg transition-transform hover:scale-105 select-none",
         onClick && "hover:cursor-pointer",
         themeData.gradientClass,
-        themeData.textColor === "light" ? "text-white" : "text-foreground",
         className
       )}
+      style={{
+        color: themeData.textColor,
+        textShadow: themeData.textShadow
+      }}
     >
       {/* Top Pokemon Image */}
       <div className="relative w-full aspect-square mb-4">
@@ -146,13 +167,13 @@ export const RankingCard = memo(function RankingCard({
       <div
         className={cn(
           "absolute -top-8 -right-8 w-24 h-24 rounded-full",
-          themeData.textColor === "light" ? "bg-white/10" : "bg-black/10"
+          isLightText ? "bg-white/10" : "bg-black/10"
         )}
       />
       <div
         className={cn(
           "absolute -bottom-4 -left-4 w-16 h-16 rounded-full",
-          themeData.textColor === "light" ? "bg-white/5" : "bg-black/5"
+          isLightText ? "bg-white/5" : "bg-black/5"
         )}
       />
 
@@ -165,7 +186,7 @@ export const RankingCard = memo(function RankingCard({
                 variant="ghost"
                 size="icon-sm"
                 className={cn(
-                  themeData.textColor === "light"
+                  isLightText
                     ? "bg-black/20 hover:bg-black/40 text-white"
                     : "bg-white/40 hover:bg-white/60 text-foreground"
                 )}

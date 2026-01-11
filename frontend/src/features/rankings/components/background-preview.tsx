@@ -94,7 +94,7 @@ export const BackgroundPreview = memo(function BackgroundPreview({
             {/* Center section: Title and info placeholders */}
             <div className="flex-1 min-w-0">
               <div className="w-32 sm:w-40 h-5 sm:h-6 rounded-full bg-white/30 mb-2" />
-              <div className="flex items-center gap-2">
+              <div className={cn("flex items-center gap-2", themeData.additionalTextCss)}>
                 <div className="w-16 sm:w-20 h-3 rounded-full bg-white/20" />
                 <span className="text-white/40">·</span>
                 <div className="w-20 sm:w-24 h-3 rounded-full bg-white/20" />

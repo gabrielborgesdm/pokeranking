@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
+
 const pokemonColors = [
   { name: "Pokemon Red", variable: "pokemon-red", class: "bg-pokemon-red" },
   {
@@ -48,12 +52,14 @@ const semanticColors = [
 ];
 
 export function ColorPalette() {
+  const { t } = useTranslation();
+
   return (
     <section className="space-y-8">
-      <h2 className="text-2xl font-semibold">Color Palette</h2>
+      <h2 className="text-2xl font-semibold">{t("design.sections.colorPalette.title")}</h2>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Pokemon Brand Colors</h3>
+        <h3 className="text-lg font-medium">{t("design.sections.colorPalette.pokerankingColors")}</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {pokemonColors.map((color) => (
             <div key={color.variable} className="space-y-2">
@@ -70,7 +76,7 @@ export function ColorPalette() {
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-medium">Semantic Colors</h3>
+        <h3 className="text-lg font-medium">{t("design.sections.colorPalette.semanticColors")}</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {semanticColors.map((color) => (
             <div key={color.variable} className="space-y-2">

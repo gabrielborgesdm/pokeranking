@@ -263,6 +263,52 @@
   .link-primary {
     @apply text-primary underline-offset-4 hover:underline transition-colors;
   }
+
+  /* Pokemon color text utilities */
+  .text-pokemon-red {
+    color: var(--color-pokemon-red);
+  }
+
+  .text-pokemon-red-light {
+    color: var(--color-pokemon-red-light);
+  }
+
+  .text-pokemon-red-dark {
+    color: var(--color-pokemon-red-dark);
+  }
+
+  .text-yellow-dark {
+    color: var(--color-pokemon-yellow-dark);
+  }
+
+  .text-pokemon-yellow {
+    color: var(--color-pokemon-yellow);
+  }
+
+  .text-pokemon-yellow-light {
+    color: var(--color-pokemon-yellow-light);
+  }
+
+  .text-pokemon-blue {
+    color: var(--color-pokemon-blue);
+  }
+
+  .text-pokemon-blue-light {
+    color: var(--color-pokemon-blue-light);
+  }
+
+  .text-pokemon-blue-dark {
+    color: var(--color-pokemon-blue-dark);
+  }
+
+  .text-pokemon-navy {
+    color: var(--color-pokemon-navy);
+  }
+
+  /* Text shadow utilities */
+  .text-shadow-dark {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  }
 }
 
 /* Pokemon Gradient Utilities */
@@ -288,16 +334,6 @@
         oklch(0.40 0.175 265) 100%);
   }
 
-  .gradient-pokeball {
-    background: linear-gradient(180deg,
-        oklch(0.50 0.205 27) 0%,
-        oklch(0.50 0.205 27) 45%,
-        oklch(0.12 0 0) 45%,
-        oklch(0.12 0 0) 55%,
-        oklch(0.98 0 0) 55%,
-        oklch(0.98 0 0) 100%);
-  }
-
   .gradient-pokemon-sunset {
     background: linear-gradient(135deg,
         oklch(0.87 0.185 90) 0%,
@@ -308,6 +344,63 @@
     background: linear-gradient(135deg,
         oklch(0.55 0.195 265) 0%,
         oklch(0.20 0.02 280) 100%);
+  }
+
+  .gradient-pokeball {
+    background: linear-gradient(180deg,
+        oklch(0.50 0.205 27) 0%,
+        oklch(0.50 0.205 27) 45%,
+        oklch(0.12 0 0) 45%,
+        oklch(0.12 0 0) 55%,
+        oklch(0.98 0 0) 55%,
+        oklch(0.98 0 0) 100%);
+  }
+
+  /* 🔵 Great Ball */
+  .gradient-greatball {
+    background: linear-gradient(180deg,
+        #2E6BD1 0%,
+        #1E4FA3 45%,
+        #000000 45%,
+        #000000 55%,
+        #F2F2F2 55%,
+        #DDDDDD 100%);
+  }
+
+  /* 🟡 Ultra Ball */
+  .gradient-ultraball {
+    background: linear-gradient(180deg,
+        #F5C542 0%,
+        #D4A017 45%,
+        #000000 45%,
+        #000000 55%,
+        #F3F3F3 55%,
+        #E1E1E1 100%);
+  }
+
+  /* 💖 Love Ball */
+  .gradient-loveball {
+    background: linear-gradient(180deg,
+        #FF7EB9 0%,
+        #E64686 45%,
+        #000000 45%,
+        #000000 55%,
+        #FFF1F6 55%,
+        #F2D6E2 100%);
+  }
+
+  /* ⚫ Luxury Ball (gold band + red accent BEFORE center) */
+  .gradient-luxuryball {
+    background: linear-gradient(180deg,
+        #2C2C2C 0%,
+        #121212 42%,
+        #B11226 42%,
+        #B11226 45%,
+        #D4AF37 45%,
+        #D4AF37 55%,
+        #1F1F1F 55%,
+        #0A0A0A 100%);
+
   }
 
   .text-gradient-pokemon {
@@ -363,8 +456,11 @@
 }
 
 .gradient-type-dark {
-  background: linear-gradient(to bottom right, #705848, #49392F) !important;
-  color: white !important;
+  background: linear-gradient(135deg,
+      #2E2A33 0%,
+      #1F1B24 50%,
+      #121016 100%);
+  color: #E6E3EB;
 }
 
 .gradient-type-dragon {
@@ -378,18 +474,27 @@
 }
 
 .gradient-type-ghost {
-  background: linear-gradient(to bottom right, #705898, #493963) !important;
-  color: white !important;
+  background: linear-gradient(135deg,
+      #5C4B8A 0%,
+      #3E315E 50%,
+      #241A3A 100%);
+  color: #EDE9F6;
 }
 
 .gradient-type-normal {
-  background: linear-gradient(to bottom right, #A8A878, #6D6D4E) !important;
-  color: white !important;
+  background: linear-gradient(135deg,
+      #F4F2E9 0%,
+      #DED8BF 45%,
+      #C6BE9E 100%);
+  color: #2B2B2B;
 }
 
 .gradient-type-poison {
-  background: linear-gradient(to bottom right, #A040A0, #682A68) !important;
-  color: white !important;
+  background: linear-gradient(135deg,
+      #B35AC8 0%,
+      #7A2E8E 45%,
+      #2B0F33 100%);
+  color: #F7F0FA;
 }
 
 .gradient-type-psychic {
