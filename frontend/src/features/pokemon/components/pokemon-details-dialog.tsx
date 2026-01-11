@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Dialog,
@@ -153,6 +154,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
   open,
   onOpenChange,
 }: PokemonDetailsDialogProps) {
+  const { t } = useTranslation();
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
   useBackButtonDialog(open, () => onOpenChange(false));
 
@@ -170,12 +172,12 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
 
   const stats = pokemon
     ? [
-      { label: "HP", value: pokemon.hp ?? 0, key: "hp" },
-      { label: "Attack", value: pokemon.attack ?? 0, key: "attack" },
-      { label: "Defense", value: pokemon.defense ?? 0, key: "defense" },
-      { label: "Sp. Atk", value: pokemon.specialAttack ?? 0, key: "special-attack" },
-      { label: "Sp. Def", value: pokemon.specialDefense ?? 0, key: "special-defense" },
-      { label: "Speed", value: pokemon.speed ?? 0, key: "speed" },
+      { label: t("pokemonDetails.hp"), value: pokemon.hp ?? 0, key: "hp" },
+      { label: t("pokemonDetails.attack"), value: pokemon.attack ?? 0, key: "attack" },
+      { label: t("pokemonDetails.defense"), value: pokemon.defense ?? 0, key: "defense" },
+      { label: t("pokemonDetails.specialAttack"), value: pokemon.specialAttack ?? 0, key: "special-attack" },
+      { label: t("pokemonDetails.specialDefense"), value: pokemon.specialDefense ?? 0, key: "special-defense" },
+      { label: t("pokemonDetails.speed"), value: pokemon.speed ?? 0, key: "speed" },
     ]
     : [];
 
@@ -198,7 +200,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
               className="min-h-[625px]"
             >
               <DialogHeader>
-                <DialogTitle className="sr-only">Loading Pokemon</DialogTitle>
+                <DialogTitle className="sr-only">{t("pokemonDetails.loadingPokemon")}</DialogTitle>
               </DialogHeader>
               <DialogSkeleton />
             </motion.div>
@@ -312,7 +314,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                     {pokemon.species && (
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                          Species
+                          {t("pokemonDetails.species")}
                         </p>
                         <p className="text-sm font-medium">{pokemon.species}</p>
                       </div>
@@ -320,7 +322,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                     {pokemon.height !== undefined && (
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                          Height
+                          {t("pokemonDetails.height")}
                         </p>
                         <p className="text-sm font-medium">{(pokemon.height / 10).toFixed(1)}m</p>
                       </div>
@@ -328,7 +330,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                     {pokemon.weight !== undefined && (
                       <div className="space-y-1">
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                          Weight
+                          {t("pokemonDetails.weight")}
                         </p>
                         <p className="text-sm font-medium">{(pokemon.weight / 10).toFixed(1)}kg</p>
                       </div>
@@ -344,7 +346,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                       className="space-y-2"
                     >
                       <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                        Abilities
+                        {t("pokemonDetails.abilities")}
                       </h3>
                       <div className="flex flex-wrap gap-2">
                         {pokemon.abilities.map((ability, index) => (
@@ -387,7 +389,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                     className="space-y-3"
                   >
                     <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                      Base Stats
+                      {t("pokemonDetails.baseStats")}
                     </h3>
                     <div className="space-y-2">
                       {stats.map((stat, index) => (
@@ -412,7 +414,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
                       transition={{ duration: 0.3, delay: 0.9 }}
                       className="flex justify-between items-center pt-2 border-t border-border"
                     >
-                      <span className="text-sm font-semibold">Total</span>
+                      <span className="text-sm font-semibold">{t("pokemonDetails.total")}</span>
                       <span className="text-lg font-bold tabular-nums">{totalStats}</span>
                     </motion.div>
                   </motion.div>

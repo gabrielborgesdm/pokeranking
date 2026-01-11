@@ -92,7 +92,7 @@ export const ShareButton = memo(function ShareButton({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="gap-2 h-10 sm:w-auto">
+        <Button variant="outline" className="gap-2 h-10 sm:w-auto font-normal">
           <Share2 className="h-4 w-4 shrink-0" />
           <span className="truncate sm:hidden lg:inline">{t("rankingView.share")}</span>
           <span className="sr-only sm:not-sr-only lg:sr-only">{t("rankingView.share")}</span>
