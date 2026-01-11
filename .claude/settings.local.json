@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(grep:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(ren pokemon-picker.tsx draggable-pokemon-gallery.tsx)"
     ],
     "deny": [],
     "ask": []

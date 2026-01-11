@@ -8,9 +8,9 @@ import { PokemonPickerGrid } from "./pokemon-picker-grid";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
-import type { PokemonPickerProps } from "../types";
+import type { DraggablePokemonGalleryProps } from "../types";
 
-export const PokemonPicker = memo(function PokemonPicker({
+export const DraggablePokemonGallery = memo(function DraggablePokemonGallery({
   pokemon,
   disabledIds = [],
   filteredOutIds = [],
@@ -22,7 +22,7 @@ export const PokemonPicker = memo(function PokemonPicker({
   gap,
   rowHeight,
   height,
-}: PokemonPickerProps) {
+}: DraggablePokemonGalleryProps) {
   const { isMobile } = useScreenSize();
   const [activePokemon, setActivePokemon] = useState<PokemonResponseDto | null>(
     null

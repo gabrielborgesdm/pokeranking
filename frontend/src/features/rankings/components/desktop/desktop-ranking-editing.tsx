@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { PokemonDropzone, PokemonPicker } from "@/features/pokemon-picker";
+import { PokemonDropzone, DraggablePokemonGallery } from "@/features/pokemon-picker";
 import { DesktopFilterPanel } from "@/features/pokemon-picker/components/desktop/desktop-filter-panel";
 import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
@@ -247,9 +247,8 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
                 )}
               </div>
             ) : (
-              <PokemonPicker
+              <DraggablePokemonGallery
                 pokemon={pickerPokemon}
-                mode="drag"
                 disabledIds={disabledIds}
                 filteredOutIds={filteredOutIds}
                 maxColumns={5}
