@@ -2,7 +2,7 @@
 
 import { memo, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Trash2, X, Save } from "lucide-react";
+import { Search, Trash2, X, Save, ArrowLeft } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -225,14 +225,14 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
                         {hasUnsavedChanges ? (
                           <Trash2 className="h-4 w-4" />
                         ) : (
-                          <X className="h-4 w-4" />
+                          <ArrowLeft className="h-4 w-4" />
                         )}
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                       {hasUnsavedChanges
                         ? t("rankingView.discardChanges", "Discard changes")
-                        : t("rankingView.close", "Close")}
+                        : t("rankingView.back", "Back")}
                     </TooltipContent>
                   </Tooltip>
 
