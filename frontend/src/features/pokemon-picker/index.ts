@@ -1,4 +1,6 @@
-export { PokemonPicker } from "./components/pokemon-picker";
+export { DraggablePokemonGallery } from "./components/draggable-pokemon-gallery";
+// Backwards compatibility alias
+export { DraggablePokemonGallery as PokemonPicker } from "./components/draggable-pokemon-gallery";
 export { PokemonPickerItem } from "./components/pokemon-picker-item";
 export { PokemonPickerGrid } from "./components/pokemon-picker-grid";
 export { PokemonDropzone } from "./components/pokemon-dropzone";
@@ -14,6 +16,7 @@ export { useAllPokemon } from "./hooks/use-all-pokemon";
 export { useFilterState } from "./hooks/use-filter-state";
 export { POKEMON_PICKER_DEFAULTS, MAX_GRID_CONTENT_WIDTH } from "./constants";
 export type {
+  DraggablePokemonGalleryProps,
   PokemonPickerProps,
   PokemonPickerMode,
   PokemonPickerItemProps,

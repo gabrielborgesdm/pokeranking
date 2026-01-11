@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
-import { PokemonDropzone, PokemonPicker } from "@/features/pokemon-picker";
+import { PokemonDropzone, DraggablePokemonGallery } from "@/features/pokemon-picker";
 import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
 import { MobileFilterDialog } from "@/features/pokemon-picker/components/mobile/mobile-filter-dialog";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
@@ -324,9 +324,8 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
                 )}
               </div>
             ) : (
-              <PokemonPicker
+              <DraggablePokemonGallery
                 pokemon={pickerPokemon}
-                mode="drag"
                 disabledIds={disabledIds}
                 filteredOutIds={filteredOutIds}
                 maxColumns={5}
