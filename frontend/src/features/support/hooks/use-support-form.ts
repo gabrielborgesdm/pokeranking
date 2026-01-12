@@ -12,11 +12,18 @@ import {
 } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
 
-const supportFormSchema = z.object({
-  message: z.string().min(10).max(2000),
-});
+type TFunction = (key: string, options?: any) => string;
 
-export type SupportFormData = z.infer<typeof supportFormSchema>;
+function createSupportFormSchema(t: TFunction) {
+  return z.object({
+    message: z
+      .string()
+      .min(10, t("validation.minLength", { min: 10 }))
+      .max(2000, t("validation.maxLength", { max: 2000 })),
+  });
+}
+
+export type SupportFormData = z.infer<ReturnType<typeof createSupportFormSchema>>;
 
 export function useSupportForm() {
   const { t } = useTranslation();
@@ -26,7 +33,7 @@ export function useSupportForm() {
   const mutation = useSupportControllerCreate();
 
   const form = useForm<SupportFormData>({
-    resolver: zodResolver(supportFormSchema),
+    resolver: zodResolver(createSupportFormSchema(t)),
     defaultValues: {
       message: "",
     },
