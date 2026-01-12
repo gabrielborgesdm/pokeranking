@@ -54,7 +54,7 @@
     "noRankings": "Nenhum ranking ainda",
     "admin": "Admin",
     "adminPokemon": "Gerenciar Pokemon",
-    "welcome": "Bem-vindo"
+    "welcome": "Bem-vindo(a)"
   },
   "auth": {
     "signIn": "Entrar",
@@ -128,7 +128,7 @@
   },
   "myRankings": {
     "title": "Meus Rankings",
-    "description": "Suas tier lists pessoais de Pokemon",
+    "description": "Suas rankings pessoais de Pokemon",
     "noRankings": "Voce ainda nao criou nenhum ranking.",
     "errorTitle": "Erro ao carregar rankings",
     "errorDescription": "Por favor, tente novamente mais tarde.",
@@ -146,7 +146,7 @@
   },
   "rankingsList": {
     "title": "Explorar Rankings",
-    "description": "Explore tier lists de Pokemon da comunidade",
+    "description": "Explore rankings de Pokemon da comunidade",
     "noRankings": "Nenhum ranking encontrado.",
     "errorTitle": "Erro ao carregar rankings",
     "errorDescription": "Por favor, tente novamente mais tarde.",
@@ -160,8 +160,8 @@
   },
   "userRankings": {
     "title": "Rankings de {{username}}",
-    "description": "Tier lists de Pokemon por {{username}}",
-    "descriptionOwner": "Suas tier lists pessoais de Pokemon",
+    "description": "rankings de Pokemon por {{username}}",
+    "descriptionOwner": "Suas rankings pessoais de Pokemon",
     "noRankings": "{{username}} ainda não criou nenhum ranking.",
     "noRankingsOwner": "Você ainda não criou nenhum ranking.",
     "errorTitle": "Erro ao carregar rankings",
@@ -242,7 +242,7 @@
     "releaseToAdd": "Solte para adicionar!",
     "emptyZone": "Nenhum Pokemon nesta tier zone",
     "emptyRanking": "Nenhum Pokemon neste ranking",
-    "addPokemon": "Adicionar Pokemon",
+    "addPokemon": "Ranquear Pokemon",
     "edit": "Editar",
     "saveChanges": "Salvar alterações",
     "searchPokemon": "Buscar Pokemon",
