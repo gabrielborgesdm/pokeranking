@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Pokeranking",
   },
   description:
-    "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+    "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
   keywords: [
     "Pokemon",
     "tier list",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     siteName: "Pokeranking",
     title: "Pokeranking - Rank your Pokemon",
     description:
-      "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+      "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
     images: [
       {
         url: "/screenshots/leaderboard.png",
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pokeranking - Rank your Pokemon",
     description:
-      "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+      "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
     images: ["/screenshots/leaderboard.png"],
   },
   robots: {

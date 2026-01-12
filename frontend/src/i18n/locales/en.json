@@ -103,7 +103,7 @@
   },
   "myRankings": {
     "title": "My Rankings",
-    "description": "Your personal Pokemon tier lists",
+    "description": "Your personal Pokemon rankings",
     "noRankings": "You haven't created any rankings yet.",
     "errorTitle": "Error loading rankings",
     "errorDescription": "Please try again later.",
@@ -121,7 +121,7 @@
   },
   "rankingsList": {
     "title": "Browse Rankings",
-    "description": "Explore Pokemon tier lists from the community",
+    "description": "Explore Pokemon rankings from the community",
     "noRankings": "No rankings found.",
     "errorTitle": "Error loading rankings",
     "errorDescription": "Please try again later.",
@@ -135,8 +135,8 @@
   },
   "userRankings": {
     "title": "{{username}}'s Rankings",
-    "description": "Pokemon tier lists by {{username}}",
-    "descriptionOwner": "Your personal Pokemon tier lists",
+    "description": "Pokemon rankings by {{username}}",
+    "descriptionOwner": "Your personal Pokemon rankings",
     "noRankings": "{{username}} hasn't created any rankings yet.",
     "noRankingsOwner": "You haven't created any rankings yet.",
     "errorTitle": "Error loading rankings",
@@ -217,7 +217,7 @@
     "releaseToAdd": "Release to add!",
     "emptyZone": "No Pokemon in this tier zone",
     "emptyRanking": "No Pokemon in this ranking",
-    "addPokemon": "Add Pokemon",
+    "addPokemon": "Rank Pokemon",
     "edit": "Edit",
     "saveChanges": "Save changes",
     "searchPokemon": "Search Pokemon",
