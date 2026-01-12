@@ -235,8 +235,6 @@ export class RankingsService {
       pokemonImages.map((p) => [p._id.toString(), p.image]),
     );
 
-    console.log('Image Map:', imageMap);
-
     return rankings.map((ranking) => ({
       ...ranking,
       image: ranking.pokemon?.[0]
