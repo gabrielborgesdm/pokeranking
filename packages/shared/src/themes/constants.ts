@@ -30,7 +30,7 @@ export const RANKING_THEMES: readonly RankingTheme[] = [
     tier: "starter",
   },
   {
-    id: "default",
+    id: "normal",
     displayName: "Normal",
     gradientClass: "gradient-type-normal",
     textColor: "#1a1a1a",
@@ -184,4 +184,4 @@ export const THEME_IDS = RANKING_THEMES.map((t) => t.id) as readonly string[];
 /**
  * Default theme ID used when no theme is specified
  */
-export const DEFAULT_THEME_ID = "default";
+export const DEFAULT_THEME_ID = "fire";
