@@ -9,12 +9,16 @@ import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useAnalytics } from "@/hooks/use-analytics";
 
-const signInSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-});
+type TFunction = (key: string, options?: any) => string;
 
-export type SignInFormData = z.infer<typeof signInSchema>;
+function createSignInSchema(t: TFunction) {
+  return z.object({
+    email: z.string().email(t("validation.invalidEmail")),
+    password: z.string().min(6, t("validation.minLength", { min: 6 })),
+  });
+}
+
+export type SignInFormData = z.infer<ReturnType<typeof createSignInSchema>>;
 
 export function useSignIn() {
   const { t } = useTranslation();
@@ -24,7 +28,7 @@ export function useSignIn() {
   const { trackSignInSuccess, trackSignInError } = useAnalytics();
 
   const form = useForm<SignInFormData>({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(createSignInSchema(t)),
     defaultValues: {
       email: "",
       password: "",

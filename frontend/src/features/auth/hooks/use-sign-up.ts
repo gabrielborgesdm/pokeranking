@@ -9,13 +9,20 @@ import { useTranslation } from "react-i18next";
 import { useAuthControllerRegister, isApiError } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
 
-const signUpSchema = z.object({
-  email: z.string().email(),
-  username: z.string().min(3).max(30),
-  password: z.string().min(6),
-});
+type TFunction = (key: string, options?: any) => string;
 
-export type SignUpFormData = z.infer<typeof signUpSchema>;
+function createSignUpSchema(t: TFunction) {
+  return z.object({
+    email: z.string().email(t("validation.invalidEmail")),
+    username: z
+      .string()
+      .min(3, t("validation.minLength", { min: 3 }))
+      .max(30, t("validation.maxLength", { max: 30 })),
+    password: z.string().min(6, t("validation.minLength", { min: 6 })),
+  });
+}
+
+export type SignUpFormData = z.infer<ReturnType<typeof createSignUpSchema>>;
 
 export function useSignUp() {
   const { t } = useTranslation();
@@ -25,7 +32,7 @@ export function useSignUp() {
   const { trackSignUpSuccess, trackSignUpError } = useAnalytics();
 
   const form = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(createSignUpSchema(t)),
     defaultValues: {
       email: "",
       username: "",
