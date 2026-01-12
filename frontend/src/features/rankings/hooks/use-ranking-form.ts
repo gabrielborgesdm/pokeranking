@@ -22,16 +22,21 @@ import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { routes } from "@/lib/routes";
 
-function createRankingFormSchema() {
+type TFunction = (key: string, options?: any) => string;
+
+function createRankingFormSchema(t: TFunction) {
   return z.object({
-    title: z.string().min(1).max(100),
+    title: z
+      .string()
+      .min(1, t("validation.required"))
+      .max(100, t("validation.maxLength", { max: 100 })),
     theme: z.string().refine((val) => THEME_IDS.includes(val), {
-      message: "Invalid theme",
+      message: t("rankingForm.invalidTheme"),
     }),
     background: z
       .string()
       .refine((val) => !val || THEME_IDS.includes(val), {
-        message: "Invalid background",
+        message: t("rankingForm.invalidBackground"),
       })
       .optional(),
   });
@@ -66,7 +71,7 @@ export function useRankingForm({
   const updateMutation = useRankingsControllerUpdate();
 
   const form = useForm<RankingFormData>({
-    resolver: zodResolver(createRankingFormSchema()),
+    resolver: zodResolver(createRankingFormSchema(t)),
     defaultValues: {
       title: initialData?.title ?? "",
       theme: initialData?.theme ?? DEFAULT_THEME_ID,
@@ -109,7 +114,7 @@ export function useRankingForm({
       );
     } else {
       if (!rankingId) {
-        setError("Ranking ID is required for edit mode");
+        setError(t("rankingForm.rankingIdRequired"));
         return;
       }
 

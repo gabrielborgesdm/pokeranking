@@ -21,6 +21,7 @@ import { useResponsiveGrid } from "../hooks/use-responsive-grid";
 import { POKEMON_PICKER_DEFAULTS } from "../constants";
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import { useScreenSize } from "@/providers/screen-size-provider";
+import { ScrollToButton } from "./scroll-to-button";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
 
@@ -53,6 +54,12 @@ export interface PokemonDropzoneProps {
   isDropping?: boolean;
   /** Custom empty state component (replaces default empty state) */
   renderEmptyState?: (isOver: boolean) => React.ReactNode;
+  /** Optional ref to access the scroll container */
+  scrollRef?: React.RefObject<HTMLDivElement>;
+  /** Whether to show the scroll to top/bottom button */
+  showScrollButton?: boolean;
+  /** Optional className for scroll button positioning */
+  scrollButtonClassName?: string;
 }
 
 // Helper to extract pokemon ID from sortable ID (removes "dropzone-" prefix)
@@ -85,6 +92,8 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   showPositions = true,
   isDropping: isDroppingProp,
   renderEmptyState,
+  showScrollButton = false,
+  scrollButtonClassName,
 }: PokemonDropzoneProps) {
   const { isMobile } = useScreenSize();
   const [activeItem, setActiveItem] = useState<PokemonResponseDto | null>(null);
@@ -359,6 +368,14 @@ export const PokemonDropzone = memo(function PokemonDropzone({
           </div>
         )}
       </DragOverlay>
+
+      {/* Scroll to top/bottom button */}
+      {showScrollButton && pokemon.length > 0 && (
+        <ScrollToButton
+          scrollRef={scrollRef}
+          className={scrollButtonClassName}
+        />
+      )}
     </div>
   );
 });

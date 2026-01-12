@@ -21,27 +21,34 @@ import {
   getAllowedImageDomains,
 } from "@/lib/image-utils";
 
-const pokemonFormSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100),
-  image: z.string().refine(isValidImageString, {
-    message: `Must be a .png filename or URL from allowed domains (${getAllowedImageDomains().join(", ")})`,
-  }),
-  types: z.array(z.string()),
-  pokedexNumber: z.number().min(1).optional().nullable(),
-  species: z.string().max(100).optional().nullable(),
-  height: z.number().min(0).optional().nullable(),
-  weight: z.number().min(0).optional().nullable(),
-  abilities: z.array(z.string()),
-  hp: z.number().min(1).max(255).optional().nullable(),
-  attack: z.number().min(1).max(255).optional().nullable(),
-  defense: z.number().min(1).max(255).optional().nullable(),
-  specialAttack: z.number().min(1).max(255).optional().nullable(),
-  specialDefense: z.number().min(1).max(255).optional().nullable(),
-  speed: z.number().min(1).max(255).optional().nullable(),
-  generation: z.number().min(1).max(9).optional().nullable(),
-});
+type TFunction = (key: string, options?: any) => string;
 
-export type PokemonFormData = z.infer<typeof pokemonFormSchema>;
+function createPokemonFormSchema(t: TFunction) {
+  return z.object({
+    name: z
+      .string()
+      .min(1, t("admin.pokemon.nameRequired"))
+      .max(100, t("validation.maxLength", { max: 100 })),
+    image: z.string().refine(isValidImageString, {
+      message: t("admin.pokemon.invalidImageFormat", { domains: getAllowedImageDomains().join(", ") }),
+    }),
+    types: z.array(z.string()),
+    pokedexNumber: z.number().min(1).optional().nullable(),
+    species: z.string().max(100).optional().nullable(),
+    height: z.number().min(0).optional().nullable(),
+    weight: z.number().min(0).optional().nullable(),
+    abilities: z.array(z.string()),
+    hp: z.number().min(1).max(255).optional().nullable(),
+    attack: z.number().min(1).max(255).optional().nullable(),
+    defense: z.number().min(1).max(255).optional().nullable(),
+    specialAttack: z.number().min(1).max(255).optional().nullable(),
+    specialDefense: z.number().min(1).max(255).optional().nullable(),
+    speed: z.number().min(1).max(255).optional().nullable(),
+    generation: z.number().min(1).max(9).optional().nullable(),
+  });
+}
+
+export type PokemonFormData = z.infer<ReturnType<typeof createPokemonFormSchema>>;
 
 interface UsePokemonFormOptions {
   mode: "create" | "edit";
@@ -63,7 +70,7 @@ export function usePokemonForm({
   const updateMutation = usePokemonControllerUpdate();
 
   const form = useForm<PokemonFormData>({
-    resolver: zodResolver(pokemonFormSchema),
+    resolver: zodResolver(createPokemonFormSchema(t)),
     defaultValues: {
       name: initialData?.name ?? "",
       image: initialData?.image ?? "",
@@ -125,7 +132,7 @@ export function usePokemonForm({
       createMutation.mutate({ data: cleanData }, { onSuccess, onError });
     } else {
       if (!pokemonId) {
-        setError("Pokemon ID is required for edit mode");
+        setError(t("admin.pokemon.pokemonIdRequired"));
         return;
       }
       updateMutation.mutate({ id: pokemonId, data: cleanData }, { onSuccess, onError });

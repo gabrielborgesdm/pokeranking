@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Pokeranking - Create & Share Pokemon Tier Lists",
+    name: "Pokeranking - Create & Share Pokemon rankings",
     short_name: "Pokeranking",
     description:
-      "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+      "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
     start_url: "/",
     id: "/",
     scope: "/",

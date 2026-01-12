@@ -48,7 +48,7 @@ export class RankingsService {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
   async create(
     userId: string,
@@ -67,10 +67,11 @@ export class RankingsService {
       });
     }
 
-    // Validate theme availability if theme provided (before transaction)
-    if (createRankingDto.theme) {
-      await this.validateThemeForUser(createRankingDto.theme, userId);
-    }
+    await this.validateThemeElegibility(
+      userId,
+      createRankingDto.theme,
+      createRankingDto.background,
+    );
 
     const savedRanking = await withTransaction(
       this.connection,
@@ -110,6 +111,21 @@ export class RankingsService {
     return savedRanking;
   }
 
+  async validateThemeElegibility(
+    userId: string,
+    themeId?: string,
+    backgroundId?: string,
+  ): Promise<void> {
+    // Validate theme availability if theme is being updated
+    if (themeId) {
+      await this.validateThemeForUser(themeId, userId);
+    }
+
+    if (backgroundId) {
+      await this.validateThemeForUser(backgroundId, userId);
+    }
+  }
+
   async update(
     id: string,
     userId: string,
@@ -121,8 +137,16 @@ export class RankingsService {
       throw new NotFoundException({ key: TK.RANKINGS.NOT_FOUND, args: { id } });
     }
 
+
     // Check ownership
     this.validateOwnership(ranking, userId);
+
+
+    await this.validateThemeElegibility(
+      userId,
+      updateRankingDto.theme,
+      updateRankingDto.background,
+    );
 
     // Generate unique title if title is being updated
     if (updateRankingDto.title && updateRankingDto.title !== ranking.title) {
@@ -137,6 +161,7 @@ export class RankingsService {
           args: { id: userId },
         });
       }
+
 
       updateRankingDto.title = this.generateUniqueTitle(
         user.rankings,
@@ -154,10 +179,7 @@ export class RankingsService {
       updateRankingDto.pokemon !== undefined &&
       ranking.pokemon.length !== newPokemon.length;
 
-    // Validate theme availability if theme is being updated
-    if (updateRankingDto.theme) {
-      await this.validateThemeForUser(updateRankingDto.theme, userId);
-    }
+
 
     // Apply updates
     Object.assign(ranking, updatedData);
@@ -212,8 +234,6 @@ export class RankingsService {
     const imageMap = new Map(
       pokemonImages.map((p) => [p._id.toString(), p.image]),
     );
-
-    console.log('Image Map:', imageMap);
 
     return rankings.map((ranking) => ({
       ...ranking,

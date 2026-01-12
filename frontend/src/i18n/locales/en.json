@@ -11,6 +11,15 @@
     "saving": "Saving...",
     "goBack": "Go Back"
   },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "minLength": "Must be at least {{min}} characters",
+    "maxLength": "Must be at most {{max}} characters",
+    "exactLength": "Must be exactly {{length}} characters",
+    "minNumber": "Must be at least {{min}}",
+    "maxNumber": "Must be at most {{max}}"
+  },
   "pokemonTypes": {
     "bug": "Bug",
     "dark": "Dark",
@@ -79,7 +88,8 @@
     "invalidResetToken": "Invalid or expired reset link",
     "requestNewLink": "Request a new link",
     "passwordReset": "Password reset successfully. Redirecting...",
-    "resetPasswordFailed": "Failed to reset password"
+    "resetPasswordFailed": "Failed to reset password",
+    "passwordsDontMatch": "Passwords don't match"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -103,7 +113,7 @@
   },
   "myRankings": {
     "title": "My Rankings",
-    "description": "Your personal Pokemon tier lists",
+    "description": "Your personal Pokemon rankings",
     "noRankings": "You haven't created any rankings yet.",
     "errorTitle": "Error loading rankings",
     "errorDescription": "Please try again later.",
@@ -121,7 +131,7 @@
   },
   "rankingsList": {
     "title": "Browse Rankings",
-    "description": "Explore Pokemon tier lists from the community",
+    "description": "Explore Pokemon rankings from the community",
     "noRankings": "No rankings found.",
     "errorTitle": "Error loading rankings",
     "errorDescription": "Please try again later.",
@@ -135,8 +145,8 @@
   },
   "userRankings": {
     "title": "{{username}}'s Rankings",
-    "description": "Pokemon tier lists by {{username}}",
-    "descriptionOwner": "Your personal Pokemon tier lists",
+    "description": "Pokemon rankings by {{username}}",
+    "descriptionOwner": "Your personal Pokemon rankings",
     "noRankings": "{{username}} hasn't created any rankings yet.",
     "noRankingsOwner": "You haven't created any rankings yet.",
     "errorTitle": "Error loading rankings",
@@ -172,7 +182,10 @@
     "create": "Create Ranking",
     "save": "Save Changes",
     "saving": "Saving...",
-    "saveFailed": "Failed to save ranking"
+    "saveFailed": "Failed to save ranking",
+    "invalidTheme": "Invalid theme",
+    "invalidBackground": "Invalid background",
+    "rankingIdRequired": "Ranking ID is required for edit mode"
   },
   "zoneEditor": {
     "label": "Tier Zones",
@@ -217,7 +230,7 @@
     "releaseToAdd": "Release to add!",
     "emptyZone": "No Pokemon in this tier zone",
     "emptyRanking": "No Pokemon in this ranking",
-    "addPokemon": "Add Pokemon",
+    "addPokemon": "Rank Pokemon",
     "edit": "Edit",
     "saveChanges": "Save changes",
     "searchPokemon": "Search Pokemon",
@@ -459,7 +472,10 @@
       "specialDefense": "Sp. Def",
       "speed": "Speed",
       "showDetails": "More details",
-      "hideDetails": "Hide details"
+      "hideDetails": "Hide details",
+      "nameRequired": "Name is required",
+      "invalidImageFormat": "Must be a .png filename or URL from allowed domains ({{domains}})",
+      "pokemonIdRequired": "Pokemon ID is required for edit mode"
     }
   },
   "githubReminder": {

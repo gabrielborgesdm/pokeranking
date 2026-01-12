@@ -11,6 +11,15 @@
     "saving": "Salvando...",
     "goBack": "Voltar"
   },
+  "validation": {
+    "required": "Este campo é obrigatório",
+    "invalidEmail": "Endereço de email inválido",
+    "minLength": "Deve ter pelo menos {{min}} caracteres",
+    "maxLength": "Deve ter no máximo {{max}} caracteres",
+    "exactLength": "Deve ter exatamente {{length}} caracteres",
+    "minNumber": "Deve ser pelo menos {{min}}",
+    "maxNumber": "Deve ser no máximo {{max}}"
+  },
   "pokemonTypes": {
     "bug": "Inseto",
     "dark": "Sombrio",
@@ -54,7 +63,7 @@
     "noRankings": "Nenhum ranking ainda",
     "admin": "Admin",
     "adminPokemon": "Gerenciar Pokemon",
-    "welcome": "Bem-vindo"
+    "welcome": "Bem-vindo(a)"
   },
   "auth": {
     "signIn": "Entrar",
@@ -104,7 +113,8 @@
     "invalidResetToken": "Link de redefinição inválido ou expirado",
     "requestNewLink": "Solicitar novo link",
     "passwordReset": "Senha redefinida com sucesso. Redirecionando...",
-    "resetPasswordFailed": "Falha ao redefinir senha"
+    "resetPasswordFailed": "Falha ao redefinir senha",
+    "passwordsDontMatch": "As senhas não coincidem"
   },
   "leaderboard": {
     "title": "Ranking",
@@ -128,7 +138,7 @@
   },
   "myRankings": {
     "title": "Meus Rankings",
-    "description": "Suas tier lists pessoais de Pokemon",
+    "description": "Suas rankings pessoais de Pokemon",
     "noRankings": "Voce ainda nao criou nenhum ranking.",
     "errorTitle": "Erro ao carregar rankings",
     "errorDescription": "Por favor, tente novamente mais tarde.",
@@ -146,7 +156,7 @@
   },
   "rankingsList": {
     "title": "Explorar Rankings",
-    "description": "Explore tier lists de Pokemon da comunidade",
+    "description": "Explore rankings de Pokemon da comunidade",
     "noRankings": "Nenhum ranking encontrado.",
     "errorTitle": "Erro ao carregar rankings",
     "errorDescription": "Por favor, tente novamente mais tarde.",
@@ -160,8 +170,8 @@
   },
   "userRankings": {
     "title": "Rankings de {{username}}",
-    "description": "Tier lists de Pokemon por {{username}}",
-    "descriptionOwner": "Suas tier lists pessoais de Pokemon",
+    "description": "rankings de Pokemon por {{username}}",
+    "descriptionOwner": "Suas rankings pessoais de Pokemon",
     "noRankings": "{{username}} ainda não criou nenhum ranking.",
     "noRankingsOwner": "Você ainda não criou nenhum ranking.",
     "errorTitle": "Erro ao carregar rankings",
@@ -197,7 +207,10 @@
     "create": "Criar Ranking",
     "save": "Salvar Alterações",
     "saving": "Salvando...",
-    "saveFailed": "Falha ao salvar ranking"
+    "saveFailed": "Falha ao salvar ranking",
+    "invalidTheme": "Tema inválido",
+    "invalidBackground": "Fundo inválido",
+    "rankingIdRequired": "ID do ranking é obrigatório para modo de edição"
   },
   "zoneEditor": {
     "label": "Tier Zones",
@@ -242,7 +255,7 @@
     "releaseToAdd": "Solte para adicionar!",
     "emptyZone": "Nenhum Pokemon nesta tier zone",
     "emptyRanking": "Nenhum Pokemon neste ranking",
-    "addPokemon": "Adicionar Pokemon",
+    "addPokemon": "Ranquear Pokemon",
     "edit": "Editar",
     "saveChanges": "Salvar alterações",
     "searchPokemon": "Buscar Pokemon",
@@ -459,7 +472,10 @@
       "specialDefense": "Def. Esp.",
       "speed": "Velocidade",
       "showDetails": "Mais detalhes",
-      "hideDetails": "Ocultar detalhes"
+      "hideDetails": "Ocultar detalhes",
+      "nameRequired": "Nome é obrigatório",
+      "invalidImageFormat": "Deve ser um arquivo .png ou URL de domínios permitidos ({{domains}})",
+      "pokemonIdRequired": "ID do Pokemon é obrigatório para modo de edição"
     }
   },
   "githubReminder": {

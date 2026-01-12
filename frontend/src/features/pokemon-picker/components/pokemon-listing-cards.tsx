@@ -1,27 +1,27 @@
 "use client";
 
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import { PokemonCard } from "@/features/pokemon/components/pokemon-card";
 import { PokemonDetailsDialog } from "@/features/pokemon/components/pokemon-details-dialog";
-import { useResponsiveGrid } from "../hooks/use-responsive-grid";
-import { useScreenSize } from "@/providers/screen-size-provider";
 import { EmptyPokemonCard } from "@/features/pokemon/empty-pokemon-card";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { ZoneHeader } from "./zone-header";
-import {
-  groupPokemonByZones,
-  buildVirtualItems,
-  type Zone,
-  type VirtualItem,
-} from "../utils/zone-grouping";
-import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
-import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
+import { cn } from "@/lib/utils";
+import { useScreenSize } from "@/providers/screen-size-provider";
+import type { PokemonResponseDto } from "@pokeranking/api-client";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { ListOrdered } from "lucide-react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useResponsiveGrid } from "../hooks/use-responsive-grid";
+import {
+  buildVirtualItems,
+  groupPokemonByZones,
+  type VirtualItem,
+  type Zone,
+} from "../utils/zone-grouping";
 import { ScrollToButton } from "./scroll-to-button";
+import { ZoneHeader } from "./zone-header";
 
 const ZONE_HEADER_HEIGHT = 80;
 const ZONE_HEADER_HEIGHT_COMPACT = 56;
@@ -165,7 +165,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
         action={
           isOwner && onAddPokemon ? (
             <Button variant="outline" className="mt-6" onClick={onAddPokemon}>
-              <Plus className="size-4" />
+              <ListOrdered className="size-4" />
               {t("rankingView.addPokemon")}
             </Button>
           ) : null

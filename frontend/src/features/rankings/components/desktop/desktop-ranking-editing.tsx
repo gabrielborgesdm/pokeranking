@@ -203,6 +203,8 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
               positionColors={positionColors}
               maxColumns={5}
               maxHeight="85vh"
+              showScrollButton={true}
+              scrollButtonClassName="bottom-8 right-8 absolute"
               renderEmptyState={(isOver) => (
                 <DesktopDropzoneEmptyState isOver={isOver} minHeight="85vh" />
               )}

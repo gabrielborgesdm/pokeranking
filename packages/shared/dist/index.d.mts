@@ -54,7 +54,7 @@ declare const THEME_IDS: readonly string[];
 /**
  * Default theme ID used when no theme is specified
  */
-declare const DEFAULT_THEME_ID = "default";
+declare const DEFAULT_THEME_ID = "fire";
 
 /**
  * Check if a theme is available based on Pokemon count
