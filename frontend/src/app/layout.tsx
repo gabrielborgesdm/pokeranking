@@ -6,6 +6,7 @@ import { ConditionalNavbar } from "@/components/conditional-navbar";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+import { DynamicThemeMeta } from "@/components/dynamic-theme-meta";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -104,8 +105,8 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/pokemon-solid"
           rel="stylesheet"
         />
-        <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#1a1d2e" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#fafafa" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://ik.imagekit.io" />
       </head>
@@ -114,6 +115,7 @@ export default function RootLayout({
       >
         <ServiceWorkerRegister />
         <Providers>
+          <DynamicThemeMeta />
           <ConditionalNavbar />
           {children}
           <GoogleAnalytics />
