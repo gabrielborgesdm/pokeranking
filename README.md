@@ -12,7 +12,7 @@ Pokeranking is a project that started as a hobby five years ago to help a Brazil
 
 At the time, I implemented the entire application on Next.js using Vercel's serverless API. Five years later, I decided to rebuild it entirely from scratch, applying solid architectural design principles.
 
-Users can create personalized tier lists to rank their favorite Pokemon, organizing them into custom zones (S-tier, A-tier, etc.). When building a ranking, users pick Pokemon from boxes—curated collections that filter the full Pokedex. Everyone starts with a default box containing all Pokemon, but can create custom boxes or browse community-shared ones (e.g., "Gen 1 Only" or "Legendaries").
+Users can create personalized rankings to rank their favorite Pokemon, organizing them into custom zones (S-tier, A-tier, etc.). When building a ranking, users pick Pokemon from boxes—curated collections that filter the full Pokedex. Everyone starts with a default box containing all Pokemon, but can create custom boxes or browse community-shared ones (e.g., "Gen 1 Only" or "Legendaries").
 
 The platform also features role-based permissions where admins can manage Pokemon by adding the newest ones or editing Pokemon attributes. The Pokemon attributes were originally web-scraped, but they might include errors—which is where the community comes in to help.
 
@@ -407,7 +407,7 @@ Full authentication flow integrated with the backend:
 
 #### Ranking Features
 
-- Create and edit personalized tier lists
+- Create and edit personalized rankings
 - Theme and background customization
 - Live preview while editing
 

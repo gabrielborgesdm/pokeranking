@@ -9,17 +9,23 @@ import { useTranslation } from "react-i18next";
 import { useAuthControllerResetPassword, isApiError } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
 
-const resetPasswordSchema = z
-  .object({
-    password: z.string().min(6),
-    confirmPassword: z.string().min(6),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+type TFunction = (key: string, options?: any) => string;
 
-export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+function createResetPasswordSchema(t: TFunction) {
+  return z
+    .object({
+      password: z.string().min(6, t("validation.minLength", { min: 6 })),
+      confirmPassword: z.string().min(6, t("validation.minLength", { min: 6 })),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("auth.passwordsDontMatch"),
+      path: ["confirmPassword"],
+    });
+}
+
+export type ResetPasswordFormData = z.infer<
+  ReturnType<typeof createResetPasswordSchema>
+>;
 
 export function useResetPassword() {
   const { t } = useTranslation();
@@ -34,7 +40,7 @@ export function useResetPassword() {
   const resetPasswordMutation = useAuthControllerResetPassword();
 
   const form = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(createResetPasswordSchema(t)),
     defaultValues: {
       password: "",
       confirmPassword: "",

@@ -13,11 +13,15 @@ import {
   isApiError,
 } from "@pokeranking/api-client";
 
-const verifyEmailSchema = z.object({
-  code: z.string().length(6),
-});
+type TFunction = (key: string, options?: any) => string;
 
-export type VerifyEmailFormData = z.infer<typeof verifyEmailSchema>;
+function createVerifyEmailSchema(t: TFunction) {
+  return z.object({
+    code: z.string().length(6, t("validation.exactLength", { length: 6 })),
+  });
+}
+
+export type VerifyEmailFormData = z.infer<ReturnType<typeof createVerifyEmailSchema>>;
 
 export function useVerifyEmail() {
   const { t } = useTranslation();
@@ -34,7 +38,7 @@ export function useVerifyEmail() {
   const resendMutation = useAuthControllerResendVerification();
 
   const form = useForm<VerifyEmailFormData>({
-    resolver: zodResolver(verifyEmailSchema),
+    resolver: zodResolver(createVerifyEmailSchema(t)),
     defaultValues: {
       code: codeFromUrl,
     },

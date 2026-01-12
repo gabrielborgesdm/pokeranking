@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Pokeranking is a Pokemon tier list ranking application with a NestJS backend and Next.js frontend. Users create personalized tier lists, manage Pokemon collections through "boxes," and participate in community features.
+Pokeranking is a Pokemon tier list ranking application with a NestJS backend and Next.js frontend. Users create personalized rankings, manage Pokemon collections through "boxes," and participate in community features.
 
 ## Repository Structure
 

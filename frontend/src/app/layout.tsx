@@ -6,6 +6,7 @@ import { ConditionalNavbar } from "@/components/conditional-navbar";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+import { DynamicThemeMeta } from "@/components/dynamic-theme-meta";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s | Pokeranking",
   },
   description:
-    "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+    "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
   keywords: [
     "Pokemon",
     "tier list",
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
     siteName: "Pokeranking",
     title: "Pokeranking - Rank your Pokemon",
     description:
-      "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+      "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
     images: [
       {
         url: "/screenshots/leaderboard.png",
@@ -83,7 +84,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pokeranking - Rank your Pokemon",
     description:
-      "Create and share personalized Pokemon tier lists. Rank your favorite Pokemon, build collections, and join the community.",
+      "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
     images: ["/screenshots/leaderboard.png"],
   },
   robots: {
@@ -104,8 +105,8 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/pokemon-solid"
           rel="stylesheet"
         />
-        <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)" />
-        <meta name="theme-color" content="#1a1d2e" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#fafafa" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://ik.imagekit.io" />
       </head>
@@ -114,6 +115,7 @@ export default function RootLayout({
       >
         <ServiceWorkerRegister />
         <Providers>
+          <DynamicThemeMeta />
           <ConditionalNavbar />
           {children}
           <GoogleAnalytics />

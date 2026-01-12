@@ -8,11 +8,15 @@ import { useTranslation } from "react-i18next";
 import { useAuthControllerForgotPassword, isApiError } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
 
-const forgotPasswordSchema = z.object({
-  email: z.string().email(),
-});
+type TFunction = (key: string, options?: any) => string;
 
-export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+function createForgotPasswordSchema(t: TFunction) {
+  return z.object({
+    email: z.string().email(t("validation.invalidEmail")),
+  });
+}
+
+export type ForgotPasswordFormData = z.infer<ReturnType<typeof createForgotPasswordSchema>>;
 
 export function useForgotPassword() {
   const { t } = useTranslation();
@@ -23,7 +27,7 @@ export function useForgotPassword() {
   const forgotPasswordMutation = useAuthControllerForgotPassword();
 
   const form = useForm<ForgotPasswordFormData>({
-    resolver: zodResolver(forgotPasswordSchema),
+    resolver: zodResolver(createForgotPasswordSchema(t)),
     defaultValues: {
       email: "",
     },

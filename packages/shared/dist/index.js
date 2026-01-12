@@ -28,7 +28,7 @@ var RANKING_THEMES = [
     tier: "starter"
   },
   {
-    id: "default",
+    id: "normal",
     displayName: "Normal",
     gradientClass: "gradient-type-normal",
     textColor: "#1a1a1a",
@@ -162,7 +162,7 @@ var RANKING_THEMES = [
   }
 ];
 var THEME_IDS = RANKING_THEMES.map((t) => t.id);
-var DEFAULT_THEME_ID = "default";
+var DEFAULT_THEME_ID = "fire";
 
 // src/themes/utils.ts
 function isThemeAvailable(themeId, pokemonCount, totalPokemonInSystem) {

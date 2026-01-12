@@ -20,7 +20,7 @@ import type { FilterQuery } from 'mongoose';
 
 const POKEMON_ALL_CACHE_KEY = 'pokemon:all';
 const POKEMON_COUNT_CACHE_KEY = 'pokemon:total_count';
-const POKEMON_COUNT_CACHE_TTL = 86400; // 24 hours
+const POKEMON_COUNT_CACHE_TTL = 1800; // 30 minutes
 
 @Injectable()
 export class PokemonService {

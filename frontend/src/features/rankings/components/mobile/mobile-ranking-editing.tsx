@@ -266,6 +266,8 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
               onChange={setPokemon}
               positionColors={positionColors}
               maxColumns={5}
+              showScrollButton
+              scrollButtonClassName="absolute"
               maxHeight={contentHeight}
               renderEmptyState={(isOver) => (
                 <MobileDropzoneEmptyState
