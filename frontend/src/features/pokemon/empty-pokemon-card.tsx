@@ -29,7 +29,7 @@ export const EmptyPokemonCard = ({
   return (
     <div
       className={cn(
-        "mx-8 mt-16 flex flex-col items-center justify-center py-12",
+        "mx-8  flex flex-col items-center justify-center pt-2 pb-6 md:py-12",
         className
       )}
     >
