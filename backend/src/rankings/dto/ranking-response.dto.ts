@@ -4,6 +4,7 @@ import { ZoneResponseDto } from './zone-response.dto';
 import { transformObjectId } from '../../common/utils/transform.util';
 import { PokemonResponseDto } from '../../pokemon/dto/pokemon-response.dto';
 import { DEFAULT_ZONES } from '@pokeranking/shared';
+import { TransformIsLiked } from '../utils/transform.util';
 
 @Exclude()
 export class RankingUserResponseDto {
@@ -135,6 +136,7 @@ export class RankingResponseDto {
   likesCount: number;
 
   @Expose()
+  @TransformIsLiked()
   @ApiProperty({
     example: false,
     description: 'Whether the current user has liked this ranking',

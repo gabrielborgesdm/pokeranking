@@ -19,6 +19,7 @@ function createSignUpSchema(t: TFunction) {
       .min(3, t("validation.minLength", { min: 3 }))
       .max(30, t("validation.maxLength", { max: 30 })),
     password: z.string().min(6, t("validation.minLength", { min: 6 })),
+    profilePic: z.string().min(1, t("validation.profilePicRequired")),
   });
 }
 
@@ -37,6 +38,7 @@ export function useSignUp() {
       email: "",
       username: "",
       password: "",
+      profilePic: "",
     },
   });
 

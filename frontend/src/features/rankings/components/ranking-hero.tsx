@@ -175,9 +175,9 @@ export const RankingHero = memo(function RankingHero({
               )}
             >
               <Heart
-                className={cn("h-5 w-5 sm:h-6 sm:w-6", isLiked && "fill-current")}
+                className={cn("h-5 w-5 sm:h-6 sm:w-6", isLiked && "fill-current")} style={{ color: textColor }}
               />
-              <span className="font-semibold">{likeCount}</span>
+              <span className="font-semibold" style={{ color: textColor }}>{likeCount}</span>
             </Button>
           </div>
         )}

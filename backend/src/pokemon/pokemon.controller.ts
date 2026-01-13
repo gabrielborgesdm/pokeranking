@@ -42,7 +42,7 @@ import { POKEMON_TYPE_VALUES } from '@pokeranking/shared';
 @ApiBearerAuth('JWT-auth')
 @Controller('pokemon')
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) {}
+  constructor(private readonly pokemonService: PokemonService) { }
 
   @Post()
   @Roles(UserRole.Admin)
@@ -94,7 +94,7 @@ export class PokemonController {
     description: 'Pokemon retrieved successfully',
     type: [PokemonResponseDto],
   })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @Public()
   async findAll() {
     return this.pokemonService.findAll();
   }

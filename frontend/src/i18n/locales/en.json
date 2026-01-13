@@ -18,7 +18,8 @@
     "maxLength": "Must be at most {{max}} characters",
     "exactLength": "Must be exactly {{length}} characters",
     "minNumber": "Must be at least {{min}}",
-    "maxNumber": "Must be at most {{max}}"
+    "maxNumber": "Must be at most {{max}}",
+    "profilePicRequired": "Please select a Pokemon avatar"
   },
   "pokemonTypes": {
     "bug": "Bug",
@@ -61,6 +62,10 @@
     "invalidCredentials": "Invalid username or password",
     "userExists": "Username or email already exists",
     "registrationFailed": "Registration failed",
+    "selectAvatar": "Select your avatar",
+    "chooseAvatar": "Choose your Pokemon avatar",
+    "clickToChange": "Click to change",
+    "noAvatarSelected": "No avatar selected",
     "verifyEmail": "Verify your email",
     "verifyEmailDescription": "We sent a code to {{email}}",
     "verificationCode": "Verification code",
@@ -78,6 +83,7 @@
     "sending": "Sending...",
     "resetEmailSent": "If an account exists, you will receive a reset email",
     "backToSignIn": "Back to sign in",
+    "backToHomepage": "Back to homepage",
     "goToHomepage": "Go to homepage",
     "resetPassword": "Reset password",
     "resetPasswordDescription": "Enter your new password",
@@ -215,6 +221,12 @@
       "searchPlaceholder": "Search by name...",
       "noResults": "No Pokemon found matching your search.",
       "noPokemon": "No Pokemon available."
+    },
+    "selectDialog": {
+      "title": "Choose Your Avatar",
+      "description": "Select a Pokemon to represent your profile",
+      "selectButton": "Select Pokemon",
+      "cancel": "Cancel"
     }
   },
   "rankingView": {
