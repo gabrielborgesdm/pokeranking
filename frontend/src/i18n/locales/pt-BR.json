@@ -104,6 +104,7 @@
     "sending": "Enviando...",
     "resetEmailSent": "Se a conta existir, você receberá um email de redefinição",
     "backToSignIn": "Voltar para o login",
+    "backToHomepage": "Voltar para o início",
     "goToHomepage": "Ir para a página inicial",
     "resetPassword": "Redefinir senha",
     "resetPasswordDescription": "Digite sua nova senha",
