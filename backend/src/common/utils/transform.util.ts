@@ -1,16 +1,44 @@
-import { plainToInstance, ClassConstructor } from 'class-transformer';
+import {
+  plainToInstance,
+  ClassConstructor,
+  ClassTransformOptions,
+} from 'class-transformer';
 import { Types } from 'mongoose';
+
+/**
+ * Extended transformation options with custom context
+ */
+export interface TransformOptionsWithContext extends ClassTransformOptions {
+  userId?: string;
+  [key: string]: any;
+}
 
 /**
  * Transform plain object(s) to DTO instance(s) with excludeExtraneousValues enabled
  * @param cls The DTO class constructor
  * @param plain The plain object or array of objects to transform
+ * @param options Optional transformation options (e.g., { userId: '...' })
  * @returns Transformed DTO instance or array of instances
  */
-export function toDto<T>(cls: ClassConstructor<T>, plain: unknown[]): T[];
-export function toDto<T>(cls: ClassConstructor<T>, plain: unknown): T;
-export function toDto<T>(cls: ClassConstructor<T>, plain: unknown): T | T[] {
-  return plainToInstance(cls, plain, { excludeExtraneousValues: true });
+export function toDto<T>(
+  cls: ClassConstructor<T>,
+  plain: unknown[],
+  options?: TransformOptionsWithContext,
+): T[];
+export function toDto<T>(
+  cls: ClassConstructor<T>,
+  plain: unknown,
+  options?: TransformOptionsWithContext,
+): T;
+export function toDto<T>(
+  cls: ClassConstructor<T>,
+  plain: unknown,
+  options?: TransformOptionsWithContext,
+): T | T[] {
+  return plainToInstance(cls, plain, {
+    excludeExtraneousValues: true,
+    ...options,
+  } as ClassTransformOptions);
 }
 
 /**
