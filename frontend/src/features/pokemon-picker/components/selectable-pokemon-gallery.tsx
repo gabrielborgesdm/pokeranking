@@ -8,7 +8,8 @@ import { PokemonCardSkeleton } from "@/features/pokemon/components/pokemon-card-
 import { EmptyPokemonCard } from "@/features/pokemon/empty-pokemon-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 
 export interface SelectablePokemonGalleryProps {
@@ -66,6 +67,7 @@ export function SelectablePokemonGallery({
   showSearch = true,
 }: SelectablePokemonGalleryProps) {
   const { t } = useTranslation();
+  const { isResizing } = useScreenSize();
 
   // Internal state for uncontrolled mode
   const [internalSelectedPokemon, setInternalSelectedPokemon] = useState<PokemonResponseDto | null>(null);
@@ -92,6 +94,14 @@ export function SelectablePokemonGallery({
     onSelect?.(poke);
   }, [isControlled, onSelect]);
 
+
+  if (isResizing) {
+    return (<div className={className + " flex items-center justify-center h-[60vh]"}>
+      <Loader2 className="animate-spin h-6 w-6 text-muted-foreground" />
+    </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {/* Search Input */}
@@ -116,7 +126,7 @@ export function SelectablePokemonGallery({
       {/* Loading State */}
       {isLoading && (
         <div className={className}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-2" style={{ height }}>
             {Array.from({ length: skeletonCount }).map((_, i) => (
               <PokemonCardSkeleton key={i} showPositionBadge={false} />
             ))}
@@ -133,16 +143,20 @@ export function SelectablePokemonGallery({
         />
       )}
 
-      {/* Pokemon Grid */}
+      {/* Pokemon Grid with Resizing Overlay */}
       {!isLoading && pokemon.length > 0 && (
-        <PokemonPickerGrid
-          pokemon={pokemon}
-          selectedId={selectedPokemon?._id}
-          onSelect={handleSelect}
-          maxColumns={maxColumns}
-          height={height}
-          className={className}
-        />
+        <div className="relative">
+
+
+          <PokemonPickerGrid
+            pokemon={pokemon}
+            selectedId={selectedPokemon?._id}
+            onSelect={handleSelect}
+            maxColumns={maxColumns}
+            height={height}
+            className={className}
+          />
+        </div>
       )}
     </div>
   );

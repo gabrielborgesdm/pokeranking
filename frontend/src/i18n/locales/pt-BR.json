@@ -18,7 +18,8 @@
     "maxLength": "Deve ter no máximo {{max}} caracteres",
     "exactLength": "Deve ter exatamente {{length}} caracteres",
     "minNumber": "Deve ser pelo menos {{min}}",
-    "maxNumber": "Deve ser no máximo {{max}}"
+    "maxNumber": "Deve ser no máximo {{max}}",
+    "profilePicRequired": "Por favor, selecione um Pokemon avatar"
   },
   "pokemonTypes": {
     "bug": "Inseto",
@@ -102,7 +103,7 @@
     "sendResetLink": "Enviar link de redefinição",
     "sending": "Enviando...",
     "resetEmailSent": "Se a conta existir, você receberá um email de redefinição",
-    "backToSignIn": "Voltar para entrar",
+    "backToSignIn": "Voltar para o login",
     "goToHomepage": "Ir para a página inicial",
     "resetPassword": "Redefinir senha",
     "resetPasswordDescription": "Digite sua nova senha",
@@ -114,7 +115,11 @@
     "requestNewLink": "Solicitar novo link",
     "passwordReset": "Senha redefinida com sucesso. Redirecionando...",
     "resetPasswordFailed": "Falha ao redefinir senha",
-    "passwordsDontMatch": "As senhas não coincidem"
+    "passwordsDontMatch": "As senhas não coincidem",
+    "selectAvatar": "Selecione seu avatar",
+    "chooseAvatar": "Escolha seu Pokemon avatar",
+    "clickToChange": "Clique para alterar",
+    "noAvatarSelected": "Nenhum avatar selecionado"
   },
   "leaderboard": {
     "title": "Ranking",
@@ -240,6 +245,12 @@
       "searchPlaceholder": "Buscar por nome...",
       "noResults": "Nenhum Pokemon encontrado na sua busca.",
       "noPokemon": "Nenhum Pokemon disponível."
+    },
+    "selectDialog": {
+      "title": "Escolha Seu Avatar",
+      "description": "Selecione um Pokemon para representar seu perfil",
+      "selectButton": "Selecionar Pokemon",
+      "cancel": "Cancelar"
     }
   },
   "rankingView": {
