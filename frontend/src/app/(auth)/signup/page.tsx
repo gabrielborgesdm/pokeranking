@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import {
   Card,
   CardContent,
@@ -147,8 +148,7 @@ export default function SignUpPage() {
                   <FormItem>
                     <FormLabel>{t("auth.password")}</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         placeholder={t("auth.passwordPlaceholder")}
                         {...field}
                       />
