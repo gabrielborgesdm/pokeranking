@@ -41,7 +41,7 @@ import type { AuthenticatedRequest } from '../common/interfaces/authenticated-re
 @ApiBearerAuth('JWT-auth')
 @Controller('rankings')
 export class RankingsController {
-  constructor(private readonly rankingsService: RankingsService) {}
+  constructor(private readonly rankingsService: RankingsService) { }
 
   @Get()
   @Public()
@@ -103,15 +103,9 @@ export class RankingsController {
   @ApiResponse({ status: 404, description: 'Ranking not found' })
   async findOne(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
     const ranking = await this.rankingsService.findOne(id);
-    const response = toDto(RankingResponseDto, ranking);
-
-    // Add isLiked for the current user
-    response.isLiked = this.rankingsService.isLikedByUser(
-      ranking,
-      req.user?._id,
-    );
-
-    return response;
+    return toDto(RankingResponseDto, ranking, {
+      userId: req.user?._id?.toString(),
+    });
   }
 
   @Post(':id/like')
