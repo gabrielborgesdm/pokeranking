@@ -83,6 +83,7 @@
     "sending": "Sending...",
     "resetEmailSent": "If an account exists, you will receive a reset email",
     "backToSignIn": "Back to sign in",
+    "backToHomepage": "Back to homepage",
     "goToHomepage": "Go to homepage",
     "resetPassword": "Reset password",
     "resetPasswordDescription": "Enter your new password",

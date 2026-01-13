@@ -170,8 +170,8 @@ export default function SignUpPage() {
               {t("auth.signIn")}
             </Link>
           </p>
-          <Link href="/signin" className="link text-sm">
-            {t("auth.backToSignIn")}
+          <Link href="/" className="link text-sm">
+            {t("auth.backToHomepage")}
           </Link>
         </CardFooter>
       </Card>
