@@ -58,7 +58,7 @@ export default function manifest(): MetadataRoute.Manifest {
     screenshots: [
       {
         src: "/screenshots/mobile-rankings.png",
-        sizes: "540x1174",
+        sizes: "540x1046",
         type: "image/png",
         form_factor: "narrow",
       },

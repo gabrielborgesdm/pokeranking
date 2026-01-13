@@ -1,6 +1,5 @@
 const CACHE_VERSION = 'v1';
 const CACHE_NAME = `pokeranking-${CACHE_VERSION}`;
-const RUNTIME_CACHE = `pokeranking-runtime-${CACHE_VERSION}`;
 
 const PRECACHE_ASSETS = [
   '/offline.html',
@@ -8,7 +7,7 @@ const PRECACHE_ASSETS = [
   '/favicon/web-app-manifest-512x512.png',
 ];
 
-// Install event - cache critical assets
+// Install event - cache only offline page and icons
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -26,7 +25,6 @@ self.addEventListener('activate', (event) => {
         cacheNames.map((cacheName) => {
           if (
             cacheName !== CACHE_NAME &&
-            cacheName !== RUNTIME_CACHE &&
             cacheName.startsWith('pokeranking-')
           ) {
             return caches.delete(cacheName);
@@ -38,68 +36,29 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - simple caching strategies
+// Fetch event - only provide offline fallback, no caching
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-  const url = new URL(request.url);
 
   // Skip non-GET requests
   if (request.method !== 'GET') {
     return;
   }
 
-  // Only handle same-origin and specific CDN requests
+  // Only handle same-origin HTML navigation requests for offline fallback
+  const url = new URL(request.url);
   const isSameOrigin = url.origin === self.location.origin;
-  const isCDN =
-    url.hostname === 'fonts.cdnfonts.com' ||
-    url.hostname === 'res.cloudinary.com' ||
-    url.hostname === 'ik.imagekit.io';
+  const isNavigationRequest = request.mode === 'navigate' || request.destination === 'document';
 
-  if (!isSameOrigin && !isCDN) {
+  if (!isSameOrigin || !isNavigationRequest) {
     return;
   }
 
-  // CacheFirst for static assets and CDN resources
-  if (
-    url.pathname.startsWith('/_next/static/') ||
-    isCDN ||
-    request.destination === 'image' ||
-    url.pathname.match(/\.(png|jpg|jpeg|svg|gif|webp|avif|ico|woff|woff2)$/i)
-  ) {
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        return (
-          cachedResponse ||
-          fetch(request).then((response) => {
-            if (!response || !response.ok) return response;
-            const responseToCache = response.clone();
-            caches.open(RUNTIME_CACHE).then((cache) => {
-              cache.put(request, responseToCache);
-            });
-            return response;
-          })
-        );
-      })
-    );
-    return;
-  }
-
-  // NetworkFirst for everything else (HTML, etc.)
+  // Network-only with offline fallback for HTML pages
   event.respondWith(
     fetch(request)
-      .then((response) => {
-        if (response && response.ok) {
-          const responseToCache = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => {
-            cache.put(request, responseToCache);
-          });
-        }
-        return response;
-      })
       .catch(() => {
-        return caches.match(request).then((cachedResponse) => {
-          return cachedResponse || caches.match('/offline.html');
-        });
+        return caches.match('/offline.html');
       })
   );
 });
