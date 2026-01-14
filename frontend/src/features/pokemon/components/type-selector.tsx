@@ -45,7 +45,7 @@ export const TypeSelector = memo(function TypeSelector({
           {label}
         </label>
       )}
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger
           disabled={disabled}
           className={cn(
