@@ -170,9 +170,18 @@ export class I18nExceptionFilter implements ExceptionFilter {
     args?: Record<string, string | number>,
   ): string {
     try {
-      return String(i18n.t(key, { args }));
-    } catch {
-      this.logger.warn(`Translation failed for key: ${key}`);
+      const translated = i18n.t(key, { args });
+      // If translation returns the key itself, it means the key wasn't found
+      if (translated === key) {
+        this.logger.warn(
+          `Translation key not found: ${key}, language: ${i18n.lang}`,
+        );
+      }
+      return String(translated);
+    } catch (error) {
+      this.logger.error(
+        `Translation failed for key: ${key}, language: ${i18n.lang}, error: ${error}`,
+      );
       return key;
     }
   }
