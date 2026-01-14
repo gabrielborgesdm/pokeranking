@@ -21,6 +21,7 @@ import { ArrowLeft, Save, Search, Trash2, X } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DesktopDropzoneEmptyState } from "./desktop-dropzone-empty-state";
+import { PokemonLoader } from "@/components/pokemon-loader";
 
 interface DesktopRankingEditingProps {
   pokemon: PokemonResponseDto[];
@@ -229,7 +230,7 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
           <div className="flex-1 min-h-0 relative">
             {pickerLoading ? (
               <div className="space-y-4 p-4">
-                <Skeleton className="h-64 w-full" />
+                <PokemonLoader size="lg" className="absolute bottom-0 top-0 flex-1 w-full" />
               </div>
             ) : pickerPokemon.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8">

@@ -36,6 +36,7 @@ import { MobileDropzoneEmptyState } from "./mobile-dropzone-empty-state";
 import { useMobileRankingTutorial } from "./use-mobile-ranking-tutorial";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import type { PokemonType } from "@/lib/pokemon-types";
+import { PokemonLoader } from "@/components/pokemon-loader";
 
 interface MobileRankingEditingProps {
   pokemon: PokemonResponseDto[];
@@ -306,7 +307,7 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
           <div className="flex-1 min-h-0">
             {pickerLoading ? (
               <div className="space-y-4 p-4">
-                <Skeleton className="h-64 w-full" />
+                <PokemonLoader size="lg" className="absolute bottom-0 top-0 left-0 w-full" />
               </div>
             ) : pickerPokemon.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8">
