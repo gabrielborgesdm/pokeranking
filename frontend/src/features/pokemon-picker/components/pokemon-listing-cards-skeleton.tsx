@@ -46,7 +46,7 @@ export function PokemonListingCardsSkeleton({
       </div>
 
       {/* Action Bar Skeleton */}
-      <div className="flex justify-center px-4 sm:px-0">
+      <div className="flex justify-center px-4">
         <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 max-w-[1044px]">
           {/* Search input */}
           <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-sm">
@@ -64,7 +64,7 @@ export function PokemonListingCardsSkeleton({
       </div>
 
       {/* Pokemon Cards with Zone Headers */}
-      <div className="flex justify-center px-1 md:px-4 mt-6">
+      <div className="flex justify-center px-1 md:px-4 mt-6 mx-3">
         <div className="w-full max-w-[1044px] space-y-6">
           {/* First Zone (S-Tier) */}
           <div className="space-y-4">

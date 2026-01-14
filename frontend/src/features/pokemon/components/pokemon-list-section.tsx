@@ -20,6 +20,7 @@ export const PokemonListSection = memo(function PokemonListSection() {
     null
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const [gridRef, setGridRef] = useState<HTMLDivElement | null>(null);
   const { trackPokemonDetailsView, trackPokedexFilterChange, trackPaginationChange } = useAnalytics();
 
   const {
@@ -71,6 +72,13 @@ export const PokemonListSection = memo(function PokemonListSection() {
     trackPaginationChange("pokedex", page);
   }, [trackPaginationChange]);
 
+  const handleSearchEnter = useCallback(() => {
+    if (gridRef && paginatedPokemon.length > 0) {
+      // Scroll to the grid with smooth behavior
+      gridRef.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [gridRef, paginatedPokemon.length]);
+
   return (
     <div className="space-y-6">
       <PokemonSearchFilters
@@ -84,6 +92,7 @@ export const PokemonListSection = memo(function PokemonListSection() {
         onGenerationChange={handleGenerationChange}
         onSortByChange={handleSortByChange}
         onOrderChange={handleOrderChange}
+        onSearchEnter={handleSearchEnter}
       />
 
       {/* Results count */}
@@ -106,7 +115,10 @@ export const PokemonListSection = memo(function PokemonListSection() {
           showAction={false}
         />
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div
+          ref={setGridRef}
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+        >
           {paginatedPokemon.map((p) => (
             <PokemonCard
               key={p._id}

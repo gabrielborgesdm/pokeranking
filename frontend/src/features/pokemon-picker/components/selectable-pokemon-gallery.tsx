@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useAllPokemon } from "../hooks/use-all-pokemon";
 import { PokemonPickerGrid } from "./pokemon-picker-grid";
-import { PokemonCardSkeleton } from "@/features/pokemon/components/pokemon-card-skeleton";
+import { PokemonLoader } from "@/components/pokemon-loader";
 import { EmptyPokemonCard } from "@/features/pokemon/empty-pokemon-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,11 +44,6 @@ export interface SelectablePokemonGalleryProps {
    */
   onSearchChange?: (search: string) => void;
   /**
-   * Show skeleton count during loading
-   * @default 8
-   */
-  skeletonCount?: number;
-  /**
    * Show search input
    * @default true
    */
@@ -63,7 +58,6 @@ export function SelectablePokemonGallery({
   className = "border rounded-lg p-4",
   search: externalSearch,
   onSearchChange: externalOnSearchChange,
-  skeletonCount = 8,
   showSearch = true,
 }: SelectablePokemonGalleryProps) {
   const { t } = useTranslation();
@@ -125,12 +119,8 @@ export function SelectablePokemonGallery({
 
       {/* Loading State */}
       {isLoading && (
-        <div className={className}>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 px-2" style={{ height }}>
-            {Array.from({ length: skeletonCount }).map((_, i) => (
-              <PokemonCardSkeleton key={i} showPositionBadge={false} />
-            ))}
-          </div>
+        <div className={className} style={{ height }}>
+          <PokemonLoader size="lg" className="h-full" />
         </div>
       )}
 

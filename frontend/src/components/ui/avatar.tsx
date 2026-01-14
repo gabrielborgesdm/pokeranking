@@ -49,7 +49,7 @@ const AvatarImage = React.memo(function AvatarImage({
       alt={alt}
       fill
       sizes="64px"
-      className={cn("aspect-square object-cover", className)}
+      className={cn("aspect-square object-contain p-2", className)}
       onError={() => setImgSrc(fallback)}
     />
   )
