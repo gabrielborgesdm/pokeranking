@@ -9,7 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { MobilePokemonSearchFilters } from "@/features/pokemon";
+import { LocalPokemonSearchFilters } from "@/features/pokemon";
 import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 import type { UseFilterStateReturn } from "../../hooks/use-filter-state";
 
@@ -39,7 +39,7 @@ export const MobileFilterDialog = memo(function MobileFilterDialog({
             {t("pokemonFilters.filters")}
           </SheetTitle>
         </SheetHeader>
-        <MobilePokemonSearchFilters
+        <LocalPokemonSearchFilters
           search={filterState.search}
           selectedTypes={filterState.selectedTypes}
           generation={filterState.generation}

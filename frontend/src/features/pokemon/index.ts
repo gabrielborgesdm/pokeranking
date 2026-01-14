@@ -9,7 +9,7 @@ export { TypeEffectivenessDisplay } from "./components/type-effectiveness-displa
 export { TypeEffectivenessCalculator } from "./components/type-effectiveness-calculator";
 export { TypeSelector } from "./components/type-selector";
 export {
-  MobilePokemonSearchFilters,
+  LocalPokemonSearchFilters,
   type PokemonSearchFiltersProps,
   type PokemonSortByOption,
   type PokemonOrderOption,
