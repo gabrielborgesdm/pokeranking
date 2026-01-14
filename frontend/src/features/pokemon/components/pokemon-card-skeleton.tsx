@@ -17,8 +17,8 @@ export function PokemonCardSkeleton({
   return (
     <div
       className={cn(
-        "relative overflow-hidden shadow-lg bg-muted",
-        isCompact ? "rounded-lg p-2" : "rounded-xl p-3 sm:p-4",
+        "relative overflow-hidden shadow-lg bg-muted flex flex-col",
+        isCompact ? "rounded-lg p-2 min-h-[100px] max-w-[140px] " : "rounded-xl p-4 min-h-[100px] max-w-[250px]",
         className
       )}
     >
