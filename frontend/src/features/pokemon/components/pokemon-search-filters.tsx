@@ -6,7 +6,7 @@ export type {
   PokemonOrderOption,
 } from "./pokemon-search-filters.types";
 
-export { MobilePokemonSearchFilters } from "./mobile/mobile-pokemon-search-filters";
+export { LocalPokemonSearchFilters } from "./mobile/local-pokemon-search-filters";
 
-// Re-export Mobile as default PokemonSearchFilters (used by pokemon-list-section)
-export { MobilePokemonSearchFilters as PokemonSearchFilters } from "./mobile/mobile-pokemon-search-filters";
+// Re-export as default PokemonSearchFilters (used by pokemon-list-section)
+export { LocalPokemonSearchFilters as PokemonSearchFilters } from "./mobile/local-pokemon-search-filters";

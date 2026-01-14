@@ -44,15 +44,15 @@ const TypeBadge = memo(function TypeBadge({
   return (
     <div
       className={cn(
-        "flex items-center gap-1.5 rounded-full text-white font-medium",
-        compact ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-sm",
+        "flex items-center gap-1 sm:gap-1.5 rounded-full text-white font-medium",
+        compact ? "px-1.5 py-0.5 text-[10px] sm:text-xs" : "px-2 py-0.5 text-xs sm:px-2.5 sm:py-1 sm:text-sm",
         pokemonTypeGradients[type]
       )}
     >
-      <PokemonTypeIcon type={type} size={compact ? 14 : 16} showTooltip={false} />
+      <PokemonTypeIcon type={type} size={compact ? 12 : 14} showTooltip={false} />
       <span>{t(`pokemonTypes.${type}`)}</span>
       {multiplier !== undefined && (
-        <span className="ml-0.5 text-white/80 font-bold text-xs">
+        <span className="ml-0.5 text-white/80 font-bold text-[10px] sm:text-xs">
           {formatMultiplierText(multiplier)}
         </span>
       )}
@@ -69,7 +69,7 @@ const TypeList = memo(function TypeList({ types, compact }: TypeListProps) {
   if (types.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5 sm:gap-2">
       {types.map((type) => (
         <TypeBadge key={type} type={type} compact={compact} />
       ))}
@@ -89,7 +89,7 @@ const TypeMultiplierList = memo(function TypeMultiplierList({
   if (items.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5 sm:gap-2">
       {items.map(({ type, multiplier }) => (
         <TypeBadge key={type} type={type} multiplier={multiplier} compact={compact} />
       ))}
@@ -111,13 +111,13 @@ const Section = memo(function Section({ title, subtitle, children, compact }: Se
         <h4
           className={cn(
             "font-medium",
-            compact ? "text-xs" : "text-sm"
+            compact ? "text-xs" : "text-xs sm:text-sm"
           )}
         >
           {title}
         </h4>
         {subtitle && (
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
+          <p className="text-xs text-muted-foreground hidden sm:block">{subtitle}</p>
         )}
       </div>
       {children}
@@ -148,23 +148,23 @@ export const TypeEffectivenessDisplay = memo(function TypeEffectivenessDisplay({
   if (!hasDefensiveData && !hasOffensiveData) return null;
 
   return (
-    <div className={cn("space-y-6", compact && "space-y-4", className)}>
+    <div className={cn("space-y-4 sm:space-y-6", compact && "space-y-3 sm:space-y-4", className)}>
       {/* Defensive Section */}
       {hasDefensiveData && (
-        <div className={cn("space-y-4", compact && "space-y-3")}>
-          <div className="flex items-center gap-2">
-            <Shield className={cn("text-blue-500", compact ? "h-4 w-4" : "h-5 w-5")} />
+        <div className={cn("space-y-3 sm:space-y-4", compact && "space-y-2 sm:space-y-3")}>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Shield className={cn("text-blue-500", compact ? "h-3.5 w-3.5 sm:h-4 sm:w-4" : "h-4 w-4 sm:h-5 sm:w-5")} />
             <h3
               className={cn(
                 "font-semibold",
-                compact ? "text-sm" : "text-base"
+                compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"
               )}
             >
               {t("pokedex.typeEffectiveness.defensive")}
             </h3>
           </div>
 
-          <div className={cn("grid gap-4", compact ? "gap-3" : "sm:grid-cols-2 lg:grid-cols-3")}>
+          <div className={cn("grid gap-3 sm:gap-4", compact ? "gap-2.5 sm:gap-3" : "sm:grid-cols-2 lg:grid-cols-3")}>
             {effectiveness.weaknesses.length > 0 && (
               <Section
                 title={t("pokedex.typeEffectiveness.weakTo")}
@@ -200,20 +200,20 @@ export const TypeEffectivenessDisplay = memo(function TypeEffectivenessDisplay({
 
       {/* Offensive Section */}
       {hasOffensiveData && (
-        <div className={cn("space-y-4", compact && "space-y-3")}>
-          <div className="flex items-center gap-2">
-            <Swords className={cn("text-orange-500", compact ? "h-4 w-4" : "h-5 w-5")} />
+        <div className={cn("space-y-3 sm:space-y-4", compact && "space-y-2 sm:space-y-3")}>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Swords className={cn("text-orange-500", compact ? "h-3.5 w-3.5 sm:h-4 sm:w-4" : "h-4 w-4 sm:h-5 sm:w-5")} />
             <h3
               className={cn(
                 "font-semibold",
-                compact ? "text-sm" : "text-base"
+                compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"
               )}
             >
               {t("pokedex.typeEffectiveness.offensive")}
             </h3>
           </div>
 
-          <div className={cn("grid gap-4", compact ? "gap-3" : "sm:grid-cols-2 lg:grid-cols-3")}>
+          <div className={cn("grid gap-3 sm:gap-4", compact ? "gap-2.5 sm:gap-3" : "sm:grid-cols-2 lg:grid-cols-3")}>
             {effectiveness.superEffective.length > 0 && (
               <Section
                 title={t("pokedex.typeEffectiveness.superEffective")}

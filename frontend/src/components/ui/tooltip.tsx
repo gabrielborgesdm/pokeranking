@@ -18,28 +18,84 @@ function TooltipProvider({
   )
 }
 
+const TooltipContext = React.createContext<{
+  open: boolean
+  setOpen: (open: boolean) => void
+}>({
+  open: false,
+  setOpen: () => { },
+})
+
 function Tooltip({
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
+  const [internalOpen, setInternalOpen] = React.useState(false)
+
+  const open = controlledOpen ?? internalOpen
+  const setOpen = controlledOnOpenChange ?? setInternalOpen
+
   return (
-    <TooltipProvider>
-      <TooltipPrimitive.Root data-slot="tooltip" {...props} />
-    </TooltipProvider>
+    <TooltipContext.Provider value={{ open, setOpen }}>
+      <TooltipProvider>
+        <TooltipPrimitive.Root
+          data-slot="tooltip"
+          open={open}
+          onOpenChange={setOpen}
+          {...props}
+        />
+      </TooltipProvider>
+    </TooltipContext.Provider>
   )
 }
 
 function TooltipTrigger({
+  children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
+  const { open, setOpen } = React.useContext(TooltipContext)
+
+  const handleClick = (e: React.MouseEvent) => {
+    // On mobile/touch devices, toggle tooltip on click
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+      e.preventDefault()
+      e.stopPropagation()
+      setOpen(!open)
+    }
+  }
+
+  return (
+    <TooltipPrimitive.Trigger
+      data-slot="tooltip-trigger"
+      onClick={handleClick}
+      {...props}
+    >
+      {children}
+    </TooltipPrimitive.Trigger>
+  )
 }
 
 function TooltipContent({
   className,
-  sideOffset = 0,
+  sideOffset = 4,
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+  const { setOpen } = React.useContext(TooltipContext)
+
+  React.useEffect(() => {
+    // Close tooltip when clicking anywhere on mobile
+    const handleClickOutside = () => {
+      if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside, true)
+    return () => document.removeEventListener('click', handleClickOutside, true)
+  }, [setOpen])
+
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
