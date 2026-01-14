@@ -39,6 +39,7 @@ export const LocalPokemonSearchFilters = memo(
     onGenerationChange,
     onSortByChange,
     onOrderChange,
+    onSearchEnter,
     contentWidth,
     className,
   }: PokemonSearchFiltersProps) {
@@ -99,6 +100,15 @@ export const LocalPokemonSearchFilters = memo(
                 placeholder={t("admin.pokemon.searchPlaceholder")}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    // Blur input to close mobile keyboard
+                    e.currentTarget.blur();
+                    // Call the search enter callback
+                    onSearchEnter?.();
+                  }
+                }}
                 className="pl-10 h-10 text-sm"
               />
               {inputValue && (
