@@ -2,6 +2,11 @@
     "version": 2,
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
+    "functions": {
+        "dist/src/main.js": {
+            "includeFiles": "dist/src/i18n/**"
+        }
+    },
     "routes": [
         {
             "src": "/(.*)",
