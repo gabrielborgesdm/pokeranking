@@ -16,37 +16,38 @@ interface PaginationProps {
 
 function getPageNumbers(
   currentPage: number,
-  totalPages: number
+  totalPages: number,
+  maxVisible: number = 7
 ): (number | "ellipsis")[] {
-  if (totalPages <= 7) {
+  if (totalPages <= maxVisible) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-  if (currentPage <= 3) {
-    return [1, 2, 3, 4, 5, "ellipsis", totalPages];
+  // For smaller maxVisible (mobile), show fewer surrounding pages
+  const sidePages = maxVisible <= 5 ? 1 : 2;
+  const edgeThreshold = sidePages + 2;
+
+  if (currentPage <= edgeThreshold) {
+    const visibleStart = Array.from(
+      { length: edgeThreshold + sidePages },
+      (_, i) => i + 1
+    );
+    return [...visibleStart, "ellipsis", totalPages];
   }
 
-  if (currentPage >= totalPages - 2) {
-    return [
-      1,
-      "ellipsis",
-      totalPages - 4,
-      totalPages - 3,
-      totalPages - 2,
-      totalPages - 1,
-      totalPages,
-    ];
+  if (currentPage >= totalPages - edgeThreshold + 1) {
+    const visibleEnd = Array.from(
+      { length: edgeThreshold + sidePages },
+      (_, i) => totalPages - edgeThreshold - sidePages + 1 + i
+    );
+    return [1, "ellipsis", ...visibleEnd];
   }
 
-  return [
-    1,
-    "ellipsis",
-    currentPage - 1,
-    currentPage,
-    currentPage + 1,
-    "ellipsis",
-    totalPages,
-  ];
+  const middle = Array.from(
+    { length: sidePages * 2 + 1 },
+    (_, i) => currentPage - sidePages + i
+  );
+  return [1, "ellipsis", ...middle, "ellipsis", totalPages];
 }
 
 export const Pagination = memo(function Pagination({
@@ -57,18 +58,57 @@ export const Pagination = memo(function Pagination({
 }: PaginationProps) {
   const { t } = useTranslation();
 
-  const pageNumbers = useMemo(
-    () => getPageNumbers(currentPage, totalPages),
+  // Mobile: show 5 pages max, Desktop: show 7 pages max
+  const mobilePageNumbers = useMemo(
+    () => getPageNumbers(currentPage, totalPages, 5),
+    [currentPage, totalPages]
+  );
+
+  const desktopPageNumbers = useMemo(
+    () => getPageNumbers(currentPage, totalPages, 7),
     [currentPage, totalPages]
   );
 
   if (totalPages <= 1) return null;
 
+  const renderPageButtons = (
+    pageNumbers: (number | "ellipsis")[],
+    keyPrefix: string
+  ) =>
+    pageNumbers.map((page, index) =>
+      page === "ellipsis" ? (
+        <span
+          key={`${keyPrefix}-ellipsis-${index}`}
+          className="px-1 sm:px-2 text-muted-foreground"
+        >
+          ...
+        </span>
+      ) : (
+        <Button
+          key={`${keyPrefix}-${page}`}
+          variant={page === currentPage ? "default" : "outline"}
+          size="icon"
+          className="h-8 w-8 sm:h-9 sm:w-9"
+          onClick={() => onPageChange(page)}
+          aria-label={`Page ${page}`}
+          aria-current={page === currentPage ? "page" : undefined}
+        >
+          {page}
+        </Button>
+      )
+    );
+
   return (
-    <div className={cn("flex items-center justify-center gap-1", className)}>
+    <div
+      className={cn(
+        "flex flex-wrap items-center justify-center gap-1",
+        className
+      )}
+    >
       <Button
         variant="outline"
         size="icon"
+        className="h-8 w-8 sm:h-9 sm:w-9"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage <= 1}
         aria-label={t("pagination.previous")}
@@ -76,33 +116,20 @@ export const Pagination = memo(function Pagination({
         <ChevronLeft className="h-4 w-4" />
       </Button>
 
-      <div className="flex items-center gap-1">
-        {pageNumbers.map((page, index) =>
-          page === "ellipsis" ? (
-            <span
-              key={`ellipsis-${index}`}
-              className="px-2 text-muted-foreground"
-            >
-              ...
-            </span>
-          ) : (
-            <Button
-              key={page}
-              variant={page === currentPage ? "default" : "outline"}
-              size="icon"
-              onClick={() => onPageChange(page)}
-              aria-label={`Page ${page}`}
-              aria-current={page === currentPage ? "page" : undefined}
-            >
-              {page}
-            </Button>
-          )
-        )}
+      {/* Mobile view */}
+      <div className="flex items-center gap-1 sm:hidden">
+        {renderPageButtons(mobilePageNumbers, "mobile")}
+      </div>
+
+      {/* Desktop view */}
+      <div className="hidden sm:flex items-center gap-1">
+        {renderPageButtons(desktopPageNumbers, "desktop")}
       </div>
 
       <Button
         variant="outline"
         size="icon"
+        className="h-8 w-8 sm:h-9 sm:w-9"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
         aria-label={t("pagination.next")}
@@ -110,7 +137,7 @@ export const Pagination = memo(function Pagination({
         <ChevronRight className="h-4 w-4" />
       </Button>
 
-      <span className="ml-2 text-sm text-muted-foreground">
+      <span className="hidden xs:inline ml-2 text-sm text-muted-foreground">
         {t("pagination.page", { current: currentPage, total: totalPages })}
       </span>
     </div>
@@ -119,15 +146,26 @@ export const Pagination = memo(function Pagination({
 
 export function PaginationSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center justify-center gap-1", className)}>
-      <Skeleton className="h-9 w-9" />
-      <div className="flex items-center gap-1">
+    <div
+      className={cn(
+        "flex flex-wrap items-center justify-center gap-1",
+        className
+      )}
+    >
+      <Skeleton className="h-8 w-8 sm:h-9 sm:w-9" />
+      {/* Mobile: 5 buttons, Desktop: 7 buttons */}
+      <div className="flex items-center gap-1 sm:hidden">
         {Array.from({ length: 5 }).map((_, i) => (
+          <Skeleton key={i} className="h-8 w-8" />
+        ))}
+      </div>
+      <div className="hidden sm:flex items-center gap-1">
+        {Array.from({ length: 7 }).map((_, i) => (
           <Skeleton key={i} className="h-9 w-9" />
         ))}
       </div>
-      <Skeleton className="h-9 w-9" />
-      <Skeleton className="ml-2 h-5 w-32" />
+      <Skeleton className="h-8 w-8 sm:h-9 sm:w-9" />
+      <Skeleton className="hidden xs:block ml-2 h-5 w-32" />
     </div>
   );
 }

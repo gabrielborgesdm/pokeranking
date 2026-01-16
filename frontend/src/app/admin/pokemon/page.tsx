@@ -45,7 +45,7 @@ export default function AdminPokemonPage() {
         title={t("admin.pokemon.title")}
         description={t("admin.pokemon.subtitle", { count: total })}
         action={
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Button asChild variant="outline">
               <Link href={routes.adminPokemonBulk}>
                 <Upload className="h-4 w-4 mr-2" />
