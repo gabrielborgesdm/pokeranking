@@ -21,6 +21,7 @@ import { UserRole } from '../common/enums/user-role.enum';
 import { UploadService } from './upload.service';
 import { UploadResponseDto } from './dto/upload-response.dto';
 import { BulkUploadResponseDto } from './dto/bulk-upload-response.dto';
+import { MulterFile } from './providers/base-image.provider';
 
 @ApiTags('upload')
 @ApiBearerAuth('JWT-auth')
@@ -56,7 +57,7 @@ export class UploadController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async uploadImage(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file: MulterFile,
   ): Promise<UploadResponseDto> {
     const url = await this.uploadService.uploadImage(file);
     return { url };
@@ -95,7 +96,7 @@ export class UploadController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   async uploadImages(
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles() files: MulterFile[],
   ): Promise<BulkUploadResponseDto> {
     const results = await this.uploadService.uploadImages(files);
     return {

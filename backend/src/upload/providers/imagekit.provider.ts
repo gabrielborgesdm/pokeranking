@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import ImageKit from 'imagekit';
-import { BaseImageProvider, UploadResult } from './base-image.provider';
+import { BaseImageProvider, MulterFile, UploadResult } from './base-image.provider';
 
 @Injectable()
 export class ImageKitProvider extends BaseImageProvider {
@@ -33,7 +33,7 @@ export class ImageKitProvider extends BaseImageProvider {
   }
 
   async uploadImage(
-    file: Express.Multer.File,
+    file: MulterFile,
     folder: string,
   ): Promise<UploadResult> {
     if (!this.imagekit) {

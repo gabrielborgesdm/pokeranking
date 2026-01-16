@@ -4,7 +4,7 @@ import {
   Logger,
   Inject,
 } from '@nestjs/common';
-import { BaseImageProvider } from './providers';
+import { BaseImageProvider, MulterFile } from './providers';
 import { IMAGE_PROVIDER_TOKEN } from './upload.constants';
 import { BulkUploadItemDto } from './dto/bulk-upload-response.dto';
 
@@ -27,7 +27,7 @@ export class UploadService {
     this.logger.log(`Using image provider: ${this.imageProvider.name}`);
   }
 
-  async uploadImage(file: Express.Multer.File): Promise<string> {
+  async uploadImage(file: MulterFile): Promise<string> {
     if (!this.imageProvider.isConfigured) {
       throw new BadRequestException(
         `Image upload is not configured. Please set ${this.imageProvider.name} credentials.`,
@@ -46,7 +46,7 @@ export class UploadService {
   }
 
   async uploadImages(
-    files: Express.Multer.File[],
+    files: MulterFile[],
   ): Promise<BulkUploadItemDto[]> {
     if (!this.imageProvider.isConfigured) {
       throw new BadRequestException(
@@ -100,7 +100,7 @@ export class UploadService {
     }
   }
 
-  private validateFile(file: Express.Multer.File): void {
+  private validateFile(file: MulterFile): void {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
