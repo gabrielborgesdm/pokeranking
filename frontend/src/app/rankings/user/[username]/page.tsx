@@ -66,7 +66,7 @@ export default function UserRankingsPage({ params }: UserRankingsPageProps) {
   }
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8 max-w-8xl">
       <section className="space-y-8">
         <PageHeader
           title={t("userRankings.title", { username })}

@@ -83,7 +83,7 @@ export default function UsersPage() {
 
   if (error) {
     return (
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 max-w-8xl">
         <ErrorMessage
           title={t("leaderboard.errorTitle")}
           description={t("leaderboard.errorDescription")}
@@ -94,7 +94,7 @@ export default function UsersPage() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8 max-w-8xl">
       <section className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold">{t("leaderboard.title")}</h1>

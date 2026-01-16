@@ -33,6 +33,7 @@ interface RankingCardProps {
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   className?: string;
+  shouldHighlight?: boolean;
 }
 
 export const RankingCard = memo(function RankingCard({
@@ -48,6 +49,7 @@ export const RankingCard = memo(function RankingCard({
   onEdit,
   onDelete,
   className,
+  shouldHighlight = false,
 }: RankingCardProps) {
   const { t, i18n } = useTranslation();
   const router = useRouter();
@@ -130,6 +132,7 @@ export const RankingCard = memo(function RankingCard({
           fill
           className={cn("drop-shadow-lg", !topPokemonImage && "opacity-60")}
           sizes="(max-width: 768px) 50vw, 200px"
+          shouldHighlight={shouldHighlight}
         />
       </div>
 

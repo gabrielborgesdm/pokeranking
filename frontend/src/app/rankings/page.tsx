@@ -95,7 +95,7 @@ export default function RankingsListPage() {
 
   if (error) {
     return (
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 max-w-8xl">
         <ErrorMessage
           title={t("rankingsList.errorTitle")}
           description={t("rankingsList.errorDescription")}
@@ -106,7 +106,7 @@ export default function RankingsListPage() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8 max-w-8xl">
       <section className="space-y-8">
         <div>
           <h1 className="text-3xl font-bold">{t("rankingsList.title")}</h1>

@@ -9,7 +9,8 @@
     "deleting": "Deleting...",
     "save": "Save",
     "saving": "Saving...",
-    "goBack": "Go Back"
+    "goBack": "Go Back",
+    "back": "Back"
   },
   "validation": {
     "required": "This field is required",

@@ -9,7 +9,7 @@ export default function AdminPokemonNewPage() {
   const { t } = useTranslation();
 
   return (
-    <main className="container mx-auto px-4 py-8 max-w-2xl space-y-6">
+    <main className="container max-w-8xl mx-auto px-4 py-8 max-w-2xl space-y-6">
       <PageHeader
         title={t("admin.pokemon.createTitle")}
         description={t("admin.pokemon.createDescription")}

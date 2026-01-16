@@ -9,7 +9,8 @@
     "deleting": "Excluindo...",
     "save": "Salvar",
     "saving": "Salvando...",
-    "goBack": "Voltar"
+    "goBack": "Voltar",
+    "back": "Voltar"
   },
   "validation": {
     "required": "Este campo é obrigatório",

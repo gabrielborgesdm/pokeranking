@@ -4,6 +4,7 @@ import { use } from "react";
 import { useTranslation } from "react-i18next";
 import { notFound } from "next/navigation";
 import { RankingForm, useRankingEditData } from "@/features/rankings";
+import { PageHeader, PageHeaderSkeleton } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditRankingPageProps {
@@ -25,31 +26,35 @@ export default function EditRankingPage({ params }: EditRankingPageProps) {
   return (
     <main className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold">{t("rankingForm.editTitle")}</h1>
-          <p className="text-muted-foreground">
-            {t("rankingForm.editDescription")}
-          </p>
-        </div>
-
         {isLoading || !ranking ? (
-          <div className="space-y-4">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </div>
+          <>
+            <PageHeaderSkeleton hasBack />
+            <div className="space-y-4">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-32 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </>
         ) : (
-          <RankingForm
-            mode="edit"
-            rankingId={id}
-            initialData={{
-              title: ranking.title,
-              theme: ranking.theme,
-              background: ranking.background ?? undefined,
-            }}
-            pokemonCount={ranking.pokemon.length}
-            topPokemonImage={ranking.pokemon[0]?.image}
-          />
+          <>
+            <PageHeader
+              title={t("rankingForm.editTitle")}
+              description={t("rankingForm.editDescription")}
+              backHref={`/rankings/${id}`}
+              backLabel={t("common.back")}
+            />
+            <RankingForm
+              mode="edit"
+              rankingId={id}
+              initialData={{
+                title: ranking.title,
+                theme: ranking.theme,
+                background: ranking.background ?? undefined,
+              }}
+              pokemonCount={ranking.pokemon.length}
+              topPokemonImage={ranking.pokemon[0]?.image}
+            />
+          </>
         )}
       </div>
     </main>

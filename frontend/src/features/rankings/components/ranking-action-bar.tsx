@@ -59,13 +59,13 @@ export const RankingActionBar = memo(function RankingActionBar({
 
   return (
     <>
-      <div className={cn("flex justify-center px-4 sm:px-0", className)}>
+      <div className={cn("flex justify-center px-4 lg:px-0", className)}>
         <div
-          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4 w-full  mt-8 px-3 sm:px-4 rounded-lg bg-card border border-border/50 py-4"
+          className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-4 w-full mt-8 px-3 lg:px-4 rounded-lg bg-card border border-border/50 py-4"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
         >
           {/* Search input - opens search overlay */}
-          <div className="relative w-full sm:flex-1 sm:min-w-[180px]">
+          <div className="relative w-full lg:flex-1 lg:min-w-[180px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <input
               type="text"
@@ -77,8 +77,8 @@ export const RankingActionBar = memo(function RankingActionBar({
             />
           </div>
 
-          {/* Action buttons - grid on mobile, flex on desktop */}
-          <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
+          {/* Action buttons - grid on mobile/tablet, flex on desktop */}
+          <div className="grid grid-cols-2 lg:flex lg:items-center gap-2">
             {/* Owner-only actions */}
             {isOwner && (
               <>
@@ -86,13 +86,10 @@ export const RankingActionBar = memo(function RankingActionBar({
                 <Button
                   variant="outline"
                   onClick={handleRankPokemon}
-                  className="gap-2 h-10 sm:w-auto font-normal"
+                  className="gap-2 h-10 lg:w-auto font-normal"
                 >
                   <ListOrdered className="h-4 w-4 shrink-0" />
-                  <span className="truncate sm:hidden lg:inline">
-                    {t("rankingView.rankPokemon")}
-                  </span>
-                  <span className="sr-only sm:not-sr-only lg:sr-only">
+                  <span className="truncate">
                     {t("rankingView.rankPokemon")}
                   </span>
                 </Button>
@@ -101,13 +98,10 @@ export const RankingActionBar = memo(function RankingActionBar({
                 <Button
                   variant="outline"
                   onClick={handleEditSettings}
-                  className="gap-2 h-10 sm:w-auto font-normal"
+                  className="gap-2 h-10 lg:w-auto font-normal"
                 >
                   <Pencil className="h-4 w-4 shrink-0" />
-                  <span className="truncate sm:hidden lg:inline">
-                    {t("rankingView.editSettings")}
-                  </span>
-                  <span className="sr-only sm:not-sr-only lg:sr-only">
+                  <span className="truncate">
                     {t("rankingView.editSettings")}
                   </span>
                 </Button>

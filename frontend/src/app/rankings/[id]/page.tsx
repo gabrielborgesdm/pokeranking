@@ -2,7 +2,7 @@
 
 import { PokemonListingCards } from "@/features/pokemon-picker/components/pokemon-listing-cards";
 import { PokemonListingCardsSkeleton } from "@/features/pokemon-picker/components/pokemon-listing-cards-skeleton";
-import { MAX_GRID_CONTENT_WIDTH } from "@/features/pokemon-picker";
+import { useResponsiveGrid } from "@/features/pokemon-picker/hooks/use-responsive-grid";
 import {
   RankingActionBar,
   RankingHero,
@@ -16,9 +16,80 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { use, useCallback, useEffect, useRef } from "react";
 import { useAnalytics } from "@/hooks/use-analytics";
+import type { PokemonResponseDto, RankingResponseDto } from "@pokeranking/api-client";
+import type { Zone } from "@/features/pokemon-picker/utils/zone-grouping";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;
+}
+
+interface RankingPageContentProps {
+  ranking: RankingResponseDto;
+  pokemon: PokemonResponseDto[];
+  zones: Zone[];
+  isOwner: boolean;
+  topPokemon: { name: string; image: string; id?: string } | null;
+  likeCount: number;
+  isLiked: boolean;
+  toggleLike: () => void;
+  isSearchEnabled: boolean;
+  onAddPokemon: () => void;
+  id: string;
+}
+
+function RankingPageContent({
+  ranking,
+  pokemon,
+  zones,
+  isOwner,
+  topPokemon,
+  likeCount,
+  isLiked,
+  toggleLike,
+  isSearchEnabled,
+  onAddPokemon,
+  id,
+}: RankingPageContentProps) {
+  // Use responsive grid to get the actual content width based on viewport
+  const { containerRef, gridContentWidth } = useResponsiveGrid({
+    itemCount: pokemon.length,
+  });
+
+  // Only apply maxWidth once measured (gridContentWidth > 0)
+  const maxContentWidth = gridContentWidth > 0 ? gridContentWidth : undefined;
+
+  return (
+    <main ref={containerRef}>
+      <RankingHero
+        title={ranking.title}
+        username={ranking.user?.username ?? ""}
+        topPokemon={topPokemon}
+        pokemonCount={pokemon.length}
+        theme={ranking.background}
+        likeCount={likeCount}
+        isLiked={isLiked}
+        isOwner={isOwner}
+        onLikeClick={toggleLike}
+        maxContentWidth={maxContentWidth}
+      />
+      <RankingActionBar
+        rankingId={id}
+        rankingTitle={ranking.title}
+        pokemon={pokemon}
+        isOwner={isOwner}
+        maxContentWidth={maxContentWidth}
+        isSearchEnabled={isSearchEnabled}
+      />
+      <PokemonListingCards
+        key="listing-view"
+        pokemon={pokemon}
+        zones={zones}
+        showPositions={true}
+        isOwner={isOwner}
+        onAddPokemon={onAddPokemon}
+      />
+    </main>
+  );
 }
 
 export default function RankingPage({ params }: RankingPageProps) {
@@ -72,36 +143,19 @@ export default function RankingPage({ params }: RankingPageProps) {
 
   return (
     <PokemonSearchProvider pokemon={pokemon} zones={zones}>
-      <main>
-        <RankingHero
-          title={ranking.title}
-          username={ranking.user?.username ?? ""}
-          topPokemon={topPokemon}
-          pokemonCount={pokemon.length}
-          theme={ranking.background}
-          likeCount={likeCount}
-          isLiked={isLiked}
-          isOwner={isOwner}
-          onLikeClick={toggleLike}
-          maxContentWidth={MAX_GRID_CONTENT_WIDTH}
-        />
-        <RankingActionBar
-          rankingId={id}
-          rankingTitle={ranking.title}
-          pokemon={pokemon}
-          isOwner={isOwner}
-          maxContentWidth={MAX_GRID_CONTENT_WIDTH}
-          isSearchEnabled={isSearchEnabled}
-        />
-        <PokemonListingCards
-          key="listing-view"
-          pokemon={pokemon}
-          zones={zones}
-          showPositions={true}
-          isOwner={isOwner}
-          onAddPokemon={handleAddPokemon}
-        />
-      </main>
+      <RankingPageContent
+        ranking={ranking}
+        pokemon={pokemon}
+        zones={zones}
+        isOwner={isOwner}
+        topPokemon={topPokemon}
+        likeCount={likeCount}
+        isLiked={isLiked}
+        toggleLike={toggleLike}
+        isSearchEnabled={isSearchEnabled}
+        onAddPokemon={handleAddPokemon}
+        id={id}
+      />
     </PokemonSearchProvider>
   );
 }
