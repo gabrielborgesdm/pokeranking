@@ -3,7 +3,7 @@
     "buildCommand": "npm run build",
     "functions": {
         "api/index.ts": {
-            "includeFiles": "dist/src/i18n/**"
+            "includeFiles": "**/src/i18n/**"
         }
     },
     "routes": [
