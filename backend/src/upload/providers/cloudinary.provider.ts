@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
-import { BaseImageProvider, UploadResult } from './base-image.provider';
+import { BaseImageProvider, MulterFile, UploadResult } from './base-image.provider';
 
 @Injectable()
 export class CloudinaryProvider extends BaseImageProvider {
@@ -32,7 +32,7 @@ export class CloudinaryProvider extends BaseImageProvider {
   }
 
   async uploadImage(
-    file: Express.Multer.File,
+    file: MulterFile,
     folder: string,
   ): Promise<UploadResult> {
     return new Promise((resolve, reject) => {

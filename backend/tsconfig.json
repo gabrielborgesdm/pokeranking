@@ -15,11 +15,18 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "noUncheckedIndexedAccess": true,
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "*.spec.ts",
+    "test",
+  ],
 }

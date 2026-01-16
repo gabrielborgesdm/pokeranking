@@ -24,8 +24,15 @@ export function AreZonesNonOverlapping(validationOptions?: ValidationOptions) {
 
           // Check for overlaps
           for (let i = 0; i < sorted.length - 1; i++) {
-            const currentEnd = sorted[i].interval[1];
-            const nextStart = sorted[i + 1].interval[0];
+            const currentZone = sorted[i];
+            const nextZone = sorted[i + 1];
+
+            if (!currentZone || !nextZone) {
+              continue;
+            }
+
+            const currentEnd = currentZone.interval[1];
+            const nextStart = nextZone.interval[0];
 
             // If current zone has null end (unbounded), it must be the last zone
             // Having a zone after an unbounded zone means they overlap

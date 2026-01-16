@@ -30,7 +30,7 @@ export class PokemonService {
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     private readonly cacheService: CacheService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) { }
 
   async create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
     const existing = await this.pokemonModel
@@ -68,8 +68,12 @@ export class PokemonService {
     for (let i = 0; i < pokemonList.length; i++) {
       const dto = pokemonList[i];
 
+      if (!dto) {
+        continue;
+      }
+
       // Check if name already exists (from initial query or created in this batch)
-      if (existingNames.has(dto.name)) {
+      if (dto.name && existingNames.has(dto.name)) {
         results.push({
           index: i,
           name: dto.name,
