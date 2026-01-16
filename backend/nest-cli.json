@@ -15,7 +15,12 @@
         "watchAssets": true
       },
       {
-        "include": "i18n/**/*.json",
+        "include": "i18n/en/*.json",
+        "outDir": "dist/src",
+        "watchAssets": true
+      },
+      {
+        "include": "i18n/pt-BR/*.json",
         "outDir": "dist/src",
         "watchAssets": true
       }
