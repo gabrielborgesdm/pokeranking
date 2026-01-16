@@ -40,7 +40,7 @@ export default function AdminPokemonPage() {
   } = usePokemonList({ initialLimit: 10 });
 
   return (
-    <main className="container mx-auto px-4 py-8 space-y-6">
+    <main className="container max-w-8xl mx-auto px-4 py-8 space-y-6">
       <PageHeader
         title={t("admin.pokemon.title")}
         description={t("admin.pokemon.subtitle", { count: total })}
