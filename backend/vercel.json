@@ -1,24 +1,15 @@
 {
     "version": 2,
     "buildCommand": "npm run build",
-    "outputDirectory": "dist",
     "functions": {
-        "dist/src/main.js": {
+        "api/index.ts": {
             "includeFiles": "dist/src/i18n/**"
         }
     },
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "dist/src/main.js",
-            "methods": [
-                "GET",
-                "POST",
-                "PUT",
-                "DELETE",
-                "PATCH",
-                "OPTIONS"
-            ]
+            "dest": "/api/index.ts"
         }
     ]
 }
