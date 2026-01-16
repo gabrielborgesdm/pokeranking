@@ -39,13 +39,12 @@ export const TypeSelector = memo(function TypeSelector({
   const defaultPlaceholder = placeholder ?? t("pokedex.typeCalculator.selectType");
 
   return (
-    <div className={cn("space-y-1.5", className)}>
+    <DropdownMenu modal={false} className={className}>
       {label && (
-        <label className="text-xs sm:text-sm font-medium text-muted-foreground">
+        <label className="text-sm font-medium text-foreground">
           {label}
         </label>
       )}
-      <DropdownMenu modal={false}>
         <DropdownMenuTrigger
           disabled={disabled}
           className={cn(
@@ -85,7 +84,6 @@ export const TypeSelector = memo(function TypeSelector({
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    </DropdownMenu>
   );
 });
