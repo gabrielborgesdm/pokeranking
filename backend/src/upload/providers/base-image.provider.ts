@@ -3,12 +3,21 @@ export interface UploadResult {
   publicId?: string;
 }
 
+export interface MulterFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  buffer: Buffer;
+}
+
 export abstract class BaseImageProvider {
   abstract readonly name: string;
   abstract readonly isConfigured: boolean;
 
   abstract uploadImage(
-    file: Express.Multer.File,
+    file: MulterFile,
     folder: string,
   ): Promise<UploadResult>;
 

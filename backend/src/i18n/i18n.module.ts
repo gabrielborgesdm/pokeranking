@@ -9,7 +9,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 const isDev = process.env.NODE_ENV === 'development';
-const i18nPath = isDev ? path.join(__dirname, '/') : path.join(process.cwd(), 'dist/src/i18n');
+const i18nPath = isDev
+  ? path.join(__dirname, '/')
+  : path.join(process.cwd(), 'dist/src/i18n');
 
 @Module({
   imports: [

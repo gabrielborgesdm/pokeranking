@@ -48,7 +48,7 @@ export class RankingsService {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly cacheService: CacheService,
-  ) { }
+  ) {}
 
   async create(
     userId: string,
@@ -137,10 +137,8 @@ export class RankingsService {
       throw new NotFoundException({ key: TK.RANKINGS.NOT_FOUND, args: { id } });
     }
 
-
     // Check ownership
     this.validateOwnership(ranking, userId);
-
 
     await this.validateThemeElegibility(
       userId,
@@ -162,7 +160,6 @@ export class RankingsService {
         });
       }
 
-
       updateRankingDto.title = this.generateUniqueTitle(
         user.rankings,
         updateRankingDto.title,
@@ -178,8 +175,6 @@ export class RankingsService {
     const pokemonCountChanged =
       updateRankingDto.pokemon !== undefined &&
       ranking.pokemon.length !== newPokemon.length;
-
-
 
     // Apply updates
     Object.assign(ranking, updatedData);

@@ -41,7 +41,7 @@ import type { AuthenticatedRequest } from '../common/interfaces/authenticated-re
 @ApiBearerAuth('JWT-auth')
 @Controller('rankings')
 export class RankingsController {
-  constructor(private readonly rankingsService: RankingsService) { }
+  constructor(private readonly rankingsService: RankingsService) {}
 
   @Get()
   @Public()

@@ -42,7 +42,7 @@ import { POKEMON_TYPE_VALUES } from '@pokeranking/shared';
 @ApiBearerAuth('JWT-auth')
 @Controller('pokemon')
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) { }
+  constructor(private readonly pokemonService: PokemonService) {}
 
   @Post()
   @Roles(UserRole.Admin)

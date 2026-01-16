@@ -17,9 +17,13 @@ interface I18nExceptionPayload {
 
 type ExceptionResponseObject = Record<string, unknown>;
 
-interface AuthenticatedRequest extends Request {
-  user?: { _id?: string; email?: string; username?: string };
+interface RequestUser {
+  _id?: string;
+  email?: string;
+  username?: string;
 }
+
+type AuthenticatedRequest = Request & { user?: RequestUser };
 
 function isI18nPayload(value: unknown): value is I18nExceptionPayload {
   return (
