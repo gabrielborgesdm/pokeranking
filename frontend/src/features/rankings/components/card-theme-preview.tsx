@@ -41,6 +41,7 @@ export const CardThemePreview = memo(function CardThemePreview({
           updatedAt={now}
           theme={theme}
           className={cn("w-48 sm:w-60 lg:w-72")}
+          shouldHighlight={pokemonCount === 0}
         />
       </div>
     </div>
