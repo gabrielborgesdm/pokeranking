@@ -40,12 +40,12 @@ export default function AdminPokemonPage() {
   } = usePokemonList({ initialLimit: 10 });
 
   return (
-    <main className="container mx-auto px-4 py-8 space-y-6">
+    <main className="container max-w-8xl mx-auto px-4 py-8 space-y-6">
       <PageHeader
         title={t("admin.pokemon.title")}
         description={t("admin.pokemon.subtitle", { count: total })}
         action={
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Button asChild variant="outline">
               <Link href={routes.adminPokemonBulk}>
                 <Upload className="h-4 w-4 mr-2" />

@@ -17,6 +17,7 @@ interface PokemonImageProps {
   sizes?: string;
   className?: string;
   draggable?: boolean;
+  shouldHighlight?: boolean;
 }
 
 export const PokemonImage = React.memo(function PokemonImage({
@@ -28,6 +29,7 @@ export const PokemonImage = React.memo(function PokemonImage({
   sizes,
   className,
   draggable = false,
+  shouldHighlight = false,
 }: PokemonImageProps) {
   const [imgSrc, setImgSrc] = React.useState(() =>
     normalizePokemonImageSrc(src)
@@ -41,9 +43,6 @@ export const PokemonImage = React.memo(function PokemonImage({
     setImgSrc(DEFAULT_POKEMON_IMAGE);
   }, []);
 
-  // Check if we're displaying the fallback/default image
-  const isFallbackImage = imgSrc === DEFAULT_POKEMON_IMAGE;
-
   if (fill) {
     return (
       <Image
@@ -54,7 +53,7 @@ export const PokemonImage = React.memo(function PokemonImage({
         sizes={sizes}
         className={cn(
           "object-contain pointer-events-none",
-          isFallbackImage && "[filter:drop-shadow(0_0_12px_rgba(100,100,100,100))_drop-shadow(0_0_4px_rgba(0,0,0,1))]",
+          shouldHighlight && "[filter:drop-shadow(0_0_1px_rgba(100,100,100,1))_drop-shadow(0_0_4px_rgba(0,0,0,1))]",
           className
         )}
         onError={handleError}
@@ -73,7 +72,7 @@ export const PokemonImage = React.memo(function PokemonImage({
       loading="eager"
       className={cn(
         "object-contain",
-        isFallbackImage && "[filter:drop-shadow(0_0_12px_rgba(100,100,100,100))_drop-shadow(0_0_4px_rgba(0,0,0,1))]",
+        shouldHighlight && "[filter:drop-shadow(0_0_1px_rgba(100,100,100,100))_drop-shadow(0_0_4px_rgba(0,0,0,1))]",
         className
       )}
       onError={handleError}

@@ -19,7 +19,7 @@ export default function AdminPokemonEditPage({ params }: EditPokemonPageProps) {
 
   if (isLoading) {
     return (
-      <main className="container mx-auto px-4 py-8 flex items-center justify-center">
+      <main className="container max-w-8xl mx-auto px-4 py-8 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
       </main>
     );
