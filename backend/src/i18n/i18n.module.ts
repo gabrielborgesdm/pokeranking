@@ -8,10 +8,10 @@ import {
 import * as path from 'path';
 import * as fs from 'fs';
 
-const isDev = process.env.NODE_ENV === 'development';
-const i18nPath = isDev
-  ? path.join(__dirname, '/')
-  : path.join(process.cwd(), 'dist/src/i18n');
+// In both dev and prod, __dirname resolves to the correct i18n directory
+// In dev: backend/src/i18n
+// In prod: backend/dist/src/i18n
+const i18nPath = path.join(__dirname, '/');
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ const i18nPath = isDev
       loader: I18nJsonLoader,
       loaderOptions: {
         path: i18nPath,
-        watch: isDev,
+        watch: process.env.NODE_ENV === 'development',
       },
       resolvers: [
         AcceptLanguageResolver,
