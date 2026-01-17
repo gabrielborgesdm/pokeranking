@@ -26,6 +26,7 @@ async function bootstrap() {
       transform: true,
       transformOptions: {
         exposeUnsetFields: false, // Do not expose fields that are not set, i.e., undefined;
+        enableImplicitConversion: true,
       },
     }),
   );
