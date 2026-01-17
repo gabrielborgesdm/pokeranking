@@ -13,7 +13,7 @@
     "export:openapi": "ts-node -r tsconfig-paths/register scripts/export-openapi.ts",
     "seed": "ts-node -r tsconfig-paths/register scripts/seed-database.ts",
     "seed:pokemon": "ts-node -r tsconfig-paths/register scripts/seed-pokemon.ts",
-    "build": "nest build",
+    "build": "nest build && cp -r src/i18n dist/src/i18n",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",

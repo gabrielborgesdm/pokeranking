@@ -2,11 +2,6 @@
     "version": 2,
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
-    "functions": {
-        "dist/**/*.js": {
-            "includeFiles": "dist/src/i18n/**"
-        }
-    },
     "routes": [
         {
             "src": "/(.*)",
