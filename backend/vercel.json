@@ -3,14 +3,14 @@
     "buildCommand": "npm run build",
     "outputDirectory": "dist",
     "functions": {
-        "dist/main.js": {
-            "includeFiles": "**/src/i18n/**"
+        "dist/**/*.js": {
+            "includeFiles": "dist/src/i18n/**"
         }
     },
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "dist/main.js",
+            "dest": "dist/src/main.js",
             "methods": [
                 "GET",
                 "POST",
