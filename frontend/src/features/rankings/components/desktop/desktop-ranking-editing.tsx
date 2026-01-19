@@ -9,15 +9,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { PokemonDropzone, DraggablePokemonGallery } from "@/features/pokemon-picker";
+import { Badge } from "@/components/ui/badge";
 import { DesktopFilterPanel } from "@/features/pokemon-picker/components/desktop/desktop-filter-panel";
-import { PickerHeaderFilters } from "@/features/pokemon-picker/components/picker-header-filters";
 import { useAllPokemon } from "@/features/pokemon-picker/hooks/use-all-pokemon";
 import type { UseFilterStateReturn } from "@/features/pokemon-picker/hooks/use-filter-state";
 import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokemon-search-overlay";
 import { usePokemonSearchContextOptional } from "@/features/pokemon-search/context/pokemon-search-context";
 import { DndContext, type SensorDescriptor, type SensorOptions } from "@dnd-kit/core";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
-import { ArrowLeft, Save, Search, Trash2, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft, Save, Search, SlidersHorizontal, Trash2, X } from "lucide-react";
 import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DesktopDropzoneEmptyState } from "./desktop-dropzone-empty-state";
@@ -216,14 +217,41 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
         {/* Right: Picker section */}
         <div className="min-h-0 overflow-hidden flex flex-col">
           {/* Header */}
-          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
+          <div className="flex items-center gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
             <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
               {t("rankingView.pokemonBox", "Pokemon Box")}
             </h2>
-            <PickerHeaderFilters
-              activeFilterCount={filterState.activeFilterCount}
-              onOpenFilters={() => setFiltersOpen(true)}
-            />
+
+            {/* Spacer to push filters to the right */}
+            <div className="flex-1" />
+            <div className="relative flex-1 max-w-md mr-auto">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder={t("pokemonFilters.searchInBox", "Search in the Pokemon Box...")}
+                value={filterState.search}
+                onChange={(e) => filterState.handleSearchChange(e.target.value)}
+                className="pl-8 h-8"
+                size={1}
+              />
+            </div>
+            <Button
+              variant={filterState.activeFilterCount > 0 ? "secondary" : "ghost"}
+              size="sm"
+              className="h-8 gap-1.5"
+              onClick={() => setFiltersOpen(true)}
+            >
+              <SlidersHorizontal className="h-4 w-4" />
+              {t("pokemonFilters.additionalFilters", "Additional Filters")}
+              {filterState.activeFilterCount > 0 && (
+                <Badge
+                  variant="default"
+                  className="h-5 w-5 p-0 justify-center text-[10px]"
+                >
+                  {filterState.activeFilterCount}
+                </Badge>
+              )}
+            </Button>
           </div>
 
           {/* Picker content */}

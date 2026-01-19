@@ -1,8 +1,8 @@
 "use client";
 
-import { memo, useState, useEffect } from "react";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, X, RotateCcw } from "lucide-react";
+import { X, RotateCcw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,22 +36,6 @@ export const DesktopFilterPanel = memo(function DesktopFilterPanel({
 }: DesktopFilterPanelProps) {
   const { t } = useTranslation();
 
-  // Local state for debounced search
-  const [inputValue, setInputValue] = useState(filterState.search);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (inputValue !== filterState.search) {
-        filterState.handleSearchChange(inputValue);
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [inputValue, filterState]);
-
-  useEffect(() => {
-    setInputValue(filterState.search);
-  }, [filterState.search]);
-
   if (!isOpen) return null;
 
   return (
@@ -60,7 +44,7 @@ export const DesktopFilterPanel = memo(function DesktopFilterPanel({
         {/* Header with title, clear button, and close button */}
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">
-            {t("pokemonFilters.filters")}
+            {t("pokemonFilters.additionalFilters", "Additional Filters")}
           </span>
           <div className="flex items-center gap-1">
             {filterState.activeFilterCount > 0 && (
@@ -84,18 +68,6 @@ export const DesktopFilterPanel = memo(function DesktopFilterPanel({
               <X className="h-4 w-4" />
             </Button>
           </div>
-        </div>
-
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder={t("admin.pokemon.searchPlaceholder")}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            className="pl-10 h-10"
-          />
         </div>
 
         {/* Filters grid */}

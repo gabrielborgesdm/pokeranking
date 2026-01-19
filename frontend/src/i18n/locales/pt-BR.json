@@ -315,6 +315,8 @@
     "generationNumber": "Geração {{number}}",
     "sortByPokedex": "Pokedex #",
     "filters": "Filtros",
+    "additionalFilters": "Filtros",
+    "searchInBox": "Buscar na Box de Pokemon...",
     "type": "Tipo",
     "sortBy": "Ordenar por",
     "order": "Ordem",
