@@ -21,6 +21,7 @@ import {
 import { THEME_IDS, DEFAULT_THEME_ID } from "@pokeranking/shared";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { routes } from "@/lib/routes";
+import { translateApiError } from "@/lib/translate-api-error";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -105,7 +106,7 @@ export function useRankingForm({
           },
           onError: (err) => {
             if (isApiError(err)) {
-              setError(err.message);
+              setError(translateApiError(err, t));
             } else {
               setError(t("rankingForm.saveFailed"));
             }
@@ -140,7 +141,7 @@ export function useRankingForm({
           },
           onError: (err) => {
             if (isApiError(err)) {
-              setError(err.message);
+              setError(translateApiError(err, t));
             } else {
               setError(t("rankingForm.saveFailed"));
             }

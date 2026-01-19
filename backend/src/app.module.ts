@@ -11,7 +11,6 @@ import { SupportModule } from './support/support.module';
 import { UploadModule } from './upload/upload.module';
 import { CommonModule } from './common/common.module';
 import { SentryModule } from './sentry/sentry.module';
-import { I18nConfigModule } from './i18n/i18n.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -37,8 +36,6 @@ import { getDatabaseConfig } from './config/database.config';
     CommonModule,
     // Sentry module (global)
     SentryModule,
-    // I18n module
-    I18nConfigModule,
     // Feature modules
     AuthModule,
     UsersModule,

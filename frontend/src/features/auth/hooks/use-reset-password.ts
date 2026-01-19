@@ -8,6 +8,7 @@ import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useAuthControllerResetPassword, isApiError } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { translateApiError } from "@/lib/translate-api-error";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -62,11 +63,7 @@ export function useResetPassword() {
         },
         onError: (err) => {
           if (isApiError(err)) {
-            if (err.status === 404 || err.status === 400) {
-              setError(t("auth.invalidResetToken"));
-            } else {
-              setError(err.message);
-            }
+            setError(translateApiError(err, t));
           } else {
             setError(t("auth.resetPasswordFailed"));
           }

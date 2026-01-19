@@ -12,6 +12,7 @@ import {
   useAuthControllerResendVerification,
   isApiError,
 } from "@pokeranking/api-client";
+import { translateApiError } from "@/lib/translate-api-error";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -74,13 +75,7 @@ export function useVerifyEmail() {
         },
         onError: (err) => {
           if (isApiError(err)) {
-            if (err.status === 404) {
-              setError(t("auth.invalidCode"));
-            } else if (err.status === 429) {
-              setError(t("auth.tooManyAttempts"));
-            } else {
-              setError(err.message);
-            }
+            setError(translateApiError(err, t));
           } else {
             setError(t("auth.verificationFailed"));
           }
@@ -101,11 +96,7 @@ export function useVerifyEmail() {
         },
         onError: (err) => {
           if (isApiError(err)) {
-            if (err.status === 429) {
-              setError(t("auth.tooManyAttempts"));
-            } else {
-              setError(err.message);
-            }
+            setError(translateApiError(err, t));
           } else {
             setError(t("auth.resendFailed"));
           }

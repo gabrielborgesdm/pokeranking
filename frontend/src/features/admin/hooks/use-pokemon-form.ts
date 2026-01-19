@@ -20,6 +20,7 @@ import {
   isValidImageString,
   getAllowedImageDomains,
 } from "@/lib/image-utils";
+import { translateApiError } from "@/lib/translate-api-error";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -122,7 +123,7 @@ export function usePokemonForm({
 
     const onError = (err: unknown) => {
       if (isApiError(err)) {
-        setError(err.message);
+        setError(translateApiError(err, t));
       } else {
         setError(t("admin.pokemon.saveError"));
       }

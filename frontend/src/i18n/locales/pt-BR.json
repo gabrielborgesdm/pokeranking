@@ -641,5 +641,47 @@
         "specialDescription": "Vermelho a rosa"
       }
     }
+  },
+  "apiErrors": {
+    "auth": {
+      "invalidCredentials": "Nome de usuário ou senha inválidos",
+      "emailNotVerified": "Por favor, verifique seu email para fazer login",
+      "invalidVerificationCode": "Código de verificação ou email inválido",
+      "emailAlreadyVerified": "Email já verificado",
+      "verificationEmailResent": "Uma conta com este email ou nome de usuário já existe mas não está verificada. Um novo email de verificação foi enviado."
+    },
+    "users": {
+      "notFound": "Usuário não encontrado",
+      "emailExists": "Usuário com email \"{{email}}\" já existe",
+      "usernameExists": "Usuário com nome de usuário \"{{username}}\" já existe",
+      "cannotUpdateOthers": "Você só pode atualizar seu próprio perfil"
+    },
+    "pokemon": {
+      "notFound": "Pokemon com ID {{id}} não encontrado",
+      "nameExists": "Pokemon com nome \"{{name}}\" já existe"
+    },
+    "rankings": {
+      "notFound": "Ranking com ID {{id}} não encontrado",
+      "titleExists": "Você já tem um ranking com título \"{{title}}\"",
+      "cannotModifyOthers": "Você só pode modificar seus próprios rankings",
+      "themeNotAvailable": "O tema \"{{themeId}}\" não está disponível. Ranqueie mais Pokemon para desbloqueá-lo."
+    },
+    "boxes": {
+      "notFound": "Box com ID {{id}} não encontrada",
+      "nameExists": "Você já tem uma box com nome \"{{name}}\"",
+      "cannotFavoriteOwn": "Não é possível favoritar sua própria box",
+      "cannotModifyOthers": "Você só pode modificar suas próprias boxes",
+      "unableToGenerateName": "Não foi possível gerar nome único para box favoritada"
+    },
+    "common": {
+      "tooManyVerificationAttempts": "Muitas tentativas de verificação. Por favor, tente novamente mais tarde.",
+      "tooManyResendAttempts": "Muitas tentativas de reenvio. Por favor, tente novamente mais tarde.",
+      "emailSendFailed": "Não foi possível enviar o email. Por favor, tente novamente mais tarde.",
+      "internalError": "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde."
+    },
+    "support": {
+      "messageCreated": "Seu feedback foi enviado com sucesso",
+      "messageNotFound": "Mensagem de suporte não encontrada"
+    }
   }
 }

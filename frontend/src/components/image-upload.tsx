@@ -12,6 +12,7 @@ import {
   isApiError,
 } from "@pokeranking/api-client";
 import { normalizePokemonImageSrc } from "@/lib/image-utils";
+import { translateApiError } from "@/lib/translate-api-error";
 
 const ALLOWED_TYPES = {
   "image/jpeg": [".jpg", ".jpeg"],
@@ -59,7 +60,7 @@ export function ImageUpload({ value, onChange, disabled, onImageClick }: ImageUp
           },
           onError: (err) => {
             setError(
-              isApiError(err) ? err.message : t("admin.pokemon.uploadError")
+              isApiError(err) ? translateApiError(err, t) : t("admin.pokemon.uploadError")
             );
             setPreview(value || null);
           },

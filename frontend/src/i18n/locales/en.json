@@ -641,5 +641,47 @@
         "specialDescription": "Red to pink"
       }
     }
+  },
+  "apiErrors": {
+    "auth": {
+      "invalidCredentials": "Invalid username or password",
+      "emailNotVerified": "Please verify your email to login",
+      "invalidVerificationCode": "Invalid verification code or email",
+      "emailAlreadyVerified": "Email is already verified",
+      "verificationEmailResent": "An account with this email or username already exists but is not verified. A new verification email has been sent."
+    },
+    "users": {
+      "notFound": "User not found",
+      "emailExists": "User with email \"{{email}}\" already exists",
+      "usernameExists": "User with username \"{{username}}\" already exists",
+      "cannotUpdateOthers": "You can only update your own profile"
+    },
+    "pokemon": {
+      "notFound": "Pokemon with ID {{id}} not found",
+      "nameExists": "Pokemon with name \"{{name}}\" already exists"
+    },
+    "rankings": {
+      "notFound": "Ranking with ID {{id}} not found",
+      "titleExists": "You already have a ranking with title \"{{title}}\"",
+      "cannotModifyOthers": "You can only modify your own rankings",
+      "themeNotAvailable": "Theme \"{{themeId}}\" is not available. Rank more Pokemon to unlock it."
+    },
+    "boxes": {
+      "notFound": "Box with ID {{id}} not found",
+      "nameExists": "You already have a box with name \"{{name}}\"",
+      "cannotFavoriteOwn": "Cannot favorite your own box",
+      "cannotModifyOthers": "You can only modify your own boxes",
+      "unableToGenerateName": "Unable to generate unique name for favorited box"
+    },
+    "common": {
+      "tooManyVerificationAttempts": "Too many verification attempts. Please try again later.",
+      "tooManyResendAttempts": "Too many resend attempts. Please try again later.",
+      "emailSendFailed": "Unable to send email. Please try again later.",
+      "internalError": "An unexpected error occurred. Please try again later."
+    },
+    "support": {
+      "messageCreated": "Your feedback has been submitted successfully",
+      "messageNotFound": "Support message not found"
+    }
   }
 }
