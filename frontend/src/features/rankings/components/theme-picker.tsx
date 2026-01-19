@@ -105,7 +105,7 @@ export const ThemePicker = memo(function ThemePicker({
           isSelected && "ring-2 ring-primary ring-offset-2 ring-offset-background",
           available
             ? "cursor-pointer hover:scale-105"
-            : "opacity-50 cursor-not-allowed"
+            : "opacity-50 cursor-zoom-in"
         )}
         aria-label={theme.displayName}
       >
