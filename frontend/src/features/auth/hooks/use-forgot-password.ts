@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useAuthControllerForgotPassword, isApiError } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { translateApiError } from "@/lib/translate-api-error";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -46,7 +47,7 @@ export function useForgotPassword() {
         },
         onError: (err) => {
           if (isApiError(err)) {
-            setError(err.message);
+            setError(translateApiError(err, t));
           } else {
             setError(t("auth.forgotPasswordFailed"));
           }

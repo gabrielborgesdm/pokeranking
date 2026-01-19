@@ -11,6 +11,7 @@ import {
   isApiError,
 } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { translateApiError } from "@/lib/translate-api-error";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -57,7 +58,7 @@ export function useSupportForm() {
         onError: (err) => {
           if (isApiError(err)) {
             trackSupportSubmitError(err.message);
-            setError(err.message);
+            setError(translateApiError(err, t));
           } else {
             trackSupportSubmitError("unknown_error");
             setError(t("support.errorMessage"));

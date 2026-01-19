@@ -69,7 +69,8 @@ export type ApiErrorResponse = {
   statusCode: number;
   message: string | string[];
   error?: string;
-  key?: string; // i18n translation key from backend
+  key?: string; // i18n translation key from backend (e.g., "auth.invalidCredentials")
+  args?: Record<string, string | number>; // interpolation arguments for translation
 };
 
 /**

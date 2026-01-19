@@ -172,23 +172,12 @@ export type pokemonControllerFindAllResponse200 = {
   status: 200;
 };
 
-export type pokemonControllerFindAllResponse401 = {
-  data: void;
-  status: 401;
-};
-
 export type pokemonControllerFindAllResponseSuccess =
   pokemonControllerFindAllResponse200 & {
     headers: Headers;
   };
-export type pokemonControllerFindAllResponseError =
-  pokemonControllerFindAllResponse401 & {
-    headers: Headers;
-  };
-
 export type pokemonControllerFindAllResponse =
-  | pokemonControllerFindAllResponseSuccess
-  | pokemonControllerFindAllResponseError;
+  pokemonControllerFindAllResponseSuccess;
 
 export const getPokemonControllerFindAllUrl = () => {
   return `/pokemon`;
@@ -212,7 +201,7 @@ export const getPokemonControllerFindAllQueryKey = () => {
 
 export const getPokemonControllerFindAllQueryOptions = <
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(options?: {
   query?: Partial<
     UseQueryOptions<
@@ -242,11 +231,11 @@ export const getPokemonControllerFindAllQueryOptions = <
 export type PokemonControllerFindAllQueryResult = NonNullable<
   Awaited<ReturnType<typeof pokemonControllerFindAll>>
 >;
-export type PokemonControllerFindAllQueryError = void;
+export type PokemonControllerFindAllQueryError = unknown;
 
 export function usePokemonControllerFindAll<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options: {
     query: Partial<
@@ -272,7 +261,7 @@ export function usePokemonControllerFindAll<
 };
 export function usePokemonControllerFindAll<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options?: {
     query?: Partial<
@@ -296,7 +285,7 @@ export function usePokemonControllerFindAll<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 export function usePokemonControllerFindAll<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options?: {
     query?: Partial<
@@ -316,7 +305,7 @@ export function usePokemonControllerFindAll<
 
 export function usePokemonControllerFindAll<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options?: {
     query?: Partial<
@@ -344,7 +333,7 @@ export function usePokemonControllerFindAll<
 
 export const getPokemonControllerFindAllSuspenseQueryOptions = <
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(options?: {
   query?: Partial<
     UseSuspenseQueryOptions<
@@ -374,11 +363,11 @@ export const getPokemonControllerFindAllSuspenseQueryOptions = <
 export type PokemonControllerFindAllSuspenseQueryResult = NonNullable<
   Awaited<ReturnType<typeof pokemonControllerFindAll>>
 >;
-export type PokemonControllerFindAllSuspenseQueryError = void;
+export type PokemonControllerFindAllSuspenseQueryError = unknown;
 
 export function usePokemonControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options: {
     query: Partial<
@@ -396,7 +385,7 @@ export function usePokemonControllerFindAllSuspense<
 };
 export function usePokemonControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options?: {
     query?: Partial<
@@ -414,7 +403,7 @@ export function usePokemonControllerFindAllSuspense<
 };
 export function usePokemonControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options?: {
     query?: Partial<
@@ -436,7 +425,7 @@ export function usePokemonControllerFindAllSuspense<
 
 export function usePokemonControllerFindAllSuspense<
   TData = Awaited<ReturnType<typeof pokemonControllerFindAll>>,
-  TError = void,
+  TError = unknown,
 >(
   options?: {
     query?: Partial<

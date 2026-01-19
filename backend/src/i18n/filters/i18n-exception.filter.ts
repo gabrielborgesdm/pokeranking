@@ -4,10 +4,8 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { I18nContext } from 'nestjs-i18n';
 import { SentryService } from '../../sentry/sentry.service';
 
 interface I18nExceptionPayload {
@@ -25,6 +23,12 @@ interface RequestUser {
 
 type AuthenticatedRequest = Request & { user?: RequestUser };
 
+interface ErrorResponsePayload {
+  message: string | string[];
+  key?: string;
+  args?: Record<string, string | number>;
+}
+
 function isI18nPayload(value: unknown): value is I18nExceptionPayload {
   return (
     typeof value === 'object' &&
@@ -40,8 +44,6 @@ function isObject(value: unknown): value is ExceptionResponseObject {
 
 @Catch(HttpException)
 export class I18nExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(I18nExceptionFilter.name);
-
   constructor(private readonly sentryService: SentryService) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
@@ -50,19 +52,20 @@ export class I18nExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<AuthenticatedRequest>();
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
-    const i18n = I18nContext.current(host);
 
     // Capture 5xx errors to Sentry
     if (status >= 500) {
       this.captureToSentry(exception, request);
     }
 
-    const message = this.extractMessage(exceptionResponse, i18n);
+    const { message, key, args } = this.extractPayload(exceptionResponse);
 
     response.status(status).json({
       statusCode: status,
       message,
       error: HttpStatus[status],
+      key,
+      args,
     });
   }
 
@@ -90,103 +93,57 @@ export class I18nExceptionFilter implements ExceptionFilter {
     });
   }
 
-  private extractMessage(
-    exceptionResponse: string | object,
-    i18n: I18nContext | undefined,
-  ): string | string[] {
+  private extractPayload(exceptionResponse: string | object): ErrorResponsePayload {
     if (typeof exceptionResponse === 'string') {
-      return this.translateIfKey(exceptionResponse, i18n);
+      return { message: exceptionResponse };
     }
 
     if (!isObject(exceptionResponse)) {
-      return this.translateIfKey('common.internalError', i18n);
+      return { message: 'Internal server error', key: 'common.internalError' };
     }
 
-    // Check if root object is an i18n payload first (e.g., { key: "common.error" })
+    // Check if root object is an i18n payload (e.g., { key: "common.error", args: {...} })
     if (isI18nPayload(exceptionResponse)) {
-      return this.translatePayload(exceptionResponse, i18n);
+      return {
+        message: exceptionResponse.key,
+        key: exceptionResponse.key,
+        args: exceptionResponse.args,
+      };
     }
 
-    return this.extractFromMessageField(exceptionResponse, i18n);
+    return this.extractFromMessageField(exceptionResponse);
   }
 
   private extractFromMessageField(
     responseObj: ExceptionResponseObject,
-    i18n: I18nContext | undefined,
-  ): string | string[] {
+  ): ErrorResponsePayload {
     const { message } = responseObj;
 
     if (Array.isArray(message)) {
-      return this.translateMessageArray(message, i18n);
+      // For validation errors (array of messages), return as-is without translation keys
+      return { message: message.map(String) };
     }
 
     if (isI18nPayload(message)) {
-      return this.translatePayload(message, i18n);
+      return {
+        message: message.key,
+        key: message.key,
+        args: message.args,
+      };
     }
 
     if (typeof message === 'string') {
-      return this.translateIfKey(message, i18n);
+      // Check if it looks like a translation key (contains a dot)
+      if (message.includes('.')) {
+        return { message, key: message };
+      }
+      return { message };
     }
 
     if (typeof message === 'number') {
-      return String(message);
+      return { message: String(message) };
     }
 
-    return this.translateIfKey('common.internalError', i18n);
-  }
-
-  private translateMessageArray(
-    messages: unknown[],
-    i18n: I18nContext | undefined,
-  ): string[] {
-    return messages.map((msg) => {
-      if (isI18nPayload(msg)) {
-        return this.translatePayload(msg, i18n);
-      }
-      if (typeof msg === 'string') {
-        return this.translateIfKey(msg, i18n);
-      }
-      return String(msg);
-    });
-  }
-
-  private translatePayload(
-    payload: I18nExceptionPayload,
-    i18n: I18nContext | undefined,
-  ): string {
-    if (!i18n) {
-      return payload.key;
-    }
-    return this.translate(i18n, payload.key, payload.args);
-  }
-
-  private translateIfKey(value: string, i18n: I18nContext | undefined): string {
-    // Check if value looks like an i18n key (contains a dot, e.g., "common.error")
-    if (!i18n || !value.includes('.')) {
-      return value;
-    }
-    return this.translate(i18n, value);
-  }
-
-  private translate(
-    i18n: I18nContext,
-    key: string,
-    args?: Record<string, string | number>,
-  ): string {
-    try {
-      const translated = i18n.t(key, { args });
-      // If translation returns the key itself, it means the key wasn't found
-      if (translated === key) {
-        this.logger.warn(
-          `Translation key not found: ${key}, language: ${i18n.lang}`,
-        );
-      }
-      return String(translated);
-    } catch (error) {
-      this.logger.error(
-        `Translation failed for key: ${key}, language: ${i18n.lang}, error: ${error}`,
-      );
-      return key;
-    }
+    return { message: 'Internal server error', key: 'common.internalError' };
   }
 }
