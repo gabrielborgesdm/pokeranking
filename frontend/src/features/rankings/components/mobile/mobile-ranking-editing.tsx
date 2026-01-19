@@ -165,7 +165,7 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
       />
 
       <div
-        className="relative h-[92dvh]"
+        className="relative h-[85dvh]"
         style={{ paddingBottom: MOBILE_TAB_BAR_HEIGHT }}
       >
         {/* Ranking Tab */}

@@ -50,7 +50,7 @@ export const PickerHeaderFilters = memo(function PickerHeaderFilters({
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        {t("rankingView.filters", "Filters")}
+        {t("pokemonFilters.additionalFilters", "Additional Filters")}
       </TooltipContent>
     </Tooltip>
   );

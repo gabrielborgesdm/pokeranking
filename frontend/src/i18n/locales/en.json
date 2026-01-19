@@ -290,6 +290,8 @@
     "generationNumber": "Generation {{number}}",
     "sortByPokedex": "Pokedex #",
     "filters": "Filters",
+    "additionalFilters": "Filters",
+    "searchInBox": "Search in the Pokemon Box...",
     "type": "Type",
     "sortBy": "Sort by",
     "order": "Order",
