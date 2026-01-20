@@ -9,6 +9,7 @@ import {
   RankingsListFilters,
   useRankingsList,
 } from "@/features/rankings";
+import { Onboarding } from "@/components/onboarding";
 import { SimplePagination } from "@/components/pagination";
 import { ErrorMessage } from "@/components/error-message";
 import { AnimatedList } from "@/components/animated-list";
@@ -114,6 +115,8 @@ export default function RankingsListPage() {
             {t("rankingsList.description")}
           </p>
         </div>
+
+        <Onboarding />
 
         <RankingsListFilters
           searchValue={search}

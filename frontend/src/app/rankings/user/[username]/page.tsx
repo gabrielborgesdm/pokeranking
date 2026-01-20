@@ -96,6 +96,14 @@ export default function UserRankingsPage({ params }: UserRankingsPageProps) {
                 ? t("userRankings.noRankingsOwner")
                 : t("userRankings.noRankings", { username })}
             </p>
+            {isOwner && (
+              <Button asChild size='lg' variant={'outline'} className="mt-4" >
+                <Link href={routes.rankingNew}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  {t("userRankings.createFirst")}
+                </Link>
+              </Button>
+            )}
           </div>
         ) : (
           <AnimatedList className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
