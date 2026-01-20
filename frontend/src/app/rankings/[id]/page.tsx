@@ -1,23 +1,23 @@
 "use client";
 
+import { LoadingFallback } from "@/components/loading-fallback";
 import { PokemonListingCards } from "@/features/pokemon-picker/components/pokemon-listing-cards";
 import { PokemonListingCardsSkeleton } from "@/features/pokemon-picker/components/pokemon-listing-cards-skeleton";
 import { useResponsiveGrid } from "@/features/pokemon-picker/hooks/use-responsive-grid";
+import type { Zone } from "@/features/pokemon-picker/utils/zone-grouping";
+import { PokemonSearchProvider } from "@/features/pokemon-search/context/pokemon-search-context";
 import {
   RankingActionBar,
   RankingHero,
   useRankingViewPage,
 } from "@/features/rankings";
-import { PokemonSearchProvider } from "@/features/pokemon-search/context/pokemon-search-context";
-import { useScreenSize } from "@/providers/screen-size-provider";
-import { LoadingFallback } from "@/components/loading-fallback";
-import { notFound } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { routes } from "@/lib/routes";
-import { use, useCallback, useEffect, useRef } from "react";
+import { useIsAuthenticated } from "@/features/users/hooks/use-is-authenticated";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { routes } from "@/lib/routes";
+import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto, RankingResponseDto } from "@pokeranking/api-client";
-import type { Zone } from "@/features/pokemon-picker/utils/zone-grouping";
+import { notFound, useRouter } from "next/navigation";
+import { use, useCallback, useEffect, useRef } from "react";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;
@@ -55,6 +55,8 @@ function RankingPageContent({
     itemCount: pokemon.length,
   });
 
+  const isAuthenticated = useIsAuthenticated();
+
   // Only apply maxWidth once measured (gridContentWidth > 0)
   const maxContentWidth = gridContentWidth > 0 ? gridContentWidth : undefined;
 
@@ -69,6 +71,7 @@ function RankingPageContent({
         likeCount={likeCount}
         isLiked={isLiked}
         isOwner={isOwner}
+        isAuthenticated={isAuthenticated}
         onLikeClick={toggleLike}
         maxContentWidth={maxContentWidth}
       />

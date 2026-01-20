@@ -1,16 +1,15 @@
 "use client";
 
-import { memo, useMemo, useState } from "react";
-import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { Heart } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { PokemonImage } from "@/components/pokemon-image";
+import { Button } from "@/components/ui/button";
 import { PokemonDetailsDialog } from "@/features/pokemon/components/pokemon-details-dialog";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { getThemeById } from "@pokeranking/shared";
-import { add } from "@dnd-kit/utilities";
+import { Heart } from "lucide-react";
+import Link from "next/link";
+import { memo, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface RankingHeroProps {
   /** Ranking title */
@@ -35,6 +34,8 @@ interface RankingHeroProps {
   maxContentWidth?: number;
   /** Optional class name */
   className?: string;
+
+  isAuthenticated?: boolean;
 }
 
 /**
@@ -52,6 +53,7 @@ export const RankingHero = memo(function RankingHero({
   likeCount,
   isLiked,
   isOwner,
+  isAuthenticated,
   onLikeClick,
   maxContentWidth,
   className,
@@ -163,7 +165,7 @@ export const RankingHero = memo(function RankingHero({
         </div>
 
         {/* Right section: Like button (hidden for owner) */}
-        {!isOwner && (
+        {!isOwner && !!isAuthenticated && (
           <div className="flex items-center gap-2 shrink-0">
             <Button
               variant="ghost"
