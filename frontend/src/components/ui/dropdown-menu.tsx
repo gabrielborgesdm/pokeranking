@@ -210,6 +210,13 @@ function DropdownMenuContent({
 
     const handleClickOutside = (e: MouseEvent | TouchEvent) => {
       const target = e.target as Node
+
+      // Check if click is inside a submenu content (which is portaled to body)
+      const subMenuContent = document.querySelector('[data-slot="dropdown-menu-sub-content"]')
+      if (subMenuContent?.contains(target)) {
+        return
+      }
+
       if (
         contentRef.current &&
         !contentRef.current.contains(target) &&
@@ -467,6 +474,7 @@ function DropdownMenuSubContent({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   const subMenu = useSubMenu()
+  const { setOpen: setMainMenuOpen } = useDropdown()
   const contentRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState({ top: 0, left: 0 })
   const [mounted, setMounted] = useState(false)
@@ -513,7 +521,50 @@ function DropdownMenuSubContent({
     }
   }, [subMenu?.open, subMenu?.triggerRef])
 
+  // Close submenu on outside click
+  useEffect(() => {
+    if (!subMenu?.open) return
+
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node
+
+      // Don't close if clicking on the submenu trigger
+      if (subMenu.triggerRef.current?.contains(target)) {
+        return
+      }
+
+      // Don't close if clicking inside the submenu content
+      if (contentRef.current?.contains(target)) {
+        return
+      }
+
+      subMenu.setOpen(false)
+    }
+
+    // Use a small delay to prevent immediate closing when submenu just opened
+    const timeoutId = setTimeout(() => {
+      document.addEventListener("mousedown", handleClickOutside)
+      document.addEventListener("touchstart", handleClickOutside)
+    }, 0)
+
+    return () => {
+      clearTimeout(timeoutId)
+      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
+    }
+  }, [subMenu])
+
   if (!subMenu?.open || !mounted) return null
+
+  // Handle click on submenu items - close both submenu and main menu
+  const handleContentClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    // Check if clicking on an actual menu item (not the container)
+    if (target.closest('[data-slot="dropdown-menu-item"]')) {
+      subMenu.setOpen(false)
+      setMainMenuOpen(false)
+    }
+  }
 
   const content = (
     <div
@@ -529,6 +580,7 @@ function DropdownMenuSubContent({
         top: position.top,
         left: position.left,
       }}
+      onClick={handleContentClick}
       {...props}
     >
       {children}
