@@ -90,8 +90,8 @@ export function useRankingForm({
         { data: apiData as CreateRankingDto },
         {
           onSuccess: (response) => {
-            if (response.status === 201) {
-              const createdRanking = response.data;
+            const createdRanking = response.data;
+            if (response.status === 201 && createdRanking) {
               trackRankingCreate(createdRanking._id, createdRanking.title);
               // Invalidate queries to refresh rankings list
               queryClient.invalidateQueries({
@@ -101,7 +101,9 @@ export function useRankingForm({
                 queryKey: getRankingsControllerFindByUsernameQueryKey(username),
               });
               onSuccess?.();
-              router.push(routes.userRankings(username));
+              router.push(routes.ranking(createdRanking._id));
+            } else {
+              setError(t("rankingForm.saveFailed"));
             }
           },
           onError: (err) => {
