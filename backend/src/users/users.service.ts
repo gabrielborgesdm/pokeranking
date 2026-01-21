@@ -37,7 +37,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
@@ -68,7 +68,6 @@ export class UsersService {
     if (existing) {
       throw new ConflictException({
         key: TK.USERS.EMAIL_EXISTS,
-        args: { email },
       });
     }
   }
@@ -210,13 +209,13 @@ export class UsersService {
       .exec();
   }
 
-  async findInactiveByEmailOrUsername(
+  async deleteInactiveByEmailOrUsername(
     email: string,
     username: string,
     options?: SessionOptions,
-  ): Promise<User | null> {
-    return await this.userModel
-      .findOne({
+  ): Promise<void> {
+    await this.userModel
+      .deleteMany({
         $or: [{ email }, { username }],
         isActive: false,
       })

@@ -4,12 +4,17 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Resend } from 'resend';
 import { User } from '../users/schemas/user.schema';
 import { TK } from '../i18n/constants/translation-keys';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as Handlebars from 'handlebars';
+import {
+  EmailProvider,
+  SendEmailOptions,
+  ResendProvider,
+  NodemailerProvider,
+} from './providers';
 
 type SupportedLanguage = 'en' | 'pt-BR';
 
@@ -38,18 +43,17 @@ const EMAIL_SUBJECTS: Record<SupportedLanguage, EmailSubjects> = {
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
-  private readonly resend: Resend;
-  private readonly fromEmail: string;
+  private readonly providers: EmailProvider[] = [];
   private readonly frontendUrl: string;
   private readonly supportEmail: string | undefined;
   private readonly emailVerificationRequired: boolean;
   private readonly templates: Record<SupportedLanguage, EmailTemplates>;
 
-  constructor(private readonly configService: ConfigService) {
-    const apiKey = this.configService.getOrThrow<string>('RESEND_API_KEY');
-    this.resend = new Resend(apiKey);
-
-    this.fromEmail = this.configService.getOrThrow<string>('RESEND_FROM_EMAIL');
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly resendProvider: ResendProvider,
+    private readonly nodemailerProvider: NodemailerProvider,
+  ) {
     this.frontendUrl = this.configService.get(
       'FRONTEND_URL',
       'http://localhost:3000',
@@ -59,6 +63,27 @@ export class EmailService {
       'EMAIL_VERIFICATION_REQUIRED',
       true,
     );
+
+    // Register all providers
+    const allProviders: EmailProvider[] = [
+      this.resendProvider,
+      this.nodemailerProvider,
+    ];
+
+    // Filter active providers and sort by priority (lower index = higher priority)
+    this.providers = allProviders
+      .filter((p) => p.isActive())
+      .sort((a, b) => a.getPriority() - b.getPriority());
+
+    if (this.providers.length === 0) {
+      this.logger.warn(
+        'No email providers configured. Set EMAIL_PROVIDERS env variable.',
+      );
+    } else {
+      this.logger.log(
+        `Email providers initialized: ${this.providers.map((p) => p.id).join(', ')}`,
+      );
+    }
 
     // Load and compile templates for all languages
     const templatesDir = join(__dirname, 'templates');
@@ -97,6 +122,45 @@ export class EmailService {
     return 'en';
   }
 
+  /**
+   * Sends an email using the configured providers in priority order.
+   * Falls back to the next provider if one fails.
+   */
+  private async sendEmail(options: SendEmailOptions): Promise<void> {
+    if (this.providers.length === 0) {
+      throw new ServiceUnavailableException({
+        key: TK.COMMON.EMAIL_SEND_FAILED,
+      });
+    }
+
+    const errors: string[] = [];
+
+    for (const provider of this.providers) {
+      this.logger.debug(`Attempting to send email via ${provider.name}`);
+
+      const result = await provider.send(options);
+
+      if (result.success) {
+        this.logger.debug(
+          `Email sent successfully via ${provider.name} (ID: ${result.messageId})`,
+        );
+        return;
+      }
+
+      errors.push(`${provider.name}: ${result.error}`);
+      this.logger.warn(
+        `Failed to send email via ${provider.name}: ${result.error}`,
+      );
+    }
+
+    this.logger.error(
+      `All email providers failed. Errors: ${errors.join('; ')}`,
+    );
+    throw new ServiceUnavailableException({
+      key: TK.COMMON.EMAIL_SEND_FAILED,
+    });
+  }
+
   async sendVerificationEmail(
     user: User,
     code: string,
@@ -109,42 +173,25 @@ export class EmailService {
       return true;
     }
 
-    try {
-      const language = this.getLanguage(lang);
-      const verificationUrl = `${this.frontendUrl}/verify-email?email=${encodeURIComponent(user.email)}&code=${code}`;
+    const language = this.getLanguage(lang);
+    const verificationUrl = `${this.frontendUrl}/verify-email?email=${encodeURIComponent(user.email)}&code=${code}`;
 
-      const html = this.templates[language].verifyEmail({
-        name: user.username,
-        email: user.email,
-        code,
-        verificationUrl,
-        year: new Date().getFullYear(),
-      });
+    const html = this.templates[language].verifyEmail({
+      name: user.username,
+      email: user.email,
+      code,
+      verificationUrl,
+      year: new Date().getFullYear(),
+    });
 
-      const { data, error } = await this.resend.emails.send({
-        from: this.fromEmail,
-        to: user.email,
-        subject: EMAIL_SUBJECTS[language].verifyEmail,
-        html,
-      });
+    await this.sendEmail({
+      to: user.email,
+      subject: EMAIL_SUBJECTS[language].verifyEmail,
+      html,
+    });
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      this.logger.debug(
-        `Verification email sent to ${user.email} (ID: ${data?.id})`,
-      );
-      return true;
-    } catch (error) {
-      this.logger.error(
-        `Failed to send verification email to ${user.email}`,
-        error instanceof Error ? error.stack : String(error),
-      );
-      throw new ServiceUnavailableException({
-        key: TK.COMMON.EMAIL_SEND_FAILED,
-      });
-    }
+    this.logger.debug(`Verification email sent to ${user.email}`);
+    return true;
   }
 
   async sendPasswordResetEmail(
@@ -152,41 +199,24 @@ export class EmailService {
     token: string,
     lang?: string,
   ): Promise<boolean> {
-    try {
-      const language = this.getLanguage(lang);
-      const resetUrl = `${this.frontendUrl}/reset-password?token=${token}`;
+    const language = this.getLanguage(lang);
+    const resetUrl = `${this.frontendUrl}/reset-password?token=${token}`;
 
-      const html = this.templates[language].resetPassword({
-        name: user.username,
-        email: user.email,
-        resetUrl,
-        year: new Date().getFullYear(),
-      });
+    const html = this.templates[language].resetPassword({
+      name: user.username,
+      email: user.email,
+      resetUrl,
+      year: new Date().getFullYear(),
+    });
 
-      const { data, error } = await this.resend.emails.send({
-        from: this.fromEmail,
-        to: user.email,
-        subject: EMAIL_SUBJECTS[language].resetPassword,
-        html,
-      });
+    await this.sendEmail({
+      to: user.email,
+      subject: EMAIL_SUBJECTS[language].resetPassword,
+      html,
+    });
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      this.logger.debug(
-        `Password reset email sent to ${user.email} (ID: ${data?.id})`,
-      );
-      return true;
-    } catch (error) {
-      this.logger.error(
-        `Failed to send password reset email to ${user.email}`,
-        error instanceof Error ? error.stack : String(error),
-      );
-      throw new ServiceUnavailableException({
-        key: TK.COMMON.EMAIL_SEND_FAILED,
-      });
-    }
+    this.logger.debug(`Password reset email sent to ${user.email}`);
+    return true;
   }
 
   async sendSupportNotification(
@@ -212,21 +242,14 @@ export class EmailService {
         year: new Date().getFullYear(),
       });
 
-      const { data, error } = await this.resend.emails.send({
-        from: this.fromEmail,
+      await this.sendEmail({
         to: this.supportEmail,
         replyTo: userEmail,
         subject: `[Support] New feedback from ${username}`,
         html,
       });
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      this.logger.debug(
-        `Support notification sent to ${this.supportEmail} (ID: ${data?.id})`,
-      );
+      this.logger.debug(`Support notification sent to ${this.supportEmail}`);
       return true;
     } catch (error) {
       this.logger.error(

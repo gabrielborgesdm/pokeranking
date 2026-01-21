@@ -663,8 +663,8 @@
     },
     "users": {
       "notFound": "User not found",
-      "emailExists": "User with email \"{{email}}\" already exists",
-      "usernameExists": "User with username \"{{username}}\" already exists",
+      "emailExists": "User with email already exists",
+      "usernameExists": "User with this username already exists",
       "cannotUpdateOthers": "You can only update your own profile"
     },
     "pokemon": {

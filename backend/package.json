@@ -51,6 +51,7 @@
     "imagekit": "^6.0.0",
     "mongoose": "^8.20.1",
     "nestjs-i18n": "^10.6.0",
+    "nodemailer": "^7.0.12",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
