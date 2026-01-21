@@ -8,7 +8,6 @@ import {
 import * as path from 'path';
 import * as fs from 'fs';
 
-
 function resolveI18nPath() {
   return process.env.NODE_ENV === 'production'
     ? path.join(process.cwd(), 'dist/src/i18n')

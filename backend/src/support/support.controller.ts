@@ -5,6 +5,7 @@ import {
   Request,
   HttpCode,
   HttpStatus,
+  Headers,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -37,12 +38,17 @@ export class SupportController {
   async create(
     @Body() dto: CreateSupportMessageDto,
     @Request() req: AuthenticatedRequest,
+    @Headers('accept-language') lang?: string,
   ): Promise<SupportMessageResponseDto> {
-    const message = await this.supportService.create(dto, {
-      _id: new Types.ObjectId(req.user._id),
-      username: req.user.username,
-      email: req.user.email,
-    });
+    const message = await this.supportService.create(
+      dto,
+      {
+        _id: new Types.ObjectId(req.user._id),
+        username: req.user.username,
+        email: req.user.email,
+      },
+      lang,
+    );
     return toDto(SupportMessageResponseDto, message);
   }
 }

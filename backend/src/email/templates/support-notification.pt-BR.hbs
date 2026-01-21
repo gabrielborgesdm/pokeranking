@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Nova Mensagem de Suporte - PokeRanking</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        line-height: 1.6;
+        color: #E8E8E8;
+        margin: 0;
+        padding: 20px;
+        background-color: #121016;
+      }
+      .container {
+        max-width: 520px;
+        margin: 0 auto;
+        background-color: #1A1A2E;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #2D2D44;
+      }
+      .header {
+        background-color: #1A1A2E;
+        padding: 40px 30px 30px;
+        text-align: center;
+        border-bottom: 1px solid #2D2D44;
+      }
+      .header h1 {
+        color: #FFFFFF;
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+      }
+      .header p {
+        color: #9090A0;
+        margin: 8px 0 0 0;
+        font-size: 14px;
+      }
+      .content {
+        padding: 40px 30px;
+      }
+      .user-info {
+        background-color: #252538;
+        border: 1px solid #3D3D55;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+      .user-info-row {
+        display: flex;
+        margin-bottom: 12px;
+      }
+      .user-info-row:last-child {
+        margin-bottom: 0;
+      }
+      .user-info-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #7070A0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        min-width: 90px;
+      }
+      .user-info-value {
+        font-size: 14px;
+        color: #FFFFFF;
+      }
+      .message-container {
+        background-color: #1E1E32;
+        border: 1px solid #3D3D55;
+        border-left: 3px solid #3366CC;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 24px 0;
+      }
+      .message-label {
+        font-size: 11px;
+        color: #7070A0;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 12px;
+      }
+      .message-content {
+        font-size: 15px;
+        color: #E8E8E8;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        line-height: 1.7;
+      }
+      .footer {
+        background-color: #151522;
+        padding: 24px 30px;
+        text-align: center;
+        font-size: 12px;
+        color: #606080;
+        border-top: 1px solid #2D2D44;
+      }
+      .footer p {
+        margin: 4px 0;
+      }
+      .footer strong {
+        color: #8080A0;
+      }
+      .footer .reply-note {
+        color: #FFCC00;
+        margin-top: 8px;
+      }
+      @media only screen and (max-width: 600px) {
+        body {
+          padding: 12px;
+        }
+        .content {
+          padding: 30px 24px;
+        }
+        .user-info-row {
+          flex-direction: column;
+        }
+        .user-info-label {
+          margin-bottom: 4px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class='container'>
+      <div class='header'>
+        <h1>Nova Mensagem de Suporte</h1>
+        <p>Um usuário enviou um feedback</p>
+      </div>
+
+      <div class='content'>
+        <div class='user-info'>
+          <div class='user-info-row'>
+            <span class='user-info-label'>Usuário</span>
+            <span class='user-info-value'>{{username}}</span>
+          </div>
+          <div class='user-info-row'>
+            <span class='user-info-label'>E-mail</span>
+            <span class='user-info-value'>{{userEmail}}</span>
+          </div>
+          <div class='user-info-row'>
+            <span class='user-info-label'>Data/Hora</span>
+            <span class='user-info-value'>{{timestamp}}</span>
+          </div>
+        </div>
+
+        <div class='message-container'>
+          <div class='message-label'>Mensagem</div>
+          <div class='message-content'>{{message}}</div>
+        </div>
+      </div>
+
+      <div class='footer'>
+        <p><strong>Suporte PokeRanking</strong></p>
+        <p>&copy; {{year}} PokeRanking</p>
+        <p class='reply-note'>Responda para contatar o usuário diretamente</p>
+      </div>
+    </div>
+  </body>
+</html>

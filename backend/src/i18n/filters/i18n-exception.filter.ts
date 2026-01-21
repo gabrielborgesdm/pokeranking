@@ -93,7 +93,9 @@ export class I18nExceptionFilter implements ExceptionFilter {
     });
   }
 
-  private extractPayload(exceptionResponse: string | object): ErrorResponsePayload {
+  private extractPayload(
+    exceptionResponse: string | object,
+  ): ErrorResponsePayload {
     if (typeof exceptionResponse === 'string') {
       return { message: exceptionResponse };
     }

@@ -8,6 +8,7 @@ import {
   HttpCode,
   HttpStatus,
   HttpException,
+  Headers,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -75,8 +76,15 @@ export class AuthController {
     type: RegisterResponseDto,
   })
   @ApiResponse({ status: 409, description: 'User already exists' })
-  async register(@Body() registerDto: RegisterDto) {
-    const result = await this.authService.register(registerDto);
+  async register(
+    @Body() registerDto: RegisterDto,
+    @Headers('accept-language') lang?: string,
+  ) {
+    const result = await this.authService.register(
+      registerDto,
+      undefined,
+      lang,
+    );
 
     return {
       user: toDto(UserResponseDto, result.user),
@@ -97,8 +105,15 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   @ApiResponse({ status: 409, description: 'User already exists' })
-  async registerAdmin(@Body() registerDto: RegisterDto) {
-    const result = await this.authService.register(registerDto, UserRole.Admin);
+  async registerAdmin(
+    @Body() registerDto: RegisterDto,
+    @Headers('accept-language') lang?: string,
+  ) {
+    const result = await this.authService.register(
+      registerDto,
+      UserRole.Admin,
+      lang,
+    );
 
     return {
       user: toDto(UserResponseDto, result.user),
@@ -184,6 +199,7 @@ export class AuthController {
   @ApiResponse({ status: 429, description: 'Too many resend attempts' })
   async resendVerification(
     @Body() resendVerificationDto: ResendVerificationDto,
+    @Headers('accept-language') lang: string | undefined,
     @Request()
     req: {
       headers: Record<string, string | string[] | undefined>;
@@ -199,7 +215,10 @@ export class AuthController {
       );
     }
 
-    await this.authService.resendVerificationCode(resendVerificationDto.email);
+    await this.authService.resendVerificationCode(
+      resendVerificationDto.email,
+      lang,
+    );
 
     return {
       message: 'Verification code sent successfully',
@@ -218,8 +237,9 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid email format' })
   async forgotPassword(
     @Body() forgotPasswordDto: ForgotPasswordDto,
+    @Headers('accept-language') lang?: string,
   ): Promise<{ message: string }> {
-    await this.authService.forgotPassword(forgotPasswordDto.email);
+    await this.authService.forgotPassword(forgotPasswordDto.email, lang);
 
     // Always return success to prevent user enumeration
     return {

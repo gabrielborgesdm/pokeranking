@@ -1,4 +1,4 @@
-import 'reflect-metadata'
+import 'reflect-metadata';
 
 // Sentry must be imported before any other imports
 import './sentry/instrument';

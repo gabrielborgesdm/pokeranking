@@ -11,6 +11,30 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as Handlebars from 'handlebars';
 
+type SupportedLanguage = 'en' | 'pt-BR';
+
+interface EmailTemplates {
+  verifyEmail: HandlebarsTemplateDelegate;
+  resetPassword: HandlebarsTemplateDelegate;
+  supportNotification: HandlebarsTemplateDelegate;
+}
+
+interface EmailSubjects {
+  verifyEmail: string;
+  resetPassword: string;
+}
+
+const EMAIL_SUBJECTS: Record<SupportedLanguage, EmailSubjects> = {
+  en: {
+    verifyEmail: 'Verify your email address',
+    resetPassword: 'Reset your password',
+  },
+  'pt-BR': {
+    verifyEmail: 'Verifique seu endereço de e-mail',
+    resetPassword: 'Redefinir sua senha',
+  },
+};
+
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
@@ -19,9 +43,7 @@ export class EmailService {
   private readonly frontendUrl: string;
   private readonly supportEmail: string | undefined;
   private readonly emailVerificationRequired: boolean;
-  private readonly verifyEmailTemplate: HandlebarsTemplateDelegate;
-  private readonly resetPasswordTemplate: HandlebarsTemplateDelegate;
-  private readonly supportNotificationTemplate: HandlebarsTemplateDelegate;
+  private readonly templates: Record<SupportedLanguage, EmailTemplates>;
 
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.getOrThrow<string>('RESEND_API_KEY');
@@ -38,29 +60,48 @@ export class EmailService {
       true,
     );
 
-    // Load and compile templates
+    // Load and compile templates for all languages
     const templatesDir = join(__dirname, 'templates');
+
+    this.templates = {
+      en: this.loadTemplates(templatesDir, ''),
+      'pt-BR': this.loadTemplates(templatesDir, '.pt-BR'),
+    };
+  }
+
+  private loadTemplates(templatesDir: string, suffix: string): EmailTemplates {
     const verifyEmailHtml = readFileSync(
-      join(templatesDir, 'verify-email.hbs'),
+      join(templatesDir, `verify-email${suffix}.hbs`),
       'utf-8',
     );
     const resetPasswordHtml = readFileSync(
-      join(templatesDir, 'reset-password.hbs'),
+      join(templatesDir, `reset-password${suffix}.hbs`),
       'utf-8',
     );
     const supportNotificationHtml = readFileSync(
-      join(templatesDir, 'support-notification.hbs'),
+      join(templatesDir, `support-notification${suffix}.hbs`),
       'utf-8',
     );
 
-    this.verifyEmailTemplate = Handlebars.compile(verifyEmailHtml);
-    this.resetPasswordTemplate = Handlebars.compile(resetPasswordHtml);
-    this.supportNotificationTemplate = Handlebars.compile(
-      supportNotificationHtml,
-    );
+    return {
+      verifyEmail: Handlebars.compile(verifyEmailHtml),
+      resetPassword: Handlebars.compile(resetPasswordHtml),
+      supportNotification: Handlebars.compile(supportNotificationHtml),
+    };
   }
 
-  async sendVerificationEmail(user: User, code: string): Promise<boolean> {
+  private getLanguage(lang?: string): SupportedLanguage {
+    if (lang?.startsWith('pt')) {
+      return 'pt-BR';
+    }
+    return 'en';
+  }
+
+  async sendVerificationEmail(
+    user: User,
+    code: string,
+    lang?: string,
+  ): Promise<boolean> {
     if (!this.emailVerificationRequired) {
       this.logger.debug(
         'Email verification is disabled, skipping verification email',
@@ -69,9 +110,10 @@ export class EmailService {
     }
 
     try {
+      const language = this.getLanguage(lang);
       const verificationUrl = `${this.frontendUrl}/verify-email?email=${encodeURIComponent(user.email)}&code=${code}`;
 
-      const html = this.verifyEmailTemplate({
+      const html = this.templates[language].verifyEmail({
         name: user.username,
         email: user.email,
         code,
@@ -82,7 +124,7 @@ export class EmailService {
       const { data, error } = await this.resend.emails.send({
         from: this.fromEmail,
         to: user.email,
-        subject: 'Verify your email address',
+        subject: EMAIL_SUBJECTS[language].verifyEmail,
         html,
       });
 
@@ -105,11 +147,16 @@ export class EmailService {
     }
   }
 
-  async sendPasswordResetEmail(user: User, token: string): Promise<boolean> {
+  async sendPasswordResetEmail(
+    user: User,
+    token: string,
+    lang?: string,
+  ): Promise<boolean> {
     try {
+      const language = this.getLanguage(lang);
       const resetUrl = `${this.frontendUrl}/reset-password?token=${token}`;
 
-      const html = this.resetPasswordTemplate({
+      const html = this.templates[language].resetPassword({
         name: user.username,
         email: user.email,
         resetUrl,
@@ -119,7 +166,7 @@ export class EmailService {
       const { data, error } = await this.resend.emails.send({
         from: this.fromEmail,
         to: user.email,
-        subject: 'Reset your password',
+        subject: EMAIL_SUBJECTS[language].resetPassword,
         html,
       });
 
@@ -146,6 +193,7 @@ export class EmailService {
     username: string,
     userEmail: string,
     message: string,
+    lang?: string,
   ): Promise<boolean> {
     if (!this.supportEmail) {
       this.logger.log(
@@ -155,7 +203,8 @@ export class EmailService {
     }
 
     try {
-      const html = this.supportNotificationTemplate({
+      const language = this.getLanguage(lang);
+      const html = this.templates[language].supportNotification({
         username,
         userEmail,
         message,
