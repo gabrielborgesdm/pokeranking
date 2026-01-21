@@ -25,18 +25,15 @@ export const routes = {
 } as const;
 
 export const publicPaths = [
-  routes.home,
-  routes.users,
-  routes.pokedex,
-  routes.signin,
-  routes.signup,
-  routes.verifyEmail,
-  routes.forgotPassword,
-  routes.resetPassword,
-  routes.contribute,
-  routes.design,
-  routes.rankings,
-  "/rankings/user",
+  // '/',
+  // routes.home,
+  // routes.users,
+  // routes.contribute,
+  // routes.design,
+  // routes.rankings,
+  // "/rankings/user",
+  // routes.contribute,
+  // routes.pokedex,
 ];
 
 export const authPaths = [

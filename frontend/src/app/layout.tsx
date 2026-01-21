@@ -7,6 +7,7 @@ import { GoogleAnalytics } from "@/components/google-analytics";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { DynamicThemeMeta } from "@/components/dynamic-theme-meta";
+import { AuthRedirect } from "@/components/auth-redirect";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -115,6 +116,7 @@ export default function RootLayout({
       >
         <ServiceWorkerRegister />
         <Providers>
+          <AuthRedirect />
           <DynamicThemeMeta />
           <ConditionalNavbar />
           {children}

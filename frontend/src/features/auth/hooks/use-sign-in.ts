@@ -49,7 +49,15 @@ export function useSignIn() {
 
     if (result?.error) {
       trackSignInError(result.error);
-      setError(t("auth.invalidCredentials"));
+      // NextAuth passes the error message from authorize()
+      // Try to translate it as an API error key, fallback to generic message
+      const translationKey = `apiErrors.${result.error}`;
+      const translated = t(translationKey);
+      setError(
+        translated !== translationKey
+          ? translated
+          : t("apiErrors.common.internalError")
+      );
       return;
     }
 
