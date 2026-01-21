@@ -292,11 +292,31 @@ export function Navbar() {
             </>
           ) : (
             <>
+
+              {/* Language selector */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Globe className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {languages.map((lang) => (
+                    <DropdownMenuItem
+                      key={lang.code}
+                      onClick={() => setLanguage(lang.code)}
+                    >
+                      {lang.label}
+                      {language === lang.code && <Check className="ml-auto h-4 w-4" />}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button variant="ghost" size="icon" onClick={handleThemeToggle}>
                 <ThemeIcon className="h-5 w-5" />
                 <span className="sr-only">{t("nav.toggleTheme")}</span>
               </Button>
-              <Button variant="outline" asChild>
+              <Button variant="outline" className="ml-2" asChild>
                 <Link href={routes.signin}>
                   <User className="mr-2 h-5 w-5" />
                   {t("nav.signIn")}

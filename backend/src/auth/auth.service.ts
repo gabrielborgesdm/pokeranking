@@ -93,28 +93,34 @@ export class AuthService {
     );
 
     const result = await withTransaction(this.connection, async (session) => {
-      // Check if there's an inactive account with the same email or username
-      const inactiveUser =
-        await this.usersService.findInactiveByEmailOrUsername(
-          registerDto.email,
-          registerDto.username,
-          { session },
-        );
-
-      if (inactiveUser) {
-        // Resend verification email for existing inactive account
-        await this.generateAndSendVerificationCode(
-          inactiveUser,
-          lang,
-          session ?? undefined,
-        );
-
-        this.logger.log(
-          `Verification email resent to inactive user: ${inactiveUser.username}`,
-        );
-
-        return { user: inactiveUser, wasInactive: true };
+      // Check if an active user already exists with the same email
+      const existingByEmail = await this.usersService.findByEmail(
+        registerDto.email,
+        { session },
+      );
+      if (existingByEmail?.isActive) {
+        throw new ConflictException({
+          key: TK.USERS.EMAIL_EXISTS,
+        });
       }
+
+      // Check if an active user already exists with the same username
+      const existingByUsername = await this.usersService.findByUsername(
+        registerDto.username,
+        { session },
+      );
+      if (existingByUsername?.isActive) {
+        throw new ConflictException({
+          key: TK.USERS.USERNAME_EXISTS,
+        });
+      }
+
+      // Remove any inactive users with the same email or username
+      await this.usersService.deleteInactiveByEmailOrUsername(
+        registerDto.email,
+        registerDto.username,
+        { session },
+      );
 
       const userCount = await this.usersService.count({ session });
 
@@ -142,19 +148,13 @@ export class AuthService {
         await newUser.save({ session });
       }
 
-      return { user: newUser, wasInactive: false };
+      return newUser;
     });
 
-    if (result.wasInactive) {
-      throw new ConflictException({
-        key: TK.AUTH.VERIFICATION_EMAIL_RESENT,
-      });
-    }
-
-    this.logger.log(`New user registered: ${result.user.username}`);
+    this.logger.log(`New user registered: ${result.username}`);
 
     return {
-      user: toDto(UserResponseDto, result.user),
+      user: toDto(UserResponseDto, result),
     };
   }
 
