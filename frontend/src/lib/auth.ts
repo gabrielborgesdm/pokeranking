@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import {
   authControllerLogin,
   authControllerGetProfile,
+  isApiError,
   type UserResponseDtoRole,
   type CustomFetchOptions,
 } from "@pokeranking/api-client";
@@ -73,7 +74,11 @@ export const authOptions: NextAuthOptions = {
             }
 
             accessToken = loginResponse.data.access_token;
-          } catch {
+          } catch (error) {
+            // Pass the API error key to the client for translation
+            if (isApiError(error) && error.data?.key) {
+              throw new Error(error.data.key);
+            }
             return null;
           }
         } else {

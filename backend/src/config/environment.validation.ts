@@ -159,6 +159,10 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   IMAGEKIT_URL_ENDPOINT?: string;
+
+  @IsString()
+  @IsOptional()
+  EMAIL_WHITELIST?: string;
 }
 
 export function validate(config: Record<string, unknown>) {

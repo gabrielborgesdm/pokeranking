@@ -659,7 +659,8 @@
       "emailNotVerified": "Please verify your email to login",
       "invalidVerificationCode": "Invalid verification code or email",
       "emailAlreadyVerified": "Email is already verified",
-      "verificationEmailResent": "An account with this email or username already exists but is not verified. A new verification email has been sent."
+      "verificationEmailResent": "An account with this email or username already exists but is not verified. A new verification email has been sent.",
+      "emailNotWhitelisted": "This email is not allowed to register"
     },
     "users": {
       "notFound": "User not found",

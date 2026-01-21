@@ -23,6 +23,7 @@ import { toDto } from '../common/utils/transform.util';
 import { UserResponseDto } from '../users/dto/user-response.dto';
 import { EmailService } from '../email/email.service';
 import { withTransaction } from '../common/utils/transaction.util';
+import { isEmailWhitelisted } from '../common/utils/email-whitelist.util';
 import * as crypto from 'crypto';
 import ms from 'ms';
 
@@ -47,6 +48,11 @@ export class AuthService {
     if (!user) {
       this.logger.warn(`Login failed: user not found - ${identifier}`);
       return null;
+    }
+
+    if (!isEmailWhitelisted(this.configService, user.email)) {
+      this.logger.warn(`Login failed: email not whitelisted - ${identifier}`);
+      throw new UnauthorizedException({ key: TK.AUTH.EMAIL_NOT_WHITELISTED });
     }
 
     const isPasswordValid = await this.usersService.comparePassword(
@@ -87,6 +93,10 @@ export class AuthService {
     requestedRole?: UserRole,
     lang?: string,
   ): Promise<RegisterResponseDto> {
+    if (!isEmailWhitelisted(this.configService, registerDto.email)) {
+      throw new BadRequestException({ key: TK.AUTH.EMAIL_NOT_WHITELISTED });
+    }
+
     const emailVerificationRequired = this.configService.get<boolean>(
       'EMAIL_VERIFICATION_REQUIRED',
       true,
