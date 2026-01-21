@@ -45,9 +45,7 @@ export class UploadService {
     }
   }
 
-  async uploadImages(
-    files: MulterFile[],
-  ): Promise<BulkUploadItemDto[]> {
+  async uploadImages(files: MulterFile[]): Promise<BulkUploadItemDto[]> {
     if (!this.imageProvider.isConfigured) {
       throw new BadRequestException(
         `Image upload is not configured. Please set ${this.imageProvider.name} credentials.`,

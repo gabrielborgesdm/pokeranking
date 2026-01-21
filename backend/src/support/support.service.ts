@@ -24,6 +24,7 @@ export class SupportService {
   async create(
     dto: CreateSupportMessageDto,
     user: UserInfo,
+    lang?: string,
   ): Promise<SupportMessage> {
     const supportMessage = new this.supportMessageModel({
       user: user._id,
@@ -36,7 +37,7 @@ export class SupportService {
 
     // Send email notification to support (fire and forget)
     this.emailService
-      .sendSupportNotification(user.username, user.email, dto.message)
+      .sendSupportNotification(user.username, user.email, dto.message, lang)
       .catch((error) => {
         this.logger.error('Failed to send support notification email', error);
       });

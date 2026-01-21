@@ -30,7 +30,7 @@ export class PokemonService {
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     private readonly cacheService: CacheService,
     private readonly uploadService: UploadService,
-  ) { }
+  ) {}
 
   async create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
     const existing = await this.pokemonModel

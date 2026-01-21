@@ -16,10 +16,7 @@ export abstract class BaseImageProvider {
   abstract readonly name: string;
   abstract readonly isConfigured: boolean;
 
-  abstract uploadImage(
-    file: MulterFile,
-    folder: string,
-  ): Promise<UploadResult>;
+  abstract uploadImage(file: MulterFile, folder: string): Promise<UploadResult>;
 
   /**
    * Delete an image from the provider.

@@ -85,6 +85,7 @@ export class AuthService {
   async register(
     registerDto: RegisterDto,
     requestedRole?: UserRole,
+    lang?: string,
   ): Promise<RegisterResponseDto> {
     const emailVerificationRequired = this.configService.get<boolean>(
       'EMAIL_VERIFICATION_REQUIRED',
@@ -104,6 +105,7 @@ export class AuthService {
         // Resend verification email for existing inactive account
         await this.generateAndSendVerificationCode(
           inactiveUser,
+          lang,
           session ?? undefined,
         );
 
@@ -133,6 +135,7 @@ export class AuthService {
       if (emailVerificationRequired) {
         await this.generateAndSendVerificationCode(
           newUser,
+          lang,
           session ?? undefined,
         );
       } else {
@@ -179,7 +182,7 @@ export class AuthService {
     });
   }
 
-  async forgotPassword(email: string): Promise<void> {
+  async forgotPassword(email: string, lang?: string): Promise<void> {
     await withTransaction(this.connection, async (session) => {
       const user = await this.usersService.findByEmail(email, { session });
 
@@ -197,7 +200,7 @@ export class AuthService {
       await user.save({ session });
 
       // Send email within transaction - if it fails, token is rolled back
-      await this.emailService.sendPasswordResetEmail(user, token);
+      await this.emailService.sendPasswordResetEmail(user, token, lang);
 
       this.logger.log(`Password reset requested: ${user.username}`);
     });
@@ -230,7 +233,7 @@ export class AuthService {
     });
   }
 
-  async resendVerificationCode(email: string): Promise<void> {
+  async resendVerificationCode(email: string, lang?: string): Promise<void> {
     await withTransaction(this.connection, async (session) => {
       const user = await this.usersService.findByEmail(email, { session });
 
@@ -242,12 +245,17 @@ export class AuthService {
         throw new BadRequestException({ key: TK.AUTH.EMAIL_ALREADY_VERIFIED });
       }
 
-      await this.generateAndSendVerificationCode(user, session ?? undefined);
+      await this.generateAndSendVerificationCode(
+        user,
+        lang,
+        session ?? undefined,
+      );
     });
   }
 
   private async generateAndSendVerificationCode(
     user: User,
+    lang?: string,
     session?: import('mongoose').ClientSession,
   ): Promise<void> {
     const code = this.generateVerificationCode();
@@ -257,7 +265,7 @@ export class AuthService {
     user.emailVerificationExpires = new Date(tokenExpiration);
     await user.save({ session });
 
-    await this.emailService.sendVerificationEmail(user, code);
+    await this.emailService.sendVerificationEmail(user, code, lang);
   }
 
   private generateToken(): string {
