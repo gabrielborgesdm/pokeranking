@@ -1,48 +1,47 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  Query,
+  Get,
   HttpCode,
   HttpStatus,
-  Logger,
+  Param,
+  Patch,
+  Post,
+  Query
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
-  ApiParam,
   ApiBody,
+  ApiOperation,
+  ApiParam,
   ApiQuery,
+  ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
-import { PokemonService } from './pokemon.service';
-import { CreatePokemonDto } from './dto/create-pokemon.dto';
-import { UpdatePokemonDto } from './dto/update-pokemon.dto';
-import { PokemonResponseDto } from './dto/pokemon-response.dto';
-import { PokemonCountResponseDto } from './dto/pokemon-count-response.dto';
-import { BulkCreatePokemonDto } from './dto/bulk-create-pokemon.dto';
-import { BulkCreatePokemonResponseDto } from './dto/bulk-create-pokemon-response.dto';
-import {
-  PokemonQueryDto,
-  POKEMON_SORTABLE_FIELDS,
-} from './dto/pokemon-query.dto';
-import { PaginatedPokemonResponseDto } from './dto/paginated-pokemon-response.dto';
+import { POKEMON_TYPE_VALUES } from '@pokeranking/shared';
+import { Public } from '../common/decorators/public.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 import { toDto } from '../common/utils/transform.util';
-import { POKEMON_TYPE_VALUES } from '@pokeranking/shared';
+import { BulkCreatePokemonResponseDto } from './dto/bulk-create-pokemon-response.dto';
+import { BulkCreatePokemonDto } from './dto/bulk-create-pokemon.dto';
+import { CreatePokemonDto } from './dto/create-pokemon.dto';
+import { PaginatedPokemonResponseDto } from './dto/paginated-pokemon-response.dto';
+import { PokemonCountResponseDto } from './dto/pokemon-count-response.dto';
+import {
+  POKEMON_SORTABLE_FIELDS,
+  PokemonQueryDto,
+} from './dto/pokemon-query.dto';
+import { PokemonResponseDto } from './dto/pokemon-response.dto';
+import { UpdatePokemonDto } from './dto/update-pokemon.dto';
+import { PokemonService } from './pokemon.service';
 
 @ApiTags('pokemon')
 @ApiBearerAuth('JWT-auth')
 @Controller('pokemon')
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) {}
+  constructor(private readonly pokemonService: PokemonService) { }
 
   @Post()
   @Roles(UserRole.Admin)
@@ -187,7 +186,6 @@ export class PokemonController {
     @Param('id') id: string,
     @Body() updatePokemonDto: UpdatePokemonDto,
   ) {
-    Logger.log('Controller - Updating pokemon:', updatePokemonDto);
     const pokemon = await this.pokemonService.update(id, updatePokemonDto);
     return toDto(PokemonResponseDto, pokemon);
   }
