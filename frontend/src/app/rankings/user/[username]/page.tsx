@@ -156,10 +156,8 @@ export default function UserRankingsPage({ params }: UserRankingsPageProps) {
                   key={ranking._id}
                   id={ranking._id}
                   title={ranking.title}
-                  topPokemonImage={normalizePokemonImageSrc(
-                    ranking.pokemon?.[0]?.image
-                  )}
-                  pokemonCount={ranking.pokemon?.length ?? 0}
+                  topPokemonImage={normalizePokemonImageSrc(ranking.image)}
+                  pokemonCount={ranking.pokemonCount}
                   createdAt={ranking.createdAt}
                   updatedAt={ranking.updatedAt}
                   theme={ranking.theme}

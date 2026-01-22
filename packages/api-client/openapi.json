@@ -1885,6 +1885,252 @@
           "password"
         ]
       },
+      "RankingUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "username": {
+            "type": "string",
+            "example": "john_doe"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          }
+        },
+        "required": [
+          "_id",
+          "username"
+        ]
+      },
+      "RankingListResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "title": {
+            "type": "string",
+            "example": "My Gen 1 Favorites"
+          },
+          "theme": {
+            "type": "string",
+            "example": "fire",
+            "description": "Theme ID for the ranking card"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://example.com/pokemon.png",
+            "description": "Image URL of the first pokemon in the ranking",
+            "nullable": true
+          },
+          "pokemonCount": {
+            "type": "number",
+            "example": 151,
+            "description": "Number of pokemon in the ranking"
+          },
+          "likesCount": {
+            "type": "number",
+            "example": 42,
+            "description": "Number of likes"
+          },
+          "user": {
+            "$ref": "#/components/schemas/RankingUserResponseDto"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-20T15:45:00.000Z"
+          }
+        },
+        "required": [
+          "_id",
+          "title",
+          "theme",
+          "image",
+          "pokemonCount",
+          "likesCount",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "john_doe"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg"
+          },
+          "rankings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankingListResponseDto"
+            }
+          },
+          "likedRankings": {
+            "description": "Rankings that the user has liked (only populated in profile endpoint)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankingListResponseDto"
+            }
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "member"
+            ],
+            "example": "member"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "rankedPokemonCount": {
+            "type": "number",
+            "example": 42,
+            "description": "Total count of ranked pokemon"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-15T10:30:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-01-20T15:45:00.000Z"
+          }
+        },
+        "required": [
+          "_id",
+          "email",
+          "username",
+          "rankings",
+          "role",
+          "isActive",
+          "rankedPokemonCount",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "RegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          }
+        },
+        "required": [
+          "user"
+        ]
+      },
+      "VerifyEmailDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "User email address"
+          },
+          "code": {
+            "type": "string",
+            "example": "123456",
+            "description": "6-digit verification code"
+          }
+        },
+        "required": [
+          "email",
+          "code"
+        ]
+      },
+      "VerifyEmailResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Email verified successfully"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponseDto"
+          },
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "required": [
+          "message",
+          "user",
+          "access_token"
+        ]
+      },
+      "ResendVerificationDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "User email address"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "user@example.com",
+            "description": "Email address to send password reset link"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "abc123def456...",
+            "description": "Password reset token from email"
+          },
+          "password": {
+            "type": "string",
+            "example": "newSecurePassword123",
+            "description": "New password (min 6 characters)"
+          }
+        },
+        "required": [
+          "token",
+          "password"
+        ]
+      },
       "PokemonResponseDto": {
         "type": "object",
         "properties": {
@@ -2033,27 +2279,6 @@
           "color"
         ]
       },
-      "RankingUserResponseDto": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "example": "507f1f77bcf86cd799439011"
-          },
-          "username": {
-            "type": "string",
-            "example": "john_doe"
-          },
-          "profilePic": {
-            "type": "string",
-            "example": "https://example.com/avatar.jpg"
-          }
-        },
-        "required": [
-          "_id",
-          "username"
-        ]
-      },
       "RankingResponseDto": {
         "type": "object",
         "properties": {
@@ -2131,174 +2356,6 @@
           "likesCount",
           "isLiked",
           "likedBy"
-        ]
-      },
-      "UserResponseDto": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "example": "507f1f77bcf86cd799439011"
-          },
-          "email": {
-            "type": "string",
-            "example": "john@example.com"
-          },
-          "username": {
-            "type": "string",
-            "example": "john_doe"
-          },
-          "profilePic": {
-            "type": "string",
-            "example": "https://example.com/avatar.jpg"
-          },
-          "rankings": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RankingResponseDto"
-            }
-          },
-          "likedRankings": {
-            "description": "Rankings that the user has liked (only populated in profile endpoint)",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/RankingResponseDto"
-            }
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "admin",
-              "member"
-            ],
-            "example": "member"
-          },
-          "isActive": {
-            "type": "boolean",
-            "example": true
-          },
-          "rankedPokemonCount": {
-            "type": "number",
-            "example": 42,
-            "description": "Total count of ranked pokemon"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2024-01-15T10:30:00.000Z"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2024-01-20T15:45:00.000Z"
-          }
-        },
-        "required": [
-          "_id",
-          "email",
-          "username",
-          "rankings",
-          "role",
-          "isActive",
-          "rankedPokemonCount",
-          "createdAt",
-          "updatedAt"
-        ]
-      },
-      "RegisterResponseDto": {
-        "type": "object",
-        "properties": {
-          "user": {
-            "$ref": "#/components/schemas/UserResponseDto"
-          }
-        },
-        "required": [
-          "user"
-        ]
-      },
-      "VerifyEmailDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "user@example.com",
-            "description": "User email address"
-          },
-          "code": {
-            "type": "string",
-            "example": "123456",
-            "description": "6-digit verification code"
-          }
-        },
-        "required": [
-          "email",
-          "code"
-        ]
-      },
-      "VerifyEmailResponseDto": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string",
-            "example": "Email verified successfully"
-          },
-          "user": {
-            "$ref": "#/components/schemas/UserResponseDto"
-          },
-          "access_token": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-          }
-        },
-        "required": [
-          "message",
-          "user",
-          "access_token"
-        ]
-      },
-      "ResendVerificationDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "user@example.com",
-            "description": "User email address"
-          }
-        },
-        "required": [
-          "email"
-        ]
-      },
-      "ForgotPasswordDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "user@example.com",
-            "description": "Email address to send password reset link"
-          }
-        },
-        "required": [
-          "email"
-        ]
-      },
-      "ResetPasswordDto": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "example": "abc123def456...",
-            "description": "Password reset token from email"
-          },
-          "password": {
-            "type": "string",
-            "example": "newSecurePassword123",
-            "description": "New password (min 6 characters)"
-          }
-        },
-        "required": [
-          "token",
-          "password"
         ]
       },
       "PublicUserResponseDto": {
@@ -2824,63 +2881,6 @@
           "results",
           "successCount",
           "failedCount"
-        ]
-      },
-      "RankingListResponseDto": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string",
-            "example": "507f1f77bcf86cd799439011"
-          },
-          "title": {
-            "type": "string",
-            "example": "My Gen 1 Favorites"
-          },
-          "theme": {
-            "type": "string",
-            "example": "fire",
-            "description": "Theme ID for the ranking card"
-          },
-          "image": {
-            "type": "string",
-            "example": "https://example.com/pokemon.png",
-            "description": "Image URL of the first pokemon in the ranking",
-            "nullable": true
-          },
-          "pokemonCount": {
-            "type": "number",
-            "example": 151,
-            "description": "Number of pokemon in the ranking"
-          },
-          "likesCount": {
-            "type": "number",
-            "example": 42,
-            "description": "Number of likes"
-          },
-          "user": {
-            "$ref": "#/components/schemas/RankingUserResponseDto"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2024-01-15T10:30:00.000Z"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2024-01-20T15:45:00.000Z"
-          }
-        },
-        "required": [
-          "_id",
-          "title",
-          "theme",
-          "image",
-          "pokemonCount",
-          "likesCount",
-          "createdAt",
-          "updatedAt"
         ]
       },
       "PaginatedRankingsResponseDto": {

@@ -5,7 +5,7 @@
  * API for managing Pokemon and user rankings
  * OpenAPI spec version: 1.0
  */
-import type { RankingResponseDto } from "./rankingResponseDto";
+import type { RankingListResponseDto } from "./rankingListResponseDto";
 import type { UserResponseDtoRole } from "./userResponseDtoRole";
 
 export interface UserResponseDto {
@@ -13,9 +13,9 @@ export interface UserResponseDto {
   email: string;
   username: string;
   profilePic?: string;
-  rankings: RankingResponseDto[];
+  rankings: RankingListResponseDto[];
   /** Rankings that the user has liked (only populated in profile endpoint) */
-  likedRankings?: RankingResponseDto[];
+  likedRankings?: RankingListResponseDto[];
   role: UserResponseDtoRole;
   isActive: boolean;
   /** Total count of ranked pokemon */
