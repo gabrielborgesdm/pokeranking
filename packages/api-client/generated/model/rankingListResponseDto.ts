@@ -17,6 +17,8 @@ export interface RankingListResponseDto {
    * @nullable
    */
   image: string | null;
+  /** Background theme ID for the full-page ranking view */
+  background: string;
   /** Number of pokemon in the ranking */
   pokemonCount: number;
   /** Number of likes */

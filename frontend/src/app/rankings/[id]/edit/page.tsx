@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { RankingForm, useRankingEditData } from "@/features/rankings";
 import { PageHeader, PageHeaderSkeleton } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { normalizePokemonImageSrc } from "@/lib/image-utils";
 
 interface EditRankingPageProps {
   params: Promise<{ id: string }>;
@@ -51,8 +52,8 @@ export default function EditRankingPage({ params }: EditRankingPageProps) {
                 theme: ranking.theme,
                 background: ranking.background ?? undefined,
               }}
-              pokemonCount={ranking.pokemon.length}
-              topPokemonImage={ranking.pokemon[0]?.image}
+              pokemonCount={ranking.pokemonCount}
+              topPokemonImage={normalizePokemonImageSrc(ranking.image)}
             />
           </>
         )}

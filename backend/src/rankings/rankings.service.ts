@@ -28,6 +28,7 @@ interface RankingListItem {
   _id: Types.ObjectId;
   title: string;
   theme: string;
+  background: string;
   image: string | null;
   pokemonCount: number;
   likesCount: number;
@@ -48,7 +49,7 @@ export class RankingsService {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
   async create(
     userId: string,

@@ -259,6 +259,7 @@ export class UsersService {
           _id: 1,
           title: 1,
           theme: 1,
+          background: 1,
           likesCount: 1,
           createdAt: 1,
           updatedAt: 1,
