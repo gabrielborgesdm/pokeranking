@@ -40,7 +40,9 @@ export class ResendProvider implements EmailProvider {
   }
 
   isActive(): boolean {
-    return this.config.isActive && this.resend !== null && this.fromEmail !== null;
+    return (
+      this.config.isActive && this.resend !== null && this.fromEmail !== null
+    );
   }
 
   getPriority(): number {

@@ -130,7 +130,7 @@ export class AuthController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@Request() req: AuthenticatedRequest) {
-    const user = await this.usersService.findOne(req.user._id);
+    const user = await this.usersService.findOneWithProfile(req.user._id);
     return toDto(UserResponseDto, user);
   }
 

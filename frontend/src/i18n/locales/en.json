@@ -161,7 +161,9 @@
     "createNew": "Create New",
     "createFirst": "Create First Ranking",
     "deleteConfirmTitle": "Delete Ranking",
-    "deleteConfirmDescription": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone."
+    "deleteConfirmDescription": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+    "likedRankingsTitle": "Liked Rankings",
+    "noLikedRankings": "You haven't liked any rankings yet."
   },
   "rankingForm": {
     "createTitle": "Create New Ranking",
@@ -346,7 +348,7 @@
     "userMenu": "User menu",
     "toggleTheme": "Toggle theme",
     "language": "Language",
-    "viewAll": "View All",
+    "viewAll": "View My Rankings",
     "viewAllRankings": "View all ({{count}})",
     "createNewRanking": "Create New Ranking",
     "noRankings": "No rankings yet",

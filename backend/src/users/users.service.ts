@@ -27,6 +27,15 @@ export type UserWithPopulatedRankings = Omit<User, 'rankings'> & {
   rankings: RankingWithPopulatedPokemon[];
 };
 
+/** User with populated rankings and likedRankings */
+export type UserWithPopulatedProfile = Omit<
+  User,
+  'rankings' | 'likedRankings'
+> & {
+  rankings: RankingWithPopulatedPokemon[];
+  likedRankings: RankingWithPopulatedPokemon[];
+};
+
 // 15-minute TTL to minimize Upstash free tier quota usage.
 // User rankings update infrequently; slight staleness is acceptable.
 const USERS_LIST_DEFAULT_CACHE_KEY = 'users:list:default';
@@ -37,7 +46,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly cacheService: CacheService,
-  ) { }
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
@@ -196,6 +205,28 @@ export class UsersService {
       throw new NotFoundException({ key: TK.USERS.NOT_FOUND, args: { id } });
     }
     return user;
+  }
+
+  async findOneWithProfile(
+    id: string,
+    options?: SessionOptions,
+  ): Promise<UserWithPopulatedProfile> {
+    const user = await this.userModel
+      .findById(id)
+      .populate<{ rankings: RankingWithPopulatedPokemon[] }>({
+        path: 'rankings',
+        populate: { path: 'pokemon' },
+      })
+      .populate<{ likedRankings: RankingWithPopulatedPokemon[] }>({
+        path: 'likedRankings',
+        populate: { path: 'pokemon' },
+      })
+      .session(options?.session ?? null)
+      .exec();
+    if (!user) {
+      throw new NotFoundException({ key: TK.USERS.NOT_FOUND, args: { id } });
+    }
+    return user as unknown as UserWithPopulatedProfile;
   }
 
   async findByEmail(

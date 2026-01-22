@@ -14,6 +14,8 @@ export interface UserResponseDto {
   username: string;
   profilePic?: string;
   rankings: RankingResponseDto[];
+  /** Rankings that the user has liked (only populated in profile endpoint) */
+  likedRankings?: RankingResponseDto[];
   role: UserResponseDtoRole;
   isActive: boolean;
   /** Total count of ranked pokemon */

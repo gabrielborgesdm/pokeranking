@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useSession } from "next-auth/react";
 import {
   useRankingsControllerFindOne,
   type PokemonResponseDto,
@@ -8,6 +9,7 @@ import {
 } from "@pokeranking/api-client";
 import { useIsOwner } from "@/features/users";
 import { useRankingLike } from "./use-ranking-like";
+import { isLikedByUser } from "../utils/like-utils";
 
 interface UseRankingViewPageOptions {
   id: string;
@@ -23,10 +25,21 @@ interface UseRankingViewPageOptions {
  * - Top pokemon for hero display
  */
 export function useRankingViewPage({ id }: UseRankingViewPageOptions) {
+  const { data: session } = useSession();
   const { data, isLoading, error } = useRankingsControllerFindOne(id);
-  const { likeCount, isLiked, toggleLike } = useRankingLike({ rankingId: id });
 
   const ranking = useMemo(() => data?.data, [data]);
+
+  const initialIsLiked = useMemo(
+    () => isLikedByUser(ranking?.likedBy, session?.user?.id),
+    [ranking?.likedBy, session?.user?.id]
+  );
+
+  const { likeCount, isLiked, toggleLike } = useRankingLike({
+    rankingId: id,
+    initialLikeCount: ranking?.likesCount,
+    initialIsLiked,
+  });
   const isOwner = useIsOwner(ranking?.user?.username);
 
   const pokemon = useMemo<PokemonResponseDto[]>(
