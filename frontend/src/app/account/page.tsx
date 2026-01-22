@@ -1,13 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
-import { ArrowLeft, User, Check } from "lucide-react";
+import { PokemonAvatar } from "@/components/pokemon-avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
 import {
   Card,
   CardContent,
@@ -18,19 +12,23 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
-import { PokemonAvatar } from "@/components/pokemon-avatar";
+import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { SelectPokemonDialog } from "@/features/pokemon-picker";
 import { useAccountForm } from "@/features/users";
-import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { cn } from "@/lib/utils";
-import { routes } from "@/lib/routes";
-import { Skeleton } from "@/components/ui/skeleton";
+import type { PokemonResponseDto } from "@pokeranking/api-client";
+import { ArrowLeft, Check, User } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function AccountPage() {
   const { t } = useTranslation();

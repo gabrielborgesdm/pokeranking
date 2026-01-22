@@ -25,7 +25,7 @@ function createAccountSchema(t: TFunction) {
       username: z
         .string()
         .min(3, t("validation.minLength", { min: 3 }))
-        .max(30, t("validation.maxLength", { max: 30 })),
+        .max(25, t("validation.maxLength", { max: 25 })),
       profilePic: z.string().min(1, t("validation.profilePicRequired")),
       newPassword: z
         .string()
@@ -123,13 +123,13 @@ export function useAccountForm() {
             });
             // Update the session with new user data
             await updateSession({
-              ...session,
               user: {
-                ...session?.user,
                 username: data.username,
                 profilePic: data.profilePic,
               },
             });
+            // Refresh Next.js router cache to pick up new session
+            router.refresh();
             // Clear password fields
             form.setValue("newPassword", "");
             form.setValue("confirmPassword", "");

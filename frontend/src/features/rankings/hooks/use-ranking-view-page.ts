@@ -40,7 +40,7 @@ export function useRankingViewPage({ id }: UseRankingViewPageOptions) {
     initialLikeCount: ranking?.likesCount,
     initialIsLiked,
   });
-  const isOwner = useIsOwner(ranking?.user?.username);
+  const isOwner = useIsOwner(ranking?.user?._id);
 
   const pokemon = useMemo<PokemonResponseDto[]>(
     () => ranking?.pokemon ?? [],
