@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { UserRole } from '../../common/enums/user-role.enum';
-import { RankingResponseDto } from '../../rankings/dto/ranking-response.dto';
+import { RankingListResponseDto } from '../../rankings/dto/ranking-response.dto';
 
 @Exclude()
 export class UserResponseDto {
@@ -26,18 +26,18 @@ export class UserResponseDto {
   profilePic?: string;
 
   @Expose()
-  @Type(() => RankingResponseDto)
-  @ApiProperty({ type: [RankingResponseDto] })
-  rankings: RankingResponseDto[];
+  @Type(() => RankingListResponseDto)
+  @ApiProperty({ type: [RankingListResponseDto] })
+  rankings: RankingListResponseDto[];
 
   @Expose()
-  @Type(() => RankingResponseDto)
+  @Type(() => RankingListResponseDto)
   @ApiPropertyOptional({
-    type: [RankingResponseDto],
+    type: [RankingListResponseDto],
     description:
       'Rankings that the user has liked (only populated in profile endpoint)',
   })
-  likedRankings?: RankingResponseDto[];
+  likedRankings?: RankingListResponseDto[];
 
   @Expose()
   @ApiProperty({ enum: UserRole, example: UserRole.Member })

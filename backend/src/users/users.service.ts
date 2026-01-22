@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -27,13 +27,30 @@ export type UserWithPopulatedRankings = Omit<User, 'rankings'> & {
   rankings: RankingWithPopulatedPokemon[];
 };
 
-/** User with populated rankings and likedRankings */
-export type UserWithPopulatedProfile = Omit<
+/** Lightweight ranking summary for profile (only image and count) */
+export interface RankingSummary {
+  _id: string;
+  title: string;
+  theme: string;
+  image: string | null;
+  pokemonCount: number;
+  likesCount: number;
+  user?: {
+    _id: string;
+    username: string;
+    profilePic?: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/** User with lightweight ranking summaries for profile */
+export type UserWithProfileSummary = Omit<
   User,
   'rankings' | 'likedRankings'
 > & {
-  rankings: RankingWithPopulatedPokemon[];
-  likedRankings: RankingWithPopulatedPokemon[];
+  rankings: RankingSummary[];
+  likedRankings: RankingSummary[];
 };
 
 // 15-minute TTL to minimize Upstash free tier quota usage.
@@ -210,23 +227,84 @@ export class UsersService {
   async findOneWithProfile(
     id: string,
     options?: SessionOptions,
-  ): Promise<UserWithPopulatedProfile> {
-    const user = await this.userModel
-      .findById(id)
-      .populate<{ rankings: RankingWithPopulatedPokemon[] }>({
-        path: 'rankings',
-        populate: { path: 'pokemon' },
-      })
-      .populate<{ likedRankings: RankingWithPopulatedPokemon[] }>({
-        path: 'likedRankings',
-        populate: { path: 'pokemon' },
-      })
+  ): Promise<UserWithProfileSummary> {
+    // Shared pipeline for ranking summary projection
+    const rankingSummaryPipeline = [
+      // Get only the first pokemon's image (preserving order)
+      {
+        $addFields: {
+          firstPokemonId: { $arrayElemAt: ['$pokemon', 0] },
+        },
+      },
+      {
+        $lookup: {
+          from: 'pokemon',
+          localField: 'firstPokemonId',
+          foreignField: '_id',
+          as: 'firstPokemon',
+          pipeline: [{ $project: { image: 1 } }],
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user',
+          foreignField: '_id',
+          as: 'userData',
+          pipeline: [{ $project: { username: 1, profilePic: 1 } }],
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          theme: 1,
+          likesCount: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          image: {
+            $ifNull: [{ $arrayElemAt: ['$firstPokemon.image', 0] }, null],
+          },
+          pokemonCount: { $size: { $ifNull: ['$pokemon', []] } },
+          user: { $arrayElemAt: ['$userData', 0] },
+        },
+      },
+    ];
+
+    const pipeline = [
+      { $match: { _id: new Types.ObjectId(id) } },
+      // Lookup rankings with only necessary fields
+      {
+        $lookup: {
+          from: 'rankings',
+          localField: 'rankings',
+          foreignField: '_id',
+          as: 'rankings',
+          pipeline: rankingSummaryPipeline,
+        },
+      },
+      // Lookup likedRankings with only necessary fields
+      {
+        $lookup: {
+          from: 'rankings',
+          localField: 'likedRankings',
+          foreignField: '_id',
+          as: 'likedRankings',
+          pipeline: rankingSummaryPipeline,
+        },
+      },
+    ];
+
+    const results = await this.userModel
+      .aggregate(pipeline)
       .session(options?.session ?? null)
       .exec();
-    if (!user) {
+
+    if (!results || results.length === 0) {
       throw new NotFoundException({ key: TK.USERS.NOT_FOUND, args: { id } });
     }
-    return user as unknown as UserWithPopulatedProfile;
+
+    return results[0] as UserWithProfileSummary;
   }
 
   async findByEmail(
