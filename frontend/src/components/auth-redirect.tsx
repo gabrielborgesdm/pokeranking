@@ -29,8 +29,8 @@ export function AuthRedirect() {
       return;
     }
 
-    // If path is not public and user is not authenticated, redirect to signin
-    if (!isPublicPath && !isAuthenticated) {
+    // If path is not public/auth and user is not authenticated, redirect to signin
+    if (!isPublicPath && !isAuthPath && !isAuthenticated) {
       const callbackUrl = encodeURIComponent(pathname);
       router.replace(`${routes.signin}?callbackUrl=${callbackUrl}`);
     }
