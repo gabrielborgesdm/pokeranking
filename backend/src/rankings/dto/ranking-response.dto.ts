@@ -51,6 +51,13 @@ export class RankingListResponseDto {
 
   @Expose()
   @ApiProperty({
+    example: 'fire',
+    description: 'Background theme ID for the full-page ranking view',
+  })
+  background: string;
+
+  @Expose()
+  @ApiProperty({
     example: 151,
     description: 'Number of pokemon in the ranking',
   })

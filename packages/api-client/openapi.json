@@ -1928,6 +1928,11 @@
             "description": "Image URL of the first pokemon in the ranking",
             "nullable": true
           },
+          "background": {
+            "type": "string",
+            "example": "fire",
+            "description": "Background theme ID for the full-page ranking view"
+          },
           "pokemonCount": {
             "type": "number",
             "example": 151,
@@ -1957,6 +1962,7 @@
           "title",
           "theme",
           "image",
+          "background",
           "pokemonCount",
           "likesCount",
           "createdAt",
