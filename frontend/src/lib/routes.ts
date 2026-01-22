@@ -10,6 +10,7 @@ export const routes = {
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   settings: "/settings",
+  account: "/account",
   rankings: "/rankings",
   ranking: (id: string) => `/rankings/${id}` as const,
   rankingEdit: (id: string) => `/rankings/${id}/edit` as const,

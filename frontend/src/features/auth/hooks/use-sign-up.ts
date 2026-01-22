@@ -13,15 +13,21 @@ import { translateApiError } from "@/lib/translate-api-error";
 type TFunction = (key: string, options?: any) => string;
 
 function createSignUpSchema(t: TFunction) {
-  return z.object({
-    email: z.string().email(t("validation.invalidEmail")),
-    username: z
-      .string()
-      .min(3, t("validation.minLength", { min: 3 }))
-      .max(30, t("validation.maxLength", { max: 30 })),
-    password: z.string().min(6, t("validation.minLength", { min: 6 })),
-    profilePic: z.string().min(1, t("validation.profilePicRequired")),
-  });
+  return z
+    .object({
+      email: z.string().email(t("validation.invalidEmail")),
+      username: z
+        .string()
+        .min(3, t("validation.minLength", { min: 3 }))
+        .max(30, t("validation.maxLength", { max: 30 })),
+      password: z.string().min(6, t("validation.minLength", { min: 6 })),
+      confirmPassword: z.string().min(1, t("validation.required")),
+      profilePic: z.string().min(1, t("validation.profilePicRequired")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("auth.passwordsDontMatch"),
+      path: ["confirmPassword"],
+    });
 }
 
 export type SignUpFormData = z.infer<ReturnType<typeof createSignUpSchema>>;
@@ -39,6 +45,7 @@ export function useSignUp() {
       email: "",
       username: "",
       password: "",
+      confirmPassword: "",
       profilePic: "",
     },
   });

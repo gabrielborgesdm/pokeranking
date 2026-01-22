@@ -27,6 +27,14 @@ const iconSizes = {
   xl: "size-16",
 };
 
+// Image sizes for Next.js optimization (in pixels)
+const imageSizes = {
+  sm: "48px",
+  md: "80px",
+  lg: "128px",
+  xl: "160px",
+};
+
 export function PokemonAvatar({
   pokemon,
   size = "lg",
@@ -67,6 +75,7 @@ export function PokemonAvatar({
           <AvatarImage
             src={pokemon.image}
             alt={pokemon.name}
+            sizes={imageSizes[size]}
           />
         ) : (
           <AvatarFallback className="bg-muted">

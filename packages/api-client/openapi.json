@@ -2365,10 +2365,6 @@
       "UpdateUserDto": {
         "type": "object",
         "properties": {
-          "email": {
-            "type": "string",
-            "example": "john@example.com"
-          },
           "username": {
             "type": "string",
             "example": "john_doe",

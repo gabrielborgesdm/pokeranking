@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon, Users, BookOpen } from "lucide-react";
+import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon, Users, BookOpen, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,7 +28,6 @@ import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
-import path from "path";
 
 function NavbarSkeleton() {
   return (
@@ -63,6 +62,12 @@ function AccountDropdown({ username, isAdmin, isDark, ThemeIcon, toggleTheme }: 
       <DropdownMenuContent align="end" className="w-48">
         <div className="px-2 py-1.5 text-sm font-medium">{username}</div>
         <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href={routes.account}>
+            <Settings className="mr-2 h-4 w-4" />
+            {t("nav.myAccount")}
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href={routes.design}>
             <Palette className="mr-2 h-4 w-4" />
@@ -368,6 +373,12 @@ export function Navbar() {
                     <>
                       <div className="my-4 h-px bg-border" />
                       <div className="flex flex-col gap-1">
+                        <MobileNavLink
+                          href={routes.account}
+                          icon={Settings}
+                          label={t("nav.myAccount")}
+                          pathname={pathname}
+                        />
                         <MobileNavLink
                           href={routes.support}
                           icon={MessageSquare}

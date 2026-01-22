@@ -8,7 +8,6 @@
 import type { UpdateUserDtoRole } from "./updateUserDtoRole";
 
 export interface UpdateUserDto {
-  email?: string;
   /**
    * @minLength 3
    * @maxLength 30
