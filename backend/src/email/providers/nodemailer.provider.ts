@@ -52,7 +52,11 @@ export class NodemailerProvider implements EmailProvider {
   }
 
   isActive(): boolean {
-    return this.config.isActive && this.transporter !== null && this.fromEmail !== null;
+    return (
+      this.config.isActive &&
+      this.transporter !== null &&
+      this.fromEmail !== null
+    );
   }
 
   getPriority(): number {

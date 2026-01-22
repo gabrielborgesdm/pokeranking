@@ -1,6 +1,10 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRankingsControllerToggleLike } from "@pokeranking/api-client";
+import {
+  useRankingsControllerToggleLike,
+  getAuthControllerGetProfileQueryKey,
+  getRankingsControllerFindOneQueryKey,
+} from "@pokeranking/api-client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAnalytics } from "@/hooks/use-analytics";
 
@@ -41,6 +45,15 @@ export function useRankingLike({
   const [isLoading, setIsLoading] = useState(false);
   const { trackRankingLike, trackRankingUnlike } = useAnalytics();
 
+  // Sync state when initial values change (e.g., when ranking data loads)
+  useEffect(() => {
+    setLikeCount(initialLikeCount);
+  }, [initialLikeCount]);
+
+  useEffect(() => {
+    setIsLiked(initialIsLiked);
+  }, [initialIsLiked]);
+
   const { mutateAsync: toggleLikeMutation } =
     useRankingsControllerToggleLike();
 
@@ -66,8 +79,14 @@ export function useRankingLike({
           trackRankingUnlike(rankingId);
         }
       }
-      // Invalidate rankings list cache
+      // Invalidate rankings list, specific ranking, and profile caches
       void queryClient.invalidateQueries({ queryKey: ["/rankings"] });
+      void queryClient.invalidateQueries({
+        queryKey: getRankingsControllerFindOneQueryKey(rankingId),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: getAuthControllerGetProfileQueryKey(),
+      });
     } catch (error) {
       // Revert on error
       setIsLiked(wasLiked);

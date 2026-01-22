@@ -1,9 +1,11 @@
 "use client";
 
-import { use, useMemo } from "react";
+import { use, useCallback, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { Plus } from "lucide-react";
+import { Plus, Heart } from "lucide-react";
+import { useAuthControllerGetProfile } from "@pokeranking/api-client";
 import {
   RankingCard,
   RankingCardsSkeleton,
@@ -24,6 +26,7 @@ interface UserRankingsPageProps {
 export default function UserRankingsPage({ params }: UserRankingsPageProps) {
   const { username } = use(params);
   const { t } = useTranslation();
+  const router = useRouter();
 
   const {
     rankings,
@@ -40,6 +43,25 @@ export default function UserRankingsPage({ params }: UserRankingsPageProps) {
     handleCardClick,
     setDeleteDialogOpen,
   } = useUserRankings(username);
+
+  const { data: profileData, isLoading: isProfileLoading } =
+    useAuthControllerGetProfile({
+      query: {
+        enabled: isOwner,
+      },
+    });
+
+  const likedRankings = useMemo(
+    () => profileData?.data?.likedRankings ?? [],
+    [profileData]
+  );
+
+  const handleLikedCardClick = useCallback(
+    (id: string) => {
+      router.push(routes.ranking(id));
+    },
+    [router]
+  );
 
   const rankingCards = useMemo(
     () =>
@@ -111,6 +133,43 @@ export default function UserRankingsPage({ params }: UserRankingsPageProps) {
           </AnimatedList>
         )}
       </section>
+
+      {isOwner && (
+        <section className="space-y-8 mt-12">
+          <div className="flex items-center gap-2">
+            <Heart className="h-5 w-5 text-red-500 dark:fill-red-500" />
+            <h2 className="text-2xl font-bold">
+              {t("userRankings.likedRankingsTitle")}
+            </h2>
+          </div>
+
+          {isProfileLoading ? (
+            <RankingCardsSkeleton />
+          ) : likedRankings.length === 0 ? (
+            <p className="text-muted-foreground">
+              {t("userRankings.noLikedRankings")}
+            </p>
+          ) : (
+            <AnimatedList className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              {likedRankings.map((ranking) => (
+                <RankingCard
+                  key={ranking._id}
+                  id={ranking._id}
+                  title={ranking.title}
+                  topPokemonImage={normalizePokemonImageSrc(
+                    ranking.pokemon?.[0]?.image
+                  )}
+                  pokemonCount={ranking.pokemon?.length ?? 0}
+                  createdAt={ranking.createdAt}
+                  updatedAt={ranking.updatedAt}
+                  theme={ranking.theme}
+                  onClick={() => handleLikedCardClick(ranking._id)}
+                />
+              ))}
+            </AnimatedList>
+          )}
+        </section>
+      )}
 
       {!!isOwner && (
         <ConfirmDialog

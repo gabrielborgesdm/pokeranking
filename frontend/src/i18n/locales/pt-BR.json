@@ -59,7 +59,7 @@
     "toggleTheme": "Alternar tema",
     "language": "Idioma",
     "support": "Suporte",
-    "viewAll": "Ver Todos",
+    "viewAll": "Ver Meus Rankings",
     "viewAllRankings": "Ver todos ({{count}})",
     "createNewRanking": "Criar Novo Ranking",
     "noRankings": "Nenhum ranking ainda",
@@ -186,7 +186,9 @@
     "createNew": "Criar Novo",
     "createFirst": "Criar Primeiro Ranking",
     "deleteConfirmTitle": "Excluir Ranking",
-    "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita."
+    "deleteConfirmDescription": "Tem certeza que deseja excluir \"{{title}}\"? Esta ação não pode ser desfeita.",
+    "likedRankingsTitle": "Rankings Curtidos",
+    "noLikedRankings": "Você ainda não curtiu nenhum ranking."
   },
   "rankingForm": {
     "createTitle": "Criar Novo Ranking",

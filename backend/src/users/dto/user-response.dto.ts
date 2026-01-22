@@ -31,6 +31,15 @@ export class UserResponseDto {
   rankings: RankingResponseDto[];
 
   @Expose()
+  @Type(() => RankingResponseDto)
+  @ApiPropertyOptional({
+    type: [RankingResponseDto],
+    description:
+      'Rankings that the user has liked (only populated in profile endpoint)',
+  })
+  likedRankings?: RankingResponseDto[];
+
+  @Expose()
   @ApiProperty({ enum: UserRole, example: UserRole.Member })
   role: UserRole;
 

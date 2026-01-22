@@ -39,7 +39,16 @@
     "/auth/register": {
       "post": {
         "operationId": "AuthController_register",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "accept-language",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -74,7 +83,16 @@
     "/auth/register-admin": {
       "post": {
         "operationId": "AuthController_registerAdmin",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "accept-language",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -222,7 +240,16 @@
     "/auth/forgot-password": {
       "post": {
         "operationId": "AuthController_forgotPassword",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "accept-language",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1713,7 +1740,16 @@
     "/support": {
       "post": {
         "operationId": "SupportController_create",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "accept-language",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2117,6 +2153,13 @@
             "example": "https://example.com/avatar.jpg"
           },
           "rankings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RankingResponseDto"
+            }
+          },
+          "likedRankings": {
+            "description": "Rankings that the user has liked (only populated in profile endpoint)",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RankingResponseDto"
