@@ -12,5 +12,5 @@ export type { SortByOption, OrderOption } from "./components/leaderboard-filters
 // Hooks
 export { useLeaderboard } from "./hooks/use-leaderboard";
 export { useIsAdmin } from "./hooks/use-is-admin";
-export { useIsOwner } from "./hooks/use-is-owner";
+export { useIsOwner, useIsCurrentUser } from "./hooks/use-is-owner";
 export { useAccountForm } from "./hooks/use-account-form";

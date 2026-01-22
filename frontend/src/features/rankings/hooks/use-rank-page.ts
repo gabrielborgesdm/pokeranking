@@ -38,7 +38,7 @@ export function useRankPage({ id }: UseRankPageOptions) {
     return [];
   }, [allPokemonData]);
 
-  const isOwner = useIsOwner(ranking?.user?.username);
+  const isOwner = useIsOwner(ranking?.user?._id);
 
   // Initial pokemon from the ranking
   const initialPokemon = useMemo<PokemonResponseDto[]>(

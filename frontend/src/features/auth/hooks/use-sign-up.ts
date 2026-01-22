@@ -19,7 +19,7 @@ function createSignUpSchema(t: TFunction) {
       username: z
         .string()
         .min(3, t("validation.minLength", { min: 3 }))
-        .max(30, t("validation.maxLength", { max: 30 })),
+        .max(25, t("validation.maxLength", { max: 25 })),
       password: z.string().min(6, t("validation.minLength", { min: 6 })),
       confirmPassword: z.string().min(1, t("validation.required")),
       profilePic: z.string().min(1, t("validation.profilePicRequired")),
@@ -53,8 +53,10 @@ export function useSignUp() {
   async function onSubmit(data: SignUpFormData) {
     setError(null);
 
+    const { confirmPassword, ...registerData } = data;
+
     registerMutation.mutate(
-      { data },
+      { data: registerData },
       {
         onSuccess: (response) => {
           if (response.status === 201) {

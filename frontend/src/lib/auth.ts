@@ -113,7 +113,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
@@ -121,6 +121,15 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
         token.profilePic = user.profilePic;
         token.accessToken = user.accessToken;
+      }
+      // Handle session updates from updateSession() calls
+      if (trigger === "update" && session?.user) {
+        if (session.user.username) {
+          token.username = session.user.username;
+        }
+        if (session.user.profilePic !== undefined) {
+          token.profilePic = session.user.profilePic;
+        }
       }
       return token;
     },

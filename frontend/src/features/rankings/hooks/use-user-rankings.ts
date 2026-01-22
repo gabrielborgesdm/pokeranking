@@ -2,12 +2,12 @@ import { useMemo, useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRankingsControllerFindByUsername } from "@pokeranking/api-client";
 import { useDeleteRanking } from "./use-delete-ranking";
-import { useIsOwner } from "@/features/users";
+import { useIsCurrentUser } from "@/features/users";
 import { routes } from "@/lib/routes";
 
 export function useUserRankings(username: string) {
   const router = useRouter();
-  const isOwner = useIsOwner(username);
+  const isOwner = useIsCurrentUser(username);
 
   const { data, isLoading, error, refetch } =
     useRankingsControllerFindByUsername(username);
