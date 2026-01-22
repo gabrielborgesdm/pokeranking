@@ -13,6 +13,7 @@ import {
   usePokemonControllerCreate,
   usePokemonControllerUpdate,
   getPokemonControllerSearchQueryKey,
+  getPokemonControllerFindOneQueryKey,
   isApiError,
 } from "@pokeranking/api-client";
 import { routes } from "@/lib/routes";
@@ -117,6 +118,11 @@ export function usePokemonForm({
       queryClient.invalidateQueries({
         queryKey: getPokemonControllerSearchQueryKey(),
       });
+      if (pokemonId) {
+        queryClient.invalidateQueries({
+          queryKey: getPokemonControllerFindOneQueryKey(pokemonId),
+        });
+      }
       toast.success(t("admin.pokemon.saveSuccess"));
       router.push(routes.adminPokemon);
     };
