@@ -46,7 +46,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
@@ -340,11 +340,6 @@ export class UsersService {
       .exec();
     if (!user) {
       throw new NotFoundException({ key: TK.USERS.NOT_FOUND, args: { id } });
-    }
-
-    // Check for email uniqueness if email is being updated
-    if (updateUserDto.email && updateUserDto.email !== user.email) {
-      await this.checkEmailUniqueness(updateUserDto.email, id, options);
     }
 
     // Check for username uniqueness if username is being updated

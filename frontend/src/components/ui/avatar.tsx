@@ -28,6 +28,7 @@ interface AvatarImageProps {
   alt: string
   className?: string
   fallback?: string
+  sizes?: string
 }
 
 const AvatarImage = React.memo(function AvatarImage({
@@ -35,6 +36,7 @@ const AvatarImage = React.memo(function AvatarImage({
   alt,
   className,
   fallback = DEFAULT_POKEMON_IMAGE,
+  sizes = "64px",
 }: AvatarImageProps) {
   const [imgSrc, setImgSrc] = React.useState(() => normalizePokemonImageSrc(src))
 
@@ -48,7 +50,7 @@ const AvatarImage = React.memo(function AvatarImage({
       src={imgSrc}
       alt={alt}
       fill
-      sizes="64px"
+      sizes={sizes}
       className={cn("aspect-square object-contain p-2", className)}
       onError={() => setImgSrc(fallback)}
     />

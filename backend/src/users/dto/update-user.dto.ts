@@ -13,11 +13,6 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole } from '../../common/enums/user-role.enum';
 
 export class UpdateUserDto {
-  @ApiPropertyOptional({ example: 'john@example.com' })
-  @IsEmail()
-  @IsOptional()
-  email?: string;
-
   @ApiPropertyOptional({ example: 'john_doe', minLength: 3, maxLength: 30 })
   @IsString()
   @IsOptional()

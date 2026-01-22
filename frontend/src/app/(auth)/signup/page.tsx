@@ -157,6 +157,22 @@ export default function SignUpPage() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("auth.confirmPassword")}</FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        placeholder={t("auth.confirmPasswordPlaceholder")}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? t("auth.signingUp") : t("auth.signUp")}
               </Button>

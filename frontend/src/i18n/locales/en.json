@@ -335,6 +335,7 @@
     "users": "Users",
     "browseRankings": "Rankings",
     "myRankings": "My Rankings",
+    "myAccount": "My Account",
     "pokedex": "Pokedex",
     "contribute": "Contribute",
     "design": "Design",
@@ -654,6 +655,19 @@
     "guestHint": "Create an account to start ranking Pokemon",
     "cta": "Go to My Rankings",
     "createAccount": "Create Account"
+  },
+  "account": {
+    "title": "My Account",
+    "description": "Manage your profile settings",
+    "changeAvatar": "Click to change avatar",
+    "changePassword": "Change Password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "leaveBlankToKeep": "Leave blank to keep current password",
+    "emailCannotBeChanged": "Email cannot be changed",
+    "saveChanges": "Save Changes",
+    "updateSuccess": "Your profile has been updated successfully",
+    "updateFailed": "Failed to update profile"
   },
   "apiErrors": {
     "auth": {

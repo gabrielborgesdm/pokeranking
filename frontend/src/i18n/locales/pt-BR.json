@@ -46,6 +46,7 @@
     "users": "Usuários",
     "browseRankings": "Rankings",
     "myRankings": "Meus Rankings",
+    "myAccount": "Minha Conta",
     "pokedex": "Pokedex",
     "contribute": "Contribuir",
     "design": "Design",
@@ -654,6 +655,19 @@
     "guestHint": "Crie uma conta para começar a ranquear Pokémon",
     "cta": "Ir para Meus Rankings",
     "createAccount": "Criar Conta"
+  },
+  "account": {
+    "title": "Minha Conta",
+    "description": "Gerencie as configurações do seu perfil",
+    "changeAvatar": "Clique para alterar avatar",
+    "changePassword": "Alterar Senha",
+    "newPassword": "Nova Senha",
+    "newPasswordPlaceholder": "Digite a nova senha",
+    "leaveBlankToKeep": "Deixe em branco para manter a senha atual",
+    "emailCannotBeChanged": "O email não pode ser alterado",
+    "saveChanges": "Salvar Alterações",
+    "updateSuccess": "Seu perfil foi atualizado com sucesso",
+    "updateFailed": "Falha ao atualizar perfil"
   },
   "apiErrors": {
     "auth": {
