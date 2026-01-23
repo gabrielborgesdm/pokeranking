@@ -4,11 +4,10 @@ import {
   Get,
   Headers,
   HttpCode,
-  HttpException,
   HttpStatus,
   Post,
   Request,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -19,13 +18,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
+import { RateLimit } from '../common/decorators/rate-limit.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
-import { RateLimitService } from '../common/services/rate-limit.service';
-import { getClientIp } from '../common/utils/request.util';
 import { toDto } from '../common/utils/transform.util';
-import { TK } from '../i18n/constants/translation-keys';
 import { UserResponseDto } from '../users/dto/user-response.dto';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
@@ -45,10 +42,10 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
-    private rateLimitService: RateLimitService,
-  ) { }
+  ) {}
 
   @Public()
+  @RateLimit()
   // LocalAuthGuard validates username/password and attaches user to request
   @UseGuards(AuthGuard('local'))
   @Post('login')
@@ -66,6 +63,7 @@ export class AuthController {
   }
 
   @Public()
+  @RateLimit()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register a new user' })
@@ -135,6 +133,7 @@ export class AuthController {
   }
 
   @Public()
+  @RateLimit()
   @Post('verify-email')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Verify email address with 6-digit code' })
@@ -151,21 +150,7 @@ export class AuthController {
   @ApiResponse({ status: 429, description: 'Too many verification attempts' })
   async verifyEmail(
     @Body() verifyEmailDto: VerifyEmailDto,
-    @Request()
-    req: {
-      headers: Record<string, string | string[] | undefined>;
-      ip?: string;
-    },
   ): Promise<VerifyEmailResponseDto> {
-    const ip = getClientIp(req);
-    const { success } = await this.rateLimitService.checkVerifyEmailLimit(ip);
-    if (!success) {
-      throw new HttpException(
-        { key: TK.COMMON.TOO_MANY_VERIFICATION_ATTEMPTS },
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-
     const user = await this.authService.verifyEmail(
       verifyEmailDto.email,
       verifyEmailDto.code,
@@ -186,6 +171,7 @@ export class AuthController {
   }
 
   @Public()
+  @RateLimit()
   @Post('resend-verification')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Resend verification code' })
@@ -200,21 +186,7 @@ export class AuthController {
   async resendVerification(
     @Body() resendVerificationDto: ResendVerificationDto,
     @Headers('accept-language') lang: string | undefined,
-    @Request()
-    req: {
-      headers: Record<string, string | string[] | undefined>;
-      ip?: string;
-    },
   ): Promise<{ message: string }> {
-    const ip = getClientIp(req);
-    const { success } = await this.rateLimitService.checkResendLimit(ip);
-    if (!success) {
-      throw new HttpException(
-        { key: TK.COMMON.TOO_MANY_RESEND_ATTEMPTS },
-        HttpStatus.TOO_MANY_REQUESTS,
-      );
-    }
-
     await this.authService.resendVerificationCode(
       resendVerificationDto.email,
       lang,
@@ -226,6 +198,7 @@ export class AuthController {
   }
 
   @Public()
+  @RateLimit()
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Request password reset email' })
@@ -249,6 +222,7 @@ export class AuthController {
   }
 
   @Public()
+  @RateLimit()
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Reset password with token' })
