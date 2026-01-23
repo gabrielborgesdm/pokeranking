@@ -26,15 +26,19 @@ export const routes = {
 } as const;
 
 export const publicPaths = [
-  // '/',
+  '/',
   // routes.home,
   // routes.users,
   // routes.contribute,
   // routes.design,
-  // routes.rankings,
   // "/rankings/user",
   // routes.contribute,
   // routes.pokedex,
+];
+
+// Paths that are public but should match exactly (not their children)
+export const publicExactPaths = [
+  routes.rankings,
 ];
 
 export const authPaths = [
