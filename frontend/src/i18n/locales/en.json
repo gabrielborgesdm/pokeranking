@@ -10,7 +10,13 @@
     "save": "Save",
     "saving": "Saving...",
     "goBack": "Go Back",
-    "back": "Back"
+    "back": "Back",
+    "error": "Error"
+  },
+  "toast": {
+    "rankingNotFound": "Ranking not found",
+    "sessionExpired": "Session expired",
+    "sessionExpiredDescription": "Please sign in again to continue."
   },
   "validation": {
     "required": "This field is required",
