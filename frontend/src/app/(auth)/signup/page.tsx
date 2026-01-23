@@ -63,7 +63,8 @@ export default function SignUpPage() {
         <div className="border-b border-border px-6 py-6">
           <div className="flex flex-col items-center gap-3">
             <PokemonAvatar
-              pokemon={selectedPokemon}
+              src={selectedPokemon?.image}
+              alt={selectedPokemon?.name}
               size="lg"
               onClick={handleAvatarClick}
               hoverText={t("auth.clickToChange")}

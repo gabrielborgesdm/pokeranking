@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { useSession, signOut } from "next-auth/react";
-import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, Globe, Check, Sun, Moon, Users, BookOpen, Settings } from "lucide-react";
+import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, ChevronsDown, Globe, Check, Sun, Moon, Users, BookOpen, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,6 +22,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/co
 import { useThemeContext } from "@/providers/theme-provider";
 import { useLanguage } from "@/providers/language-provider";
 import { Logo } from "@/components/logo";
+import { PokemonAvatar } from "@/components/pokemon-avatar";
 import { RankingsDropdown } from "@/components/rankings-dropdown";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -221,6 +222,109 @@ function MobileNavLink({ href, icon: Icon, label, pathname, indent }: MobileNavL
   );
 }
 
+interface MobileNavContentProps {
+  mobileNavLinks: NavLink[];
+  pathname: string;
+  isAuthenticated: boolean;
+  isAdmin: boolean;
+}
+
+function MobileNavContent({ mobileNavLinks, pathname, isAuthenticated, isAdmin }: MobileNavContentProps) {
+  const { t } = useTranslation();
+  const navRef = useRef<HTMLElement>(null);
+  const [canScroll, setCanScroll] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(false);
+
+  const checkScroll = useCallback(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const hasOverflow = nav.scrollHeight > nav.clientHeight;
+    const atBottom = nav.scrollHeight - nav.scrollTop - nav.clientHeight < 10;
+
+    setCanScroll(hasOverflow);
+    setIsAtBottom(atBottom);
+  }, []);
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
+  }, [checkScroll]);
+
+  const showScrollIndicator = canScroll && !isAtBottom;
+
+  return (
+    <div className="relative flex-1 min-h-0">
+      <nav
+        ref={navRef}
+        onScroll={checkScroll}
+        className="h-full overflow-y-auto px-4 py-2"
+      >
+        <NavLinks links={mobileNavLinks} pathname={pathname} variant="mobile" />
+
+        {/* Secondary links */}
+        {isAuthenticated && (
+          <>
+            <div className="my-4 h-px bg-border" />
+            <div className="flex flex-col gap-1">
+              <MobileNavLink
+                href={routes.account}
+                icon={Settings}
+                label={t("nav.myAccount")}
+                pathname={pathname}
+              />
+              <MobileNavLink
+                href={routes.support}
+                icon={MessageSquare}
+                label={t("nav.support")}
+                pathname={pathname}
+              />
+              <MobileNavLink
+                href={routes.design}
+                icon={Palette}
+                label={t("nav.design")}
+                pathname={pathname}
+              />
+            </div>
+          </>
+        )}
+
+        {/* Admin section */}
+        {isAdmin && (
+          <>
+            <div className="my-4 h-px bg-border" />
+            <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {t("nav.admin")}
+            </p>
+            <div className="flex flex-col gap-1">
+              <MobileNavLink
+                href={routes.adminPokemon}
+                icon={PawPrint}
+                label={t("nav.adminPokemon")}
+                pathname={pathname}
+              />
+            </div>
+          </>
+        )}
+      </nav>
+
+      {/* Scroll indicator */}
+      <div
+        className={cn(
+          "pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center justify-end transition-opacity duration-300",
+          showScrollIndicator ? "opacity-100" : "opacity-0"
+        )}
+      >
+        <div className="h-12 w-full bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div className="absolute bottom-2 animate-bounce">
+          <ChevronsDown className="h-5 w-5 text-muted-foreground" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Navbar() {
   const { t } = useTranslation();
   const { isDark, ThemeIcon, toggleTheme } = useThemeContext();
@@ -350,11 +454,13 @@ export function Navbar() {
 
               {/* User greeting */}
               {isAuthenticated && session?.user?.username && (
-                <div className="px-6 py-4 border-y bg-muted/30">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                      <User className="h-5 w-5 text-primary" />
-                    </div>
+                <div className="px-2 border-y bg-muted/30">
+                  <div className="flex items-center gap-2">
+                    <PokemonAvatar
+                      src={session.user.profilePic}
+                      size="md"
+                      showBorder={false}
+                    />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-muted-foreground">{t("nav.welcome")}</p>
                       <p className="font-medium truncate">{session.user.username}</p>
@@ -364,58 +470,12 @@ export function Navbar() {
               )}
 
               {/* Main navigation */}
-              <div className="relative flex-1 min-h-0">
-                <nav className="h-full overflow-y-auto px-4 py-4">
-                  <NavLinks links={mobileNavLinks} pathname={pathname} variant="mobile" />
-
-                  {/* Secondary links */}
-                  {isAuthenticated && (
-                    <>
-                      <div className="my-4 h-px bg-border" />
-                      <div className="flex flex-col gap-1">
-                        <MobileNavLink
-                          href={routes.account}
-                          icon={Settings}
-                          label={t("nav.myAccount")}
-                          pathname={pathname}
-                        />
-                        <MobileNavLink
-                          href={routes.support}
-                          icon={MessageSquare}
-                          label={t("nav.support")}
-                          pathname={pathname}
-                        />
-                        <MobileNavLink
-                          href={routes.design}
-                          icon={Palette}
-                          label={t("nav.design")}
-                          pathname={pathname}
-                        />
-                      </div>
-                    </>
-                  )}
-
-                  {/* Admin section */}
-                  {isAdmin && (
-                    <>
-                      <div className="my-4 h-px bg-border" />
-                      <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        {t("nav.admin")}
-                      </p>
-                      <div className="flex flex-col gap-1">
-                        <MobileNavLink
-                          href={routes.adminPokemon}
-                          icon={PawPrint}
-                          label={t("nav.adminPokemon")}
-                          pathname={pathname}
-                        />
-                      </div>
-                    </>
-                  )}
-                </nav>
-                {/* Scroll fade indicator */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-background to-transparent" />
-              </div>
+              <MobileNavContent
+                mobileNavLinks={mobileNavLinks}
+                pathname={pathname}
+                isAuthenticated={isAuthenticated}
+                isAdmin={isAdmin}
+              />
 
               {/* Footer with settings and sign out */}
               <div className="mt-auto border-t px-4 py-4">

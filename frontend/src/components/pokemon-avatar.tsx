@@ -1,10 +1,10 @@
 import { User } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { cn } from "@/lib/utils";
 
 interface PokemonAvatarProps {
-  pokemon: PokemonResponseDto | null;
+  src?: string | null;
+  alt?: string;
   size?: "sm" | "md" | "lg" | "xl";
   onClick?: () => void;
   hoverText?: string;
@@ -36,7 +36,8 @@ const imageSizes = {
 };
 
 export function PokemonAvatar({
-  pokemon,
+  src,
+  alt = "Pokemon avatar",
   size = "lg",
   onClick,
   hoverText,
@@ -54,7 +55,7 @@ export function PokemonAvatar({
         isClickable && [
           "cursor-pointer group",
           "hover:scale-105",
-          pokemon && "hover:opacity-90",
+          src && "hover:opacity-90",
         ],
         className
       )}
@@ -64,17 +65,17 @@ export function PokemonAvatar({
           sizeClasses[size],
           "transition-all duration-200",
           showBorder && [
-            pokemon
+            src
               ? "ring-4 ring-primary ring-offset-2 ring-offset-background shadow-lg shadow-primary/25"
               : "ring-2 ring-dashed ring-muted-foreground/30 ring-offset-2 ring-offset-background",
           ],
           hasError && "ring-destructive"
         )}
       >
-        {pokemon ? (
+        {src ? (
           <AvatarImage
-            src={pokemon.image}
-            alt={pokemon.name}
+            src={src}
+            alt={alt}
             sizes={imageSizes[size]}
           />
         ) : (
@@ -85,7 +86,7 @@ export function PokemonAvatar({
       </Avatar>
 
       {/* Hover overlay for selected Pokemon */}
-      {isClickable && pokemon && hoverText && (
+      {isClickable && src && hoverText && (
         <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
           <span className="text-white text-xs font-medium text-center px-2">
             {hoverText}
