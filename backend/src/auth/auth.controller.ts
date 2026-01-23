@@ -1,43 +1,43 @@
 import {
-  Controller,
-  Post,
   Body,
-  UseGuards,
-  Request,
+  Controller,
   Get,
-  HttpCode,
-  HttpStatus,
-  HttpException,
   Headers,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
-import { LoginResponseDto } from './dto/login-response.dto';
-import { RegisterResponseDto } from './dto/register-response.dto';
-import { UserResponseDto } from '../users/dto/user-response.dto';
-import { VerifyEmailDto } from './dto/verify-email.dto';
-import { VerifyEmailResponseDto } from './dto/verify-email-response.dto';
-import { ResendVerificationDto } from './dto/resend-verification.dto';
-import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
 import { Public } from '../common/decorators/public.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
-import { toDto } from '../common/utils/transform.util';
-import { getClientIp } from '../common/utils/request.util';
-import { UsersService } from '../users/users.service';
-import { RateLimitService } from '../common/services/rate-limit.service';
-import { TK } from '../i18n/constants/translation-keys';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
+import { RateLimitService } from '../common/services/rate-limit.service';
+import { getClientIp } from '../common/utils/request.util';
+import { toDto } from '../common/utils/transform.util';
+import { TK } from '../i18n/constants/translation-keys';
+import { UserResponseDto } from '../users/dto/user-response.dto';
+import { UsersService } from '../users/users.service';
+import { AuthService } from './auth.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { LoginDto } from './dto/login.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
+import { RegisterDto } from './dto/register.dto';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { VerifyEmailResponseDto } from './dto/verify-email-response.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -46,7 +46,7 @@ export class AuthController {
     private authService: AuthService,
     private usersService: UsersService,
     private rateLimitService: RateLimitService,
-  ) {}
+  ) { }
 
   @Public()
   // LocalAuthGuard validates username/password and attaches user to request

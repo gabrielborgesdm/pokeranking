@@ -283,6 +283,14 @@ export class RankingsService {
           { session },
         );
 
+        // Remove ranking from all users' likedRankings arrays
+        await this.userModel
+          .updateMany(
+            { likedRankings: ranking._id },
+            { $pull: { likedRankings: ranking._id } },
+          )
+          .session(session);
+
         return ranking;
       },
     );

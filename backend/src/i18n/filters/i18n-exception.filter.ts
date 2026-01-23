@@ -44,7 +44,7 @@ function isObject(value: unknown): value is ExceptionResponseObject {
 
 @Catch(HttpException)
 export class I18nExceptionFilter implements ExceptionFilter {
-  constructor(private readonly sentryService: SentryService) {}
+  constructor(private readonly sentryService: SentryService) { }
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -101,7 +101,7 @@ export class I18nExceptionFilter implements ExceptionFilter {
     }
 
     if (!isObject(exceptionResponse)) {
-      return { message: 'Internal server error', key: 'common.internalError' };
+      return { message: 'common.internalError', key: 'common.internalError' };
     }
 
     // Check if root object is an i18n payload (e.g., { key: "common.error", args: {...} })
@@ -146,6 +146,6 @@ export class I18nExceptionFilter implements ExceptionFilter {
       return { message: String(message) };
     }
 
-    return { message: 'Internal server error', key: 'common.internalError' };
+    return { message: 'common.internalError', key: 'common.internalError' };
   }
 }
