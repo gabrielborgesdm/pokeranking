@@ -8,6 +8,7 @@ export class RateLimitService {
   private readonly logger = new Logger(RateLimitService.name);
   private verifyEmailRateLimit: Ratelimit | null = null;
   private resendVerificationRateLimit: Ratelimit | null = null;
+  private authRateLimit: Ratelimit | null = null;
   private readonly enabled: boolean;
 
   constructor(
@@ -48,6 +49,12 @@ export class RateLimitService {
       limiter: Ratelimit.slidingWindow(resendLimit, `${windowSeconds} s`),
       prefix: 'ratelimit:resend-verification',
     });
+
+    this.authRateLimit = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(5, '10 m'),
+      prefix: 'ratelimit:auth',
+    });
   }
 
   async checkVerifyEmailLimit(identifier: string) {
@@ -72,5 +79,21 @@ export class RateLimitService {
       );
     }
     return result;
+  }
+
+  async checkAuthLimit(identifier: string) {
+    if (!this.enabled || !this.authRateLimit) {
+      return { success: true, limit: 0, remaining: 0, reset: 0 };
+    }
+    try {
+      const result = await this.authRateLimit.limit(identifier);
+      if (!result.success) {
+        this.logger.warn(`Rate limit exceeded: auth for ${identifier}`);
+      }
+      return result;
+    } catch (error) {
+      this.logger.error(`Rate limit check failed: ${error}`);
+      return { success: true, limit: 0, remaining: 0, reset: 0 };
+    }
   }
 }

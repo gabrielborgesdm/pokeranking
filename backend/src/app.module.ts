@@ -12,6 +12,7 @@ import { UploadModule } from './upload/upload.module';
 import { CommonModule } from './common/common.module';
 import { SentryModule } from './sentry/sentry.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { RateLimitGuard } from './common/guards/rate-limit.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { I18nExceptionFilter } from './i18n/filters/i18n-exception.filter';
@@ -47,6 +48,11 @@ import { getDatabaseConfig } from './config/database.config';
   ],
   controllers: [],
   providers: [
+    // Global rate limit guard (must run first)
+    {
+      provide: APP_GUARD,
+      useClass: RateLimitGuard,
+    },
     // Global authentication guard
     {
       provide: APP_GUARD,
