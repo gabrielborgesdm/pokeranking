@@ -37,30 +37,33 @@ export function PWAInstallPrompt() {
     // Exit early if not on mobile
     if (!mobile) return;
 
-    // Check localStorage to avoid pestering users
+    // Check localStorage - never show again if dismissed
     const promptDismissed = localStorage.getItem("pwa-prompt-dismissed");
-
-    // Only show if not dismissed in last 30 days
-    if (promptDismissed) {
-      const dismissedDate = new Date(promptDismissed);
-      const daysSinceDismissal =
-        (Date.now() - dismissedDate.getTime()) / (1000 * 60 * 60 * 24);
-      if (daysSinceDismissal < 30) return;
-    }
+    if (promptDismissed) return;
 
     // Android: Listen for beforeinstallprompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
+      // Double-check dismissal in case localStorage changed
+      if (localStorage.getItem("pwa-prompt-dismissed")) return;
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       // Show prompt with a delay
-      setTimeout(() => setShowPrompt(true), 2000);
+      setTimeout(() => {
+        if (!localStorage.getItem("pwa-prompt-dismissed")) {
+          setShowPrompt(true);
+        }
+      }, 2000);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     // iOS: Show manual instructions
     if (ios && !standalone) {
-      setTimeout(() => setShowPrompt(true), 2000);
+      setTimeout(() => {
+        if (!localStorage.getItem("pwa-prompt-dismissed")) {
+          setShowPrompt(true);
+        }
+      }, 2000);
     }
 
     return () => {
@@ -96,7 +99,10 @@ export function PWAInstallPrompt() {
   // Don't show if already installed
   if (isStandalone) return null;
 
-  // Don't show if dismissed
+  // Don't show if dismissed (check on every render)
+  if (typeof window !== "undefined" && localStorage.getItem("pwa-prompt-dismissed")) return null;
+
+  // Don't show if prompt state is false
   if (!showPrompt) return null;
 
   return (
