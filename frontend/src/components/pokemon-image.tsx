@@ -45,25 +45,25 @@ export const PokemonImage = React.memo(function PokemonImage({
 
   if (fill) {
     return (
-      <Image
+      <img
         src={imgSrc}
         alt={alt}
-        fill
         loading="eager"
         sizes={sizes}
+        draggable={draggable}
+        onError={handleError}
         className={cn(
-          "object-contain pointer-events-none",
-          shouldHighlight && "[filter:drop-shadow(0_0_1px_rgba(100,100,100,1))_drop-shadow(0_0_4px_rgba(0,0,0,1))]",
+          "absolute inset-0 w-full h-full object-contain pointer-events-none",
+          shouldHighlight &&
+          "[filter:drop-shadow(0_0_1px_rgba(100,100,100,1))_drop-shadow(0_0_4px_rgba(0,0,0,1))]",
           className
         )}
-        onError={handleError}
-        draggable={draggable}
       />
     );
   }
 
   return (
-    <Image
+    <img
       src={imgSrc}
       alt={alt}
       width={width ?? 200}
