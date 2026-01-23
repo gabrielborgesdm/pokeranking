@@ -16,8 +16,10 @@ import { useAnalytics } from "@/hooks/use-analytics";
 import { routes } from "@/lib/routes";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto, RankingResponseDto } from "@pokeranking/api-client";
-import { notFound, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { use, useCallback, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 interface RankingPageProps {
   params: Promise<{ id: string }>;
@@ -100,6 +102,7 @@ export default function RankingPage({ params }: RankingPageProps) {
   const { isResizing } = useScreenSize();
   const router = useRouter();
   const { isMobile } = useScreenSize();
+  const { t } = useTranslation();
 
   const { trackRankingView } = useAnalytics();
   const hasTrackedRef = useRef(false);
@@ -129,11 +132,15 @@ export default function RankingPage({ params }: RankingPageProps) {
     router.push(routes.rankingRank(id));
   }, [router, id]);
 
-  if (rankingNotFound) {
-    notFound();
-  }
+  useEffect(() => {
+    if (rankingNotFound) {
+      toast.error(t("toast.rankingNotFound"));
+      router.push(routes.home);
+    }
+  }, [rankingNotFound, router, t]);
 
-  if (isLoading || !ranking) {
+
+  if (isLoading || !ranking || rankingNotFound) {
     return <PokemonListingCardsSkeleton count={15} isCompact={false} />;
   }
 

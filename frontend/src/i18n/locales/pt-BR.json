@@ -10,7 +10,13 @@
     "save": "Salvar",
     "saving": "Salvando...",
     "goBack": "Voltar",
-    "back": "Voltar"
+    "back": "Voltar",
+    "error": "Erro"
+  },
+  "toast": {
+    "rankingNotFound": "Ranking não encontrado",
+    "sessionExpired": "Sessão expirada",
+    "sessionExpiredDescription": "Por favor, entre novamente para continuar."
   },
   "validation": {
     "required": "Este campo é obrigatório",

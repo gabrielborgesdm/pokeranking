@@ -1,6 +1,7 @@
 import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { isApiError, setAuthToken, getAuthToken } from "@pokeranking/api-client";
+import i18n from "@/i18n";
 
 let isHandling = false;
 
@@ -21,8 +22,8 @@ export function handleSessionExpired(error: unknown): boolean {
 
   setAuthToken(null);
 
-  toast.error("Session expired", {
-    description: "Please sign in again to continue.",
+  toast.error(i18n.t("toast.sessionExpired"), {
+    description: i18n.t("toast.sessionExpiredDescription"),
     duration: 3000,
   });
 
