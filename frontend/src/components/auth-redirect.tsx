@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { publicPaths, authPaths, routes } from "@/lib/routes";
+import { publicPaths, publicExactPaths, authPaths, routes } from "@/lib/routes";
 
 export function AuthRedirect() {
   const { status } = useSession();
@@ -13,9 +13,10 @@ export function AuthRedirect() {
   useEffect(() => {
     if (status === "loading") return;
 
-    const isPublicPath = publicPaths.some(
-      (path) => pathname === path || pathname.startsWith(`${path}/`)
-    );
+    const isPublicPath =
+      publicPaths.some(
+        (path) => pathname === path || pathname.startsWith(`${path}/`)
+      ) || publicExactPaths.some((path) => pathname === path);
 
     const isAuthPath = authPaths.some(
       (path) => pathname === path || pathname.startsWith(`${path}/`)
