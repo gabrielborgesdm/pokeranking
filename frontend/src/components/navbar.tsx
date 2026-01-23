@@ -490,26 +490,18 @@ export function Navbar() {
                     {isDark ? t("nav.lightMode") : t("nav.darkMode")}
                   </button>
 
-                  {/* Language selector */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-muted">
-                        <Globe className="h-4 w-4" />
-                        {languages.find(l => l.code === language)?.label ?? language}
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      {languages.map((lang) => (
-                        <DropdownMenuItem
-                          key={lang.code}
-                          onClick={() => setLanguage(lang.code)}
-                        >
-                          {lang.label}
-                          {language === lang.code && <Check className="ml-auto h-4 w-4" />}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  {/* Language selector - cycles through languages */}
+                  <button
+                    onClick={() => {
+                      const currentIndex = languages.findIndex(l => l.code === language);
+                      const nextIndex = (currentIndex + 1) % languages.length;
+                      setLanguage(languages[nextIndex].code);
+                    }}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+                  >
+                    <Globe className="h-4 w-4" />
+                    {languages.find(l => l.code === language)?.label ?? language}
+                  </button>
                 </div>
 
                 {/* Sign in/out */}
