@@ -189,7 +189,7 @@
       "master": "Master Themes"
     },
     "cardPreview": "Card Preview",
-    "cardPreviewDescription": "How your ranking appears on the My Rankings page",
+    "cardPreviewDescription": "How your ranking appears on the \"My Rankings\" page",
     "backgroundLabel": "Header Banner",
     "backgroundDescription": "Choose a theme for the banner at the top of your ranking",
     "backgroundPreview": "Banner Preview",
@@ -623,6 +623,10 @@
         "bulbasaur": "Bulbasaur",
         "charmander": "Charmander",
         "squirtle": "Squirtle"
+      },
+      "userCards": {
+        "title": "User Cards",
+        "description": "Ranking cards with Pokemon type-inspired gradient backgrounds"
       },
       "gradients": {
         "title": "Gradients",

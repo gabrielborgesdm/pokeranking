@@ -215,7 +215,7 @@
       "master": "Temas Mestre Pokémon"
     },
     "cardPreview": "Prévia do Card",
-    "cardPreviewDescription": "Como seu ranking aparece na página Meus Rankings",
+    "cardPreviewDescription": "Como seu ranking aparece na página \"Meus Rankings\"",
     "backgroundLabel": "Banner do Cabeçalho",
     "backgroundDescription": "Escolha um tema para o banner no topo do seu ranking",
     "backgroundPreview": "Prévia do Banner",
@@ -623,6 +623,10 @@
         "bulbasaur": "Bulbasaur",
         "charmander": "Charmander",
         "squirtle": "Squirtle"
+      },
+      "userCards": {
+        "title": "Cards de Usuário",
+        "description": "Cards de ranking com fundos gradiente inspirados em tipos de Pokémon"
       },
       "gradients": {
         "title": "Gradientes",

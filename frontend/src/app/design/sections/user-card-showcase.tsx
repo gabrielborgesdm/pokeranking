@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "react-i18next";
 import { UserCard, PokemonTypeVariant } from "@/features/users";
 
 const mockUsers: {
@@ -47,12 +48,16 @@ const mockUsers: {
   ];
 
 export function UserCardShowcase() {
+  const { t } = useTranslation();
+
   return (
     <section className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold mb-2">User Cards</h2>
+        <h2 className="text-2xl font-bold mb-2">
+          {t("design.sections.userCards.title")}
+        </h2>
         <p className="text-muted-foreground">
-          Ranking cards with Pokemon type-inspired gradient backgrounds
+          {t("design.sections.userCards.description")}
         </p>
       </div>
 

@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Pencil, Search, ListOrdered } from "lucide-react";
+import { Pencil, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -77,42 +77,67 @@ export const RankingActionBar = memo(function RankingActionBar({
             />
           </div>
 
-          {/* Action buttons - grid on mobile/tablet, flex on desktop */}
-          <div className="grid grid-cols-2 lg:flex lg:items-center gap-2">
+          {/* Action buttons */}
+          <div className="flex flex-col lg:flex-row lg:items-center gap-2">
             {/* Owner-only actions */}
             {isOwner && (
               <>
-                {/* Rank Pokemon - enters drag-and-drop mode */}
+                {/* Rank Pokemon - PRIMARY CTA - enters drag-and-drop mode */}
                 <Button
-                  variant="outline"
                   onClick={handleRankPokemon}
-                  className="gap-2 h-10 lg:w-auto font-normal"
+                  variant="outline"
+                  className="gap-2 h-11 lg:h-10 w-full lg:w-auto font-medium bg-pokemon-red hover:bg-pokemon-red-dark text-whiteorder-first"
                 >
-                  <ListOrdered className="h-4 w-4 shrink-0" />
-                  <span className="truncate">
-                    {t("rankingView.rankPokemon")}
-                  </span>
+                  {/* Pokeball icon - red top, white bottom */}
+                  <svg
+                    viewBox="0 0 100 100"
+                    className="h-5 w-5 shrink-0"
+                    aria-hidden="true"
+                  >
+                    <circle cx="50" cy="50" r="48" className="fill-none stroke-white/30" strokeWidth="4" />
+                    {/* Top half - red */}
+                    <path d="M 50 2 A 48 48 0 0 1 98 50 L 65 50 A 15 15 0 0 0 35 50 L 2 50 A 48 48 0 0 1 50 2 Z" fill="oklch(0.50 0.205 27)" />
+                    {/* Bottom half - white */}
+                    <path d="M 2 50 A 48 48 0 0 0 50 98 A 48 48 0 0 0 98 50 L 65 50 A 15 15 0 0 1 35 50 Z" className="fill-white" />
+                    {/* Middle band - black */}
+                    <rect x="2" y="47" width="96" height="6" fill="oklch(0.12 0 0)" />
+                    {/* Center button */}
+                    <circle cx="50" cy="50" r="15" className="fill-white" stroke="oklch(0.12 0 0)" strokeWidth="3" />
+                    <circle cx="50" cy="50" r="6" fill="oklch(0.12 0 0)" opacity="0.3" />
+                  </svg>
+                  <span>{t("rankingView.rankPokemon")}</span>
                 </Button>
 
-                {/* Edit settings - goes to edit page */}
-                <Button
-                  variant="outline"
-                  onClick={handleEditSettings}
-                  className="gap-2 h-10 lg:w-auto font-normal"
-                >
-                  <Pencil className="h-4 w-4 shrink-0" />
-                  <span className="truncate">
-                    {t("rankingView.editSettings")}
-                  </span>
-                </Button>
+                {/* Secondary actions grid on mobile */}
+                <div className="grid  lg:flex lg:items-center gap-2">
+                  {/* Edit settings - goes to edit page */}
+                  <Button
+                    variant="outline"
+                    onClick={handleEditSettings}
+                    className="gap-2 h-10 lg:w-auto font-normal"
+                  >
+                    <Pencil className="h-4 w-4 shrink-0" />
+                    <span className="truncate">
+                      {t("rankingView.editSettings")}
+                    </span>
+                  </Button>
+
+                  {/* Share button - visible to all */}
+                  <ShareButton rankingId={rankingId} rankingTitle={rankingTitle} />
+
+                  {/* Export button - visible to all */}
+                  <ExportButton rankingId={rankingId} rankingTitle={rankingTitle} pokemon={pokemon} />
+                </div>
               </>
             )}
 
-            {/* Share button - visible to all */}
-            <ShareButton rankingId={rankingId} rankingTitle={rankingTitle} />
-
-            {/* Export button - visible to all */}
-            <ExportButton rankingId={rankingId} rankingTitle={rankingTitle} pokemon={pokemon} />
+            {/* Non-owner: Share and Export only */}
+            {!isOwner && (
+              <div className="grid grid-cols-2 lg:flex lg:items-center gap-2">
+                <ShareButton rankingId={rankingId} rankingTitle={rankingTitle} />
+                <ExportButton rankingId={rankingId} rankingTitle={rankingTitle} pokemon={pokemon} />
+              </div>
+            )}
           </div>
         </div>
       </div>
