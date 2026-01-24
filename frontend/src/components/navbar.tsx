@@ -367,10 +367,10 @@ export function Navbar() {
   // Mobile nav links (includes My Rankings as simple link)
   const username = session?.user?.username ?? "";
   const mobileNavLinks: NavLink[] = [
+    { href: routes.rankings, label: t("nav.browseRankings"), icon: Layers },
     ...(isAuthenticated && username
       ? [{ href: routes.userRankings(username), label: t("nav.myRankings"), icon: Trophy }]
       : []),
-    { href: routes.rankings, label: t("nav.browseRankings"), icon: Layers },
     { href: routes.pokedex, label: t("nav.pokedex"), icon: BookOpen },
     { href: routes.users, label: t("nav.users"), icon: Users },
     { href: routes.contribute, label: t("nav.contribute"), icon: Heart },
