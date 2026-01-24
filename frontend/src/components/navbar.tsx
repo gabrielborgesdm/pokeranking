@@ -500,7 +500,7 @@ export function Navbar() {
                     className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
                   >
                     <Globe className="h-4 w-4" />
-                    {languages.find(l => l.code === language)?.label ?? language}
+                    {languages.find(l => l.code !== language)?.label ?? language}
                   </button>
                 </div>
 
