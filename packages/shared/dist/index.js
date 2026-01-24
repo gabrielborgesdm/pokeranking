@@ -121,6 +121,7 @@ var RANKING_THEMES = [
     gradientClass: "gradient-greatball",
     textColor: "#ffffff",
     textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+    cardTextColor: "#1a1a1a",
     unlockRequirement: { type: "fixed", count: 1050 },
     tier: "master"
   },
@@ -130,6 +131,7 @@ var RANKING_THEMES = [
     gradientClass: "gradient-ultraball",
     textColor: "#ffffff",
     textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+    cardTextColor: "#1a1a1a",
     unlockRequirement: { type: "fixed", count: 1100 },
     tier: "master"
   },
@@ -139,6 +141,7 @@ var RANKING_THEMES = [
     gradientClass: "gradient-loveball",
     textColor: "#ffffff",
     textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+    cardTextColor: "#1a1a1a",
     unlockRequirement: { type: "fixed", count: 1150 },
     tier: "master"
   },
@@ -156,6 +159,7 @@ var RANKING_THEMES = [
     displayName: "Pokeball",
     gradientClass: "gradient-pokeball",
     textColor: "#ffffff",
+    cardTextColor: "#1a1a1a",
     textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
     unlockRequirement: { type: "fixed", count: 1250 },
     tier: "master"

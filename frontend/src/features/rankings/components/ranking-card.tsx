@@ -92,6 +92,18 @@ export const RankingCard = memo(function RankingCard({
     return foundTheme ?? getThemeById(DEFAULT_THEME_ID)!;
   }, [theme]);
 
+  const getCardTextStyle = (): React.CSSProperties => {
+    const styles: React.CSSProperties = {};
+    if (themeData.cardTextColor) {
+      styles.color = themeData.cardTextColor;
+    }
+    else {
+      styles.textShadow = themeData.textShadow;
+      styles.color = themeData.textColor;
+    }
+    return styles;
+  }
+
   // Determine if text is light or dark based on color value for decorative elements
   const isLightText = useMemo(() => {
     const color = themeData.textColor.toLowerCase();
@@ -119,10 +131,7 @@ export const RankingCard = memo(function RankingCard({
         themeData.gradientClass,
         className
       )}
-      style={{
-        color: themeData.textColor,
-        textShadow: themeData.textShadow
-      }}
+      style={getCardTextStyle()}
     >
       {/* Top Pokemon Image */}
       <div className="relative w-full aspect-square mb-4">
@@ -138,17 +147,26 @@ export const RankingCard = memo(function RankingCard({
 
       {/* Content */}
       <div className="space-y-2 min-w-0">
-        <h3 className="text-xl font-bold truncate">{title}</h3>
+        <h3
+          className="text-xl font-bold truncate"
+          style={getCardTextStyle()}
+        >
+          {title}
+        </h3>
         {username && (
           <button
             onClick={handleUsernameClick}
             className="flex items-center gap-1 text-sm opacity-80 hover:opacity-100 hover:underline transition-opacity min-w-0 w-full"
+            style={getCardTextStyle()}
           >
             <User className="h-3 w-3 flex-shrink-0" />
             <span className="truncate">{username}</span>
           </button>
         )}
-        <div className="flex items-center justify-between sm:text-sm opacity-80">
+        <div
+          className="flex items-center justify-between sm:text-sm opacity-80"
+          style={getCardTextStyle()}
+        >
           <span>
             <span className="sm:hidden">{pokemonCount} PK</span>
             <span className="hidden sm:inline">
@@ -181,40 +199,42 @@ export const RankingCard = memo(function RankingCard({
       />
 
       {/* Actions Dropdown */}
-      {showActions && (
-        <div className="absolute top-2 right-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className={cn(
-                  isLightText
-                    ? "bg-black/20 hover:bg-black/40 text-white"
-                    : "bg-white/40 hover:bg-white/60 text-foreground"
+      {
+        showActions && (
+          <div className="absolute top-2 right-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className={cn(
+                    isLightText
+                      ? "bg-black/20 hover:bg-black/40 text-white"
+                      : "bg-white/40 hover:bg-white/60 text-foreground"
+                  )}
+                >
+                  <MoreVertical className="h-4 w-4" />
+                  <span className="sr-only">{t("common.actions")}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {onEdit && (
+                  <DropdownMenuItem onClick={handleEdit}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    {t("myRankings.edit")}
+                  </DropdownMenuItem>
                 )}
-              >
-                <MoreVertical className="h-4 w-4" />
-                <span className="sr-only">{t("common.actions")}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {onEdit && (
-                <DropdownMenuItem onClick={handleEdit}>
-                  <Pencil className="mr-2 h-4 w-4" />
-                  {t("myRankings.edit")}
-                </DropdownMenuItem>
-              )}
-              {onDelete && (
-                <DropdownMenuItem variant="destructive" onClick={handleDelete}>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  {t("myRankings.delete")}
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      )}
-    </div>
+                {onDelete && (
+                  <DropdownMenuItem variant="destructive" onClick={handleDelete}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {t("myRankings.delete")}
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )
+      }
+    </div >
   );
 });
