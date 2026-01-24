@@ -1,7 +1,7 @@
 "use client";
 
-import { memo } from "react";
-import { X } from "lucide-react";
+import { memo, useState } from "react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { PokemonType } from "@pokeranking/shared";
 import { POKEMON_TYPE_VALUES, getPokemonTypeColor } from "@/lib/pokemon-types";
@@ -38,6 +38,13 @@ export const TypesSelector = memo(function TypesSelector({
   buttonClassName,
 }: TypesSelectorProps) {
   const { t } = useTranslation();
+  const [page, setPage] = useState(0);
+  const ITEMS_PER_PAGE = 8;
+  const totalPages = Math.ceil(POKEMON_TYPE_VALUES.length / ITEMS_PER_PAGE);
+  const paginatedTypes = POKEMON_TYPE_VALUES.slice(
+    page * ITEMS_PER_PAGE,
+    (page + 1) * ITEMS_PER_PAGE
+  );
 
   const handleTypeToggle = (type: PokemonType) => {
     if (selectedTypes.includes(type)) {
@@ -93,8 +100,8 @@ export const TypesSelector = memo(function TypesSelector({
                 )}
               </div>
             )}
-            <div className="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto">
-              {POKEMON_TYPE_VALUES.map((type) => (
+            <div className="grid grid-cols-2 gap-2 my-3">
+              {paginatedTypes.map((type) => (
                 <label
                   key={type}
                   className="flex items-center gap-2 cursor-pointer p-1 rounded hover:bg-muted"
@@ -114,6 +121,33 @@ export const TypesSelector = memo(function TypesSelector({
                 </label>
               ))}
             </div>
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between pt-2 border-t">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                  className="h-7 px-2"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <span className="text-xs text-muted-foreground">
+                  {page + 1} / {totalPages}
+                </span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                  disabled={page === totalPages - 1}
+                  className="h-7 px-2"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </div>
         </PopoverContent>
       </Popover>
