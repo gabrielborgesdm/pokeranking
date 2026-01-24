@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, ChevronsDown, Globe, Check, Sun, Moon, Users, BookOpen, Settings, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import {
   DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { useIsAdmin } from "@/features/users";
+import { useSignOut } from "@/features/auth";
 import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useThemeContext } from "@/providers/theme-provider";
 import { useLanguage } from "@/providers/language-provider";
@@ -45,9 +46,10 @@ interface AccountDropdownProps {
   isDark: boolean;
   ThemeIcon: LucideIcon;
   toggleTheme: () => void;
+  onSignOut: () => void;
 }
 
-function AccountDropdown({ username, isAdmin, isDark, ThemeIcon, toggleTheme }: AccountDropdownProps) {
+function AccountDropdown({ username, isAdmin, isDark, ThemeIcon, toggleTheme, onSignOut }: AccountDropdownProps) {
   const { t } = useTranslation();
   const { language, setLanguage, languages } = useLanguage();
 
@@ -122,7 +124,7 @@ function AccountDropdown({ username, isAdmin, isDark, ThemeIcon, toggleTheme }: 
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={() => signOut()}>
+        <DropdownMenuItem variant="destructive" onClick={onSignOut}>
           <LogOut className="mr-2 h-4 w-4" />
           {t("nav.signOut")}
         </DropdownMenuItem>
@@ -334,6 +336,7 @@ export function Navbar() {
   const isLoading = status === "loading";
   const isAuthenticated = status === "authenticated";
   const isAdmin = useIsAdmin();
+  const signOut = useSignOut();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { trackThemeToggle } = useAnalytics();
   useBackButtonDialog(mobileMenuOpen, () => setMobileMenuOpen(false));
@@ -397,6 +400,7 @@ export function Navbar() {
                 isDark={isDark}
                 ThemeIcon={ThemeIcon}
                 toggleTheme={handleThemeToggle}
+                onSignOut={signOut}
               />
             </>
           ) : (
