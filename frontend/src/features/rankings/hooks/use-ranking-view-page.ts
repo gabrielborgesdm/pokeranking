@@ -26,7 +26,7 @@ interface UseRankingViewPageOptions {
  */
 export function useRankingViewPage({ id }: UseRankingViewPageOptions) {
   const { data: session } = useSession();
-  const { data, isLoading, error } = useRankingsControllerFindOne(id);
+  const { data, isLoading, isError, isFetching } = useRankingsControllerFindOne(id);
 
   const ranking = useMemo(() => data?.data, [data]);
 
@@ -52,7 +52,9 @@ export function useRankingViewPage({ id }: UseRankingViewPageOptions) {
     [ranking]
   );
 
-  const notFound = error || (data && data.status === 404);
+  // Only consider notFound after all retries are exhausted (isError=true)
+  // and not while still fetching/retrying
+  const notFound = !isFetching && (isError || (data && data.status === 404));
 
   // Get top Pokemon for hero display
   const topPokemon = pokemon[0]
@@ -65,7 +67,7 @@ export function useRankingViewPage({ id }: UseRankingViewPageOptions) {
     zones,
     isOwner,
     isLoading,
-    error,
+    isError,
     notFound,
     likeCount,
     isLiked,
