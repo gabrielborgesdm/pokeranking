@@ -89,7 +89,7 @@ export function Onboarding() {
               </Button>
             ) : (
               <Button asChild size="lg" className="mt-2" variant="outline">
-                <Link href={routes.signin}>
+                <Link href={routes.signup}>
                   <User2 className="mr-2 h-4 w-4" />
                   {t("onboarding.createAccount")}
                 </Link>
