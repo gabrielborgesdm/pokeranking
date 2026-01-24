@@ -20,9 +20,9 @@ export function PokemonListingCardsSkeleton({
   const secondZoneCount = Math.max(0, count - firstZoneCount);
 
   return (
-    <main className={cn("space-y-0", className)}>
+    <main className={cn("space-y-0 px-2 sm:px-23 mx-auto max-w-[1250px]", className)}>
       {/* Hero Skeleton */}
-      <div className="mt-6 mx-4 sm:mx-auto max-w-[1044px] rounded-2xl py-8 sm:py-12 px-4 sm:px-6 bg-muted/50">
+      <div className="mt-6 mx-4 sm:mx-auto rounded-2xl py-8 sm:py-8 px-4  sm:px-6 bg-muted/50">
         <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-6">
           {/* Left: Top Pokemon Image */}
           <div className="shrink-0">
@@ -46,10 +46,10 @@ export function PokemonListingCardsSkeleton({
       </div>
 
       {/* Action Bar Skeleton */}
-      <div className="flex justify-center px-4">
-        <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50 max-w-[1044px]">
+      <div className="flex justify-center px-0">
+        <div className="flex flex-row items-center justify-between gap-2 sm:gap-4 w-full py-3 sm:py-4 mt-6 px-3 sm:px-4 rounded-xl bg-card/80 border border-border/50">
           {/* Search input */}
-          <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-sm">
+          <div className="flex-1 min-w-0 sm:max-w-sm">
             <Skeleton className="h-9 w-full" />
           </div>
 
@@ -64,8 +64,8 @@ export function PokemonListingCardsSkeleton({
       </div>
 
       {/* Pokemon Cards with Zone Headers */}
-      <div className="flex justify-center px-1 md:px-4 mt-6 mx-3">
-        <div className="w-full max-w-[1044px] space-y-6">
+      <div className="flex justify-center mt-6">
+        <div className="w-full space-y-6">
           {/* First Zone (S-Tier) */}
           <div className="space-y-4">
             {/* Zone Header Skeleton */}
