@@ -20,6 +20,11 @@ async function bootstrap() {
   // Enable CORS
   app.enableCors(getCorsConfig(configService));
 
+  app.use((req, res, next) => {
+    res.setHeader('Vary', 'Origin');
+    next();
+  });
+
   // Global validation pipe for DTOs
   app.useGlobalPipes(
     new ValidationPipe({
