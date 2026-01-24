@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState, useTransition } from "react";
+import { memo, useState, useTransition, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, Trash2, X, Save, ArrowLeft } from "lucide-react";
 import {
@@ -76,6 +76,7 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
   const [isPending, startTransition] = useTransition();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState("");
 
   // Wrap tab changes in transition to keep UI responsive
   const handleTabChange = (tab: MobileRankingTab) => {
@@ -106,6 +107,21 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
     handleSortByChange,
     handleOrderChange,
   } = useAllPokemon();
+
+  // Debounce search input and sync with filter state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchInputValue !== search) {
+        handleSearchChange(searchInputValue);
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInputValue, search, handleSearchChange]);
+
+  // Sync local state when external search changes
+  useEffect(() => {
+    setSearchInputValue(search);
+  }, [search]);
 
   // Compute filter state values
   const activeFilterCount = [
@@ -293,10 +309,26 @@ export const MobileRankingEditing = memo(function MobileRankingEditing({
           style={{ paddingBottom: MOBILE_TAB_BAR_HEIGHT }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between gap-3 px-4 py-1 border-b border-border/40 h-10 shrink-0">
-            <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
-              {t("rankingView.pokemonBox", "Pokemon Box")}
-            </h2>
+          <div className="flex items-center justify-between gap-3 px-4 py-1 border-b border-border/40 h-12 shrink-0">
+            <div className="relative flex-1">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchInputValue}
+                onChange={(e) => setSearchInputValue(e.target.value)}
+                className="flex-1 w-full text-sm border border-input rounded-sm pl-8 pr-8 py-1.5 bg-background"
+                placeholder={t("rankingView.searchPokemon", "Search Pokemon")}
+              />
+              {searchInputValue && (
+                <button
+                  type="button"
+                  onClick={() => setSearchInputValue("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
             <PickerHeaderFilters
               activeFilterCount={filterState.activeFilterCount}
               onOpenFilters={() => setFiltersOpen(true)}
