@@ -5,7 +5,6 @@ import { X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { PokemonType } from "@pokeranking/shared";
 import { POKEMON_TYPE_VALUES, getPokemonTypeColor } from "@/lib/pokemon-types";
-import { capitalize } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -110,7 +109,7 @@ export const TypesSelector = memo(function TypesSelector({
                     style={{ backgroundColor: getPokemonTypeColor(type) }}
                     className="text-white text-xs"
                   >
-                    {capitalize(type)}
+                    {t(`pokemonTypes.${type}`)}
                   </Badge>
                 </label>
               ))}
@@ -135,6 +134,8 @@ export const SelectedTypesBadges = memo(function SelectedTypesBadges({
   disabled,
   className,
 }: SelectedTypesBadgesProps) {
+  const { t } = useTranslation();
+
   if (selectedTypes.length === 0) return null;
 
   return (
@@ -147,7 +148,7 @@ export const SelectedTypesBadges = memo(function SelectedTypesBadges({
           className="text-white text-xs cursor-pointer h-6"
           onClick={() => !disabled && onTypeRemove(type)}
         >
-          {capitalize(type)}
+          {t(`pokemonTypes.${type}`)}
           <X className="h-3 w-3 ml-1" />
         </Badge>
       ))}
