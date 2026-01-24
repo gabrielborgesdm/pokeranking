@@ -205,7 +205,7 @@
     "titleLabel": "Título",
     "titlePlaceholder": "Meus Pokémon Favoritos",
     "themeLabel": "Tema do Card",
-    "themeDescription": "Escolha como seu card de ranking aparece. Desbloqueie mais temas adicionando Pokémon!",
+    "themeDescription": "Escolha como o seu card de ranking aparece. Desbloqueie mais temas adicionando Pokémon!",
     "unlockRequirement": "{{current}}/{{required}} Pokémon para desbloquear",
     "themeTier": {
       "starter": "Temas Iniciais",
@@ -215,7 +215,7 @@
       "master": "Temas Mestre Pokémon"
     },
     "cardPreview": "Prévia do Card",
-    "cardPreviewDescription": "Como seu ranking aparece na página \"Meus Rankings\"",
+    "cardPreviewDescription": "Como o seu ranking aparece na página \"Meus Rankings\"",
     "backgroundLabel": "Banner do Cabeçalho",
     "backgroundDescription": "Escolha um tema para o banner no topo do seu ranking",
     "backgroundPreview": "Prévia do Banner",
