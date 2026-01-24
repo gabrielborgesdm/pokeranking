@@ -140,7 +140,7 @@ export default function RankingPage({ params }: RankingPageProps) {
   }, [rankingNotFound, router, t]);
 
 
-  if (isLoading || !ranking || rankingNotFound) {
+  if (!isLoading || !ranking || rankingNotFound) {
     return <PokemonListingCardsSkeleton count={15} isCompact={false} />;
   }
 

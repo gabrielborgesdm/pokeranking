@@ -20,9 +20,9 @@ export function PokemonListingCardsSkeleton({
   const secondZoneCount = Math.max(0, count - firstZoneCount);
 
   return (
-    <main className={cn("space-y-0 px-2 sm:px-23 mx-auto max-w-[1250px]", className)}>
+    <main className={cn("space-y-0 px-4 sm:px-23 mx-auto max-w-[1250px]", className)}>
       {/* Hero Skeleton */}
-      <div className="mt-6 mx-4 sm:mx-auto rounded-2xl py-8 sm:py-8 px-4  sm:px-6 bg-muted/50">
+      <div className="mt-6 sm:mx-auto rounded-2xl py-8 sm:py-8 px-4  sm:px-6 bg-muted/50">
         <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-6">
           {/* Left: Top Pokemon Image */}
           <div className="shrink-0">
@@ -54,11 +54,11 @@ export function PokemonListingCardsSkeleton({
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center justify-end gap-2">
-            <Skeleton className="h-9 w-9 rounded-md" />
-            <Skeleton className="h-9 w-9 rounded-md" />
-            <Skeleton className="h-9 w-9 rounded-md" />
-            <Skeleton className="h-9 w-9 rounded-md" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 md:auto-cols-fr md:auto-flow-col">
+            <Skeleton className="h-9 md:w-9  rounded-md" />
+            <Skeleton className="h-9 md:w-9  rounded-md" />
+            <Skeleton className="h-9 md:w-9  rounded-md" />
+            <Skeleton className="h-9 md:w-9  rounded-md" />
           </div>
         </div>
       </div>
