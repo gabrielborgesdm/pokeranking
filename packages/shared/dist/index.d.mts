@@ -24,6 +24,8 @@ interface RankingTheme {
     gradientClass: string;
     /** Text color as CSS color value (e.g., '#ffffff', 'rgb(255,255,255)') */
     textColor: string;
+    /** Optional text color override for card component (for split themes like Pokeball) */
+    cardTextColor?: string;
     /** Optional text shadow for better contrast */
     textShadow?: string;
     /** Requirement to unlock this theme */
