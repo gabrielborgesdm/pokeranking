@@ -75,6 +75,7 @@ export function Onboarding() {
               {t("onboarding.description")}
             </p>
 
+
             {/* Hint */}
             <p className="text-sm md:text-base font-medium text-foreground/70">
               {username ? t("onboarding.loggedHint") : t("onboarding.guestHint")}
@@ -83,7 +84,7 @@ export function Onboarding() {
             {/* CTA Button */}
             {username ? (
               <Button asChild size="lg" className="mt-4" variant="outline">
-                <Link href={username ? routes.userRankings(username) : routes.signin}>
+                <Link href={routes.rankingNew}>
                   {t("onboarding.cta")}
                 </Link>
               </Button>

@@ -657,7 +657,7 @@
   "onboarding": {
     "welcome": "Bem-vindo ao Pokeranking!",
     "description": "Crie seus rankings Pokemon, ranqueie seus favoritos e compartilhe com a comunidade.",
-    "loggedHint": "Clique em \"Meus Rankings\" para criar um novo ranking",
+    "loggedHint": "Clique para criar um novo ranking",
     "guestHint": "Crie uma conta para começar a ranquear Pokémon",
     "cta": "Ir para Meus Rankings",
     "createAccount": "Criar Conta"

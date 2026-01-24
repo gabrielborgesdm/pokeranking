@@ -657,7 +657,7 @@
   "onboarding": {
     "welcome": "Welcome to Pokeranking!",
     "description": "Create your own Pokemon tier lists, rank your favorites, and share them with the community.",
-    "loggedHint": "Click on \"My Rankings\" to create a new ranking",
+    "loggedHint": "Click to create a new ranking",
     "guestHint": "Create an account to start ranking Pokemon",
     "cta": "Go to My Rankings",
     "createAccount": "Create Account"
