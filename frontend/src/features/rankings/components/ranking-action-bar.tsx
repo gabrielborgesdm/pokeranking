@@ -86,7 +86,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                 <Button
                   onClick={handleRankPokemon}
                   variant="outline"
-                  className="gap-2 h-11 lg:h-10 w-full lg:w-auto font-medium bg-pokemon-red hover:bg-pokemon-red-dark text-whiteorder-first"
+                  className="gap-2 h-11 lg:h-10 w-full lg:w-auto font-medium "
                 >
                   {/* Pokeball icon - red top, white bottom */}
                   <svg
@@ -94,7 +94,7 @@ export const RankingActionBar = memo(function RankingActionBar({
                     className="h-5 w-5 shrink-0"
                     aria-hidden="true"
                   >
-                    <circle cx="50" cy="50" r="48" className="fill-none stroke-white/30" strokeWidth="4" />
+                    <circle cx="50" cy="50" r="48" className="fill-none stroke-current opacity-30" strokeWidth="4" />
                     {/* Top half - red */}
                     <path d="M 50 2 A 48 48 0 0 1 98 50 L 65 50 A 15 15 0 0 0 35 50 L 2 50 A 48 48 0 0 1 50 2 Z" fill="oklch(0.50 0.205 27)" />
                     {/* Bottom half - white */}
