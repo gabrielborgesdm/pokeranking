@@ -98,7 +98,7 @@ export const ZoneHeader = memo(function ZoneHeader({
 
         {/* Stats button */}
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
           className={cn(
             "shrink-0",
