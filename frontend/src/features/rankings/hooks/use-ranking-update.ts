@@ -137,28 +137,28 @@ export function useRankingUpdate({
 
   // Sync with initialPokemon when it changes and there's no draft
   useEffect(() => {
-    if (initialPokemon.length === 0) return;
+    // Wait for allPokemon to be loaded before making any decisions
+    if (allPokemon.length === 0) return;
 
     const storedDraft = loadDraft(rankingId);
-    if (storedDraft && allPokemon.length > 0) {
+    if (storedDraft) {
       // There's a draft, try to resolve it
       const resolved = resolvePokemonIds(storedDraft.pokemonIds, allPokemon);
       if (resolved) {
         setDraftPokemon(resolved);
         setHasDraft(true);
         // Keep initial ref as the baseline for dirty checking
-        if (initialPokemonIdsRef.current.length === 0) {
+        if (initialPokemonIdsRef.current.length === 0 || initialPokemon.length > 0) {
           initialPokemonIdsRef.current = initialPokemon.map((p) => p._id);
         }
-      } else {
-        // Draft invalid, clear it and sync with initial
-        clearDraftFromStorage(rankingId);
-        setDraftPokemon(initialPokemon);
-        setHasDraft(false);
-        initialPokemonIdsRef.current = initialPokemon.map((p) => p._id);
+        return;
       }
-    } else {
-      // No draft, sync with initial pokemon
+      // Draft invalid, clear it
+      clearDraftFromStorage(rankingId);
+    }
+
+    // No valid draft, sync with initial pokemon
+    if (initialPokemon.length > 0) {
       setDraftPokemon(initialPokemon);
       setHasDraft(false);
       initialPokemonIdsRef.current = initialPokemon.map((p) => p._id);
