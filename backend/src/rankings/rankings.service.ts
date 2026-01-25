@@ -447,7 +447,7 @@ export class RankingsService {
   ): Promise<{ rankings: RankingListItem[]; total: number }> {
     const {
       page = 1,
-      limit = 20,
+      limit = 12,
       sortBy = LIKES_COUNT,
       order = 'desc',
       search,
@@ -456,7 +456,7 @@ export class RankingsService {
     // Check if this is the default query (cacheable)
     const isDefaultQuery =
       page === 1 &&
-      limit === 20 &&
+      limit === 12 &&
       sortBy === LIKES_COUNT &&
       order === 'desc' &&
       !search;
