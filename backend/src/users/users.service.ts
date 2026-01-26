@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  Logger,
 } from '@nestjs/common';
 import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel } from '@nestjs/mongoose';
@@ -60,6 +61,8 @@ const USERS_LIST_CACHE_TTL_SECONDS = 15 * 60;
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly cacheService: CacheService,
@@ -137,7 +140,11 @@ export class UsersService {
       ...createUserDto,
       password: hashedPassword,
     });
-    return await user.save({ session: options?.session });
+    const saved = await user.save({ session: options?.session });
+
+    this.logger.log(`User created: ${saved.username}`);
+
+    return saved;
   }
 
   async findAll(
@@ -432,7 +439,20 @@ export class UsersService {
     }
     // Apply updates, ignoring undefined fields
     Object.assign(user, stripUndefined(updateUserDto));
-    return await user.save({ session: options?.session });
+    const saved = await user.save({ session: options?.session });
+
+    const differentUsername = updateUserDto.username &&
+      updateUserDto.username !== user.username;
+    if (differentUsername) {
+      this.logger.log(
+        `User updated: ${user.username} -> ${updateUserDto.username}`,
+      );
+    } else
+   {
+      this.logger.log(`User updated: ${saved.username}`);
+   }
+
+    return saved;
   }
 
   async remove(id: string, options?: SessionOptions): Promise<User> {
@@ -445,6 +465,9 @@ export class UsersService {
     }
 
     await user.deleteOne({ session: options?.session });
+
+    this.logger.log(`User deleted: ${user.username}`);
+
     return user;
   }
 
@@ -469,6 +492,10 @@ export class UsersService {
     await this.userModel.findByIdAndUpdate(user._id, {
       rankedPokemonCount: totalCount,
     });
+
+    this.logger.debug(
+      `Updated ranked pokemon count for ${user.username}: ${totalCount}`,
+    );
 
     await this.invalidateUsersListCache();
   }

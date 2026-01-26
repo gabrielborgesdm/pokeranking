@@ -49,6 +49,8 @@ export class PokemonService {
 
     await this.invalidateCountCache();
 
+    this.logger.log(`Pokemon created: ${saved.name}`);
+
     return saved;
   }
 
@@ -107,8 +109,10 @@ export class PokemonService {
     }
 
     // Invalidate cache if any were created
-    if (results.some((r) => r.success)) {
+    const successCount = results.filter((r) => r.success).length;
+    if (successCount > 0) {
       await this.invalidateCountCache();
+      this.logger.log(`Bulk created ${successCount}/${pokemonList.length} Pokemon`);
     }
 
     return results;
@@ -204,7 +208,7 @@ export class PokemonService {
     updatePokemonDto: UpdatePokemonDto,
   ): Promise<Pokemon> {
     const pokemon = await this.pokemonModel.findById(id).exec();
-    this.logger.log('Updating pokemon:', updatePokemonDto);
+    this.logger.debug(`Updating pokemon: ${JSON.stringify(updatePokemonDto)}`);
     if (!pokemon) {
       throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
     }
@@ -222,8 +226,9 @@ export class PokemonService {
 
     // Remove undefined fields from the update DTO before applying the update
     Object.assign(pokemon, stripUndefined(updatePokemonDto));
-    this.logger.log('Updated pokemon:', pokemon);
     const updated = await pokemon.save();
+
+    this.logger.log(`Pokemon updated: ${updated.name}`);
 
     await this.cacheService.del(POKEMON_ALL_CACHE_KEY);
 
@@ -248,6 +253,8 @@ export class PokemonService {
     await pokemon.deleteOne();
 
     await this.invalidateCountCache();
+
+    this.logger.log(`Pokemon deleted: ${pokemon.name}`);
 
     return pokemon;
   }
