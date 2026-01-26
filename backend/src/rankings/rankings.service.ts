@@ -5,6 +5,7 @@ import {
   BadRequestException,
   Inject,
   forwardRef,
+  Logger,
 } from '@nestjs/common';
 import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
@@ -41,6 +42,8 @@ interface RankingListItem {
 
 @Injectable()
 export class RankingsService {
+  private readonly logger = new Logger(RankingsService.name);
+
   constructor(
     @InjectConnection() private connection: Connection,
     @InjectModel(Ranking.name) private readonly rankingModel: Model<Ranking>,
@@ -108,6 +111,10 @@ export class RankingsService {
 
     // Invalidate rankings list cache
     await this.invalidateRankingsListCache();
+
+    this.logger.log(
+      `Ranking created: "${savedRanking.title}" with ${savedRanking.pokemon.length} Pokemon`,
+    );
 
     return savedRanking;
   }
@@ -189,6 +196,8 @@ export class RankingsService {
 
     // Invalidate rankings list cache
     await this.invalidateRankingsListCache();
+
+    this.logger.log(`Ranking updated: "${savedRanking.title}"`);
 
     return savedRanking;
   }
@@ -302,6 +311,8 @@ export class RankingsService {
     // Invalidate rankings list cache
     await this.invalidateRankingsListCache();
 
+    this.logger.log(`Ranking deleted: "${deletedRanking.title}"`);
+
     return deletedRanking;
   }
 
@@ -369,6 +380,7 @@ export class RankingsService {
     ]);
 
     if (!isThemeAvailable(themeId, userTotalRanked, totalPokemonInSystem)) {
+      this.logger.warn(`Theme validation failed for user ${userId}: ${themeId}`);
       throw new BadRequestException({
         key: TK.RANKINGS.THEME_NOT_AVAILABLE,
         args: { themeId },
@@ -425,8 +437,13 @@ export class RankingsService {
       .select('likesCount')
       .exec();
 
+    const isLiked = !isCurrentlyLiked;
+    this.logger.log(
+      `Ranking ${isLiked ? 'liked' : 'unliked'}: "${ranking.title}"`,
+    );
+
     return {
-      isLiked: !isCurrentlyLiked,
+      isLiked,
       likesCount: updatedRanking?.likesCount ?? 0,
     };
   }

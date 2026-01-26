@@ -5,17 +5,9 @@ import {
   RequestContextData,
 } from '../services/request-context.service';
 
-interface RequestWithUser extends Request {
-  user?: {
-    _id: string;
-    username: string;
-    email: string;
-  };
-}
-
 @Injectable()
 export class RequestContextMiddleware implements NestMiddleware {
-  use(req: RequestWithUser, res: Response, next: NextFunction): void {
+  use(req: Request, res: Response, next: NextFunction): void {
     const context: RequestContextData = {
       path: req.path,
       method: req.method,
