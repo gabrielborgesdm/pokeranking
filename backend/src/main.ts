@@ -4,16 +4,22 @@ import 'reflect-metadata';
 import './sentry/instrument';
 
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { getCorsConfig } from './config/app.config';
+import { CustomLogger } from './common/logger/custom.logger';
 
-const logger = new Logger('Bootstrap');
+// Set Sentry initialized flag based on env var (Sentry is initialized in instrument.ts)
+CustomLogger.setSentryInitialized(!!process.env.SENTRY_DSN);
+
+const logger = new CustomLogger('Bootstrap');
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new CustomLogger(),
+  });
 
   const configService = app.get(ConfigService);
 

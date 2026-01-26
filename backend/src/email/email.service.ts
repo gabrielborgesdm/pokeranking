@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   Logger,
   ServiceUnavailableException,
@@ -15,6 +16,10 @@ import {
   ResendProvider,
   NodemailerProvider,
 } from './providers';
+import {
+  NODEMAILER_PROVIDER,
+  NODEMAILER2_PROVIDER,
+} from './email.constants';
 
 type SupportedLanguage = 'en' | 'pt-BR';
 
@@ -52,7 +57,10 @@ export class EmailService {
   constructor(
     private readonly configService: ConfigService,
     private readonly resendProvider: ResendProvider,
+    @Inject(NODEMAILER_PROVIDER)
     private readonly nodemailerProvider: NodemailerProvider,
+    @Inject(NODEMAILER2_PROVIDER)
+    private readonly nodemailer2Provider: NodemailerProvider,
   ) {
     this.frontendUrl = this.configService.get(
       'FRONTEND_URL',
@@ -68,6 +76,7 @@ export class EmailService {
     const allProviders: EmailProvider[] = [
       this.resendProvider,
       this.nodemailerProvider,
+      this.nodemailer2Provider,
     ];
 
     // Filter active providers and sort by priority (lower index = higher priority)
@@ -148,7 +157,7 @@ export class EmailService {
       }
 
       errors.push(`${provider.name}: ${result.error}`);
-      this.logger.warn(
+      this.logger.error(
         `Failed to send email via ${provider.name}: ${result.error}`,
       );
     }
