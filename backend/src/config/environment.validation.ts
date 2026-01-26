@@ -92,6 +92,27 @@ class EnvironmentVariables {
   @IsOptional()
   SMTP_FROM?: string;
 
+  // Nodemailer 2/SMTP Provider (fallback)
+  @IsString()
+  @IsOptional()
+  SMTP_HOST_2?: string;
+
+  @IsNumber()
+  @IsOptional()
+  SMTP_PORT_2?: number;
+
+  @IsString()
+  @IsOptional()
+  SMTP_USER_2?: string;
+
+  @IsString()
+  @IsOptional()
+  SMTP_PASS_2?: string;
+
+  @IsString()
+  @IsOptional()
+  SMTP_FROM_2?: string;
+
   @IsBoolean()
   @IsOptional()
   CACHE_DISABLED?: boolean;
