@@ -6,8 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "engines": {
-    "node": ">=24.0.0",
-    "npm": ">=11.0.0"
+    "node": "24.x",
+    "npm": "11.x"
   },
   "scripts": {
     "export:openapi": "ts-node -r tsconfig-paths/register scripts/export-openapi.ts",
