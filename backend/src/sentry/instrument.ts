@@ -17,6 +17,7 @@ if (dsn) {
     integrations: (integrations) => [
       ...integrations.filter((i) => i.name !== 'Mongo'),
       nodeProfilingIntegration(),
+      Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] })
     ],
     tracesSampleRate: environment === 'production' ? 0.1 : 1.0,
     profilesSampleRate: environment === 'production' ? 0.1 : 1.0,
