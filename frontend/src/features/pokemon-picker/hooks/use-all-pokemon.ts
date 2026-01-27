@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import {
-  usePokemonControllerFindAll,
-  type PokemonResponseDto,
-} from "@pokeranking/api-client";
+import type { PokemonResponseDto } from "@pokeranking/api-client";
+import { useAllPokemonQuery } from "@/features/pokemon/hooks/use-all-pokemon-query";
 import type { PokemonType } from "@pokeranking/shared";
 
 export type PokemonSortByOption = "pokedexNumber" | "name";
@@ -22,7 +20,7 @@ export function useAllPokemon() {
   const {
     data: allPokemonData,
     isLoading,
-  } = usePokemonControllerFindAll();
+  } = useAllPokemonQuery();
 
   // Get raw pokemon
   const rawPokemon = useMemo((): PokemonResponseDto[] => {
