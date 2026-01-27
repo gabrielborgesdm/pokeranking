@@ -19,14 +19,16 @@ import { CreateSupportMessageDto } from './dto/create-support-message.dto';
 import { SupportMessageResponseDto } from './dto/support-message-response.dto';
 import { toDto } from '../common/utils/transform.util';
 import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
+import { RateLimit } from 'src/common/decorators/rate-limit.decorator';
 
 @ApiTags('support')
 @ApiBearerAuth('JWT-auth')
 @Controller('support')
 export class SupportController {
-  constructor(private readonly supportService: SupportService) {}
+  constructor(private readonly supportService: SupportService) { }
 
   @Post()
+  @RateLimit()
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Submit a support/feedback message' })
   @ApiResponse({
