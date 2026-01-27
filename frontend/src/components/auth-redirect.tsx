@@ -4,9 +4,11 @@ import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { publicPaths, publicExactPaths, authPaths, routes } from "@/lib/routes";
+import * as Sentry from "@sentry/nextjs";
+
 
 export function AuthRedirect() {
-  const { status } = useSession();
+  const { status, data } = useSession();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -23,6 +25,15 @@ export function AuthRedirect() {
     );
 
     const isAuthenticated = status === "authenticated";
+    const user = data?.user;
+
+    if (isAuthenticated && user?.username) {
+      Sentry.setUser({
+        id: user.id,
+        email: user.email, // optional
+        username: user.username, // optional
+      });
+    }
 
     // If user is authenticated and trying to access auth paths, redirect to home
     if (isAuthenticated && isAuthPath) {

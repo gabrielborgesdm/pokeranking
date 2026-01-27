@@ -30,7 +30,7 @@ export class PokemonService {
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     private readonly cacheService: CacheService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) { }
 
   async create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
     const existing = await this.pokemonModel
@@ -140,7 +140,6 @@ export class PokemonService {
 
     const pokemon = await this.pokemonModel
       .find()
-      .select('name image types generation pokedexNumber')
       .lean()
       .exec();
     const dtos = toDto(PokemonResponseDto, pokemon);
