@@ -28,12 +28,12 @@ This is an npm workspace monorepo with three packages:
 
 Services:
 
-- **Image Storage**: Cloudinary
+- **Image Storage**: Cloudinary + public static image
 - **Distributed Cache**: Upstash Redis
 - **Database**: MongoDB Atlas
-- **Email**: Resend
+- **Email**: Multiple Nodemailer providers
 - **Error Tracking**: Sentry
-- **Payments**: Stripe (donations)
+- **Payments**: Stripe (donations) and PIX
 - **Analytics**: Google Analytics
 - **Deployment**: Vercel (serverless functions)
 
