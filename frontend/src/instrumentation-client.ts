@@ -10,8 +10,8 @@ Sentry.init({
   // Add optional integrations for additional features
   integrations: [
     Sentry.replayIntegration({
-      unblock: [".sentry-unblock, [data-sentry-unblock]"],
-      unmask: [".sentry-unmask, [data-sentry-unmask]"],
+      maskAllText: false,
+      blockAllMedia: false,
     }),
 
   ],
