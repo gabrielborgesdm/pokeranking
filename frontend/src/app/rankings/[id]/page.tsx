@@ -30,7 +30,7 @@ interface RankingPageContentProps {
   pokemon: PokemonResponseDto[];
   zones: Zone[];
   isOwner: boolean;
-  topPokemon: { name: string; image: string; id?: string } | null;
+  topPokemon: PokemonResponseDto | null;
   likeCount: number;
   isLiked: boolean;
   toggleLike: () => void;

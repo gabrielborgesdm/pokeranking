@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PokemonDetailsDialog } from "@/features/pokemon/components/pokemon-details-dialog";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
+import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { getThemeById } from "@pokeranking/shared";
 import { Heart } from "lucide-react";
 import Link from "next/link";
@@ -17,7 +18,7 @@ interface RankingHeroProps {
   /** Username of the ranking owner */
   username: string;
   /** Top #1 Pokemon in the ranking */
-  topPokemon?: { name: string; image: string; id?: string } | null;
+  topPokemon?: PokemonResponseDto | null;
   /** Total number of Pokemon in this ranking */
   pokemonCount: number;
   /** Theme ID for the background */
@@ -127,9 +128,9 @@ export const RankingHero = memo(function RankingHero({
           <div
             className={cn(
               "relative w-20 h-20 sm:w-32 sm:h-32",
-              topPokemon?.id && "cursor-pokeball"
+              topPokemon?._id && "cursor-pokeball"
             )}
-            onClick={() => topPokemon?.id && setIsDetailsOpen(true)}
+            onClick={() => topPokemon?._id && setIsDetailsOpen(true)}
           >
             <div className="relative w-full h-full">
               {/* Glow effect */}
@@ -187,7 +188,7 @@ export const RankingHero = memo(function RankingHero({
 
       {/* Pokemon details dialog */}
       <PokemonDetailsDialog
-        pokemonId={topPokemon?.id ?? null}
+        pokemon={topPokemon ?? null}
         open={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />

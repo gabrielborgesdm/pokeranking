@@ -60,14 +60,14 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
         className="max-sm:inset-0 max-sm:top-0 max-sm:left-0 max-sm:translate-x-0 max-sm:translate-y-0 max-sm:max-w-none max-sm:h-full max-sm:max-h-full max-sm:rounded-none sm:max-w-4xl sm:max-h-[90vh] overflow-y-auto overflow-x-hidden"
         showCloseButton
       >
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
           {pokemon && (
             <motion.div
               key={pokemon._id}
-              initial={{ opacity: 0 }}
+              initial={false}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
               className="space-y-4 min-h-[625px]"
             >
               <DialogHeader className="sr-only">
