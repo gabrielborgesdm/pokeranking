@@ -58,7 +58,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
 }: PokemonListingCardsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { isSmall } = useScreenSize();
-  const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonResponseDto | null>(
     null
   );
 
@@ -268,7 +268,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                           positionColor={color}
                           isCompact={isSmall}
                           isHighlighted={highlightedPokemonId === p._id}
-                          onClick={() => setSelectedPokemonId(p._id)}
+                          onClick={() => setSelectedPokemon(p)}
                         />
                       </div>
                     );
@@ -315,7 +315,7 @@ export const PokemonListingCards = memo(function PokemonListingCards({
                           position={showPositions ? position : undefined}
                           isCompact={isSmall}
                           isHighlighted={highlightedPokemonId === p._id}
-                          onClick={() => setSelectedPokemonId(p._id)}
+                          onClick={() => setSelectedPokemon(p)}
                         />
                       </div>
                     );
@@ -328,9 +328,9 @@ export const PokemonListingCards = memo(function PokemonListingCards({
 
       {/* Single dialog instance for performance */}
       <PokemonDetailsDialog
-        pokemonId={selectedPokemonId}
-        open={!!selectedPokemonId}
-        onOpenChange={(open) => !open && setSelectedPokemonId(null)}
+        pokemon={selectedPokemon}
+        open={!!selectedPokemon}
+        onOpenChange={(open) => !open && setSelectedPokemon(null)}
       />
 
       {/* Floating scroll button - uses window scroll */}
