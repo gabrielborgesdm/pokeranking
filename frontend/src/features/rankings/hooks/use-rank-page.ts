@@ -4,10 +4,10 @@ import { useMemo, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   useRankingsControllerFindOne,
-  usePokemonControllerFindAll,
   type PokemonResponseDto,
   type ZoneResponseDto,
 } from "@pokeranking/api-client";
+import { useAllPokemonQuery } from "@/features/pokemon/hooks/use-all-pokemon-query";
 import { useIsOwner } from "@/features/users";
 import { useRankingUpdate } from "./use-ranking-update";
 import { routes } from "@/lib/routes";
@@ -28,7 +28,7 @@ interface UseRankPageOptions {
 export function useRankPage({ id }: UseRankPageOptions) {
   const router = useRouter();
   const { data, isLoading, error } = useRankingsControllerFindOne(id);
-  const { data: allPokemonData } = usePokemonControllerFindAll();
+  const { data: allPokemonData } = useAllPokemonQuery();
 
   const ranking = useMemo(() => data?.data, [data]);
   const allPokemon = useMemo<PokemonResponseDto[]>(() => {
