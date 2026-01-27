@@ -57,9 +57,7 @@ export function useRankingViewPage({ id }: UseRankingViewPageOptions) {
   const notFound = !isFetching && (isError || (data && data.status === 404));
 
   // Get top Pokemon for hero display
-  const topPokemon = pokemon[0]
-    ? { name: pokemon[0].name, image: pokemon[0].image, id: pokemon[0]._id }
-    : null;
+  const topPokemon = pokemon[0] ?? null;
 
   return {
     ranking,
