@@ -21,5 +21,6 @@ if (dsn) {
     ],
     tracesSampleRate: environment === 'production' ? 0.1 : 1.0,
     profilesSampleRate: environment === 'production' ? 0.1 : 1.0,
+    enableLogs: true,
   });
 }
