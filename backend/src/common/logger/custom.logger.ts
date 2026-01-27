@@ -27,19 +27,39 @@ export class CustomLogger extends ConsoleLogger {
   }
 
   log(message: unknown, context?: string): void {
-    super.log(this.formatWithUser(message), context);
+    const formatted = this.formatWithUser(message);
+    super.log(formatted, context);
+
+    if (CustomLogger.sentryInitialized) {
+      Sentry.logger.info(formatted, { context: context ?? this.context });
+    }
   }
 
   warn(message: unknown, context?: string): void {
-    super.warn(this.formatWithUser(message), context);
+    const formatted = this.formatWithUser(message);
+    super.warn(formatted, context);
+
+    if (CustomLogger.sentryInitialized) {
+      Sentry.logger.warn(formatted, { context: context ?? this.context });
+    }
   }
 
   debug(message: unknown, context?: string): void {
-    super.debug(this.formatWithUser(message), context);
+    const formatted = this.formatWithUser(message);
+    super.debug(formatted, context);
+
+    if (CustomLogger.sentryInitialized) {
+      Sentry.logger.debug(formatted, { context: context ?? this.context });
+    }
   }
 
   verbose(message: unknown, context?: string): void {
-    super.verbose(this.formatWithUser(message), context);
+    const formatted = this.formatWithUser(message);
+    super.verbose(formatted, context);
+
+    if (CustomLogger.sentryInitialized) {
+      Sentry.logger.trace(formatted, { context: context ?? this.context });
+    }
   }
 
   error(message: unknown, stackOrContext?: string): void;
@@ -102,5 +122,6 @@ export class CustomLogger extends ConsoleLogger {
     }
 
     Sentry.captureException(error, { extra });
+    Sentry.logger.error(this.formatWithUser(message), extra);
   }
 }
