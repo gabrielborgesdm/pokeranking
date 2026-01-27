@@ -16,7 +16,7 @@ const ITEMS_PER_PAGE = 24;
 
 export const PokemonListSection = memo(function PokemonListSection() {
   const { t } = useTranslation();
-  const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(
+  const [selectedPokemon, setSelectedPokemon] = useState<typeof pokemon[0] | null>(
     null
   );
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,7 +63,7 @@ export const PokemonListSection = memo(function PokemonListSection() {
   }, [pokemon, currentPage]);
 
   const handlePokemonClick = useCallback((pokemonItem: typeof pokemon[0]) => {
-    setSelectedPokemonId(pokemonItem._id);
+    setSelectedPokemon(pokemonItem);
     trackPokemonDetailsView(pokemonItem._id, pokemonItem.name);
   }, [trackPokemonDetailsView]);
 
@@ -143,9 +143,9 @@ export const PokemonListSection = memo(function PokemonListSection() {
 
       {/* Pokemon Details Dialog */}
       <PokemonDetailsDialog
-        pokemonId={selectedPokemonId}
-        open={!!selectedPokemonId}
-        onOpenChange={(open) => !open && setSelectedPokemonId(null)}
+        pokemon={selectedPokemon}
+        open={!!selectedPokemon}
+        onOpenChange={(open) => !open && setSelectedPokemon(null)}
       />
     </div>
   );

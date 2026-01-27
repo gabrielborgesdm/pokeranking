@@ -18,139 +18,17 @@ import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 import { cn } from "@/lib/utils";
 import { normalizePokemonImageSrc } from "@/lib/image-utils";
 import { pokemonTypeGradients, type PokemonType } from "@/lib/pokemon-types";
-import { usePokemonControllerFindOne } from "@pokeranking/api-client";
-import { Skeleton } from "@/components/ui/skeleton";
+import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { formatGeneration } from "@/lib/generation-utils";
 
 interface PokemonDetailsDialogProps {
-  pokemonId: string | null;
+  pokemon: PokemonResponseDto | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-function DialogSkeleton() {
-  return (
-    <div className="grid sm:grid-cols-[280px_1fr] gap-6">
-      {/* Left column skeleton */}
-      <div className="space-y-4">
-        {/* Image skeleton */}
-        <div className="flex justify-center">
-          <Skeleton className="w-[220px] h-[220px] rounded-full" />
-        </div>
-
-        {/* Name and badges skeleton */}
-        <div className="text-center space-y-2">
-          <Skeleton className="h-8 w-48 mx-auto" />
-          <div className="flex justify-center gap-2">
-            <Skeleton className="h-8 w-8 rounded-full" />
-            <Skeleton className="h-8 w-8 rounded-full" />
-          </div>
-          <Skeleton className="h-7 w-20 mx-auto rounded-full" />
-        </div>
-
-        {/* Physical Info skeleton */}
-        <div className="grid grid-cols-3 gap-2 text-center border-t border-border pt-4">
-          <div className="space-y-1">
-            <Skeleton className="h-3 w-12 mx-auto" />
-            <Skeleton className="h-5 w-16 mx-auto" />
-          </div>
-          <div className="space-y-1">
-            <Skeleton className="h-3 w-12 mx-auto" />
-            <Skeleton className="h-5 w-12 mx-auto" />
-          </div>
-          <div className="space-y-1">
-            <Skeleton className="h-3 w-12 mx-auto" />
-            <Skeleton className="h-5 w-12 mx-auto" />
-          </div>
-        </div>
-
-        {/* Abilities skeleton */}
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-16" />
-          <div className="flex gap-2">
-            <Skeleton className="h-9 w-20 rounded-lg" />
-            <Skeleton className="h-9 w-24 rounded-lg" />
-          </div>
-        </div>
-      </div>
-
-      {/* Right column skeleton */}
-      <div className="space-y-4">
-        {/* Type effectiveness - Defensive skeleton */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-5 w-5" />
-            <Skeleton className="h-5 w-20" />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-16" />
-              <Skeleton className="h-3 w-32" />
-              <div className="flex flex-wrap gap-2">
-                <Skeleton className="h-6 w-20 rounded-full" />
-                <Skeleton className="h-6 w-24 rounded-full" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-3 w-36" />
-              <div className="flex flex-wrap gap-2">
-                <Skeleton className="h-6 w-18 rounded-full" />
-                <Skeleton className="h-6 w-22 rounded-full" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Type effectiveness - Offensive skeleton */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Skeleton className="h-5 w-5" />
-            <Skeleton className="h-5 w-20" />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-28" />
-              <Skeleton className="h-3 w-36" />
-              <div className="flex flex-wrap gap-2">
-                <Skeleton className="h-6 w-20 rounded-full" />
-                <Skeleton className="h-6 w-18 rounded-full" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-3 w-32" />
-              <div className="flex flex-wrap gap-2">
-                <Skeleton className="h-6 w-22 rounded-full" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats skeleton */}
-        <div className="space-y-3">
-          <Skeleton className="h-4 w-20" />
-          <div className="space-y-2">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="flex items-center gap-3">
-                <Skeleton className="w-16 h-4" />
-                <Skeleton className="flex-1 h-3 rounded-full" />
-                <Skeleton className="w-8 h-4" />
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-between items-center pt-2 border-t border-border">
-            <Skeleton className="h-5 w-12" />
-            <Skeleton className="h-6 w-12" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
-  pokemonId,
+  pokemon,
   open,
   onOpenChange,
 }: PokemonDetailsDialogProps) {
@@ -158,13 +36,6 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
   useBackButtonDialog(open, () => onOpenChange(false));
 
-  const { data, isLoading } = usePokemonControllerFindOne(pokemonId ?? "", {
-    query: {
-      enabled: !!pokemonId && open,
-    },
-  });
-
-  const pokemon = data?.status === 200 ? data.data : null;
   const primaryType = pokemon?.types?.[0] as PokemonType | undefined;
   const gradientClass = primaryType
     ? pokemonTypeGradients[primaryType]
@@ -190,21 +61,7 @@ export const PokemonDetailsDialog = memo(function PokemonDetailsDialog({
         showCloseButton
       >
         <AnimatePresence mode="wait" initial={false}>
-          {isLoading || !pokemon ? (
-            <motion.div
-              key="skeleton"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="min-h-[625px]"
-            >
-              <DialogHeader>
-                <DialogTitle className="sr-only">{t("pokemonDetails.loadingPokemon")}</DialogTitle>
-              </DialogHeader>
-              <DialogSkeleton />
-            </motion.div>
-          ) : (
+          {pokemon && (
             <motion.div
               key={pokemon._id}
               initial={{ opacity: 0 }}
