@@ -109,9 +109,6 @@ export class RankingsService {
     const fullUser = await this.usersService.findOne(userId);
     await this.usersService.updateRankedPokemonCount(fullUser);
 
-    // Invalidate rankings list cache
-    await this.invalidateRankingsListCache();
-
     this.logger.log(
       `Ranking created: "${savedRanking.title}" with ${savedRanking.pokemon.length} Pokemon`,
     );
@@ -193,9 +190,6 @@ export class RankingsService {
       const user = await this.usersService.findOne(userId);
       await this.usersService.updateRankedPokemonCount(user);
     }
-
-    // Invalidate rankings list cache
-    await this.invalidateRankingsListCache();
 
     this.logger.log(`Ranking updated: "${savedRanking.title}"`);
 
@@ -308,8 +302,16 @@ export class RankingsService {
     const user = await this.usersService.findOne(userId);
     await this.usersService.updateRankedPokemonCount(user);
 
+
     // Invalidate rankings list cache
-    await this.invalidateRankingsListCache();
+    const cachedList = await this.cacheService.get(
+      RANKINGS_LIST_DEFAULT_CACHE_KEY,
+    ) as { rankings: RankingListItem[]; total: number } | null;
+    const wasCached = cachedList?.rankings?.some(r => r._id?.toString() === deletedRanking._id?.toString())
+    if (cachedList && wasCached) {
+      await this.cacheService.del(RANKINGS_LIST_DEFAULT_CACHE_KEY);
+      this.logger.log('Rankings list cache invalidated due to deletion');
+    }
 
     this.logger.log(`Ranking deleted: "${deletedRanking.title}"`);
 
@@ -428,9 +430,6 @@ export class RankingsService {
         $addToSet: { likedRankings: ranking._id },
       });
     }
-
-    // Invalidate cache
-    await this.invalidateRankingsListCache();
 
     const updatedRanking = await this.rankingModel
       .findById(rankingId)
@@ -595,12 +594,5 @@ export class RankingsService {
     }
 
     return result;
-  }
-
-  /**
-   * Invalidate the rankings list cache
-   */
-  async invalidateRankingsListCache(): Promise<void> {
-    await this.cacheService.del(RANKINGS_LIST_DEFAULT_CACHE_KEY);
   }
 }
