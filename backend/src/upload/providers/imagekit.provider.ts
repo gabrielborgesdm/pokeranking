@@ -28,7 +28,6 @@ export class ImageKitProvider extends BaseImageProvider {
         privateKey: privateKey!,
         urlEndpoint: urlEndpoint!,
       });
-      this.logger.log('ImageKit configured successfully');
     } else {
       this.logger.warn(
         'ImageKit is not configured. Image uploads will not work.',

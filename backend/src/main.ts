@@ -19,6 +19,7 @@ const logger = new CustomLogger('Bootstrap');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new CustomLogger(),
+    bufferLogs: true,
   });
 
   const configService = app.get(ConfigService);

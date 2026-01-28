@@ -88,10 +88,6 @@ export class EmailService {
       this.logger.warn(
         'No email providers configured. Set EMAIL_PROVIDERS env variable.',
       );
-    } else {
-      this.logger.log(
-        `Email providers initialized: ${this.providers.map((p) => p.id).join(', ')}`,
-      );
     }
 
     // Load and compile templates for all languages
