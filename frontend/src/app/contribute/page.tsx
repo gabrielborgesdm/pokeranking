@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Heart, Star, CreditCard, ChevronDown } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,21 +11,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { StripeCheckout } from "@/components/stripe-checkout";
 import { PixContribution } from "@/components/pix-contribution";
 import { getClientConfig } from "@/lib/config";
-import { cn } from "@/lib/utils";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 export default function ContributePage() {
   const { t } = useTranslation();
   const config = getClientConfig();
-  const [isStripeOpen, setIsStripeOpen] = useState(false);
   const { trackPageView, trackDonationStart } = useAnalytics();
 
   useEffect(() => {
@@ -36,14 +28,6 @@ export default function ContributePage() {
     trackDonationStart("github");
   }, [trackDonationStart]);
 
-  const handleStripeOpen = useCallback((open: boolean) => {
-    setIsStripeOpen(open);
-    if (open) {
-      trackDonationStart("stripe");
-    }
-  }, [trackDonationStart]);
-
-  const hasStripe = config.stripePublishableKey && config.stripePriceId;
   const hasPix = !!config.pixCode;
 
   return (
@@ -91,38 +75,6 @@ export default function ContributePage() {
 
         {/* Pix Section */}
         {hasPix && <PixContribution pixCode={config.pixCode!} />}
-
-        {/* Stripe Section (Collapsible) */}
-        {hasStripe && (
-          <Card className="overflow-hidden">
-            <Collapsible open={isStripeOpen} onOpenChange={handleStripeOpen}>
-              <CollapsibleTrigger asChild>
-                <CardHeader className="cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <CreditCard className="h-5 w-5 text-blue-500" />
-                      <CardTitle>{t("contribute.stripe.title")}</CardTitle>
-                    </div>
-                    <ChevronDown
-                      className={cn(
-                        "h-5 w-5 text-muted-foreground transition-transform",
-                        isStripeOpen && "rotate-180"
-                      )}
-                    />
-                  </div>
-                  <CardDescription>
-                    {t("contribute.stripe.description")}
-                  </CardDescription>
-                </CardHeader>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <CardContent>
-                  <StripeCheckout />
-                </CardContent>
-              </CollapsibleContent>
-            </Collapsible>
-          </Card>
-        )}
       </div>
     </main>
   );
