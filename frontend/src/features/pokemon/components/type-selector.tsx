@@ -42,7 +42,7 @@ export const TypeSelector = memo(function TypeSelector({
     <DropdownMenu modal={false} className={className}>
       {label && (
         <label className="text-sm font-medium text-foreground">
-          {label} asd
+          {label}
         </label>
       )}
       <DropdownMenuTrigger
