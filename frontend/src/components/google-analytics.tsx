@@ -46,8 +46,8 @@ export type AnalyticsEvent =
   | { name: "pagination_change"; params: { page: string; page_number: number } }
   | { name: "sort_change"; params: { page: string; sort_by: string; order: string } }
   // Donation events
-  | { name: "donation_start"; params: { method: "stripe" | "github" } }
-  | { name: "donation_complete"; params: { method: "stripe" | "github" } }
+  | { name: "donation_start"; params: { method: "github" } }
+  | { name: "donation_complete"; params: { method: "github" } }
   // Support events
   | { name: "support_submit_success"; params: Record<string, never> }
   | { name: "support_submit_error"; params: { error: string } }
