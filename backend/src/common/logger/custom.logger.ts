@@ -26,17 +26,20 @@ export class CustomLogger extends ConsoleLogger {
     return messageStr;
   }
 
+  private static readonly FILTERED_CONTEXTS = new Set([
+    'NestFactory',
+    'InstanceLoader',
+    'RouterExplorer',
+    'RoutesResolver',
+    'NestApplication',
+  ]);
+
   log(message: unknown, context?: string): void {
-    if ( // doing this to avoid spamming with framework logs, since it's serverless
-      context === 'NestFactory' ||
-      context === 'InstanceLoader' ||
-      context === 'RouterExplorer' ||
-      context === 'RoutesResolver' ||
-      context === 'NestApplication'
-    ) {
+    const ctx = context ?? this.context;
+    // Skip framework logs to avoid spam in serverless environment
+    if (ctx && CustomLogger.FILTERED_CONTEXTS.has(ctx)) {
       return;
     }
-
 
     const formatted = this.formatWithUser(message);
     super.log(formatted, context);
