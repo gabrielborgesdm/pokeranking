@@ -28,7 +28,6 @@ export class CustomLogger extends ConsoleLogger {
 
   log(message: unknown, context?: string): void {
     if ( // doing this to avoid spamming with framework logs, since it's serverless
-      process.env.NODE_ENV === 'production' &&
       context === 'NestFactory' ||
       context === 'InstanceLoader' ||
       context === 'RouterExplorer' ||
