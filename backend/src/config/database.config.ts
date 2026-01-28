@@ -15,9 +15,6 @@ export const getDatabaseConfig = (
     retryAttempts: 5,
     retryDelay: 1000,
     connectionFactory: (connection: Connection) => {
-      connection.on('connected', () => {
-        console.log('MongoDB connected successfully');
-      });
       connection.on('error', (error: Error) => {
         console.error('MongoDB connection error:', error);
       });
