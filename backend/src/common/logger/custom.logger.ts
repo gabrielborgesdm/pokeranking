@@ -32,6 +32,7 @@ export class CustomLogger extends ConsoleLogger {
     'RouterExplorer',
     'RoutesResolver',
     'NestApplication',
+    'Bootstrap'
   ]);
 
   log(message: unknown, context?: string): void {
