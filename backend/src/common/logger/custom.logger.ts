@@ -32,8 +32,7 @@ export class CustomLogger extends ConsoleLogger {
       context === 'InstanceLoader' ||
       context === 'RouterExplorer' ||
       context === 'RoutesResolver' ||
-      context === 'NestApplication' ||
-      context === undefined
+      context === 'NestApplication'
     ) {
       return;
     }
