@@ -61,9 +61,9 @@ export function useAnalytics() {
     trackSortChange: (page: string, sortBy: string, order: string) =>
       track({ name: "sort_change", params: { page, sort_by: sortBy, order } }),
     // Donation events
-    trackDonationStart: (method: "stripe" | "github") =>
+    trackDonationStart: (method: "github" | "pix") =>
       track({ name: "donation_start", params: { method } }),
-    trackDonationComplete: (method: "stripe" | "github") =>
+    trackDonationComplete: (method: "github" | "pix") =>
       track({ name: "donation_complete", params: { method } }),
     // Support events
     trackSupportSubmitSuccess: () =>

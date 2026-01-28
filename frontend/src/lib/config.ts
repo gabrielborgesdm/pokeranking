@@ -29,8 +29,6 @@ export function getServerConfig(): ServerConfig {
 const clientConfigSchema = z.object({
   apiUrl: z.string().url(),
   githubUrl: z.string().url().optional(),
-  stripePublishableKey: z.string().optional(),
-  stripePriceId: z.string().optional(),
   pixCode: z.string().optional(),
   allowedImageDomains: z.array(z.string()),
 });
@@ -41,9 +39,6 @@ export function getClientConfig(): ClientConfig {
   const result = clientConfigSchema.safeParse({
     apiUrl: process.env.NEXT_PUBLIC_API_URL,
     githubUrl: process.env.NEXT_PUBLIC_GITHUB_URL || undefined,
-    stripePublishableKey:
-      process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || undefined,
-    stripePriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || undefined,
     pixCode: process.env.NEXT_PUBLIC_PIX_CODE || undefined,
     allowedImageDomains: (
       process.env.NEXT_PUBLIC_ALLOWED_IMAGE_DOMAINS || "ik.imagekit.io"
