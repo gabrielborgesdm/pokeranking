@@ -27,7 +27,6 @@ export class CacheService {
           token,
           enableAutoPipelining: false,
         });
-        this.logger.log('Cache service initialized with Redis');
       }
     } else {
       this.redis = null;
