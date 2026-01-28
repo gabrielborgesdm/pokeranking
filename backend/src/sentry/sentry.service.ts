@@ -23,8 +23,6 @@ export class SentryService {
       this.logger.warn(
         'Sentry DSN not configured. Error tracking is disabled.',
       );
-    } else {
-      this.logger.log('Sentry initialized successfully');
     }
   }
 

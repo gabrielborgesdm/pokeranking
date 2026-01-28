@@ -23,9 +23,7 @@ export class UploadService {
   constructor(
     @Inject(IMAGE_PROVIDER_TOKEN)
     private readonly imageProvider: BaseImageProvider,
-  ) {
-    this.logger.log(`Using image provider: ${this.imageProvider.name}`);
-  }
+  ) { }
 
   async uploadImage(file: MulterFile): Promise<string> {
     if (!this.imageProvider.isConfigured) {

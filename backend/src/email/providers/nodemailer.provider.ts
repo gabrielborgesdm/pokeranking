@@ -84,9 +84,6 @@ export class NodemailerProvider implements EmailProvider {
           },
         });
         this.fromEmail = fromEmail;
-        this.logger.log(
-          `${this.name} provider initialized (priority: ${this.config.priority})`,
-        );
       } else {
         this.logger.warn(
           `${this.name} provider is listed in EMAIL_PROVIDERS but SMTP configuration is incomplete`,
