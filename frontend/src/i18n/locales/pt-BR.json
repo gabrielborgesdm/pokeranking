@@ -131,8 +131,8 @@
     "noAvatarSelected": "Nenhum avatar selecionado"
   },
   "leaderboard": {
-    "title": "Ranking",
-    "description": "Treinadores Pokémon mais bem classificados",
+    "title": "Treinadores Pokémon",
+    "description": "Treinadores com os maiores rankings",
     "noUsers": "Nenhum usuário encontrado.",
     "errorTitle": "Erro ao carregar usuários",
     "errorDescription": "Por favor, tente novamente mais tarde.",
