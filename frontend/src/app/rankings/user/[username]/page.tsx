@@ -24,7 +24,8 @@ interface UserRankingsPageProps {
 }
 
 export default function UserRankingsPage({ params }: UserRankingsPageProps) {
-  const { username } = use(params);
+  const { username: encodedUsername } = use(params);
+  const username = decodeURIComponent(encodedUsername);
   const { t } = useTranslation();
   const router = useRouter();
 

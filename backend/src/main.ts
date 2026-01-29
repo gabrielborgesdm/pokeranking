@@ -63,7 +63,12 @@ async function bootstrap() {
     });
   }
 
-  await app.init();
+  if (process.env.NODE_ENV === 'development') {
+    const port = configService.get<number>('PORT', 8000);
+    await app.listen(port);
+  } else {
+    await app.init();
+  }
 
   return app.getHttpAdapter().getInstance();
 }

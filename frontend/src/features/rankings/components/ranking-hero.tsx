@@ -166,7 +166,7 @@ export const RankingHero = memo(function RankingHero({
         </div>
 
         {/* Right section: Like button (hidden for owner) */}
-        {!isOwner && !!isAuthenticated && (
+        {!isOwner && (
           <div className="flex items-center gap-2 shrink-0">
             <Button
               variant="ghost"
@@ -176,6 +176,7 @@ export const RankingHero = memo(function RankingHero({
                 "gap-2 hover:bg-white/15 text-lg",
                 isLiked && "text-red-500"
               )}
+              disabled={!isAuthenticated}
             >
               <Heart
                 className={cn("h-5 w-5 sm:h-6 sm:w-6", isLiked && "fill-current")} style={{ color: textColor }}
