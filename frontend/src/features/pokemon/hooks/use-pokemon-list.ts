@@ -18,12 +18,13 @@ export type OrderOption = "asc" | "desc";
 interface UsePokemonListOptions {
   initialPage?: number;
   initialLimit?: number;
+  scrollTargetRef?: React.RefObject<HTMLElement | null>;
 }
 
 export function usePokemonList(options: UsePokemonListOptions = {}) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const { initialPage = 1, initialLimit = 20 } = options;
+  const { initialPage = 1, initialLimit = 20, scrollTargetRef } = options;
 
   const [page, setPage] = useState(initialPage);
   const [limit, setLimit] = useState(initialLimit);
@@ -94,7 +95,8 @@ export function usePokemonList(options: UsePokemonListOptions = {}) {
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
-  }, []);
+    scrollTargetRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [scrollTargetRef]);
 
   const handleLimitChange = useCallback((newLimit: number) => {
     setLimit(newLimit);

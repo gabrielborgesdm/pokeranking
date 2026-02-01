@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { Plus, Upload } from "lucide-react";
@@ -18,6 +19,7 @@ import { routes } from "@/lib/routes";
 
 export default function AdminPokemonPage() {
   const { t } = useTranslation();
+  const tableRef = useRef<HTMLDivElement>(null);
   const {
     pokemon,
     total,
@@ -37,7 +39,7 @@ export default function AdminPokemonPage() {
     handlePageChange,
     handleLimitChange,
     handleDelete,
-  } = usePokemonList({ initialLimit: 10 });
+  } = usePokemonList({ initialLimit: 10, scrollTargetRef: tableRef });
 
   return (
     <main className="container max-w-8xl mx-auto px-4 py-8 space-y-6">
@@ -75,13 +77,15 @@ export default function AdminPokemonPage() {
         onLimitChange={handleLimitChange}
       />
 
-      <PokemonTable
-        pokemon={pokemon}
-        isLoading={isLoading}
-        isDeleting={isDeleting}
-        onDelete={handleDelete}
-        skeletonRows={limit}
-      />
+      <div ref={tableRef} className="scroll-mt-4">
+        <PokemonTable
+          pokemon={pokemon}
+          isLoading={isLoading}
+          isDeleting={isDeleting}
+          onDelete={handleDelete}
+          skeletonRows={limit}
+        />
+      </div>
 
       {isLoading ? (
         <SimplePaginationSkeleton />

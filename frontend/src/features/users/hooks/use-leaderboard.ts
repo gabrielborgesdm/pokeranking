@@ -7,7 +7,12 @@ import type { SortByOption, OrderOption } from "../components/leaderboard-filter
 
 const ITEMS_PER_PAGE = 12;
 
-export function useLeaderboard() {
+interface UseLeaderboardOptions {
+  scrollTargetRef?: React.RefObject<HTMLElement | null>;
+}
+
+export function useLeaderboard(options: UseLeaderboardOptions = {}) {
+  const { scrollTargetRef } = options;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchUsername, setSearchUsername] = useState("");
   const [sortBy, setSortBy] = useState<SortByOption>("rankedPokemonCount");
@@ -28,8 +33,8 @@ export function useLeaderboard() {
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    scrollTargetRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [scrollTargetRef]);
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchUsername(value);
