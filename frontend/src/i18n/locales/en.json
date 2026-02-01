@@ -543,6 +543,10 @@
       "step3": "Tap \"Add\" to confirm"
     }
   },
+  "pokedexPwa": {
+    "title": "Install Pokedex",
+    "description": "Quick access to Pokemon data and type effectiveness"
+  },
   "zoneStats": {
     "title": "{{zoneName}}-Tier Stats",
     "totalPokemon": "Total Pokemon",

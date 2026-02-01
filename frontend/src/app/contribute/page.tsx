@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { Heart, Star } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
+import { PixContribution } from "@/components/pix-contribution";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,12 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { PixContribution } from "@/components/pix-contribution";
-import { getClientConfig } from "@/lib/config";
 import { useAnalytics } from "@/hooks/use-analytics";
-import { PageHeader } from "@/components/page-header";
-import { BackButton } from "@/components/back-button";
+import { getClientConfig } from "@/lib/config";
+import { routes } from "@/lib/routes";
+import { Star } from "lucide-react";
+import { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function ContributePage() {
   const { t } = useTranslation();
@@ -36,11 +36,11 @@ export default function ContributePage() {
     <main className="container mx-auto px-4 py-8 max-w-3xl">
       <div className="space-y-8">
         {/* Header */}
-        <BackButton />
         <div className="flex items-center gap-3">
           <PageHeader
             title={t("contribute.title")}
             description={t("contribute.description")}
+            backHref={routes.home}
           />
 
         </div>

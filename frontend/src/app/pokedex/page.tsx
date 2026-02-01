@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { BookOpen } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
+import { PokedexInstallPrompt } from "@/components/pokedex-install-prompt";
 import {
-  TypeEffectivenessCalculator,
   PokemonListSection,
+  TypeEffectivenessCalculator,
 } from "@/features/pokemon";
 import { useAnalytics } from "@/hooks/use-analytics";
-import { BackButton } from "@/components/back-button";
-import { PageHeader } from "@/components/page-header";
+import { routes } from "@/lib/routes";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function PokedexPage() {
   const { t } = useTranslation();
@@ -23,10 +23,10 @@ export default function PokedexPage() {
     <main className="container mx-auto px-4 py-8 max-w-8xl">
       <div className="space-y-8">
         {/* Header */}
-        <BackButton />
         <PageHeader
           title={t("pokedex.title")}
           description={t("pokedex.description")}
+          backHref={routes.home}
         />
 
         {/* Type Effectiveness Calculator */}
@@ -38,6 +38,7 @@ export default function PokedexPage() {
           <PokemonListSection />
         </div>
       </div>
+      <PokedexInstallPrompt />
     </main>
   );
 }

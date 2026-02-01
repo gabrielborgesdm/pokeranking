@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { MessageSquare } from "lucide-react";
+import { PageHeader } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,21 +9,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
 import { useSupportForm } from "@/features/support";
 import { useAnalytics } from "@/hooks/use-analytics";
-import { PageHeader } from "@/components/page-header";
-import { BackButton } from "@/components/back-button";
+import { routes } from "@/lib/routes";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SupportPage() {
   const { t } = useTranslation();
@@ -42,11 +39,11 @@ export default function SupportPage() {
     <main className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="space-y-8">
         {/* Header */}
-        <BackButton />
         <div className="flex items-center gap-3">
           <PageHeader
             title={t("support.title")}
             description={t("support.description")}
+            backHref={routes.home}
           />
 
         </div>

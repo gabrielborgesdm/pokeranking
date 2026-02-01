@@ -543,6 +543,10 @@
       "step3": "Toque em \"Adicionar\" para confirmar"
     }
   },
+  "pokedexPwa": {
+    "title": "Instalar Pokedex",
+    "description": "Acesso rápido aos dados de Pokémon e eficácia de tipos"
+  },
   "zoneStats": {
     "title": "Estatísticas do Tier {{zoneName}}",
     "totalPokemon": "Total de Pokémon",

@@ -99,10 +99,10 @@ export default function UsersPage() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-8xl">
       <section className="space-y-8">
-        <BackButton />
         <PageHeader
           title={t("leaderboard.title")}
           description={t("leaderboard.description")}
+          backHref={routes.home}
         />
 
 
