@@ -1,18 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { X } from "lucide-react";
+import { X, BookOpen } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-export function PWAInstallPrompt() {
+export function PokedexInstallPrompt() {
   const { t } = useTranslation();
-  const pathname = usePathname();
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -21,37 +19,29 @@ export function PWAInstallPrompt() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Check if already installed
     const standalone = window.matchMedia("(display-mode: standalone)").matches;
     setIsStandalone(standalone);
 
-    // Detect iOS
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent);
     setIsIOS(ios);
 
-    // Detect mobile device
     const mobile =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       ) || window.matchMedia("(max-width: 768px)").matches;
     setIsMobile(mobile);
 
-    // Exit early if not on mobile
     if (!mobile) return;
 
-    // Check localStorage - never show again if dismissed
-    const promptDismissed = localStorage.getItem("pwa-prompt-dismissed");
+    const promptDismissed = localStorage.getItem("pokedex-pwa-prompt-dismissed");
     if (promptDismissed) return;
 
-    // Android: Listen for beforeinstallprompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
-      // Double-check dismissal in case localStorage changed
-      if (localStorage.getItem("pwa-prompt-dismissed")) return;
+      if (localStorage.getItem("pokedex-pwa-prompt-dismissed")) return;
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Show prompt with a delay
       setTimeout(() => {
-        if (!localStorage.getItem("pwa-prompt-dismissed")) {
+        if (!localStorage.getItem("pokedex-pwa-prompt-dismissed")) {
           setShowPrompt(true);
         }
       }, 2000);
@@ -59,10 +49,9 @@ export function PWAInstallPrompt() {
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-    // iOS: Show manual instructions
     if (ios && !standalone) {
       setTimeout(() => {
-        if (!localStorage.getItem("pwa-prompt-dismissed")) {
+        if (!localStorage.getItem("pokedex-pwa-prompt-dismissed")) {
           setShowPrompt(true);
         }
       }, 2000);
@@ -83,7 +72,10 @@ export function PWAInstallPrompt() {
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === "accepted") {
-      localStorage.setItem("pwa-install-attempted", new Date().toISOString());
+      localStorage.setItem(
+        "pokedex-pwa-install-attempted",
+        new Date().toISOString()
+      );
     }
 
     setDeferredPrompt(null);
@@ -92,26 +84,23 @@ export function PWAInstallPrompt() {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem("pwa-prompt-dismissed", new Date().toISOString());
+    localStorage.setItem(
+      "pokedex-pwa-prompt-dismissed",
+      new Date().toISOString()
+    );
   };
 
-  // Don't show on Pokedex route (has its own PWA)
-  if (pathname?.startsWith("/pokedex")) return null;
-
-  // Don't show if not on mobile
   if (!isMobile) return null;
-
-  // Don't show if already installed
   if (isStandalone) return null;
-
-  // Don't show if dismissed (check on every render)
-  if (typeof window !== "undefined" && localStorage.getItem("pwa-prompt-dismissed")) return null;
-
-  // Don't show if prompt state is false
+  if (
+    typeof window !== "undefined" &&
+    localStorage.getItem("pokedex-pwa-prompt-dismissed")
+  )
+    return null;
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 p-4 shadow-lg border border-border bg-card rounded-lg">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 p-4 shadow-lg border border-red-500/30 bg-card rounded-lg">
       <button
         onClick={handleDismiss}
         className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -121,14 +110,12 @@ export function PWAInstallPrompt() {
       </button>
 
       <div className="flex items-start gap-3">
-        <img
-          src="/favicon/web-app-manifest-192x192.png"
-          alt="Pokeranking"
-          className="w-12 h-12 rounded-lg flex-shrink-0"
-        />
+        <div className="w-12 h-12 rounded-lg flex-shrink-0 bg-red-500 flex items-center justify-center">
+          <BookOpen className="h-6 w-6 text-white" />
+        </div>
         <div className="flex-1">
           <h3 className="font-semibold text-sm mb-1 text-foreground">
-            {t("pwa.title")}
+            {t("pokedexPwa.title")}
           </h3>
 
           {isIOS ? (
@@ -143,11 +130,11 @@ export function PWAInstallPrompt() {
           ) : (
             <>
               <p className="text-xs text-muted-foreground mb-3">
-                {t("pwa.description")}
+                {t("pokedexPwa.description")}
               </p>
               <button
                 onClick={handleInstallClick}
-                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+                className="w-full px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors"
               >
                 {t("pwa.installButton")}
               </button>

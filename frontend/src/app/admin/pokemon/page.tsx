@@ -44,10 +44,10 @@ export default function AdminPokemonPage() {
 
   return (
     <main className="container max-w-8xl mx-auto px-4 py-8 space-y-6">
-      <BackButton />
       <PageHeader
         title={t("admin.pokemon.title")}
         description={t("admin.pokemon.subtitle", { count: total })}
+        backHref={routes.home}
         action={
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <Button asChild variant="outline">
