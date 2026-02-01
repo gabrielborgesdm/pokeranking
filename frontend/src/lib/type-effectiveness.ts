@@ -24,6 +24,10 @@ export interface TypeEffectivenessResult {
   superEffective: PokemonType[]; // 2x
   notVeryEffective: PokemonType[]; // 0.5x
   noEffect: PokemonType[]; // 0x
+
+  // Recommended counters - super effective AND not weak to target
+  recommended: PokemonType[]; // Takes < 2x but > 0x damage
+  recommendedImmune: PokemonType[]; // Takes 0x damage (best options)
 }
 
 /**
@@ -64,6 +68,8 @@ export function calculateTypeEffectiveness(
     superEffective: [],
     notVeryEffective: [],
     noEffect: [],
+    recommended: [],
+    recommendedImmune: [],
   };
 
   if (types.length === 0) return result;
@@ -130,6 +136,40 @@ export function calculateTypeEffectiveness(
   result.superEffective = Array.from(superEffectiveSet);
   result.notVeryEffective = Array.from(notVeryEffectiveSet);
   result.noEffect = Array.from(noEffectSet);
+
+  // Calculate recommended counters
+  // Type is recommended if:
+  // 1. It's super effective (2x+) against target
+  // 2. Target is NOT super effective against it (target can't hit it for 2x+)
+  for (const attackerType of POKEMON_TYPE_VALUES) {
+    // Calculate how much damage attackerType deals to target
+    let offensiveMultiplier = 1;
+    for (const targetType of types) {
+      offensiveMultiplier *= getOffensiveMultiplier(attackerType, targetType);
+    }
+
+    // Skip if not super effective against target
+    if (offensiveMultiplier < 2) continue;
+
+    // Skip if target is super effective against this type
+    // (check if attackerType appears in target's super effective list)
+    if (superEffectiveSet.has(attackerType)) continue;
+
+    // Calculate how much damage target deals to attackerType (for immunity check)
+    let targetDamageToAttacker = 1;
+    for (const targetType of types) {
+      targetDamageToAttacker *= getOffensiveMultiplier(targetType, attackerType);
+    }
+
+    // Categorize based on how safe the counter is
+    if (targetDamageToAttacker === 0) {
+      // Immune to target's attacks - best counter
+      result.recommendedImmune.push(attackerType);
+    } else {
+      // Target can't hit super effectively - safe counter
+      result.recommended.push(attackerType);
+    }
+  }
 
   return result;
 }

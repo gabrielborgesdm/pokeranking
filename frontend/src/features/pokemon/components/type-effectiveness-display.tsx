@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Shield, Swords } from "lucide-react";
+import { Shield, Swords, Target } from "lucide-react";
 import type { PokemonType } from "@pokeranking/shared";
 import { cn } from "@/lib/utils";
 import { useTypeEffectiveness } from "@/hooks/use-type-effectiveness";
@@ -241,6 +241,45 @@ export const TypeEffectivenessDisplay = memo(function TypeEffectivenessDisplay({
                 compact={compact}
               >
                 <TypeList types={effectiveness.noEffect} compact={compact} />
+              </Section>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Recommended Section */}
+      {(effectiveness.recommended.length > 0 || effectiveness.recommendedImmune.length > 0) && (
+        <div className={cn("space-y-3 sm:space-y-4", compact && "space-y-2 sm:space-y-3")}>
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Target className={cn("text-green-500", compact ? "h-3.5 w-3.5 sm:h-4 sm:w-4" : "h-4 w-4 sm:h-5 sm:w-5")} />
+            <h3
+              className={cn(
+                "font-semibold",
+                compact ? "text-xs sm:text-sm" : "text-sm sm:text-base"
+              )}
+            >
+              {t("pokedex.typeEffectiveness.recommended")}
+            </h3>
+          </div>
+
+          <div className={cn("grid gap-3 sm:gap-4", compact ? "gap-2.5 sm:gap-3" : "sm:grid-cols-2")}>
+            {effectiveness.recommendedImmune.length > 0 && (
+              <Section
+                title={t("pokedex.typeEffectiveness.bestCounters")}
+                subtitle={t("pokedex.typeEffectiveness.bestCountersHint")}
+                compact={compact}
+              >
+                <TypeList types={effectiveness.recommendedImmune} compact={compact} />
+              </Section>
+            )}
+
+            {effectiveness.recommended.length > 0 && (
+              <Section
+                title={t("pokedex.typeEffectiveness.safeCounters")}
+                subtitle={t("pokedex.typeEffectiveness.safeCountersHint")}
+                compact={compact}
+              >
+                <TypeList types={effectiveness.recommended} compact={compact} />
               </Section>
             )}
           </div>
