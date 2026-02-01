@@ -391,7 +391,12 @@
       "notVeryEffectiveHint": "Causa menos dano a esses tipos",
       "noEffect": "Sem efeito em",
       "noEffectHint": "Não causa dano a esses tipos",
-      "none": "Nenhum"
+      "none": "Nenhum",
+      "recommended": "Recomendado",
+      "bestCounters": "Melhores counters",
+      "bestCountersHint": "Super efetivo e imune aos ataques deste Pokémon",
+      "safeCounters": "Counters seguros",
+      "safeCountersHint": "Super efetivo sem ser fraco a este Pokémon"
     },
     "pokemonList": {
       "title": "Lista de Pokémon",
