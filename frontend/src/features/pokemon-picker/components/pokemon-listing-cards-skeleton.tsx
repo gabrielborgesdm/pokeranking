@@ -21,6 +21,11 @@ export function PokemonListingCardsSkeleton({
 
   return (
     <main className={cn("space-y-0 px-4 sm:px-23 mx-auto max-w-[1250px]", className)}>
+      {/* Back Button Skeleton */}
+      <div className="pt-4">
+        <Skeleton className="h-8 w-20 rounded-md" />
+      </div>
+
       {/* Hero Skeleton */}
       <div className="mt-6 sm:mx-auto rounded-2xl py-8 sm:py-8 px-4  sm:px-6 bg-muted/50">
         <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-6">

@@ -8,6 +8,8 @@ import {
   PokemonListSection,
 } from "@/features/pokemon";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { BackButton } from "@/components/back-button";
+import { PageHeader } from "@/components/page-header";
 
 export default function PokedexPage() {
   const { t } = useTranslation();
@@ -21,13 +23,11 @@ export default function PokedexPage() {
     <main className="container mx-auto px-4 py-8 max-w-8xl">
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <BookOpen className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold">{t("pokedex.title")}</h1>
-            <p className="text-muted-foreground">{t("pokedex.description")}</p>
-          </div>
-        </div>
+        <BackButton />
+        <PageHeader
+          title={t("pokedex.title")}
+          description={t("pokedex.description")}
+        />
 
         {/* Type Effectiveness Calculator */}
         <TypeEffectivenessCalculator />

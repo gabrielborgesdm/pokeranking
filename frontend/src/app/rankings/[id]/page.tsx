@@ -1,6 +1,8 @@
 "use client";
 
+import { BackButton } from "@/components/back-button";
 import { LoadingFallback } from "@/components/loading-fallback";
+import { PageHeader } from "@/components/page-header";
 import { PokemonListingCards } from "@/features/pokemon-picker/components/pokemon-listing-cards";
 import { PokemonListingCardsSkeleton } from "@/features/pokemon-picker/components/pokemon-listing-cards-skeleton";
 import { useResponsiveGrid } from "@/features/pokemon-picker/hooks/use-responsive-grid";
@@ -64,6 +66,9 @@ function RankingPageContent({
 
   return (
     <main ref={containerRef}>
+      <div style={{ maxWidth: maxContentWidth }} className="mx-auto pt-4">
+        <BackButton />
+      </div>
       <RankingHero
         title={ranking.title}
         username={ranking.user?.username ?? ""}

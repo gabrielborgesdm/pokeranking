@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { PixContribution } from "@/components/pix-contribution";
 import { getClientConfig } from "@/lib/config";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { PageHeader } from "@/components/page-header";
+import { BackButton } from "@/components/back-button";
 
 export default function ContributePage() {
   const { t } = useTranslation();
@@ -34,14 +36,13 @@ export default function ContributePage() {
     <main className="container mx-auto px-4 py-8 max-w-3xl">
       <div className="space-y-8">
         {/* Header */}
+        <BackButton />
         <div className="flex items-center gap-3">
-          <Heart className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold">{t("contribute.title")}</h1>
-            <p className="text-muted-foreground">
-              {t("contribute.description")}
-            </p>
-          </div>
+          <PageHeader
+            title={t("contribute.title")}
+            description={t("contribute.description")}
+          />
+
         </div>
 
         {/* GitHub Star Section */}

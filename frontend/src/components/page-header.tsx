@@ -4,9 +4,10 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { t } from "i18next";
 
 interface PageHeaderProps {
-  title: string;
+  title?: string;
   description?: string;
   action?: ReactNode;
   backHref?: string;
@@ -28,7 +29,7 @@ export function PageHeader({
         <Button variant="ghost" size="sm" asChild>
           <Link href={backHref}>
             <ArrowLeft className="h-4 w-4 mr-2" />
-            {backLabel}
+            {backLabel || t("common.back")}
           </Link>
         </Button>
       )}
@@ -39,7 +40,7 @@ export function PageHeader({
         )}
       >
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold">{title}</h1>
+          {title && <h1 className="text-2xl sm:text-3xl font-bold">{title}</h1>}
           {description && (
             <p className="text-sm sm:text-base text-muted-foreground">
               {description}
