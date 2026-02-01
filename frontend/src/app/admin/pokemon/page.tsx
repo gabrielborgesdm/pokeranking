@@ -16,6 +16,7 @@ import {
   usePokemonList,
 } from "@/features/pokemon";
 import { routes } from "@/lib/routes";
+import { BackButton } from "@/components/back-button";
 
 export default function AdminPokemonPage() {
   const { t } = useTranslation();
@@ -43,6 +44,7 @@ export default function AdminPokemonPage() {
 
   return (
     <main className="container max-w-8xl mx-auto px-4 py-8 space-y-6">
+      <BackButton />
       <PageHeader
         title={t("admin.pokemon.title")}
         description={t("admin.pokemon.subtitle", { count: total })}

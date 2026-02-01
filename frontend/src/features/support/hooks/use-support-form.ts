@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import * as Sentry from "@sentry/nextjs";
 import {
   useSupportControllerCreate,
@@ -15,6 +16,7 @@ import { useAnalytics } from "@/hooks/use-analytics";
 import { translateApiError } from "@/lib/translate-api-error";
 import { useSession } from "next-auth/react";
 import { useCurrentUser } from "@/features/users/hooks/use-current-user";
+import { routes } from "@/lib/routes";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -31,6 +33,7 @@ export type SupportFormData = z.infer<ReturnType<typeof createSupportFormSchema>
 
 export function useSupportForm() {
   const { t } = useTranslation();
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const { trackSupportSubmitSuccess, trackSupportSubmitError } = useAnalytics();
   const { user } = useCurrentUser();
@@ -60,6 +63,8 @@ export function useSupportForm() {
               description: t("support.successMessage"),
             });
             form.reset();
+            router.push(routes.home);
+
           }
         },
         onError: (err) => {

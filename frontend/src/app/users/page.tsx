@@ -15,6 +15,8 @@ import { getVariantByIndex } from "@/lib/utils";
 import { AnimatedList } from "@/components/animated-list";
 import { routes } from "@/lib/routes";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { PageHeader } from "@/components/page-header";
+import { BackButton } from "@/components/back-button";
 
 export default function UsersPage() {
   const { t } = useTranslation();
@@ -97,10 +99,12 @@ export default function UsersPage() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-8xl">
       <section className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold">{t("leaderboard.title")}</h1>
-          <p className="text-muted-foreground">{t("leaderboard.description")}</p>
-        </div>
+        <BackButton />
+        <PageHeader
+          title={t("leaderboard.title")}
+          description={t("leaderboard.description")}
+        />
+
 
         <LeaderboardFilters
           searchValue={searchUsername}

@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/form";
 import { useSupportForm } from "@/features/support";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { PageHeader } from "@/components/page-header";
+import { BackButton } from "@/components/back-button";
 
 export default function SupportPage() {
   const { t } = useTranslation();
@@ -39,12 +41,14 @@ export default function SupportPage() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="space-y-8">
+        {/* Header */}
+        <BackButton />
         <div className="flex items-center gap-3">
-          <MessageSquare className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold">{t("support.title")}</h1>
-            <p className="text-muted-foreground">{t("support.description")}</p>
-          </div>
+          <PageHeader
+            title={t("support.title")}
+            description={t("support.description")}
+          />
+
         </div>
 
         <Card>

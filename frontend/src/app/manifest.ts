@@ -54,6 +54,19 @@ export default function manifest(): MetadataRoute.Manifest {
           },
         ],
       },
+      {
+        name: "Pokedex",
+        short_name: "Pokedex",
+        description: "Browse all Pokemon in the Pokedex",
+        url: "/pokedex",
+        icons: [
+          {
+            src: "/favicon/web-app-manifest-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+        ],
+      },
     ],
     screenshots: [
       {
