@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback, useEffect } from "react";
+import { useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,6 +19,7 @@ import { useAnalytics } from "@/hooks/use-analytics";
 export default function UsersPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const gridRef = useRef<HTMLDivElement>(null);
   const { trackPageView, trackPaginationChange, trackLeaderboardUserClick } = useAnalytics();
   const {
     currentPage,
@@ -36,7 +37,7 @@ export default function UsersPage() {
     handleSortByChange,
     handleOrderChange,
     ITEMS_PER_PAGE,
-  } = useLeaderboard();
+  } = useLeaderboard({ scrollTargetRef: gridRef });
 
   useEffect(() => {
     trackPageView("leaderboard", "Leaderboard");
@@ -122,12 +123,14 @@ export default function UsersPage() {
           </div>
         ) : (
           <>
-            <AnimatedList
-              key={currentPage}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6"
-            >
-              {userCards}
-            </AnimatedList>
+            <div ref={gridRef} className="scroll-mt-4">
+              <AnimatedList
+                key={currentPage}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6"
+              >
+                {userCards}
+              </AnimatedList>
+            </div>
 
             <SimplePagination
               page={currentPage}

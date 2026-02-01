@@ -13,7 +13,12 @@ export type OrderOption = RankingsControllerFindAllOrder;
 
 const ITEMS_PER_PAGE = 12;
 
-export function useRankingsList() {
+interface UseRankingsListOptions {
+  scrollTargetRef?: React.RefObject<HTMLElement | null>;
+}
+
+export function useRankingsList(options: UseRankingsListOptions = {}) {
+  const { scrollTargetRef } = options;
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortByOption>("likesCount");
@@ -39,8 +44,8 @@ export function useRankingsList() {
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, []);
+    scrollTargetRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [scrollTargetRef]);
 
   const handleSearchChange = useCallback((value: string) => {
     setSearch(value);

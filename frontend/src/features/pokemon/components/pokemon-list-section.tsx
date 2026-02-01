@@ -69,8 +69,9 @@ export const PokemonListSection = memo(function PokemonListSection() {
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
+    gridRef?.scrollIntoView({ behavior: "smooth", block: "start" });
     trackPaginationChange("pokedex", page);
-  }, [trackPaginationChange]);
+  }, [trackPaginationChange, gridRef]);
 
   const handleSearchEnter = useCallback(() => {
     if (gridRef && paginatedPokemon.length > 0) {
@@ -117,7 +118,7 @@ export const PokemonListSection = memo(function PokemonListSection() {
       ) : (
         <div
           ref={setGridRef}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+          className="scroll-mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
         >
           {paginatedPokemon.map((p) => (
             <PokemonCard
