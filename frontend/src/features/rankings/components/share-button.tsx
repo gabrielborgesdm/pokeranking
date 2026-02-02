@@ -49,7 +49,7 @@ export const ShareButton = memo(function ShareButton({
 
   const getShareUrl = useCallback(() => {
     if (typeof window === "undefined") return "";
-    return `${window.location.origin}/rankings/${rankingId}`;
+    return `${window.location.origin}/main/rankings/${rankingId}`;
   }, [rankingId]);
 
   const handleCopyUrl = useCallback(async () => {

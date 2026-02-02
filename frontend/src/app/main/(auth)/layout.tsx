@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useThemeContext } from "@/providers/theme-provider";
 import { useLanguage } from "@/providers/language-provider";
+import { routes } from "@/lib/routes";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   // an anti-pattern to detect if we are on the signup page, but acceptable for this simple use case
-  const isSignUpPage = pathname === "/signup";
+  const isSignUpPage = pathname === routes.signup;
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4 auth-bg">

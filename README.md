@@ -63,14 +63,8 @@ There's nothing too fancy here—just a denormalized count of how many Pokemon e
 
 ## Gamification — Theme System
 
-Rankings feature a 4-tier unlock progression system that rewards users for ranking more Pokemon:
+Rankings feature a unlock progression system that rewards users for ranking more Pokemon:
 
-| Tier | Unlock Requirement | Themes |
-| --- | --- | --- |
-| Starter | Always available | Classic, Fire, Water, Grass |
-| Intermediate | 10 Pokemon or 5% of total | Electric, Psychic, Poison |
-| Advanced | 25 Pokemon or 15% of total | Dragon, Ghost, Dark |
-| Premium | 50 Pokemon or 30% of total | Sunset, Ocean, Legendary |
 
 Background customization is independent from card themes, with visual lock indicators and progress bars showing unlock requirements.
 

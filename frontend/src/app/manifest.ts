@@ -6,9 +6,9 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Pokeranking",
     description:
       "Create and share personalized Pokemon rankings. Rank your favorite Pokemon, build collections, and join the community.",
-    start_url: "/",
-    id: "/",
-    scope: "/",
+    start_url: "/main",
+    id: "/main",
+    scope: "/main",
     display: "standalone",
     background_color: "#0f1419",
     theme_color: "#4476da",
@@ -45,20 +45,7 @@ export default function manifest(): MetadataRoute.Manifest {
         name: "All Rankings",
         short_name: "Rankings",
         description: "Browse all Pokemon rankings",
-        url: "/rankings",
-        icons: [
-          {
-            src: "/favicon/web-app-manifest-192x192.png",
-            sizes: "192x192",
-            type: "image/png",
-          },
-        ],
-      },
-      {
-        name: "Pokedex",
-        short_name: "Pokedex",
-        description: "Browse all Pokemon in the Pokedex",
-        url: "/pokedex",
+        url: "/main/rankings",
         icons: [
           {
             src: "/favicon/web-app-manifest-192x192.png",
