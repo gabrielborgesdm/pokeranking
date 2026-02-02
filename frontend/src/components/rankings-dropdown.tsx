@@ -30,7 +30,7 @@ export function RankingsDropdown() {
   const rankings = useMemo(() => data?.data?.rankings ?? [], [data]);
   const username = session?.user?.username ?? "";
   const userRankingsPath = username ? routes.userRankings(username) : "";
-  const isActive = pathname.startsWith("/rankings/user");
+  const isActive = pathname.startsWith("/main/rankings/user");
 
   return (
     <DropdownMenu>
