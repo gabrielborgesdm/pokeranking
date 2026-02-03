@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const CACHE_NAME = `pokeranking-${CACHE_VERSION}`;
 const API_CACHE_NAME = `pokemon-api-${CACHE_VERSION}`;
 
@@ -78,20 +78,60 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Only handle same-origin HTML navigation requests for offline fallback
   const isSameOrigin = url.origin === self.location.origin;
   const isNavigationRequest = request.mode === 'navigate' || request.destination === 'document';
 
-  if (!isSameOrigin || !isNavigationRequest) {
+  if (!isSameOrigin) {
     return;
   }
 
-  // Skip offline fallback for pokedex - it handles offline state itself
+  // Cache Next.js static assets (JS/CSS chunks) - cache-first since they're immutable
+  if (url.pathname.startsWith('/_next/static/')) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return fetch(request).then((response) => {
+            if (response.ok) {
+              cache.put(request, response.clone());
+            }
+            return response;
+          });
+        });
+      })
+    );
+    return;
+  }
+
+  // Only handle navigation requests for pages
+  if (!isNavigationRequest) {
+    return;
+  }
+
+  // Handle Pokedex navigation - network-first with cache fallback for offline support
   if (url.pathname.startsWith('/pokedex')) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return fetch(request)
+          .then((response) => {
+            // Cache successful HTML responses
+            if (response.ok) {
+              cache.put(request, response.clone());
+            }
+            return response;
+          })
+          .catch(() => {
+            // Return cached HTML when offline
+            return cache.match(request);
+          });
+      })
+    );
     return;
   }
 
-  // Network-only with offline fallback for HTML pages
+  // Network-only with offline fallback for other HTML pages
   event.respondWith(
     fetch(request)
       .catch(() => {

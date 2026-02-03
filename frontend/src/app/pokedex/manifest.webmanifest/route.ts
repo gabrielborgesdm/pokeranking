@@ -11,7 +11,7 @@ export async function GET() {
     scope: "/pokedex",
     display: "standalone",
     background_color: "#0f1419",
-    theme_color: "#ef4444",
+    theme_color: "#4476da",
     orientation: "any",
     categories: ["entertainment", "games", "education"],
     icons: [
