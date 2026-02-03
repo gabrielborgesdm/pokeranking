@@ -790,6 +790,45 @@
         ]
       }
     },
+    "/pokemon/has-changes": {
+      "get": {
+        "description": "Used by clients to determine if they need to refetch Pokemon data. Returns hasChanges: true if cache is unavailable (fail-safe).",
+        "operationId": "PokemonController_hasChanges",
+        "parameters": [
+          {
+            "name": "version",
+            "required": false,
+            "in": "query",
+            "description": "Client version timestamp (epoch ms)",
+            "schema": {
+              "example": 1706745600000,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Change status retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PokemonHasChangesResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Check if Pokemon data has changed since a given version",
+        "tags": [
+          "pokemon"
+        ]
+      }
+    },
     "/pokemon/{id}": {
       "get": {
         "operationId": "PokemonController_findOne",
@@ -2708,6 +2747,25 @@
         },
         "required": [
           "totalPokemonCount"
+        ]
+      },
+      "PokemonHasChangesResponseDto": {
+        "type": "object",
+        "properties": {
+          "hasChanges": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether the Pokemon data has changed since the provided version"
+          },
+          "currentVersion": {
+            "type": "number",
+            "example": 1706745600000,
+            "description": "Current version timestamp (epoch ms)"
+          }
+        },
+        "required": [
+          "hasChanges",
+          "currentVersion"
         ]
       },
       "UpdatePokemonDto": {

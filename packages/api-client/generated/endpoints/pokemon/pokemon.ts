@@ -28,8 +28,10 @@ import type {
   BulkCreatePokemonResponseDto,
   CreatePokemonDto,
   PaginatedPokemonResponseDto,
+  PokemonControllerHasChangesParams,
   PokemonControllerSearchParams,
   PokemonCountResponseDto,
+  PokemonHasChangesResponseDto,
   PokemonResponseDto,
   UpdatePokemonDto,
 } from "../../model";
@@ -1194,6 +1196,337 @@ export function usePokemonControllerGetCountSuspense<
 } {
   const queryOptions =
     getPokemonControllerGetCountSuspenseQueryOptions(options);
+
+  const query = useSuspenseQuery(
+    queryOptions,
+    queryClient,
+  ) as UseSuspenseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * Used by clients to determine if they need to refetch Pokemon data. Returns hasChanges: true if cache is unavailable (fail-safe).
+ * @summary Check if Pokemon data has changed since a given version
+ */
+export type pokemonControllerHasChangesResponse200 = {
+  data: PokemonHasChangesResponseDto;
+  status: 200;
+};
+
+export type pokemonControllerHasChangesResponseSuccess =
+  pokemonControllerHasChangesResponse200 & {
+    headers: Headers;
+  };
+export type pokemonControllerHasChangesResponse =
+  pokemonControllerHasChangesResponseSuccess;
+
+export const getPokemonControllerHasChangesUrl = (
+  params?: PokemonControllerHasChangesParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/pokemon/has-changes?${stringifiedParams}`
+    : `/pokemon/has-changes`;
+};
+
+export const pokemonControllerHasChanges = async (
+  params?: PokemonControllerHasChangesParams,
+  options?: RequestInit,
+): Promise<pokemonControllerHasChangesResponse> => {
+  return customFetch<pokemonControllerHasChangesResponse>(
+    getPokemonControllerHasChangesUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getPokemonControllerHasChangesQueryKey = (
+  params?: PokemonControllerHasChangesParams,
+) => {
+  return [`/pokemon/has-changes`, ...(params ? [params] : [])] as const;
+};
+
+export const getPokemonControllerHasChangesQueryOptions = <
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getPokemonControllerHasChangesQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof pokemonControllerHasChanges>>
+  > = ({ signal }) =>
+    pokemonControllerHasChanges(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type PokemonControllerHasChangesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof pokemonControllerHasChanges>>
+>;
+export type PokemonControllerHasChangesQueryError = unknown;
+
+export function usePokemonControllerHasChanges<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params: undefined | PokemonControllerHasChangesParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+          TError,
+          Awaited<ReturnType<typeof pokemonControllerHasChanges>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerHasChanges<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+          TError,
+          Awaited<ReturnType<typeof pokemonControllerHasChanges>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function usePokemonControllerHasChanges<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+/**
+ * @summary Check if Pokemon data has changed since a given version
+ */
+
+export function usePokemonControllerHasChanges<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getPokemonControllerHasChangesQueryOptions(
+    params,
+    options,
+  );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getPokemonControllerHasChangesSuspenseQueryOptions = <
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getPokemonControllerHasChangesQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof pokemonControllerHasChanges>>
+  > = ({ signal }) =>
+    pokemonControllerHasChanges(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseSuspenseQueryOptions<
+    Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type PokemonControllerHasChangesSuspenseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof pokemonControllerHasChanges>>
+>;
+export type PokemonControllerHasChangesSuspenseQueryError = unknown;
+
+export function usePokemonControllerHasChangesSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params: undefined | PokemonControllerHasChangesParams,
+  options: {
+    query: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerHasChangesSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function usePokemonControllerHasChangesSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+/**
+ * @summary Check if Pokemon data has changed since a given version
+ */
+
+export function usePokemonControllerHasChangesSuspense<
+  TData = Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+  TError = unknown,
+>(
+  params?: PokemonControllerHasChangesParams,
+  options?: {
+    query?: Partial<
+      UseSuspenseQueryOptions<
+        Awaited<ReturnType<typeof pokemonControllerHasChanges>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseSuspenseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+} {
+  const queryOptions = getPokemonControllerHasChangesSuspenseQueryOptions(
+    params,
+    options,
+  );
 
   const query = useSuspenseQuery(
     queryOptions,
