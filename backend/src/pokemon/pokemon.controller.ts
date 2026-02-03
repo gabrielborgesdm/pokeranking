@@ -30,6 +30,10 @@ import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { PaginatedPokemonResponseDto } from './dto/paginated-pokemon-response.dto';
 import { PokemonCountResponseDto } from './dto/pokemon-count-response.dto';
 import {
+  PokemonHasChangesQueryDto,
+  PokemonHasChangesResponseDto,
+} from './dto/pokemon-has-changes.dto';
+import {
   POKEMON_SORTABLE_FIELDS,
   PokemonQueryDto,
 } from './dto/pokemon-query.dto';
@@ -143,6 +147,30 @@ export class PokemonController {
   async getCount(): Promise<PokemonCountResponseDto> {
     const totalPokemonCount = await this.pokemonService.getCachedTotalCount();
     return { totalPokemonCount };
+  }
+
+  @Get('has-changes')
+  @Public()
+  @ApiOperation({
+    summary: 'Check if Pokemon data has changed since a given version',
+    description:
+      'Used by clients to determine if they need to refetch Pokemon data. Returns hasChanges: true if cache is unavailable (fail-safe).',
+  })
+  @ApiQuery({
+    name: 'version',
+    required: false,
+    type: Number,
+    description: 'Client version timestamp (epoch ms)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Change status retrieved successfully',
+    type: PokemonHasChangesResponseDto,
+  })
+  async hasChanges(
+    @Query() query: PokemonHasChangesQueryDto,
+  ): Promise<PokemonHasChangesResponseDto> {
+    return this.pokemonService.hasChanges(query.version);
   }
 
   @Get(':id')

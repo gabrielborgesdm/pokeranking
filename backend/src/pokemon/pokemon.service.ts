@@ -21,6 +21,7 @@ import type { FilterQuery } from 'mongoose';
 const POKEMON_ALL_CACHE_KEY = 'pokemon:all';
 const POKEMON_COUNT_CACHE_KEY = 'pokemon:total_count';
 const POKEMON_COUNT_CACHE_TTL = 1800; // 30 minutes
+const POKEMON_VERSION_CACHE_KEY = 'pokemon:version';
 
 @Injectable()
 export class PokemonService {
@@ -229,7 +230,10 @@ export class PokemonService {
 
     this.logger.log(`Pokemon updated: ${updated.name}`);
 
-    await this.cacheService.del(POKEMON_ALL_CACHE_KEY);
+    await Promise.all([
+      this.cacheService.del(POKEMON_ALL_CACHE_KEY),
+      this.updateVersion(),
+    ]);
 
     return updated;
   }
@@ -278,13 +282,64 @@ export class PokemonService {
   }
 
   /**
+   * Get the current Pokemon data version (timestamp).
+   * Returns null if cache is unavailable.
+   */
+  async getCurrentVersion(): Promise<number | null> {
+    return this.cacheService.get<number>(POKEMON_VERSION_CACHE_KEY);
+  }
+
+  /**
+   * Updates the Pokemon data version to the current timestamp.
+   * Called whenever Pokemon data is mutated.
+   * @returns The new version timestamp
+   */
+  private async updateVersion(): Promise<number> {
+    const newVersion = Date.now();
+    await this.cacheService.set(POKEMON_VERSION_CACHE_KEY, newVersion);
+    return newVersion;
+  }
+
+  /**
+   * Check if Pokemon data has changed since the client's version.
+   * Returns true if:
+   * - Client version is not provided
+   * - Cache read fails (fail-safe: assume changes)
+   * - Current version is newer than client version
+   */
+  async hasChanges(clientVersion?: number): Promise<{
+    hasChanges: boolean;
+    currentVersion: number;
+  }> {
+    const currentVersion = await this.getCurrentVersion();
+
+    // If cache fails or no version exists, assume changes and set a new version
+    if (currentVersion === null) {
+      const newVersion = await this.updateVersion();
+      return { hasChanges: true, currentVersion: newVersion };
+    }
+
+    // If client didn't provide a version, they need to fetch
+    if (clientVersion === undefined) {
+      return { hasChanges: true, currentVersion };
+    }
+
+    // Compare versions
+    return {
+      hasChanges: currentVersion > clientVersion,
+      currentVersion,
+    };
+  }
+
+  /**
    * Invalidates the count cache. Called on create/remove operations.
-   * Also invalidates the all Pokemon cache.
+   * Also invalidates the all Pokemon cache and updates the version.
    */
   private async invalidateCountCache(): Promise<void> {
     await Promise.all([
       this.cacheService.del(POKEMON_ALL_CACHE_KEY),
       this.cacheService.del(POKEMON_COUNT_CACHE_KEY),
+      this.updateVersion(),
     ]);
   }
 }
