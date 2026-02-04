@@ -2,6 +2,7 @@ import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 import { isApiError, setAuthToken, getAuthToken } from "@pokeranking/api-client";
 import i18n from "@/i18n";
+import { routes } from "@/lib/routes";
 
 let isHandling = false;
 
@@ -28,7 +29,7 @@ export function handleSessionExpired(error: unknown): boolean {
   });
 
   setTimeout(() => {
-    signOut({ callbackUrl: "/signin" });
+    signOut({ callbackUrl: routes.signin });
     setTimeout(() => {
       isHandling = false;
     }, 1000);
