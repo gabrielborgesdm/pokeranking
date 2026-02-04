@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v6';
 const CACHE_NAME = `pokeranking-${CACHE_VERSION}`;
 const API_CACHE_NAME = `pokemon-api-${CACHE_VERSION}`;
 
@@ -91,11 +91,9 @@ self.addEventListener('fetch', (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          return fetch(request).then((response) => {
-            if (response.ok) {
-              cache.put(request, response.clone());
-            }
-            return response;
+          return fetch(request).catch(() => {
+            // Asset not cached and offline - return empty response to avoid iOS crash
+            return new Response('', { status: 408 });
           });
         });
       })
@@ -108,24 +106,19 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle Pokedex navigation - network-first with cache fallback for offline support
-  if (url.pathname.startsWith('/pokedex')) {
-    event.respondWith(
-      caches.open(CACHE_NAME).then((cache) => {
-        return fetch(request)
-          .then((response) => {
-            if (response.ok) {
-              cache.put(request, response.clone());
-            }
-            return response;
-          })
-          .catch(() => {
-            return cache.match(request);
-          });
-      })
-    );
-    return;
-  }
-
-  // Other pages - don't intercept, let the browser handle offline natively
+  // All pages - network-first with cache fallback for offline support
+  event.respondWith(
+    caches.open(CACHE_NAME).then((cache) => {
+      return fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            cache.put(request, response.clone());
+          }
+          return response;
+        })
+        .catch(() => {
+          return cache.match(request);
+        });
+    })
+  );
 });
