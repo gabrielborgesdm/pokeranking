@@ -69,9 +69,7 @@ self.addEventListener('fetch', (event) => {
             return response;
           })
           .catch(() => {
-            return cache.match(request).then((cached) => {
-              return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-            });
+            return cache.match(request);
           });
       })
     );
@@ -122,9 +120,7 @@ self.addEventListener('fetch', (event) => {
             return response;
           })
           .catch(() => {
-            return cache.match(request).then((cached) => {
-              return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-            });
+            return cache.match(request);
           });
       })
     );
