@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const CACHE_NAME = `pokeranking-${CACHE_VERSION}`;
 const API_CACHE_NAME = `pokemon-api-${CACHE_VERSION}`;
 
@@ -69,8 +69,9 @@ self.addEventListener('fetch', (event) => {
             return response;
           })
           .catch(() => {
-            // Return cached response when offline
-            return cache.match(request);
+            return cache.match(request).then((cached) => {
+              return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+            });
           });
       })
     );
@@ -115,34 +116,20 @@ self.addEventListener('fetch', (event) => {
       caches.open(CACHE_NAME).then((cache) => {
         return fetch(request)
           .then((response) => {
-            // Cache successful HTML responses
             if (response.ok) {
               cache.put(request, response.clone());
             }
             return response;
           })
           .catch(() => {
-            // Return cached HTML when offline
-            return cache.match(request);
+            return cache.match(request).then((cached) => {
+              return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+            });
           });
       })
     );
     return;
   }
 
-  // Network-first with cache fallback for other HTML pages
-  event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return fetch(request)
-        .then((response) => {
-          if (response.ok) {
-            cache.put(request, response.clone());
-          }
-          return response;
-        })
-        .catch(() => {
-          return cache.match(request);
-        });
-    })
-  );
+  // Other pages - don't intercept, let the browser handle offline natively
 });
