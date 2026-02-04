@@ -63,7 +63,7 @@ async function bootstrap() {
     });
   }
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.deployment_type !== 'serverless') {
     const port = configService.get<number>('PORT', 8000);
     await app.listen(port);
   } else {
