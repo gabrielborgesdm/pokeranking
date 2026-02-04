@@ -13,7 +13,7 @@ export function OfflineBanner() {
   if (!isOffline) return null;
 
   return (
-    <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4">
+    <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4 my-4">
       <div className="flex items-start gap-3">
         <WifiOff className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
         <div className="flex-1 space-y-1">
