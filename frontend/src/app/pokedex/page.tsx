@@ -7,6 +7,7 @@ import {
   TypeEffectivenessCalculator,
 } from "@/features/pokemon";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { useIsPwa } from "@/hooks/use-is-pwa";
 import { routes } from "@/lib/routes";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,6 +15,7 @@ import { useTranslation } from "react-i18next";
 export default function PokedexPage() {
   const { t } = useTranslation();
   const { trackPageView } = useAnalytics();
+  const { isPokedexPwa } = useIsPwa();
 
   useEffect(() => {
     trackPageView("pokedex", "Pokedex");
@@ -26,7 +28,7 @@ export default function PokedexPage() {
         <PageHeader
           title={t("pokedex.title")}
           description={t("pokedex.description")}
-          backHref={routes.home}
+          backHref={isPokedexPwa ? undefined : routes.home}
         />
 
         {/* Type Effectiveness Calculator */}

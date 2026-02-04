@@ -1,9 +1,8 @@
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = `pokeranking-${CACHE_VERSION}`;
 const API_CACHE_NAME = `pokemon-api-${CACHE_VERSION}`;
 
 const PRECACHE_ASSETS = [
-  '/offline.html',
   '/favicon/web-app-manifest-192x192.png',
   '/favicon/web-app-manifest-512x512.png',
 ];
@@ -131,11 +130,19 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Network-only with offline fallback for other HTML pages
+  // Network-first with cache fallback for other HTML pages
   event.respondWith(
-    fetch(request)
-      .catch(() => {
-        return caches.match('/offline.html');
-      })
+    caches.open(CACHE_NAME).then((cache) => {
+      return fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            cache.put(request, response.clone());
+          }
+          return response;
+        })
+        .catch(() => {
+          return cache.match(request);
+        });
+    })
   );
 });

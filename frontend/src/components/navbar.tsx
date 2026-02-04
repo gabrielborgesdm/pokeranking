@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
+import { useIsOffline } from "@/hooks/use-is-offline";
 
 function NavbarSkeleton() {
   return (
@@ -144,23 +145,29 @@ interface NavLinksProps {
   links: NavLink[];
   pathname: string;
   variant?: "desktop" | "mobile";
+  isOffline?: boolean;
 }
 
-function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
+function NavLinks({ links, pathname, variant = "desktop", isOffline }: NavLinksProps) {
   if (variant === "desktop") {
     return (
       <>
         {links.map((link) => {
           const isActive = pathname === link.href;
+          const isDisabled = isOffline && link.href !== routes.pokedex;
           return (
             <Link
               key={link.href}
               href={link.href}
+              aria-disabled={isDisabled}
+              tabIndex={isDisabled ? -1 : undefined}
               className={cn(
                 "flex items-center gap-1.5 text-sm font-medium transition-colors",
-                isActive
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground",
+                isDisabled
+                  ? "pointer-events-none opacity-40"
+                  : isActive
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 link.className
               )}
             >
@@ -177,15 +184,20 @@ function NavLinks({ links, pathname, variant = "desktop" }: NavLinksProps) {
     <div className="flex flex-col gap-1">
       {links.map((link) => {
         const isActive = pathname === link.href;
+        const isDisabled = isOffline && link.href !== routes.pokedex;
         return (
           <Link
             key={link.href}
             href={link.href}
+            aria-disabled={isDisabled}
+            tabIndex={isDisabled ? -1 : undefined}
             className={cn(
               "flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-all",
-              isActive
-                ? "bg-muted font-semibold text-foreground"
-                : "font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              isDisabled
+                ? "pointer-events-none opacity-40"
+                : isActive
+                  ? "bg-muted font-semibold text-foreground"
+                  : "font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground"
             )}
           >
             <link.icon className="h-5 w-5" />
@@ -203,19 +215,24 @@ interface MobileNavLinkProps {
   label: string;
   pathname: string;
   indent?: boolean;
+  disabled?: boolean;
 }
 
-function MobileNavLink({ href, icon: Icon, label, pathname, indent }: MobileNavLinkProps) {
+function MobileNavLink({ href, icon: Icon, label, pathname, indent, disabled }: MobileNavLinkProps) {
   const isActive = pathname === href;
   return (
     <Link
       href={href}
+      aria-disabled={disabled}
+      tabIndex={disabled ? -1 : undefined}
       className={cn(
         "flex items-center gap-3 rounded-lg px-3 py-3 text-base transition-all",
         indent && "ml-4",
-        isActive
-          ? "bg-muted font-semibold text-foreground"
-          : "font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+        disabled
+          ? "pointer-events-none opacity-40"
+          : isActive
+            ? "bg-muted font-semibold text-foreground"
+            : "font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground"
       )}
     >
       <Icon className="h-5 w-5" />
@@ -229,9 +246,10 @@ interface MobileNavContentProps {
   pathname: string;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isOffline: boolean;
 }
 
-function MobileNavContent({ mobileNavLinks, pathname, isAuthenticated, isAdmin }: MobileNavContentProps) {
+function MobileNavContent({ mobileNavLinks, pathname, isAuthenticated, isAdmin, isOffline }: MobileNavContentProps) {
   const { t } = useTranslation();
   const navRef = useRef<HTMLElement>(null);
   const [canScroll, setCanScroll] = useState(false);
@@ -263,7 +281,7 @@ function MobileNavContent({ mobileNavLinks, pathname, isAuthenticated, isAdmin }
         onScroll={checkScroll}
         className="h-full overflow-y-auto px-4 py-2"
       >
-        <NavLinks links={mobileNavLinks} pathname={pathname} variant="mobile" />
+        <NavLinks links={mobileNavLinks} pathname={pathname} variant="mobile" isOffline={isOffline} />
 
         {/* Secondary links */}
         {isAuthenticated && (
@@ -275,18 +293,21 @@ function MobileNavContent({ mobileNavLinks, pathname, isAuthenticated, isAdmin }
                 icon={Settings}
                 label={t("nav.myAccount")}
                 pathname={pathname}
+                disabled={isOffline}
               />
               <MobileNavLink
                 href={routes.support}
                 icon={MessageSquare}
                 label={t("nav.support")}
                 pathname={pathname}
+                disabled={isOffline}
               />
               <MobileNavLink
                 href={routes.design}
                 icon={Palette}
                 label={t("nav.design")}
                 pathname={pathname}
+                disabled={isOffline}
               />
             </div>
           </>
@@ -305,6 +326,7 @@ function MobileNavContent({ mobileNavLinks, pathname, isAuthenticated, isAdmin }
                 icon={PawPrint}
                 label={t("nav.adminPokemon")}
                 pathname={pathname}
+                disabled={isOffline}
               />
             </div>
           </>
@@ -339,6 +361,7 @@ export function Navbar() {
   const signOut = useSignOut();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { trackThemeToggle } = useAnalytics();
+  const isOffline = useIsOffline();
   useBackButtonDialog(mobileMenuOpen, () => setMobileMenuOpen(false));
 
   const handleMobileMenuChange = (open: boolean) => {
@@ -384,7 +407,7 @@ export function Navbar() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex md:flex-1 md:items-center md:gap-6">
 
-          <NavLinks links={desktopNavLinks} pathname={pathname} variant="desktop" />
+          <NavLinks links={desktopNavLinks} pathname={pathname} variant="desktop" isOffline={isOffline} />
         </nav>
 
         {/* Desktop Right Side */}
@@ -429,8 +452,13 @@ export function Navbar() {
                 <ThemeIcon className="h-5 w-5" />
                 <span className="sr-only">{t("nav.toggleTheme")}</span>
               </Button>
-              <Button variant="outline" className="ml-2" asChild>
-                <Link href={routes.signin}>
+              <Button variant="outline" className="ml-2" asChild disabled={isOffline}>
+                <Link
+                  href={routes.signin}
+                  aria-disabled={isOffline}
+                  tabIndex={isOffline ? -1 : undefined}
+                  className={cn(isOffline && "pointer-events-none opacity-40")}
+                >
                   <User className="mr-2 h-5 w-5" />
                   {t("nav.signIn")}
                 </Link>
@@ -479,6 +507,7 @@ export function Navbar() {
                 pathname={pathname}
                 isAuthenticated={isAuthenticated}
                 isAdmin={isAdmin}
+                isOffline={isOffline}
               />
 
               {/* Footer with settings and sign out */}
@@ -519,8 +548,13 @@ export function Navbar() {
                     {t("nav.signOut")}
                   </Button>
                 ) : (
-                  <Button asChild className="w-full">
-                    <Link href={routes.signin}>
+                  <Button asChild className="w-full" disabled={isOffline}>
+                    <Link
+                      href={routes.signin}
+                      aria-disabled={isOffline}
+                      tabIndex={isOffline ? -1 : undefined}
+                      className={cn(isOffline && "pointer-events-none opacity-40")}
+                    >
                       <User className="mr-2 h-4 w-4" />
                       {t("nav.signIn")}
                     </Link>
