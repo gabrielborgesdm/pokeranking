@@ -91,6 +91,7 @@ export function PokedexInstallPrompt() {
   };
 
   if (!isMobile) return null;
+  if (isIOS) return null;
   if (isStandalone) return null;
   if (
     typeof window !== "undefined" &&
