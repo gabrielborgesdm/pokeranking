@@ -7,6 +7,7 @@ import { GoogleAnalytics } from "@/components/google-analytics";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { DynamicThemeMeta } from "@/components/dynamic-theme-meta";
+import { DynamicManifest } from "@/components/dynamic-manifest";
 import { AuthRedirect } from "@/components/auth-redirect";
 import "./globals.css";
 
@@ -118,6 +119,7 @@ export default function RootLayout({
         <Providers>
           <AuthRedirect />
           <DynamicThemeMeta />
+          <DynamicManifest />
           <ConditionalNavbar />
           {children}
           <GoogleAnalytics />
