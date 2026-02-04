@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const manifest = {
-    name: "Rankingdex",
-    short_name: "Rankingdex",
+    name: "Pokedex",
+    short_name: "Pokedex",
     description:
       "Pokemon counters, type effectiveness calculator, and complete Pokedex. Works offline!",
     start_url: "/pokedex",

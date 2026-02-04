@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
-import { User2 } from "lucide-react";
+import { User2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/lib/routes";
 import { useRankingsControllerFindByUsername } from "@pokeranking/api-client";
@@ -76,26 +76,44 @@ export function Onboarding() {
             </p>
 
 
+            {/* Pokedex hint (only for logged-in users) */}
+            {username && (
+              <p className="text-sm md:text-base text-muted-foreground max-w-lg leading-relaxed">
+                {t("onboarding.pokedexHint")}
+              </p>
+            )}
+
             {/* Hint */}
             <p className="text-sm md:text-base font-medium text-foreground/70">
               {username ? t("onboarding.loggedHint") : t("onboarding.guestHint")}
             </p>
 
-            {/* CTA Button */}
-            {username ? (
-              <Button asChild size="lg" className="mt-4" variant="outline">
-                <Link href={routes.rankingNew}>
-                  {t("onboarding.cta")}
-                </Link>
-              </Button>
-            ) : (
-              <Button asChild size="lg" className="mt-2" variant="outline">
-                <Link href={routes.signup}>
-                  <User2 className="mr-2 h-4 w-4" />
-                  {t("onboarding.createAccount")}
-                </Link>
-              </Button>
-            )}
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+              {username ? (
+                <>
+                  <Button asChild size="lg" variant="outline">
+                    <Link href={routes.rankingNew}>
+                      <User2 className="mr-2 h-4 w-4" />
+                      {t("onboarding.cta")}
+                    </Link>
+                  </Button>
+                  <Button asChild size="lg" variant="outline">
+                    <Link href={routes.pokedex}>
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      {t("onboarding.goToPokedex")}
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <Button asChild size="lg" variant="outline">
+                  <Link href={routes.signup}>
+                    <User2 className="mr-2 h-4 w-4" />
+                    {t("onboarding.createAccount")}
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
         </motion.div>
       )}

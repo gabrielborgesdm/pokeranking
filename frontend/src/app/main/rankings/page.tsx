@@ -10,6 +10,7 @@ import {
   useRankingsList,
 } from "@/features/rankings";
 import { Onboarding } from "@/components/onboarding";
+import { OfflineBanner } from "@/components/offline-banner";
 import { SimplePagination } from "@/components/pagination";
 import { ErrorMessage } from "@/components/error-message";
 import { AnimatedList } from "@/components/animated-list";
@@ -109,6 +110,7 @@ export default function RankingsListPage() {
 
   return (
     <main className="container mx-auto px-4 py-8 max-w-8xl">
+      <OfflineBanner />
       <Onboarding />
       <section className="pt-8 space-y-8">
         <div>

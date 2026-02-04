@@ -543,8 +543,14 @@
       "step3": "Toque em \"Adicionar\" para confirmar"
     }
   },
+  "offline": {
+    "title": "Você está offline",
+    "message": "O Pokeranking precisa de conexão com a internet para funcionar.",
+    "pokedexHint": "A Pokedex está disponível offline!",
+    "goToPokedex": "Abrir Pokedex"
+  },
   "pokedexPwa": {
-    "title": "Instalar Rankingdex",
+    "title": "Instalar Pokedex",
     "description": "Um app separado do Pokeranking! Acesse counters de Pokemon, efetividade de tipos e stats offline.",
     "separateApp": "App separado do Pokeranking",
     "offlineAccess": "Funciona offline",
@@ -673,10 +679,12 @@
   "onboarding": {
     "welcome": "Bem-vindo ao Pokeranking!",
     "description": "Crie seus rankings Pokémon, ranqueie seus favoritos e compartilhe com a comunidade.",
-    "loggedHint": "Clique para criar um novo ranking",
+    "loggedHint": "Clique para criar um novo ranking ou visite a Pokedex",
     "guestHint": "Crie uma conta para começar a ranquear Pokémon",
-    "cta": "Ir para Meus Rankings",
-    "createAccount": "Criar Conta"
+    "cta": "Meus Rankings",
+    "createAccount": "Criar Conta",
+    "pokedexHint": "Confira também a Pokedex — veja Pokemon, efetividade de tipos e counters, mesmo offline!",
+    "goToPokedex": "Abrir Pokedex"
   },
   "account": {
     "title": "Minha Conta",
