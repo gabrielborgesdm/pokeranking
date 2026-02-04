@@ -544,8 +544,11 @@
     }
   },
   "pokedexPwa": {
-    "title": "Instalar Pokedex",
-    "description": "Acesso rápido aos dados de Pokémon e eficácia de tipos"
+    "title": "Instalar Rankingdex",
+    "description": "Um app separado do Pokeranking! Acesse counters de Pokemon, efetividade de tipos e stats offline.",
+    "separateApp": "App separado do Pokeranking",
+    "offlineAccess": "Funciona offline",
+    "canInstallBoth": "Você pode instalar os dois apps"
   },
   "zoneStats": {
     "title": "Estatísticas do Tier {{zoneName}}",

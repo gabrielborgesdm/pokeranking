@@ -2,39 +2,39 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const manifest = {
-    name: "Pokedex - Pokemon Database",
-    short_name: "Pokedex",
+    name: "Rankingdex",
+    short_name: "Rankingdex",
     description:
-      "Browse all Pokemon, explore type effectiveness, and discover Pokemon stats",
+      "Pokemon counters, type effectiveness calculator, and complete Pokedex. Works offline!",
     start_url: "/pokedex",
     id: "/pokedex",
     scope: "/pokedex",
     display: "standalone",
     background_color: "#0f1419",
-    theme_color: "#4476da",
+    theme_color: "#ef4444",
     orientation: "any",
     categories: ["entertainment", "games", "education"],
     icons: [
       {
-        src: "/favicon/web-app-manifest-192x192.png",
+        src: "/favicon-pokedex/web-app-manifest-192x192.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/favicon/web-app-manifest-192x192.png",
+        src: "/favicon-pokedex/web-app-manifest-192x192.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "maskable",
       },
       {
-        src: "/favicon/web-app-manifest-512x512.png",
+        src: "/favicon-pokedex/web-app-manifest-512x512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/favicon/web-app-manifest-512x512.png",
+        src: "/favicon-pokedex/web-app-manifest-512x512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

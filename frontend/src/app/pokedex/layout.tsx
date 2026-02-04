@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pokedex",
+  title: "Rankingdex",
   description:
-    "Browse all Pokemon, explore type effectiveness, and discover Pokemon stats",
+    "Pokemon counters, type effectiveness calculator, and complete Pokedex. Works offline!",
   manifest: "/pokedex/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Pokedex",
+    title: "Rankingdex",
   },
 };
 

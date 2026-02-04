@@ -120,6 +120,20 @@ export function PokedexInstallPrompt() {
 
           {isIOS ? (
             <div className="text-xs text-muted-foreground space-y-2">
+              <ul className="space-y-1 mb-2">
+                <li className="flex items-center gap-1">
+                  <span className="text-red-500">•</span>
+                  {t("pokedexPwa.separateApp")}
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className="text-red-500">•</span>
+                  {t("pokedexPwa.offlineAccess")}
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className="text-red-500">•</span>
+                  {t("pokedexPwa.canInstallBoth")}
+                </li>
+              </ul>
               <p>{t("pwa.ios.instruction")}</p>
               <ol className="list-decimal list-inside space-y-1">
                 <li>{t("pwa.ios.step1")}</li>
@@ -129,9 +143,20 @@ export function PokedexInstallPrompt() {
             </div>
           ) : (
             <>
-              <p className="text-xs text-muted-foreground mb-3">
-                {t("pokedexPwa.description")}
-              </p>
+              <ul className="text-xs text-muted-foreground space-y-1 mb-3">
+                <li className="flex items-center gap-1">
+                  <span className="text-red-500">•</span>
+                  {t("pokedexPwa.separateApp")}
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className="text-red-500">•</span>
+                  {t("pokedexPwa.offlineAccess")}
+                </li>
+                <li className="flex items-center gap-1">
+                  <span className="text-red-500">•</span>
+                  {t("pokedexPwa.canInstallBoth")}
+                </li>
+              </ul>
               <button
                 onClick={handleInstallClick}
                 className="w-full px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-600 transition-colors"

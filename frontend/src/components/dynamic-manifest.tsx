@@ -29,7 +29,7 @@ export function DynamicManifest() {
     }
     appleTitleMeta.setAttribute(
       "content",
-      isPokedex ? "Pokedex" : "Pokeranking"
+      isPokedex ? "Rankingdex" : "Pokeranking"
     );
   }, [pathname]);
 
