@@ -13,6 +13,7 @@ import {
   isApiError,
 } from "@pokeranking/api-client";
 import { translateApiError } from "@/lib/translate-api-error";
+import { routes } from "@/lib/routes";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -66,7 +67,7 @@ export function useVerifyEmail() {
               redirect: false,
             });
             if (result?.ok) {
-              router.push("/");
+              router.push(routes.home);
               router.refresh();
             } else {
               setError(t("auth.verificationFailed"));

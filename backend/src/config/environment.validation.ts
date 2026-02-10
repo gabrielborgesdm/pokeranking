@@ -54,8 +54,7 @@ class EnvironmentVariables {
   VERIFICATION_TOKEN_EXPIRATION?: StringValue;
 
   @IsString()
-  @IsOptional()
-  FRONTEND_URL?: string;
+  FRONTEND_URL: string;
 
   // Email Configuration
   @IsString()

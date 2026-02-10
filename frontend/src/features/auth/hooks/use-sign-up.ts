@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { useAuthControllerRegister, isApiError } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { translateApiError } from "@/lib/translate-api-error";
+import { routes } from "@/lib/routes";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -62,7 +63,7 @@ export function useSignUp() {
           if (response.status === 201) {
             trackSignUpSuccess();
             router.push(
-              `/verify-email?email=${encodeURIComponent(data.email)}`
+              `${routes.verifyEmail}?email=${encodeURIComponent(data.email)}`
             );
           }
         },

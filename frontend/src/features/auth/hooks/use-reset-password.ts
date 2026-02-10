@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { useAuthControllerResetPassword, isApiError } from "@pokeranking/api-client";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { translateApiError } from "@/lib/translate-api-error";
+import { routes } from "@/lib/routes";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -58,7 +59,7 @@ export function useResetPassword() {
           trackResetPasswordSubmit();
           setSuccess(true);
           setTimeout(() => {
-            router.push("/signin");
+            router.push(routes.signin);
           }, 2000);
         },
         onError: (err) => {

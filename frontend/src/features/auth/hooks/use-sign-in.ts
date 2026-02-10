@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { routes } from "@/lib/routes";
 
 type TFunction = (key: string, options?: any) => string;
 
@@ -62,7 +63,7 @@ export function useSignIn() {
     }
 
     trackSignInSuccess("credentials");
-    router.push("/");
+    router.push(routes.home);
     router.refresh();
   }
 
