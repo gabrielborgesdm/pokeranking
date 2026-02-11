@@ -179,7 +179,7 @@ export class EmailService {
     }
 
     const language = this.getLanguage(lang);
-    const verificationUrl = `${this.frontendUrl}/verify-email?email=${encodeURIComponent(user.email)}&code=${code}`;
+    const verificationUrl = `${this.frontendUrl}/main/verify-email?email=${encodeURIComponent(user.email)}&code=${code}`;
 
     const html = this.templates[language].verifyEmail({
       name: user.username,
