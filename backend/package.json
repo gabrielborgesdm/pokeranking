@@ -14,7 +14,7 @@
     "seed": "ts-node -r tsconfig-paths/register scripts/seed-database.ts",
     "seed:pokemon": "ts-node -r tsconfig-paths/register scripts/seed-pokemon.ts",
     "migrate:images": "ts-node -r tsconfig-paths/register scripts/migrate-images.ts",
-    "build": "nest build && cp -r src/i18n dist/src/i18n",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",

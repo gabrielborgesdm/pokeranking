@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useSignIn } from "@/features/auth";
+import { routes } from "@/lib/routes";
 
 export default function SignInPage() {
   const { t } = useTranslation();
@@ -76,7 +77,7 @@ export default function SignInPage() {
               )}
             />
             <div className="text-right">
-              <Link href="/forgot-password" className="link text-sm">
+              <Link href={routes.forgotPassword} className="link text-sm">
                 {t("auth.forgotPassword")}
               </Link>
             </div>
@@ -89,12 +90,12 @@ export default function SignInPage() {
       <CardFooter className="flex-col gap-2">
         <p className="text-sm text-muted-foreground">
           {t("auth.noAccount")}{" "}
-          <Link href="/signup" className="link">
+          <Link href={routes.signup} className="link">
             {t("auth.signUp")}
           </Link>
         </p>
         <p className="text-sm text-muted-foreground">
-          <Link href="/" className="link">
+          <Link href={routes.home} className="link">
             {t("auth.goToHomepage")}
           </Link>
         </p>
