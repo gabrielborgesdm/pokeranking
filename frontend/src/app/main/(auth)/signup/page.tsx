@@ -27,6 +27,7 @@ import { useSignUp } from "@/features/auth";
 import { SelectPokemonDialog } from "@/features/pokemon-picker";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { cn } from "@/lib/utils";
+import { routes } from "@/lib/routes";
 
 export default function SignUpPage() {
   const { t } = useTranslation();
@@ -183,11 +184,11 @@ export default function SignUpPage() {
         <CardFooter className="flex-col gap-2">
           <p className="text-sm text-muted-foreground">
             {t("auth.hasAccount")}{" "}
-            <Link href="/signin" className="link">
+            <Link href={routes.signin} className="link">
               {t("auth.signIn")}
             </Link>
           </p>
-          <Link href="/" className="link text-sm">
+          <Link href={routes.home} className="link text-sm">
             {t("auth.backToHomepage")}
           </Link>
         </CardFooter>

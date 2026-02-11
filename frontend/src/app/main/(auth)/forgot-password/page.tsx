@@ -21,6 +21,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForgotPassword } from "@/features/auth";
+import { routes } from "@/lib/routes";
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation();
@@ -70,7 +71,7 @@ export default function ForgotPasswordPage() {
         )}
       </CardContent>
       <CardFooter className="justify-center">
-        <Link href="/signin" className="link text-sm">
+        <Link href={routes.signin} className="link text-sm">
           {t("auth.backToSignIn")}
         </Link>
       </CardFooter>

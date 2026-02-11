@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useVerifyEmail } from "@/features/auth";
+import { routes } from "@/lib/routes";
 
 function VerifyEmailForm() {
   const { t } = useTranslation();
@@ -91,7 +92,7 @@ function VerifyEmailForm() {
         </div>
       </CardContent>
       <CardFooter className="justify-center">
-        <Link href="/signin" className="link text-sm">
+        <Link href={routes.signin} className="link text-sm">
           {t("auth.backToSignIn")}
         </Link>
       </CardFooter>

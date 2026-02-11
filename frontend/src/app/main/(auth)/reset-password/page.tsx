@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useResetPassword } from "@/features/auth";
+import { routes } from "@/lib/routes";
 
 function ResetPasswordForm() {
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ function ResetPasswordForm() {
           </div>
         </CardContent>
         <CardFooter className="justify-center">
-          <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+          <Link href={routes.forgotPassword} className="text-sm text-primary hover:underline">
             {t("auth.requestNewLink")}
           </Link>
         </CardFooter>
@@ -108,7 +109,7 @@ function ResetPasswordForm() {
         )}
       </CardContent>
       <CardFooter className="justify-center">
-        <Link href="/signin" className="text-sm text-primary hover:underline">
+        <Link href={routes.signin} className="text-sm text-primary hover:underline">
           {t("auth.backToSignIn")}
         </Link>
       </CardFooter>
