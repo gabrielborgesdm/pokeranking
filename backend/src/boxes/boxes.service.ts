@@ -280,7 +280,7 @@ export class BoxesService {
     if (!isOwner && !isPublic) {
       throw new NotFoundException({
         key: TK.BOXES.NOT_FOUND,
-        args: { id: String(box.id) },
+        args: { id: String(box._id) },
       });
     }
   }

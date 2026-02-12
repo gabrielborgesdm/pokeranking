@@ -1,22 +1,22 @@
 import {
-  Injectable,
-  NotFoundException,
   ConflictException,
+  Injectable,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
-import { TK } from '../i18n/constants/translation-keys';
 import { InjectModel } from '@nestjs/mongoose';
+import type { QueryFilter } from 'mongoose';
 import { Model } from 'mongoose';
-import { Pokemon } from './schemas/pokemon.schema';
-import { CreatePokemonDto } from './dto/create-pokemon.dto';
-import { UpdatePokemonDto } from './dto/update-pokemon.dto';
-import { PokemonResponseDto } from './dto/pokemon-response.dto';
-import { PokemonQueryDto } from './dto/pokemon-query.dto';
-import { BulkCreatePokemonItemDto } from './dto/bulk-create-pokemon-response.dto';
-import { stripUndefined, toDto } from '../common/utils/transform.util';
 import { CacheService } from '../common/services/cache.service';
+import { stripUndefined, toDto } from '../common/utils/transform.util';
+import { TK } from '../i18n/constants/translation-keys';
 import { UploadService } from '../upload/upload.service';
-import type { FilterQuery } from 'mongoose';
+import { BulkCreatePokemonItemDto } from './dto/bulk-create-pokemon-response.dto';
+import { CreatePokemonDto } from './dto/create-pokemon.dto';
+import { PokemonQueryDto } from './dto/pokemon-query.dto';
+import { PokemonResponseDto } from './dto/pokemon-response.dto';
+import { UpdatePokemonDto } from './dto/update-pokemon.dto';
+import { Pokemon } from './schemas/pokemon.schema';
 
 const POKEMON_ALL_CACHE_KEY = 'pokemon:all';
 const POKEMON_COUNT_CACHE_KEY = 'pokemon:total_count';
@@ -181,8 +181,8 @@ export class PokemonService {
     return { pokemon, total };
   }
 
-  private buildFilter(query: PokemonQueryDto): FilterQuery<Pokemon> {
-    const filter: FilterQuery<Pokemon> = {};
+  private buildFilter(query: PokemonQueryDto): QueryFilter<Pokemon> {
+    const filter: QueryFilter<Pokemon> = {};
 
     if (query.name) {
       filter.name = { $regex: query.name, $options: 'i' };
