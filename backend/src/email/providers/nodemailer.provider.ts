@@ -1,13 +1,14 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-import { Transporter } from 'nodemailer';
+import { SentMessageInfo, Transporter } from 'nodemailer';
 import {
   EmailProvider,
   SendEmailOptions,
   SendEmailResult,
 } from './email-provider.interface';
 import { getProviderConfig, ProviderConfig } from './email-provider.utils';
+import { TimeoutError, withTimeout } from '../utils/timeout.util';
 
 export interface NodemailerConfig {
   id: string;
@@ -53,6 +54,7 @@ export class NodemailerProvider implements EmailProvider {
   private readonly transporter: Transporter | null = null;
   private readonly fromEmail: string | null = null;
   private readonly config: ProviderConfig;
+  private readonly timeoutMs: number;
 
   constructor(
     private readonly configService: ConfigService,
@@ -65,6 +67,10 @@ export class NodemailerProvider implements EmailProvider {
     this.name = cfg.name;
     this.logger = new Logger(`NodemailerProvider:${cfg.id}`);
     this.config = getProviderConfig(configService, this.id);
+    this.timeoutMs = this.configService.get<number>(
+      'EMAIL_SEND_TIMEOUT_MS',
+      10000,
+    );
 
     if (this.config.isActive) {
       const host = this.configService.get<string>(cfg.hostKey);
@@ -113,19 +119,30 @@ export class NodemailerProvider implements EmailProvider {
     }
 
     try {
-      const info = await this.transporter.sendMail({
-        from: this.fromEmail!,
-        to: options.to,
-        subject: options.subject,
-        html: options.html,
-        replyTo: options.replyTo,
-      });
+      const info = await withTimeout<SentMessageInfo>(
+        this.transporter.sendMail({
+          from: this.fromEmail!,
+          to: options.to,
+          subject: options.subject,
+          html: options.html,
+          replyTo: options.replyTo,
+        }),
+        this.timeoutMs,
+        `${this.name} email send timeout after ${this.timeoutMs}ms`,
+      );
 
       return {
         success: true,
         messageId: info.messageId,
       };
     } catch (error) {
+      if (error instanceof TimeoutError) {
+        return {
+          success: false,
+          error: `Email send timeout after ${this.timeoutMs}ms`,
+        };
+      }
+
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),

@@ -735,6 +735,7 @@
       "tooManyVerificationAttempts": "Muitas tentativas de verificação. Por favor, tente novamente mais tarde.",
       "tooManyResendAttempts": "Muitas tentativas de reenvio. Por favor, tente novamente mais tarde.",
       "emailSendFailed": "Não foi possível enviar o email. Por favor, tente novamente mais tarde.",
+      "emailSendFailedDailyLimit": "Atingimos nosso limite diário de cadastros devido a limitações de custo. Por favor, tente novamente amanhã.",
       "internalError": "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde."
     },
     "support": {

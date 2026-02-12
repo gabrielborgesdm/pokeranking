@@ -70,7 +70,13 @@ export function useSignUp() {
         onError: (err) => {
           if (isApiError(err)) {
             trackSignUpError(err.message);
-            setError(translateApiError(err, t));
+
+            // Show daily limit message for email send failures during signup
+            if (err.data.key === 'common.emailSendFailed') {
+              setError(t('apiErrors.common.emailSendFailedDailyLimit'));
+            } else {
+              setError(translateApiError(err, t));
+            }
           } else {
             trackSignUpError("unknown_error");
             setError(t("auth.registrationFailed"));

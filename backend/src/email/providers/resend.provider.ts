@@ -7,6 +7,7 @@ import {
   SendEmailResult,
 } from './email-provider.interface';
 import { getProviderConfig, ProviderConfig } from './email-provider.utils';
+import { TimeoutError, withTimeout } from '../utils/timeout.util';
 
 @Injectable()
 export class ResendProvider implements EmailProvider {
@@ -17,9 +18,14 @@ export class ResendProvider implements EmailProvider {
   private readonly resend: Resend | null = null;
   private readonly fromEmail: string | null = null;
   private readonly config: ProviderConfig;
+  private readonly timeoutMs: number;
 
   constructor(private readonly configService: ConfigService) {
     this.config = getProviderConfig(configService, this.id);
+    this.timeoutMs = this.configService.get<number>(
+      'EMAIL_SEND_TIMEOUT_MS',
+      10000,
+    );
 
     if (this.config.isActive) {
       const apiKey = this.configService.get<string>('RESEND_API_KEY');
@@ -58,13 +64,17 @@ export class ResendProvider implements EmailProvider {
     }
 
     try {
-      const { data, error } = await this.resend.emails.send({
-        from: this.fromEmail!,
-        to: options.to,
-        subject: options.subject,
-        html: options.html,
-        replyTo: options.replyTo,
-      });
+      const { data, error } = await withTimeout(
+        this.resend.emails.send({
+          from: this.fromEmail!,
+          to: options.to,
+          subject: options.subject,
+          html: options.html,
+          replyTo: options.replyTo,
+        }),
+        this.timeoutMs,
+        `Resend email send timeout after ${this.timeoutMs}ms`,
+      );
 
       if (error) {
         return {
@@ -78,6 +88,13 @@ export class ResendProvider implements EmailProvider {
         messageId: data?.id,
       };
     } catch (error) {
+      if (error instanceof TimeoutError) {
+        return {
+          success: false,
+          error: `Email send timeout after ${this.timeoutMs}ms`,
+        };
+      }
+
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
