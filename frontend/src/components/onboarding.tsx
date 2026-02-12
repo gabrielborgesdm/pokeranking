@@ -1,13 +1,12 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "motion/react";
-import { User2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/features/users/hooks/use-current-user";
 import { routes } from "@/lib/routes";
-import { useRankingsControllerFindByUsername } from "@pokeranking/api-client";
+import { BookOpen, User2 } from "lucide-react";
+import { motion } from "motion/react";
+import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 function Pokeball({ className }: { className?: string }) {
   return (
@@ -35,88 +34,100 @@ function Pokeball({ className }: { className?: string }) {
 
 export function Onboarding() {
   const { t } = useTranslation();
-  const { data: session, status } = useSession();
-  const isSessionLoading = status === "loading";
-  const username = session?.user?.username;
+  const { user, isLoading } = useCurrentUser();
+  const username = user?.username;
 
-  const { data: rankingsData, isLoading } = useRankingsControllerFindByUsername(
-    username ?? "",
-    { query: { enabled: !!username } }
-  );
+  if (isLoading) {
+    return (
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 animate-pulse min-h-[350px]">
+        <div className="flex flex-col items-center text-center gap-5 h-full justify-center">
+          {/* Title */}
+          <div className="h-8 w-56 rounded bg-muted" />
 
-  const hasRankings = (rankingsData?.data?.length ?? 0) > 0;
-  const shouldShow = !isSessionLoading && !(username && (isLoading || hasRankings));
+          {/* Description */}
+          <div className="space-y-2 max-w-lg w-full">
+            <div className="h-4 w-full rounded bg-muted" />
+            <div className="h-4 w-5/6 rounded bg-muted" />
+            <div className="h-4 w-4/6 rounded bg-muted" />
+          </div>
+
+          {/* Hint */}
+          <div className="h-4 w-48 rounded bg-muted" />
+
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-2">
+            <div className="h-10 w-44 rounded bg-muted" />
+            <div className="h-10 w-44 rounded bg-muted" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <AnimatePresence>
-      {shouldShow && (
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative overflow-hidden rounded-2xl border border-border bg-card"
-        >
-          {/* Decorative pokeballs */}
-          <Pokeball className="absolute -top-6 -left-6 w-24 h-24 opacity-20 text-muted-foreground rotate-[-15deg]" />
-          <Pokeball className="absolute -bottom-8 -right-8 w-32 h-32 opacity-20 text-muted-foreground rotate-[20deg]" />
-          <Pokeball className="absolute top-1/2 -translate-y-1/2 -right-4 w-16 h-16 opacity-10 text-muted-foreground rotate-[45deg] hidden md:block" />
+    <motion.div
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      className="relative overflow-hidden rounded-2xl border border-border bg-card min-h-[350px] justify-center flex items-center"
+    >
+      {/* Decorative pokeballs */}
+      <Pokeball className="absolute -top-6 -left-6 w-24 h-24 opacity-20 text-muted-foreground rotate-[-15deg]" />
+      <Pokeball className="absolute -bottom-8 -right-8 w-32 h-32 opacity-20 text-muted-foreground rotate-[20deg]" />
+      <Pokeball className="absolute top-1/2 -translate-y-1/2 -right-4 w-16 h-16 opacity-10 text-muted-foreground rotate-[45deg] hidden md:block" />
 
-          <div className="relative z-10 flex flex-col items-center text-center gap-5 px-6 py-6 ">
-            {/* Header with pokeballs */}
-            <div className="flex items-center gap-3">
-              <h2 className="text-2xl md:text-3xl font-bold">
-                {t("onboarding.welcome")}
-              </h2>
-            </div>
+      <div className="relative z-10 flex flex-col items-center text-center gap-5 px-6 py-6">
+        {/* Header with pokeballs */}
+        <div className="flex items-center gap-3">
+          <h2 className="text-2xl md:text-3xl font-bold">
+            {t("onboarding.welcome")}
+          </h2>
+        </div>
 
-            {/* Description */}
-            <p className="text-muted-foreground max-w-lg text-sm md:text-base leading-relaxed">
-              {t("onboarding.description")}
-            </p>
+        {/* Description */}
+        <p className="text-muted-foreground max-w-lg text-sm md:text-base leading-relaxed">
+          {t("onboarding.description")}
+        </p>
 
+        {/* Pokedex hint (only for logged-in users) */}
+        {username && (
+          <p className="text-sm md:text-base text-muted-foreground max-w-lg leading-relaxed">
+            {t("onboarding.pokedexHint")}
+          </p>
+        )}
 
-            {/* Pokedex hint (only for logged-in users) */}
-            {username && (
-              <p className="text-sm md:text-base text-muted-foreground max-w-lg leading-relaxed">
-                {t("onboarding.pokedexHint")}
-              </p>
-            )}
+        {/* Hint */}
+        <p className="text-sm md:text-base font-medium text-foreground/70">
+          {username ? t("onboarding.loggedHint") : t("onboarding.guestHint")}
+        </p>
 
-            {/* Hint */}
-            <p className="text-sm md:text-base font-medium text-foreground/70">
-              {username ? t("onboarding.loggedHint") : t("onboarding.guestHint")}
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
-              {username ? (
-                <>
-                  <Button asChild size="lg" variant="outline">
-                    <Link href={routes.rankingNew}>
-                      <User2 className="mr-2 h-4 w-4" />
-                      {t("onboarding.cta")}
-                    </Link>
-                  </Button>
-                  <Button asChild size="lg" variant="outline">
-                    <Link href={routes.pokedex}>
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      {t("onboarding.goToPokedex")}
-                    </Link>
-                  </Button>
-                </>
-              ) : (
-                <Button asChild size="lg" variant="outline">
-                  <Link href={routes.signup}>
-                    <User2 className="mr-2 h-4 w-4" />
-                    {t("onboarding.createAccount")}
-                  </Link>
-                </Button>
-              )}
-            </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+          {username ? (
+            <>
+              <Button asChild size="lg" variant="outline">
+                <Link href={routes.rankingNew}>
+                  <User2 className="mr-2 h-4 w-4" />
+                  {t("onboarding.cta")}
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link href={routes.pokedex}>
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  {t("onboarding.goToPokedex")}
+                </Link>
+              </Button>
+            </>
+          ) : (
+            <Button asChild size="lg" variant="outline">
+              <Link href={routes.signup}>
+                <User2 className="mr-2 h-4 w-4" />
+                {t("onboarding.createAccount")}
+              </Link>
+            </Button>
+          )}
+        </div>
+      </div>
+    </motion.div>
   );
 }
