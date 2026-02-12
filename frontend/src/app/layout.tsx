@@ -8,6 +8,7 @@ import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { DynamicThemeMeta } from "@/components/dynamic-theme-meta";
 import { AuthRedirect } from "@/components/auth-redirect";
+import { ClientOnly } from "@/components/client-only";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -116,12 +117,14 @@ export default function RootLayout({
       >
         <ServiceWorkerRegister />
         <Providers>
-          <AuthRedirect />
-          <DynamicThemeMeta />
-          <ConditionalNavbar />
-          {children}
-          <GoogleAnalytics />
-          <PWAInstallPrompt />
+          <ClientOnly>
+            <AuthRedirect />
+            <DynamicThemeMeta />
+            <ConditionalNavbar />
+            {children}
+            <GoogleAnalytics />
+            <PWAInstallPrompt />
+          </ClientOnly>
         </Providers>
         <Toaster richColors position="top-right" />
       </body>
