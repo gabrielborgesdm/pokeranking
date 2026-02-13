@@ -5,21 +5,18 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User } from '../users/schemas/user.schema';
-import { TK } from '../i18n/constants/translation-keys';
 import { readFileSync } from 'fs';
-import { join } from 'path';
 import * as Handlebars from 'handlebars';
+import { join } from 'path';
+import { TK } from '../i18n/constants/translation-keys';
+import { User } from '../users/schemas/user.schema';
+import { NODEMAILER2_PROVIDER, NODEMAILER_PROVIDER } from './email.constants';
 import {
   EmailProvider,
-  SendEmailOptions,
-  ResendProvider,
   NodemailerProvider,
+  ResendProvider,
+  SendEmailOptions,
 } from './providers';
-import {
-  NODEMAILER_PROVIDER,
-  NODEMAILER2_PROVIDER,
-} from './email.constants';
 
 type SupportedLanguage = 'en' | 'pt-BR';
 

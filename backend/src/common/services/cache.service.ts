@@ -45,6 +45,9 @@ export class CacheService {
     return this.redis;
   }
 
+  private getFormattedCacheKey = (key: string) =>
+    `${this.configService.get('NODE_ENV') || ''} ${key}`;
+
   /**
    * Retrieves a cached value by key
    * @returns The cached value or null if not found/expired
@@ -53,14 +56,17 @@ export class CacheService {
     if (!this.redis) {
       return null;
     }
+
+    const finalKey = this.getFormattedCacheKey(key);
+
     try {
-      const value = await this.redis.get<T>(key);
+      const value = await this.redis.get<T>(finalKey);
       if (value === null) {
-        this.logger.debug(`Cache miss: ${key}`);
+        this.logger.debug(`Cache miss: ${finalKey}`);
       }
       return value;
     } catch (error) {
-      this.logger.error(`Cache get error for key "${key}":`, error);
+      this.logger.error(`Cache get error for key "${finalKey}":`, error);
       return null;
     }
   }
@@ -75,11 +81,13 @@ export class CacheService {
     if (!this.redis) {
       return;
     }
+    const finalKey = this.getFormattedCacheKey(key);
+
     try {
       const options = ttlSeconds ? { ex: ttlSeconds } : undefined;
-      await this.redis.set(key, value, options);
+      await this.redis.set(finalKey, value, options);
     } catch (error) {
-      this.logger.error(`Cache set error for key "${key}":`, error);
+      this.logger.error(`Cache set error for key "${finalKey}":`, error);
     }
   }
 
@@ -90,10 +98,12 @@ export class CacheService {
     if (!this.redis) {
       return;
     }
+    const finalKey = this.getFormattedCacheKey(key);
+
     try {
-      await this.redis.del(key);
+      await this.redis.del(finalKey);
     } catch (error) {
-      this.logger.error(`Cache delete error for key "${key}":`, error);
+      this.logger.error(`Cache delete error for key "${finalKey}":`, error);
     }
   }
 }
