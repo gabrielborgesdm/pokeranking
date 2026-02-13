@@ -679,11 +679,11 @@
   "onboarding": {
     "welcome": "Welcome to Pokeranking!",
     "description": "Create your own Pokemon tier lists, rank your favorites, and share them with the community.",
-    "loggedHint": "Click to create a new ranking or visit the Pokedex",
+    "loggedHint": "Click to access your rankings or visit the Pokedex",
     "guestHint": "Create an account to start ranking Pokemon",
     "cta": "My Rankings",
     "createAccount": "Create Account",
-    "pokedexHint": "Also check out the Pokedex — browse Pokemon, type effectiveness, and counters, even offline!",
+    "pokedexHint": "Also check out the Pokedex, browse Pokemon, type effectiveness, and counters!",
     "goToPokedex": "Open Pokedex"
   },
   "account": {

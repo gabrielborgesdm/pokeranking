@@ -679,11 +679,11 @@
   "onboarding": {
     "welcome": "Bem-vindo ao Pokeranking!",
     "description": "Crie seus rankings Pokémon, ranqueie seus favoritos e compartilhe com a comunidade.",
-    "loggedHint": "Clique para criar um novo ranking ou visite a Pokedex",
+    "loggedHint": "Clique para visitar seus rankings ou acesse a Pokedex",
     "guestHint": "Crie uma conta para começar a ranquear Pokémon",
     "cta": "Meus Rankings",
     "createAccount": "Criar Conta",
-    "pokedexHint": "Confira também a Pokedex — veja Pokemon, efetividade de tipos e counters, mesmo offline!",
+    "pokedexHint": "Confira também a Pokedex, veja Pokémon, efetividade de tipos e counters!",
     "goToPokedex": "Abrir Pokedex"
   },
   "account": {

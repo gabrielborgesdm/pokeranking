@@ -1,5 +1,8 @@
+"use client";
+
 import { ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,14 +26,28 @@ export function PageHeader({
   backLabel,
   className,
 }: PageHeaderProps) {
+  const router = useRouter();
+
   return (
     <div className={cn("space-y-4", className)}>
-      {backHref && (
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={backHref}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            {backLabel || t("common.back")}
-          </Link>
+      {backLabel && (
+        <Button
+          variant="ghost"
+          size="sm"
+          asChild={!!backHref}
+          onClick={!backHref ? () => router.back() : undefined}
+        >
+          {backHref ? (
+            <Link href={backHref}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              {backLabel || t("common.back")}
+            </Link>
+          ) : (
+            <>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              {backLabel || t("common.back")}
+            </>
+          )}
         </Button>
       )}
       <div

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/features/users/hooks/use-current-user";
 import { routes } from "@/lib/routes";
-import { BookOpen, User2 } from "lucide-react";
+import { BookOpen, Trophy, User2 } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
@@ -106,8 +106,8 @@ export function Onboarding() {
           {username ? (
             <>
               <Button asChild size="lg" variant="outline">
-                <Link href={routes.rankingNew}>
-                  <User2 className="mr-2 h-4 w-4" />
+                <Link href={routes.userRankings(username)}>
+                  <Trophy className="mr-2 h-4 w-4" />
                   {t("onboarding.cta")}
                 </Link>
               </Button>

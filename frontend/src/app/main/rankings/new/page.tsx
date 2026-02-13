@@ -3,6 +3,7 @@
 import { useTranslation } from "react-i18next";
 import { RankingForm } from "@/features/rankings";
 import { PageHeader } from "@/components/page-header";
+import { routes } from "@/lib/routes";
 
 export default function NewRankingPage() {
   const { t } = useTranslation();
@@ -13,7 +14,6 @@ export default function NewRankingPage() {
         <PageHeader
           title={t("rankingForm.createTitle")}
           description={t("rankingForm.createDescription")}
-          backHref="/rankings"
           backLabel={t("common.back")}
         />
 
