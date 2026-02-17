@@ -1,36 +1,36 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslation } from "react-i18next";
-import { useSession } from "next-auth/react";
-import { Menu, LogOut, User, Heart, Palette, List, Layers, MessageSquare, Shield, PawPrint, LucideIcon, ChevronDown, ChevronsDown, Globe, Check, Sun, Moon, Users, BookOpen, Settings, Trophy } from "lucide-react";
+import { Logo } from "@/components/logo";
+import { PokemonAvatar } from "@/components/pokemon-avatar";
+import { RankingsDropdown } from "@/components/rankings-dropdown";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
   DropdownMenuSub,
-  DropdownMenuSubTrigger,
   DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useIsAdmin } from "@/features/users";
-import { useSignOut } from "@/features/auth";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { useThemeContext } from "@/providers/theme-provider";
-import { useLanguage } from "@/providers/language-provider";
-import { Logo } from "@/components/logo";
-import { PokemonAvatar } from "@/components/pokemon-avatar";
-import { RankingsDropdown } from "@/components/rankings-dropdown";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { routes } from "@/lib/routes";
+import { useSignOut } from "@/features/auth";
+import { useIsAdmin } from "@/features/users";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { useBackButtonDialog } from "@/hooks/use-back-button-dialog";
 import { useIsOffline } from "@/hooks/use-is-offline";
+import { routes } from "@/lib/routes";
+import { cn } from "@/lib/utils";
+import { useLanguage } from "@/providers/language-provider";
+import { useThemeContext } from "@/providers/theme-provider";
+import { BookOpen, Check, ChevronDown, ChevronsDown, Globe, Heart, Layers, LogOut, LucideIcon, Menu, MessageSquare, Moon, PawPrint, Settings, Shield, Sun, Trophy, User, Users } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 function NavbarSkeleton() {
   return (
@@ -70,12 +70,6 @@ function AccountDropdown({ username, isAdmin, isDark, ThemeIcon, toggleTheme, on
           <Link href={routes.account}>
             <Settings className="mr-2 h-4 w-4" />
             {t("nav.myAccount")}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={routes.design}>
-            <Palette className="mr-2 h-4 w-4" />
-            {t("nav.design")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
@@ -299,13 +293,6 @@ function MobileNavContent({ mobileNavLinks, pathname, isAuthenticated, isAdmin, 
                 href={routes.support}
                 icon={MessageSquare}
                 label={t("nav.support")}
-                pathname={pathname}
-                disabled={isOffline}
-              />
-              <MobileNavLink
-                href={routes.design}
-                icon={Palette}
-                label={t("nav.design")}
                 pathname={pathname}
                 disabled={isOffline}
               />
