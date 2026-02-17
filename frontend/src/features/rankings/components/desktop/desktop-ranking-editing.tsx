@@ -23,6 +23,9 @@ import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DesktopDropzoneEmptyState } from "./desktop-dropzone-empty-state";
 import { PokemonLoader } from "@/components/pokemon-loader";
+import { LoadingFallback } from "@/components/loading-fallback";
+import { useRankingEditDesktopLayout } from "../../hooks/use-ranking-edit-desktop-layout";
+import { cn } from "@/lib/utils";
 
 interface DesktopRankingEditingProps {
   pokemon: PokemonResponseDto[];
@@ -57,6 +60,7 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
   const { t } = useTranslation();
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const { sizing, isResizing } = useRankingEditDesktopLayout();
 
   const searchContext = usePokemonSearchContextOptional();
   const isSearchEnabled = searchContext !== null;
@@ -113,13 +117,18 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
 
   return (
     <DndContext sensors={sensors}>
-      <div className="grid gap-4 grid-cols-2">
+      <div className={cn("grid grid-cols-2", sizing.styles.gridGap)}>
         {/* Left: Dropzone section */}
         <div className="min-h-0 overflow-hidden flex flex-col">
           {/* Header */}
-          <div className="flex items-center justify-between gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
+          <div className={cn(
+            "flex items-center justify-between gap-3 border-b border-border/40",
+            sizing.layout.headerPaddingX,
+            sizing.layout.headerPaddingY,
+            sizing.layout.headerHeight
+          )}>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
+              <h2 className={cn("font-semibold text-muted-foreground whitespace-nowrap", sizing.styles.headerTitleSize)}>
                 {t("rankingView.yourRanking", "Your Ranking")}
               </h2>
               {isEditMode && hasUnsavedChanges && (
@@ -137,9 +146,9 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
                     size="icon"
                     disabled={!isSearchEnabled}
                     onClick={isSearchEnabled ? searchContext?.openSearch : undefined}
-                    className="h-8 w-8"
+                    className={sizing.styles.iconButtonSize}
                   >
-                    <Search className="h-4 w-4" />
+                    <Search className={sizing.styles.iconSize} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -158,12 +167,12 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
                         size="icon"
                         onClick={handleDiscardClick}
                         disabled={isSaving}
-                        className="h-8 w-8"
+                        className={sizing.styles.iconButtonSize}
                       >
                         {hasUnsavedChanges ? (
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className={sizing.styles.iconSize} />
                         ) : (
-                          <ArrowLeft className="h-4 w-4" />
+                          <ArrowLeft className={sizing.styles.iconSize} />
                         )}
                       </Button>
                     </TooltipTrigger>
@@ -182,9 +191,9 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
                         size="icon"
                         onClick={onSave}
                         disabled={isSaving || !hasUnsavedChanges}
-                        className="h-8 w-8"
+                        className={sizing.styles.iconButtonSize}
                       >
-                        <Save className="h-4 w-4" />
+                        <Save className={sizing.styles.iconSize} />
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -198,40 +207,49 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
 
           {/* Dropzone content */}
           <div className="flex-1 min-h-0">
-            <PokemonDropzone
-              id="ranking-pokemon"
-              pokemon={pokemon}
-              onChange={setPokemon}
-              positionColors={positionColors}
-              maxColumns={5}
-              maxHeight="85vh"
-              showScrollButton={true}
-              scrollButtonClassName="bottom-8 right-8 absolute"
-              renderEmptyState={(isOver) => (
-                <DesktopDropzoneEmptyState isOver={isOver} minHeight="85vh" />
-              )}
-            />
+            {isResizing ? (
+              <LoadingFallback />
+            ) : (
+              <PokemonDropzone
+                id="ranking-pokemon"
+                pokemon={pokemon}
+                onChange={setPokemon}
+                positionColors={positionColors}
+                maxColumns={sizing.grid.maxColumns}
+                minCardWidth={sizing.grid.minCardWidth}
+                rowHeight={sizing.grid.rowHeight}
+                maxHeight={sizing.layout.contentHeight}
+                showScrollButton={true}
+                scrollButtonClassName="bottom-8 right-8 absolute"
+                renderEmptyState={(isOver) => (
+                  <DesktopDropzoneEmptyState isOver={isOver} minHeight={sizing.layout.contentHeight} />
+                )}
+              />
+            )}
           </div>
         </div>
 
         {/* Right: Picker section */}
         <div className="min-h-0 overflow-hidden flex flex-col">
           {/* Header */}
-          <div className="flex items-center gap-3 px-8 py-2 border-b border-border/40 h-[52px]">
-            <h2 className="text-sm font-semibold text-muted-foreground whitespace-nowrap">
+          <div className={cn(
+            "flex items-center gap-3 border-b border-border/40",
+            sizing.layout.headerPaddingX,
+            sizing.layout.headerPaddingY,
+            sizing.layout.headerHeight
+          )}>
+            <h2 className={cn("font-semibold text-muted-foreground whitespace-nowrap", sizing.styles.headerTitleSize)}>
               {t("rankingView.pokemonBox", "Pokemon Box")}
             </h2>
 
-            {/* Spacer to push filters to the right */}
-            <div className="flex-1" />
-            <div className="relative flex-1 max-w-md mr-auto">
+            <div className="relative flex-1 min-w-0 max-w-sm ml-auto">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder={t("pokemonFilters.searchInBox", "Search in the Pokemon Box...")}
                 value={filterState.search}
                 onChange={(e) => filterState.handleSearchChange(e.target.value)}
-                className="pl-8 h-8"
+                className="pl-8 h-8 w-full"
                 size={1}
               />
             </div>
@@ -256,10 +274,10 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
 
           {/* Picker content */}
           <div className="flex-1 min-h-0 relative">
-            {pickerLoading ? (
-              <div className="space-y-4 p-4">
-                <PokemonLoader size="lg" className="absolute bottom-0 top-0 flex-1 w-full" />
-              </div>
+            {isResizing ? (
+              <LoadingFallback />
+            ) : pickerLoading ? (
+              <PokemonLoader size="lg" className="h-full w-full" />
             ) : pickerPokemon.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8">
                 <p className="text-muted-foreground">
@@ -282,8 +300,10 @@ export const DesktopRankingEditing = memo(function DesktopRankingEditing({
                 pokemon={pickerPokemon}
                 disabledIds={disabledIds}
                 filteredOutIds={filteredOutIds}
-                maxColumns={5}
-                height="85vh"
+                maxColumns={sizing.grid.maxColumns}
+                minCardWidth={sizing.grid.minCardWidth}
+                rowHeight={sizing.grid.rowHeight}
+                height={sizing.layout.contentHeight}
               />
             )}
 

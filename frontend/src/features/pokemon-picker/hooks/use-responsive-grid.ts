@@ -89,39 +89,34 @@ export function useResponsiveGrid({
     [maxColumns, minCardWidthProp, gapProp, rowHeightProp, paddingX, isSmall]
   );
 
+  // Track container width separately to recalculate when props change
+  const [containerWidth, setContainerWidth] = useState(0);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    let resizeTimeout: NodeJS.Timeout | null = null;
-
     const resizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];
       if (entry) {
-        const width = entry.contentRect.width;
-
-        // Debounce resize calculations
-        if (resizeTimeout) {
-          clearTimeout(resizeTimeout);
-        }
-        resizeTimeout = setTimeout(() => {
-          setConfig(calculateGrid(width));
-        }, 100);
+        setContainerWidth(entry.contentRect.width);
       }
     });
 
     resizeObserver.observe(container);
 
-    // Initial calculation (no debounce)
-    setConfig(calculateGrid(container.clientWidth));
+    // Initial width
+    setContainerWidth(container.clientWidth);
 
     return () => {
       resizeObserver.disconnect();
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-      }
     };
-  }, [calculateGrid]);
+  }, []);
+
+  // Recalculate config when container width OR props change
+  useEffect(() => {
+    setConfig(calculateGrid(containerWidth));
+  }, [containerWidth, calculateGrid]);
 
   const rowCount = Math.ceil(itemCount / config.columnCount);
 

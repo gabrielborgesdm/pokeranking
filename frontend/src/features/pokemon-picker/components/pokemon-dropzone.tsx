@@ -38,6 +38,10 @@ export interface PokemonDropzoneProps {
   placeholder?: string;
   /** Maximum number of columns for grid layout */
   maxColumns?: number;
+  /** Minimum card width in pixels */
+  minCardWidth?: number;
+  /** Row height for virtualization */
+  rowHeight?: number;
   /** Optional class name */
   className?: string;
   /** Min height of the dropzone */
@@ -84,6 +88,8 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   onRemove,
   placeholder = "Drag Pokemon here",
   maxColumns = 4,
+  minCardWidth,
+  rowHeight,
   className,
   minHeight = 150,
   maxHeight = POKEMON_PICKER_DEFAULTS.HEIGHT,
@@ -110,6 +116,8 @@ export const PokemonDropzone = memo(function PokemonDropzone({
   // Use responsive grid hook to calculate layout
   const { containerRef, config, rowCount } = useResponsiveGrid({
     maxColumns,
+    minCardWidth,
+    rowHeight,
     itemCount: pokemon.length,
   });
 

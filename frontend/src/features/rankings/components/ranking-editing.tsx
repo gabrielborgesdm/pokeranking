@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { useRankingEditing } from "../hooks/use-ranking-editing";
-import { useScreenSize } from "@/providers/screen-size-provider";
+import { useRankingEditDesktopLayout } from "../hooks/use-ranking-edit-desktop-layout";
 import { DesktopRankingEditing } from "./desktop/desktop-ranking-editing";
 import { MobileRankingEditing } from "./mobile/mobile-ranking-editing";
 import type { PokemonResponseDto, RankingResponseDto } from "@pokeranking/api-client";
@@ -40,10 +40,10 @@ export const RankingEditing = memo(function RankingEditing({
   onSave,
   onDiscard,
 }: RankingEditingProps) {
-  const { isMedium } = useScreenSize();
+  const { useMobileLayout } = useRankingEditDesktopLayout();
   const { sensors, filteredOutIds, disabledIds } = useRankingEditing(
     pokemon,
-    isMedium
+    useMobileLayout
   );
 
   const commonProps = {
@@ -59,7 +59,7 @@ export const RankingEditing = memo(function RankingEditing({
     disabledIds,
   };
 
-  if (isMedium) {
+  if (useMobileLayout) {
     return <MobileRankingEditing {...commonProps} />;
   }
 
