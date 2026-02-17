@@ -7,6 +7,7 @@ import { RankingForm, useRankingEditData } from "@/features/rankings";
 import { PageHeader, PageHeaderSkeleton } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { normalizePokemonImageSrc } from "@/lib/image-utils";
+import { routes } from "@/lib/routes";
 
 interface EditRankingPageProps {
   params: Promise<{ id: string }>;
@@ -41,7 +42,7 @@ export default function EditRankingPage({ params }: EditRankingPageProps) {
             <PageHeader
               title={t("rankingForm.editTitle")}
               description={t("rankingForm.editDescription")}
-              backHref={`/rankings/${id}`}
+              backHref={routes.ranking(id)}
               backLabel={t("common.back")}
             />
             <RankingForm
