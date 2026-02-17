@@ -13,7 +13,7 @@ import { Model, Types, Connection, PipelineStage } from 'mongoose';
 import { Ranking } from './schemas/ranking.schema';
 import { CreateRankingDto } from './dto/create-ranking.dto';
 import { UpdateRankingDto } from './dto/update-ranking.dto';
-import { RankingQueryDto, LIKES_COUNT } from './dto/ranking-query.dto';
+import { RankingQueryDto, POKEMON_COUNT } from './dto/ranking-query.dto';
 import { stripUndefined } from '../common/utils/transform.util';
 import { User } from '../users/schemas/user.schema';
 import { Pokemon } from '../pokemon/schemas/pokemon.schema';
@@ -468,7 +468,7 @@ export class RankingsService {
     const {
       page = 1,
       limit = 12,
-      sortBy = LIKES_COUNT,
+      sortBy = POKEMON_COUNT,
       order = 'desc',
       search,
     } = query;
@@ -477,7 +477,7 @@ export class RankingsService {
     const isDefaultQuery =
       page === 1 &&
       limit === 12 &&
-      sortBy === LIKES_COUNT &&
+      sortBy === POKEMON_COUNT &&
       order === 'desc' &&
       !search;
 

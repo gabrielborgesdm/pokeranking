@@ -3,11 +3,12 @@ import { Type } from 'class-transformer';
 import { IsOptional, IsInt, Min, Max, IsIn, IsString } from 'class-validator';
 
 export const LIKES_COUNT = 'likesCount' as const;
+export const POKEMON_COUNT = 'pokemonCount' as const;
 
 export const RANKING_SORTABLE_FIELDS = [
   LIKES_COUNT,
   'createdAt',
-  'pokemonCount',
+  POKEMON_COUNT,
 ] as const;
 
 export type RankingSortableField = (typeof RANKING_SORTABLE_FIELDS)[number];
@@ -38,14 +39,14 @@ export class RankingQueryDto {
   limit?: number = 20;
 
   @ApiPropertyOptional({
-    example: LIKES_COUNT,
+    example: POKEMON_COUNT,
     description: 'Field to sort by',
     enum: RANKING_SORTABLE_FIELDS,
-    default: LIKES_COUNT,
+    default: POKEMON_COUNT,
   })
   @IsIn(RANKING_SORTABLE_FIELDS)
   @IsOptional()
-  sortBy?: RankingSortableField = LIKES_COUNT;
+  sortBy?: RankingSortableField = POKEMON_COUNT;
 
   @ApiPropertyOptional({
     example: 'desc',

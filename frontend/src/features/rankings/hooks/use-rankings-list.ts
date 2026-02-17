@@ -13,7 +13,7 @@ export type SortByOption = RankingsControllerFindAllSortBy;
 export type OrderOption = RankingsControllerFindAllOrder;
 
 const ITEMS_PER_PAGE = 12;
-const DEFAULT_SORT_BY: SortByOption = "likesCount";
+const DEFAULT_SORT_BY: SortByOption = "pokemonCount";
 const DEFAULT_ORDER: OrderOption = "desc";
 
 const VALID_SORT_BY_VALUES: SortByOption[] = ["likesCount", "createdAt", "pokemonCount"];
