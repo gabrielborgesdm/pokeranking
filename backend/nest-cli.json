@@ -3,8 +3,13 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "watchOptions": {
-    "watchDirectory": "useFsEvents",
-    "exclude": ["../**"]
+    "exclude": [
+      "node_modules",
+      "dist",
+      "test",
+      "../frontend",
+      "../packages"
+    ]
   },
   "compilerOptions": {
     "deleteOutDir": true,
