@@ -101,7 +101,7 @@ export const DESKTOP_RESPONSIVE_BREAKPOINTS: BreakpointConfig[] = [
   },
   {
     name: "md",
-    minWidth: 1024,
+    minWidth: 1100,
     sizing: {
       grid: { maxColumns: 3, minCardWidth: 140, rowHeight: 220 },
       layout: {
@@ -114,13 +114,13 @@ export const DESKTOP_RESPONSIVE_BREAKPOINTS: BreakpointConfig[] = [
         headerTitleSize: "text-xs",
         iconButtonSize: "h-7 w-7",
         iconSize: "h-3.5 w-3.5",
-        gridGap: "gap-3",
+        gridGap: "gap-2",
       },
     },
   },
   {
     name: "sm",
-    minWidth: 872,
+    minWidth: 1000,
     sizing: {
       grid: { maxColumns: 3 },
       layout: {
@@ -133,7 +133,7 @@ export const DESKTOP_RESPONSIVE_BREAKPOINTS: BreakpointConfig[] = [
         headerTitleSize: "text-xs",
         iconButtonSize: "h-7 w-7",
         iconSize: "h-3.5 w-3.5",
-        gridGap: "gap-2",
+        gridGap: "gap-3",
       },
     },
   },

@@ -72,7 +72,7 @@ export const SortablePokemonCard = memo(function SortablePokemonCard({
             e.stopPropagation();
             onRemove(pokemon._id);
           }}
-          className="absolute -top-2 -left-2 z-10 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity shadow-md hover:scale-110"
+          className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity shadow-md hover:scale-110"
         >
           <X className="w-4 h-4  text-white" />
         </button>

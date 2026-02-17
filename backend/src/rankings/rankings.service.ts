@@ -303,9 +303,10 @@ export class RankingsService {
     await this.usersService.updateRankedPokemonCount(user);
 
     // Invalidate rankings list cache
-    const cachedList = await this.cacheService.get(
-      RANKINGS_LIST_DEFAULT_CACHE_KEY,
-    );
+    const cachedList = await this.cacheService.get<{
+      rankings: RankingListItem[];
+      total: number;
+    }>(RANKINGS_LIST_DEFAULT_CACHE_KEY);
     const wasCached = cachedList?.rankings?.some(
       (r) => r._id?.toString() === deletedRanking._id?.toString(),
     );
