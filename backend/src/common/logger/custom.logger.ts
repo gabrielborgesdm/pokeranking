@@ -133,7 +133,7 @@ export class CustomLogger extends ConsoleLogger {
     if (user || ip) {
       Sentry.setUser({
         id: user?.id,
-        username: user?.username,
+        username: user?.username ?? ip, // Use IP as fallback ID if user is not authenticated
         ip_address: ip,
       });
     }
