@@ -8,10 +8,15 @@ import {
 @Injectable()
 export class RequestContextMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
+    const ip =
+      req.headers['x-forwarded-for']?.toString().split(',')[0]?.trim() ||
+      req.ip;
+
     const context: RequestContextData = {
       path: req.path,
       method: req.method,
       requestId: req.headers['x-request-id'] as string | undefined,
+      ip,
     };
 
     // User will be set later by the auth guard after JWT validation

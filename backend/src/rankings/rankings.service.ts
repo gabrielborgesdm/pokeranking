@@ -52,7 +52,7 @@ export class RankingsService {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly cacheService: CacheService,
-  ) { }
+  ) {}
 
   async create(
     userId: string,
@@ -302,12 +302,13 @@ export class RankingsService {
     const user = await this.usersService.findOne(userId);
     await this.usersService.updateRankedPokemonCount(user);
 
-
     // Invalidate rankings list cache
     const cachedList = await this.cacheService.get(
       RANKINGS_LIST_DEFAULT_CACHE_KEY,
-    ) as { rankings: RankingListItem[]; total: number } | null;
-    const wasCached = cachedList?.rankings?.some(r => r._id?.toString() === deletedRanking._id?.toString())
+    );
+    const wasCached = cachedList?.rankings?.some(
+      (r) => r._id?.toString() === deletedRanking._id?.toString(),
+    );
     if (cachedList && wasCached) {
       await this.cacheService.del(RANKINGS_LIST_DEFAULT_CACHE_KEY);
       this.logger.log('Rankings list cache invalidated due to deletion');
@@ -382,7 +383,9 @@ export class RankingsService {
     ]);
 
     if (!isThemeAvailable(themeId, userTotalRanked, totalPokemonInSystem)) {
-      this.logger.warn(`Theme validation failed for user ${userId}: ${themeId}`);
+      this.logger.warn(
+        `Theme validation failed for user ${userId}: ${themeId}`,
+      );
       throw new BadRequestException({
         key: TK.RANKINGS.THEME_NOT_AVAILABLE,
         args: { themeId },

@@ -66,7 +66,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly cacheService: CacheService,
-  ) { }
+  ) {}
 
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
@@ -441,16 +441,15 @@ export class UsersService {
     Object.assign(user, stripUndefined(updateUserDto));
     const saved = await user.save({ session: options?.session });
 
-    const differentUsername = updateUserDto.username &&
-      updateUserDto.username !== user.username;
+    const differentUsername =
+      updateUserDto.username && updateUserDto.username !== user.username;
     if (differentUsername) {
       this.logger.log(
         `User updated: ${user.username} -> ${updateUserDto.username}`,
       );
-    } else
-   {
+    } else {
       this.logger.log(`User updated: ${saved.username}`);
-   }
+    }
 
     return saved;
   }

@@ -44,7 +44,7 @@ function isObject(value: unknown): value is ExceptionResponseObject {
 
 @Catch(HttpException)
 export class I18nExceptionFilter implements ExceptionFilter {
-  constructor(private readonly sentryService: SentryService) { }
+  constructor(private readonly sentryService: SentryService) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -74,12 +74,16 @@ export class I18nExceptionFilter implements ExceptionFilter {
     request: AuthenticatedRequest,
   ): void {
     const user = request.user;
+    const ip =
+      request.headers['x-forwarded-for']?.toString().split(',')[0]?.trim() ||
+      request.ip;
 
     if (user?._id) {
       this.sentryService.setUser({
         id: user._id,
         email: user.email,
         username: user.username,
+        ip_address: ip,
       });
     }
 
@@ -90,6 +94,7 @@ export class I18nExceptionFilter implements ExceptionFilter {
       body: request.body,
       query: request.query,
       params: request.params,
+      ip,
     });
   }
 

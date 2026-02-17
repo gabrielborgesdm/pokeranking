@@ -18,6 +18,11 @@ export class LoggingInterceptor implements NestInterceptor {
     const { method, url } = request;
     const startTime = Date.now();
 
+    // Get client IP (supports proxied requests)
+    const ip =
+      request.headers['x-forwarded-for']?.toString().split(',')[0]?.trim() ||
+      request.ip;
+
     // Get user ID if authenticated (set by JwtAuthGuard)
     const userId = (request as Request & { user?: { _id?: string } }).user?._id;
 
@@ -27,14 +32,14 @@ export class LoggingInterceptor implements NestInterceptor {
           const response = context.switchToHttp().getResponse<Response>();
           const duration = Date.now() - startTime;
           this.logger.log(
-            `${method} ${url} ${response.statusCode} ${duration}ms${userId ? ` - user:${userId}` : ''}`,
+            `${method} ${url} ${response.statusCode} ${duration}ms - ip:${ip}${userId ? ` - user:${userId}` : ''}`,
           );
         },
         error: (error: { status?: number; message?: string }) => {
           const duration = Date.now() - startTime;
           const status = error.status || 500;
           this.logger.warn(
-            `${method} ${url} ${status} ${duration}ms${userId ? ` - user:${userId}` : ''} - ${error.message}`,
+            `${method} ${url} ${status} ${duration}ms - ip:${ip}${userId ? ` - user:${userId}` : ''} - ${error.message}`,
           );
         },
       }),

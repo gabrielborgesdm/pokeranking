@@ -56,6 +56,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   private setUserContext(context: ExecutionContext): void {
     const request = context.switchToHttp().getRequest();
     const user = request.user as JwtUser | undefined;
+    const ip = RequestContextService.get()?.ip;
 
     if (user) {
       RequestContextService.setUser({
@@ -68,6 +69,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         id: user._id,
         username: user.username,
         email: user.email,
+        ip_address: ip,
       });
     }
   }

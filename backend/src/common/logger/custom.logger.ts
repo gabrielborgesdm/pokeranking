@@ -32,7 +32,7 @@ export class CustomLogger extends ConsoleLogger {
     'RouterExplorer',
     'RoutesResolver',
     'NestApplication',
-    'Bootstrap'
+    'Bootstrap',
   ]);
 
   log(message: unknown, context?: string): void {
@@ -129,10 +129,12 @@ export class CustomLogger extends ConsoleLogger {
 
     // Set user in Sentry scope if available
     const user = RequestContextService.getUser();
-    if (user) {
+    const ip = requestContext?.ip;
+    if (user || ip) {
       Sentry.setUser({
-        id: user.id,
-        username: user.username,
+        id: user?.id,
+        username: user?.username,
+        ip_address: ip,
       });
     }
 

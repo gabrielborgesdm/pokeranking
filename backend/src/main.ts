@@ -14,7 +14,6 @@ import { CustomLogger } from './common/logger/custom.logger';
 // Set Sentry initialized flag based on env var (Sentry is initialized in instrument.ts)
 CustomLogger.setSentryInitialized(!!process.env.SENTRY_DSN);
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new CustomLogger('Bootstrap'),

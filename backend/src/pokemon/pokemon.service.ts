@@ -31,7 +31,7 @@ export class PokemonService {
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     private readonly cacheService: CacheService,
     private readonly uploadService: UploadService,
-  ) { }
+  ) {}
 
   async create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
     const existing = await this.pokemonModel
@@ -113,7 +113,9 @@ export class PokemonService {
     const successCount = results.filter((r) => r.success).length;
     if (successCount > 0) {
       await this.invalidateCountCache();
-      this.logger.log(`Bulk created ${successCount}/${pokemonList.length} Pokemon`);
+      this.logger.log(
+        `Bulk created ${successCount}/${pokemonList.length} Pokemon`,
+      );
     }
 
     return results;
@@ -139,10 +141,7 @@ export class PokemonService {
       return cached;
     }
 
-    const pokemon = await this.pokemonModel
-      .find()
-      .lean()
-      .exec();
+    const pokemon = await this.pokemonModel.find().lean().exec();
     const dtos = toDto(PokemonResponseDto, pokemon);
 
     await this.cacheService.set(POKEMON_ALL_CACHE_KEY, dtos);

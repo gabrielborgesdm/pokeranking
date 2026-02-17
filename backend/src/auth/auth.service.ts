@@ -37,13 +37,12 @@ export class AuthService {
     private jwtService: JwtService,
     private emailService: EmailService,
     private configService: ConfigService,
-  ) { }
+  ) {}
 
   async validateUser(
     identifier: string,
     password: string,
   ): Promise<User | null> {
-
     const user = await this.usersService.findByUsernameOrEmail(identifier);
 
     if (!user) {

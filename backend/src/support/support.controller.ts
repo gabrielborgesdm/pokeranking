@@ -25,7 +25,7 @@ import { RateLimit } from 'src/common/decorators/rate-limit.decorator';
 @ApiBearerAuth('JWT-auth')
 @Controller('support')
 export class SupportController {
-  constructor(private readonly supportService: SupportService) { }
+  constructor(private readonly supportService: SupportService) {}
 
   @Post()
   @RateLimit()

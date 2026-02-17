@@ -12,6 +12,7 @@ export interface RequestContextData {
   requestId?: string;
   path?: string;
   method?: string;
+  ip?: string;
 }
 
 @Injectable()

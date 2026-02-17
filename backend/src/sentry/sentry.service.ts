@@ -6,6 +6,7 @@ interface SentryUser {
   id: string;
   email?: string;
   username?: string;
+  ip_address?: string;
 }
 
 @Injectable()
