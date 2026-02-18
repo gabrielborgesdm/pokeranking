@@ -18,6 +18,7 @@ import { useAnalytics } from "@/hooks/use-analytics";
 import { routes } from "@/lib/routes";
 import { useScreenSize } from "@/providers/screen-size-provider";
 import type { PokemonResponseDto, RankingResponseDto } from "@pokeranking/api-client";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { use, useCallback, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -66,9 +67,15 @@ function RankingPageContent({
 
   return (
     <main ref={containerRef}>
-      <div style={{ maxWidth: maxContentWidth }} className="mx-auto pt-4">
+      <motion.div
+        style={{ maxWidth: maxContentWidth }}
+        className="mx-auto pt-4"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+      >
         <BackButton />
-      </div>
+      </motion.div>
       <RankingHero
         title={ranking.title}
         username={ranking.user?.username ?? ""}

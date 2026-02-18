@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Trophy } from "lucide-react";
+import { Trophy, Sparkles } from "lucide-react";
 import {
   getTrophy,
   getNextTrophy,
@@ -72,7 +72,10 @@ export const TrophyBadge = memo(function TrophyBadge({
               <Progress value={progressPercentage} className="h-2" />
             </>
           ) : (
-            <p className="text-xs opacity-80">{t("trophy.maxTier")}</p>
+            <div className="flex items-center gap-2 text-amber-500">
+              <Sparkles size={14} />
+              <p className="text-xs font-semibold">{t("trophy.maxTier")}</p>
+            </div>
           )}
         </div>
       </TooltipContent>

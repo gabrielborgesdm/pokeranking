@@ -10,6 +10,7 @@ import { getThemeById } from "@pokeranking/shared";
 import { Heart } from "lucide-react";
 import { TrophyBadge } from "@/components/trophy-badge";
 import Link from "next/link";
+import { motion } from "motion/react";
 import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -74,7 +75,7 @@ export const RankingHero = memo(function RankingHero({
   const textShadow = themeData?.textShadow;
 
   return (
-    <div
+    <motion.div
       className={cn(
         "relative mt-6 mx-auto rounded-lg py-8 sm:py-12 px-4 sm:px-6 overflow-hidden",
         gradientClass,
@@ -85,7 +86,9 @@ export const RankingHero = memo(function RankingHero({
         color: textColor,
         textShadow: textShadow
       }}
-
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
     >
       {/* Flowing wave decoration */}
       <svg
@@ -124,7 +127,12 @@ export const RankingHero = memo(function RankingHero({
         style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
       >
         {/* Left section: Top Pokemon */}
-        <div className="flex flex-col items-center gap-2 shrink-0">
+        <motion.div
+          className="flex flex-col items-center gap-2 shrink-0"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+        >
           {/* Top Pokemon Image - falls back to "who.png" if no pokemon */}
           <div
             className={cn(
@@ -145,10 +153,15 @@ export const RankingHero = memo(function RankingHero({
               />
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Center section: Title, username, pokemon count */}
-        <div className="flex-1 min-w-0 text-center sm:text-left">
+        <motion.div
+          className="flex-1 min-w-0 text-center sm:text-left"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.15 }}
+        >
           <h1 className="text-xl sm:text-3xl font-bold truncate drop-shadow-md">
             {title}
           </h1>
@@ -161,15 +174,27 @@ export const RankingHero = memo(function RankingHero({
             </Link>
             <span>·</span>
             <span className="flex items-center gap-1">
-              <TrophyBadge pokemonCount={pokemonCount} size={16} />
+              <motion.span
+                className="inline-flex items-center"
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.3 }}
+              >
+                <TrophyBadge pokemonCount={pokemonCount} size={16} />
+              </motion.span>
               {t("rankings.pokemonCount", { count: pokemonCount })}
             </span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Right section: Like button (hidden for owner) */}
         {!isOwner && (
-          <div className="flex items-center gap-2 shrink-0">
+          <motion.div
+            className="flex items-center gap-2 shrink-0"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.35 }}
+          >
             <Button
               variant="ghost"
               size="lg"
@@ -185,7 +210,7 @@ export const RankingHero = memo(function RankingHero({
               />
               <span className="font-semibold" style={{ color: textColor }}>{likeCount}</span>
             </Button>
-          </div>
+          </motion.div>
         )}
       </div>
 
@@ -195,6 +220,6 @@ export const RankingHero = memo(function RankingHero({
         open={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />
-    </div>
+    </motion.div>
   );
 });

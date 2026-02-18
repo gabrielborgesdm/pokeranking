@@ -12,6 +12,7 @@ import { PokemonSearchOverlay } from "@/features/pokemon-search/components/pokem
 import { ShareButton } from "./share-button";
 import { ExportButton } from "./export-button";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
+import { motion } from "motion/react";
 
 interface RankingActionBarProps {
   /** Ranking ID for share URL and navigation */
@@ -59,7 +60,12 @@ export const RankingActionBar = memo(function RankingActionBar({
 
   return (
     <>
-      <div className={cn("flex justify-center px-4 lg:px-0", className)}>
+      <motion.div
+        className={cn("flex justify-center px-4 lg:px-0", className)}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.2 }}
+      >
         <div
           className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-4 w-full mt-8 px-3 lg:px-4 rounded-lg bg-card border border-border/50 py-4"
           style={maxContentWidth ? { maxWidth: maxContentWidth } : undefined}
@@ -140,7 +146,7 @@ export const RankingActionBar = memo(function RankingActionBar({
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Search overlay dialog */}
       <PokemonSearchOverlay />
