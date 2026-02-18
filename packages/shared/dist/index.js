@@ -1,6 +1,25 @@
 'use strict';
 
 // src/themes/constants.ts
+var TROPHY_THRESHOLDS = {
+  starter: 0,
+  wild: 100,
+  elite: 300,
+  legendary: 700,
+  master: 1050
+};
+var TROPHY_COLORS = {
+  starter: "#78716c",
+  // stone-500 (bronze-like)
+  wild: "#22c55e",
+  // green-500
+  elite: "#3b82f6",
+  // blue-500
+  legendary: "#a855f7",
+  // purple-500
+  master: "#f59e0b"
+  // amber-500 (gold)
+};
 var RANKING_THEMES = [
   // Starter Tier (0 required) - Always available
   {
@@ -212,6 +231,31 @@ function getThemeRequiredCount(themeId, totalPokemonInSystem) {
     return Math.ceil(unlockRequirement.percent / 100 * totalPokemonInSystem);
   }
 }
+function getTrophy(pokemonCount) {
+  let tier = "starter";
+  if (pokemonCount >= TROPHY_THRESHOLDS.master) {
+    tier = "master";
+  } else if (pokemonCount >= TROPHY_THRESHOLDS.legendary) {
+    tier = "legendary";
+  } else if (pokemonCount >= TROPHY_THRESHOLDS.elite) {
+    tier = "elite";
+  } else if (pokemonCount >= TROPHY_THRESHOLDS.wild) {
+    tier = "wild";
+  }
+  return { tier, color: TROPHY_COLORS[tier] };
+}
+function getNextTrophy(pokemonCount) {
+  const tierOrder = ["starter", "wild", "elite", "legendary", "master"];
+  const currentTrophy = getTrophy(pokemonCount);
+  const currentIndex = tierOrder.indexOf(currentTrophy.tier);
+  if (currentIndex >= tierOrder.length - 1) {
+    return null;
+  }
+  const nextTier = tierOrder[currentIndex + 1];
+  const threshold = TROPHY_THRESHOLDS[nextTier];
+  const remaining = threshold - pokemonCount;
+  return { nextTier, threshold, remaining };
+}
 
 // src/pokemon-types.ts
 var POKEMON_TYPE_VALUES = [
@@ -254,10 +298,14 @@ exports.POKEMON_TYPE_VALUES = POKEMON_TYPE_VALUES;
 exports.PokemonTypes = PokemonTypes;
 exports.RANKING_THEMES = RANKING_THEMES;
 exports.THEME_IDS = THEME_IDS;
+exports.TROPHY_COLORS = TROPHY_COLORS;
+exports.TROPHY_THRESHOLDS = TROPHY_THRESHOLDS;
 exports.getAvailableThemes = getAvailableThemes;
+exports.getNextTrophy = getNextTrophy;
 exports.getThemeById = getThemeById;
 exports.getThemeRequiredCount = getThemeRequiredCount;
 exports.getThemeUnlockProgress = getThemeUnlockProgress;
+exports.getTrophy = getTrophy;
 exports.isThemeAvailable = isThemeAvailable;
 exports.isValidThemeId = isValidThemeId;
 //# sourceMappingURL=index.js.map

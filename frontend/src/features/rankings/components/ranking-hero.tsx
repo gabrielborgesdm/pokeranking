@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { getThemeById } from "@pokeranking/shared";
 import { Heart } from "lucide-react";
+import { TrophyBadge } from "@/components/trophy-badge";
 import Link from "next/link";
 import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -159,7 +160,8 @@ export const RankingHero = memo(function RankingHero({
               @{username}
             </Link>
             <span>·</span>
-            <span>
+            <span className="flex items-center gap-1">
+              <TrophyBadge pokemonCount={pokemonCount} size={16} />
               {t("rankings.pokemonCount", { count: pokemonCount })}
             </span>
           </div>

@@ -4,6 +4,7 @@ import { memo, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { MoreVertical, Pencil, Trash2, Heart, User } from "lucide-react";
+import { TrophyBadge } from "@/components/trophy-badge";
 import { cn } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 import { PokemonImage } from "@/components/pokemon-image";
@@ -167,19 +168,18 @@ export const RankingCard = memo(function RankingCard({
           className="flex items-center justify-between sm:text-sm opacity-80"
           style={getCardTextStyle()}
         >
-          <span>
+          <span className="flex items-center gap-1">
+            <TrophyBadge pokemonCount={pokemonCount} />
             <span className="sm:hidden">{pokemonCount} PK</span>
             <span className="hidden sm:inline">
               {t("myRankings.pokemonCount", { count: pokemonCount })}
             </span>
           </span>
-          {likesCount !== undefined ? (
+          {likesCount !== undefined && likesCount > 0 && (
             <div className="flex items-center gap-1 flex-shrink-0">
               <Heart className="h-3 w-3" />
               <span>{likesCount}</span>
             </div>
-          ) : (
-            <span className="hidden sm:inline flex-shrink-0">{formattedDate}</span>
           )}
         </div>
       </div>

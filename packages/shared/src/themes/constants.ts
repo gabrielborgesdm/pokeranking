@@ -1,4 +1,26 @@
-import type { RankingTheme } from "./types";
+import type { RankingTheme, ThemeTier } from "./types";
+
+/**
+ * Pokemon count thresholds for trophy tiers
+ */
+export const TROPHY_THRESHOLDS: Record<ThemeTier, number> = {
+  starter: 0,
+  wild: 100,
+  elite: 300,
+  legendary: 700,
+  master: 1050,
+};
+
+/**
+ * Trophy colors per tier (hex values)
+ */
+export const TROPHY_COLORS: Record<ThemeTier, string> = {
+  starter: "#78716c", // stone-500 (bronze-like)
+  wild: "#22c55e", // green-500
+  elite: "#3b82f6", // blue-500
+  legendary: "#a855f7", // purple-500
+  master: "#f59e0b", // amber-500 (gold)
+};
 
 /**
  * All available ranking themes

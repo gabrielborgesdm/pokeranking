@@ -699,6 +699,15 @@
     "updateSuccess": "Seu perfil foi atualizado com sucesso",
     "updateFailed": "Falha ao atualizar perfil"
   },
+  "trophy": {
+    "starter": "Treinador Iniciante",
+    "wild": "Treinador Selvagem",
+    "elite": "Treinador de Elite",
+    "legendary": "Treinador Lendário",
+    "master": "Mestre Pokemon",
+    "nextTier": "{{remaining}} mais para {{tier}}",
+    "maxTier": "Rank máximo alcançado!"
+  },
   "apiErrors": {
     "auth": {
       "invalidCredentials": "Nome de usuário ou senha inválidos",

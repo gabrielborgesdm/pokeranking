@@ -1,4 +1,23 @@
 // src/themes/constants.ts
+var TROPHY_THRESHOLDS = {
+  starter: 0,
+  wild: 100,
+  elite: 300,
+  legendary: 700,
+  master: 1050
+};
+var TROPHY_COLORS = {
+  starter: "#78716c",
+  // stone-500 (bronze-like)
+  wild: "#22c55e",
+  // green-500
+  elite: "#3b82f6",
+  // blue-500
+  legendary: "#a855f7",
+  // purple-500
+  master: "#f59e0b"
+  // amber-500 (gold)
+};
 var RANKING_THEMES = [
   // Starter Tier (0 required) - Always available
   {
@@ -210,6 +229,31 @@ function getThemeRequiredCount(themeId, totalPokemonInSystem) {
     return Math.ceil(unlockRequirement.percent / 100 * totalPokemonInSystem);
   }
 }
+function getTrophy(pokemonCount) {
+  let tier = "starter";
+  if (pokemonCount >= TROPHY_THRESHOLDS.master) {
+    tier = "master";
+  } else if (pokemonCount >= TROPHY_THRESHOLDS.legendary) {
+    tier = "legendary";
+  } else if (pokemonCount >= TROPHY_THRESHOLDS.elite) {
+    tier = "elite";
+  } else if (pokemonCount >= TROPHY_THRESHOLDS.wild) {
+    tier = "wild";
+  }
+  return { tier, color: TROPHY_COLORS[tier] };
+}
+function getNextTrophy(pokemonCount) {
+  const tierOrder = ["starter", "wild", "elite", "legendary", "master"];
+  const currentTrophy = getTrophy(pokemonCount);
+  const currentIndex = tierOrder.indexOf(currentTrophy.tier);
+  if (currentIndex >= tierOrder.length - 1) {
+    return null;
+  }
+  const nextTier = tierOrder[currentIndex + 1];
+  const threshold = TROPHY_THRESHOLDS[nextTier];
+  const remaining = threshold - pokemonCount;
+  return { nextTier, threshold, remaining };
+}
 
 // src/pokemon-types.ts
 var POKEMON_TYPE_VALUES = [
@@ -246,6 +290,6 @@ var DEFAULT_ZONES = [
   { name: "F", interval: [1001, null], color: "#6b7280" }
 ];
 
-export { DEFAULT_THEME_ID, DEFAULT_ZONES, POKEMON_TYPE_VALUES, PokemonTypes, RANKING_THEMES, THEME_IDS, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };
+export { DEFAULT_THEME_ID, DEFAULT_ZONES, POKEMON_TYPE_VALUES, PokemonTypes, RANKING_THEMES, THEME_IDS, TROPHY_COLORS, TROPHY_THRESHOLDS, getAvailableThemes, getNextTrophy, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, getTrophy, isThemeAvailable, isValidThemeId };
 //# sourceMappingURL=index.mjs.map
 //# sourceMappingURL=index.mjs.map

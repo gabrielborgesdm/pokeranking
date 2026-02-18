@@ -699,6 +699,15 @@
     "updateSuccess": "Your profile has been updated successfully",
     "updateFailed": "Failed to update profile"
   },
+  "trophy": {
+    "starter": "Starter Trainer",
+    "wild": "Wild Trainer",
+    "elite": "Elite Trainer",
+    "legendary": "Legendary Trainer",
+    "master": "Pokemon Master",
+    "nextTier": "{{remaining}} more for {{tier}}",
+    "maxTier": "Maximum rank achieved!"
+  },
   "apiErrors": {
     "auth": {
       "invalidCredentials": "Invalid username or password",

@@ -46,6 +46,14 @@ interface ThemeUnlockProgress {
 }
 
 /**
+ * Pokemon count thresholds for trophy tiers
+ */
+declare const TROPHY_THRESHOLDS: Record<ThemeTier, number>;
+/**
+ * Trophy colors per tier (hex values)
+ */
+declare const TROPHY_COLORS: Record<ThemeTier, string>;
+/**
  * All available ranking themes
  */
 declare const RANKING_THEMES: readonly RankingTheme[];
@@ -100,6 +108,25 @@ declare function isValidThemeId(themeId: string): boolean;
  * @returns The required Pokemon count, or 0 if theme not found
  */
 declare function getThemeRequiredCount(themeId: string, totalPokemonInSystem: number): number;
+/**
+ * Get trophy configuration based on Pokemon count
+ * @param pokemonCount - Current Pokemon count in the ranking
+ * @returns Trophy tier and color
+ */
+declare function getTrophy(pokemonCount: number): {
+    tier: ThemeTier;
+    color: string;
+};
+/**
+ * Get the next trophy tier and remaining Pokemon needed
+ * @param pokemonCount - Current Pokemon count
+ * @returns Next tier info or null if at master tier
+ */
+declare function getNextTrophy(pokemonCount: number): {
+    nextTier: ThemeTier;
+    threshold: number;
+    remaining: number;
+} | null;
 
 declare const POKEMON_TYPE_VALUES: readonly ["bug", "dark", "dragon", "electric", "fairy", "fighting", "fire", "flying", "ghost", "grass", "ground", "ice", "normal", "poison", "psychic", "rock", "steel", "water"];
 type PokemonType = (typeof POKEMON_TYPE_VALUES)[number];
@@ -129,4 +156,4 @@ interface Zone {
  */
 declare const DEFAULT_ZONES: readonly Zone[];
 
-export { DEFAULT_THEME_ID, DEFAULT_ZONES, POKEMON_TYPE_VALUES, type PokemonStats, type PokemonType, PokemonTypes, RANKING_THEMES, type RankingTheme, THEME_IDS, type ThemeTier, type ThemeUnlockProgress, type ThemeUnlockRequirement, type Zone, getAvailableThemes, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, isThemeAvailable, isValidThemeId };
+export { DEFAULT_THEME_ID, DEFAULT_ZONES, POKEMON_TYPE_VALUES, type PokemonStats, type PokemonType, PokemonTypes, RANKING_THEMES, type RankingTheme, THEME_IDS, TROPHY_COLORS, TROPHY_THRESHOLDS, type ThemeTier, type ThemeUnlockProgress, type ThemeUnlockRequirement, type Zone, getAvailableThemes, getNextTrophy, getThemeById, getThemeRequiredCount, getThemeUnlockProgress, getTrophy, isThemeAvailable, isValidThemeId };
