@@ -143,8 +143,8 @@
     "pokemonCount_other": "{{count}} Pokemon"
   },
   "rankingsList": {
-    "title": "Browse Rankings",
-    "description": "Explore Pokemon rankings from the community",
+    "title": "Community Rankings",
+    "description": "Top rankings shown first. Rank more Pokemon to climb!",
     "noRankings": "No rankings found.",
     "errorTitle": "Error loading rankings",
     "errorDescription": "Please try again later.",
@@ -678,13 +678,13 @@
   },
   "onboarding": {
     "welcome": "Welcome to Pokeranking!",
-    "description": "Create your own Pokemon tier lists, rank your favorites, and share them with the community.",
-    "loggedHint": "Click to access your rankings or visit the Pokedex",
-    "guestHint": "Create an account to start ranking Pokemon",
+    "description": "Create and share your Pokemon tier lists.",
+    "loggedHint": "Access your rankings or explore the Pokedex",
+    "guestHint": "Sign up to start ranking",
     "cta": "My Rankings",
     "createAccount": "Create Account",
     "pokedexHint": "Also check out the Pokedex, browse Pokemon, type effectiveness, and counters!",
-    "goToPokedex": "Open Pokedex"
+    "goToPokedex": "Pokedex"
   },
   "account": {
     "title": "My Account",

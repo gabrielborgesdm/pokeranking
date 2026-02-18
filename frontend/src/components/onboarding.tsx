@@ -39,25 +39,21 @@ export function Onboarding() {
 
   if (isLoading) {
     return (
-      <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 animate-pulse min-h-[350px]">
-        <div className="flex flex-col items-center text-center gap-5 h-full justify-center">
+      <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 animate-pulse min-h-[180px]">
+        <div className="flex flex-col items-center text-center gap-3 h-full justify-center">
           {/* Title */}
-          <div className="h-8 w-56 rounded bg-muted" />
+          <div className="h-7 w-48 rounded bg-muted" />
 
           {/* Description */}
-          <div className="space-y-2 max-w-lg w-full">
-            <div className="h-4 w-full rounded bg-muted" />
-            <div className="h-4 w-5/6 rounded bg-muted" />
-            <div className="h-4 w-4/6 rounded bg-muted" />
-          </div>
+          <div className="h-4 w-64 rounded bg-muted" />
 
           {/* Hint */}
-          <div className="h-4 w-48 rounded bg-muted" />
+          <div className="h-4 w-56 rounded bg-muted" />
 
           {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-2">
-            <div className="h-10 w-44 rounded bg-muted" />
-            <div className="h-10 w-44 rounded bg-muted" />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="h-10 w-36 rounded bg-muted" />
+            <div className="h-10 w-36 rounded bg-muted" />
           </div>
         </div>
       </div>
@@ -69,40 +65,30 @@ export function Onboarding() {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-      className="relative overflow-hidden rounded-2xl border border-border bg-card min-h-[350px] justify-center flex items-center"
+      className="relative overflow-hidden rounded-2xl border border-border bg-card min-h-[180px] justify-center flex items-center"
     >
       {/* Decorative pokeballs */}
-      <Pokeball className="absolute -top-6 -left-6 w-24 h-24 opacity-20 text-muted-foreground rotate-[-15deg]" />
-      <Pokeball className="absolute -bottom-8 -right-8 w-32 h-32 opacity-20 text-muted-foreground rotate-[20deg]" />
-      <Pokeball className="absolute top-1/2 -translate-y-1/2 -right-4 w-16 h-16 opacity-10 text-muted-foreground rotate-[45deg] hidden md:block" />
+      <Pokeball className="absolute -top-6 -left-6 w-20 h-20 opacity-20 text-muted-foreground rotate-[-15deg]" />
+      <Pokeball className="absolute -bottom-6 -right-6 w-24 h-24 opacity-20 text-muted-foreground rotate-[20deg]" />
 
-      <div className="relative z-10 flex flex-col items-center text-center gap-5 px-6 py-6">
-        {/* Header with pokeballs */}
-        <div className="flex items-center gap-3">
-          <h2 className="text-2xl md:text-3xl font-bold">
-            {t("onboarding.welcome")}
-          </h2>
-        </div>
+      <div className="relative z-10 flex flex-col items-center text-center gap-3 px-6 py-4">
+        {/* Header */}
+        <h2 className="text-xl md:text-2xl font-bold">
+          {t("onboarding.welcome")}
+        </h2>
 
         {/* Description */}
-        <p className="text-muted-foreground max-w-lg text-sm md:text-base leading-relaxed">
+        <p className="text-muted-foreground text-sm md:text-base">
           {t("onboarding.description")}
         </p>
 
-        {/* Pokedex hint (only for logged-in users) */}
-        {username && (
-          <p className="text-sm md:text-base text-muted-foreground max-w-lg leading-relaxed">
-            {t("onboarding.pokedexHint")}
-          </p>
-        )}
-
         {/* Hint */}
-        <p className="text-sm md:text-base font-medium text-foreground/70">
+        <p className="text-sm font-medium text-foreground/70">
           {username ? t("onboarding.loggedHint") : t("onboarding.guestHint")}
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+        <div className="flex flex-col sm:flex-row items-center gap-3">
           {username ? (
             <>
               <Button asChild size="lg" variant="outline">

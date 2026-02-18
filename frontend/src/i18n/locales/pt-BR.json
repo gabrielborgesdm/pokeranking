@@ -169,8 +169,8 @@
     "pokemonCount_other": "{{count}} Pokémon"
   },
   "rankingsList": {
-    "title": "Explorar Rankings",
-    "description": "Explore rankings de Pokémon da comunidade",
+    "title": "Rankings da Comunidade",
+    "description": "Rankings com mais Pokémon aparecem primeiro. Ranqueie para subir!",
     "noRankings": "Nenhum ranking encontrado.",
     "errorTitle": "Erro ao carregar rankings",
     "errorDescription": "Por favor, tente novamente mais tarde.",
@@ -678,13 +678,13 @@
   },
   "onboarding": {
     "welcome": "Bem-vindo ao Pokeranking!",
-    "description": "Crie seus rankings Pokémon, ranqueie seus favoritos e compartilhe com a comunidade.",
-    "loggedHint": "Clique para visitar seus rankings ou acesse a Pokedex",
-    "guestHint": "Crie uma conta para começar a ranquear Pokémon",
+    "description": "Crie e compartilhe seus rankings Pokémon.",
+    "loggedHint": "Acesse seus rankings ou explore a Pokédex",
+    "guestHint": "Cadastre-se para começar",
     "cta": "Meus Rankings",
     "createAccount": "Criar Conta",
     "pokedexHint": "Confira também a Pokedex, veja Pokémon, efetividade de tipos e counters!",
-    "goToPokedex": "Abrir Pokedex"
+    "goToPokedex": "Pokédex"
   },
   "account": {
     "title": "Minha Conta",
