@@ -86,9 +86,9 @@ export const RankingHero = memo(function RankingHero({
         color: textColor,
         textShadow: textShadow
       }}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+      transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
     >
       {/* Flowing wave decoration */}
       <svg
@@ -129,9 +129,9 @@ export const RankingHero = memo(function RankingHero({
         {/* Left section: Top Pokemon */}
         <motion.div
           className="flex flex-col items-center gap-2 shrink-0"
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
         >
           {/* Top Pokemon Image - falls back to "who.png" if no pokemon */}
           <div
@@ -158,9 +158,9 @@ export const RankingHero = memo(function RankingHero({
         {/* Center section: Title, username, pokemon count */}
         <motion.div
           className="flex-1 min-w-0 text-center sm:text-left"
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.15 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 }}
         >
           <h1 className="text-xl sm:text-3xl font-bold truncate drop-shadow-md">
             {title}
@@ -176,9 +176,9 @@ export const RankingHero = memo(function RankingHero({
             <span className="flex items-center gap-1">
               <motion.span
                 className="inline-flex items-center"
-                initial={{ opacity: 0, scale: 0 }}
+                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15, delay: 0.3 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
               >
                 <TrophyBadge pokemonCount={pokemonCount} size={16} />
               </motion.span>
@@ -191,9 +191,9 @@ export const RankingHero = memo(function RankingHero({
         {!isOwner && (
           <motion.div
             className="flex items-center gap-2 shrink-0"
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 12 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.35 }}
+            transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.45 }}
           >
             <Button
               variant="ghost"

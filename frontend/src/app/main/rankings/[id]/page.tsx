@@ -70,9 +70,9 @@ function RankingPageContent({
       <motion.div
         style={{ maxWidth: maxContentWidth }}
         className="mx-auto pt-4"
-        initial={{ opacity: 0, x: -20 }}
+        initial={{ opacity: 0, x: -12 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
       >
         <BackButton />
       </motion.div>

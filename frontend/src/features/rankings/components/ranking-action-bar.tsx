@@ -62,9 +62,9 @@ export const RankingActionBar = memo(function RankingActionBar({
     <>
       <motion.div
         className={cn("flex justify-center px-4 lg:px-0", className)}
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.2 }}
+        transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.25 }}
       >
         <div
           className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-4 w-full mt-8 px-3 lg:px-4 rounded-lg bg-card border border-border/50 py-4"
