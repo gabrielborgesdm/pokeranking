@@ -10,4 +10,6 @@ export interface RankingUserResponseDto {
   _id: string;
   username: string;
   profilePic?: string;
+  /** Total Pokemon ranked by this user across all rankings */
+  rankedPokemonCount: number;
 }

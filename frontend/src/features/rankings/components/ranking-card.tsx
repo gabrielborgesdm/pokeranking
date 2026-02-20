@@ -30,6 +30,8 @@ interface RankingCardProps {
   likesCount?: number;
   /** Username of the ranking owner (for public list view) */
   username?: string;
+  /** User's total ranked Pokemon across all rankings (for trophy badge) */
+  userTotalRankedPokemon?: number;
   onClick?: () => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
@@ -46,6 +48,7 @@ export const RankingCard = memo(function RankingCard({
   theme,
   likesCount,
   username,
+  userTotalRankedPokemon,
   onClick,
   onEdit,
   onDelete,
@@ -169,7 +172,7 @@ export const RankingCard = memo(function RankingCard({
           style={getCardTextStyle()}
         >
           <span className="flex items-center gap-1">
-            <TrophyBadge pokemonCount={pokemonCount} />
+            <TrophyBadge userTotalRankedPokemon={userTotalRankedPokemon ?? 0} />
             <span className="sm:hidden">{pokemonCount} PK</span>
             <span className="hidden sm:inline">
               {t("myRankings.pokemonCount", { count: pokemonCount })}

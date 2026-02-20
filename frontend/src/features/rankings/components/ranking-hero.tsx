@@ -9,6 +9,11 @@ import type { PokemonResponseDto } from "@pokeranking/api-client";
 import { getThemeById } from "@pokeranking/shared";
 import { Heart } from "lucide-react";
 import { TrophyBadge } from "@/components/trophy-badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { memo, useMemo, useState } from "react";
@@ -23,6 +28,8 @@ interface RankingHeroProps {
   topPokemon?: PokemonResponseDto | null;
   /** Total number of Pokemon in this ranking */
   pokemonCount: number;
+  /** User's total ranked Pokemon across all rankings (for trophy badge) */
+  userTotalRankedPokemon: number;
   /** Theme ID for the background */
   theme?: string | null;
   /** Number of likes */
@@ -52,6 +59,7 @@ export const RankingHero = memo(function RankingHero({
   username,
   topPokemon,
   pokemonCount,
+  userTotalRankedPokemon,
   theme,
   likeCount,
   isLiked,
@@ -165,7 +173,7 @@ export const RankingHero = memo(function RankingHero({
           <h1 className="text-xl sm:text-3xl font-bold truncate drop-shadow-md">
             {title}
           </h1>
-          <div className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-base opacity-90 mt-1">
+          <div className="inline-flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-base mt-2 flex-wrap bg-black/20 backdrop-blur-sm rounded-full px-4 py-1.5">
             <Link
               href={routes.userRankings(username)}
               className="hover:underline font-medium"
@@ -173,17 +181,47 @@ export const RankingHero = memo(function RankingHero({
               @{username}
             </Link>
             <span>·</span>
-            <span className="flex items-center gap-1">
-              <motion.span
-                className="inline-flex items-center"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
-              >
-                <TrophyBadge pokemonCount={pokemonCount} size={16} />
-              </motion.span>
-              {t("rankings.pokemonCount", { count: pokemonCount })}
-            </span>
+            <motion.span
+              className="inline-flex items-center gap-1"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
+            >
+              <TrophyBadge userTotalRankedPokemon={userTotalRankedPokemon} size={16} />
+              <span>{userTotalRankedPokemon}</span>
+            </motion.span>
+            <span>·</span>
+            <motion.span
+              className="inline-flex items-center gap-1"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.5 }}
+            >
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <svg
+                      viewBox="0 0 100 100"
+                      className="w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" strokeWidth="14" />
+                      <line x1="5" y1="50" x2="95" y2="50" stroke="currentColor" strokeWidth="14" />
+                      <circle cx="50" cy="50" r="14" fill="currentColor" />
+                    </svg>
+                    <span>{pokemonCount}</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t("rankings.pokemonCountOnRanking", { count: pokemonCount })}</p>
+                </TooltipContent>
+              </Tooltip>
+            </motion.span>
           </div>
         </motion.div>
 

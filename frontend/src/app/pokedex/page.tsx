@@ -29,6 +29,7 @@ export default function PokedexPage() {
           title={t("pokedex.title")}
           description={t("pokedex.description")}
           backHref={isPokedexPwa ? undefined : routes.home}
+          backLabel={isPokedexPwa ? undefined : t("common.back")}
         />
 
         {/* Type Effectiveness Calculator */}

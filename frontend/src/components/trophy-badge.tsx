@@ -16,28 +16,28 @@ import {
 import { Progress } from "@/components/ui/progress";
 
 interface TrophyBadgeProps {
-  pokemonCount: number;
+  userTotalRankedPokemon: number;
   size?: number;
   className?: string;
 }
 
 export const TrophyBadge = memo(function TrophyBadge({
-  pokemonCount,
+  userTotalRankedPokemon,
   size = 12,
   className,
 }: TrophyBadgeProps) {
   const { t } = useTranslation();
 
-  const trophy = useMemo(() => getTrophy(pokemonCount), [pokemonCount]);
-  const nextTrophy = useMemo(() => getNextTrophy(pokemonCount), [pokemonCount]);
+  const trophy = useMemo(() => getTrophy(userTotalRankedPokemon), [userTotalRankedPokemon]);
+  const nextTrophy = useMemo(() => getNextTrophy(userTotalRankedPokemon), [userTotalRankedPokemon]);
 
   const progressPercentage = useMemo(() => {
     if (!nextTrophy) return 100;
     const currentThreshold = TROPHY_THRESHOLDS[trophy.tier as keyof typeof TROPHY_THRESHOLDS];
     const range = nextTrophy.threshold - currentThreshold;
-    const progress = pokemonCount - currentThreshold;
+    const progress = userTotalRankedPokemon - currentThreshold;
     return Math.min(100, (progress / range) * 100);
-  }, [pokemonCount, trophy.tier, nextTrophy]);
+  }, [userTotalRankedPokemon, trophy.tier, nextTrophy]);
 
   return (
     <Tooltip>
@@ -60,7 +60,9 @@ export const TrophyBadge = memo(function TrophyBadge({
           <p className="font-medium">
             {t(`trophy.${trophy.tier}`)}
           </p>
-          <p className="text-xs opacity-80">{pokemonCount} Pokemon</p>
+          <p className="text-xs opacity-80">
+            {t("trophy.totalRanked", { count: userTotalRankedPokemon })}
+          </p>
           {nextTrophy ? (
             <>
               <p className="text-xs opacity-80">

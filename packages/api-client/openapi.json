@@ -1938,11 +1938,17 @@
           "profilePic": {
             "type": "string",
             "example": "https://example.com/avatar.jpg"
+          },
+          "rankedPokemonCount": {
+            "type": "number",
+            "example": 150,
+            "description": "Total Pokemon ranked by this user across all rankings"
           }
         },
         "required": [
           "_id",
-          "username"
+          "username",
+          "rankedPokemonCount"
         ]
       },
       "RankingListResponseDto": {

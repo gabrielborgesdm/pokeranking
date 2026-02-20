@@ -36,7 +36,9 @@ interface RankingListItem {
   createdAt: Date;
   updatedAt: Date;
   user: {
+    _id: Types.ObjectId;
     username: string;
+    rankedPokemonCount: number;
   };
 }
 
@@ -246,6 +248,8 @@ export class RankingsService {
   async findByUsername(username: string) {
     const user = await this.userModel
       .findOne({ username, isActive: true })
+      .select('_id username rankedPokemonCount')
+      .lean()
       .exec();
 
     if (!user) {
@@ -255,7 +259,17 @@ export class RankingsService {
       });
     }
 
-    return this.find(user._id.toString());
+    const rankings = await this.find(user._id.toString());
+
+    // Add user data to each ranking for consistent response shape
+    return rankings.map((ranking) => ({
+      ...ranking,
+      user: {
+        _id: user._id,
+        username: user.username,
+        rankedPokemonCount: user.rankedPokemonCount ?? 0,
+      },
+    }));
   }
 
   async remove(id: string, userId: string): Promise<Ranking> {
@@ -502,14 +516,14 @@ export class RankingsService {
       },
     });
 
-    // Lookup user data for username only
+    // Lookup user data
     pipeline.push({
       $lookup: {
         from: 'users',
         localField: 'user',
         foreignField: '_id',
         as: 'userData',
-        pipeline: [{ $project: { username: 1 } }],
+        pipeline: [{ $project: { username: 1, rankedPokemonCount: 1 } }],
       },
     });
 
@@ -577,7 +591,9 @@ export class RankingsService {
         createdAt: 1,
         updatedAt: 1,
         user: {
+          _id: '$userData._id',
           username: '$userData.username',
+          rankedPokemonCount: '$userData.rankedPokemonCount',
         },
       },
     });

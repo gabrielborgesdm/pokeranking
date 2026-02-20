@@ -81,6 +81,7 @@ function RankingPageContent({
         username={ranking.user?.username ?? ""}
         topPokemon={topPokemon}
         pokemonCount={pokemon.length}
+        userTotalRankedPokemon={ranking.user?.rankedPokemonCount ?? 0}
         theme={ranking.background}
         likeCount={likeCount}
         isLiked={isLiked}

@@ -20,6 +20,13 @@ export class RankingUserResponseDto {
   @Expose()
   @ApiPropertyOptional({ example: 'https://example.com/avatar.jpg' })
   profilePic?: string;
+
+  @Expose()
+  @ApiProperty({
+    example: 150,
+    description: 'Total Pokemon ranked by this user across all rankings',
+  })
+  rankedPokemonCount: number;
 }
 
 @Exclude()

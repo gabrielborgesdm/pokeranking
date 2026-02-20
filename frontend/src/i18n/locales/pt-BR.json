@@ -166,7 +166,9 @@
   },
   "rankings": {
     "pokemonCount_one": "{{count}} Pokémon",
-    "pokemonCount_other": "{{count}} Pokémon"
+    "pokemonCount_other": "{{count}} Pokémon",
+    "pokemonCountOnRanking_one": "{{count}} Pokémon neste ranking",
+    "pokemonCountOnRanking_other": "{{count}} Pokémon neste ranking"
   },
   "rankingsList": {
     "title": "Rankings da Comunidade",
@@ -705,6 +707,7 @@
     "elite": "Treinador de Elite",
     "legendary": "Treinador Lendário",
     "master": "Mestre Pokemon",
+    "totalRanked": "{{count}} Pokémon em todos os rankings",
     "nextTier": "{{remaining}} mais para {{tier}}",
     "maxTier": "Rank máximo alcançado!"
   },

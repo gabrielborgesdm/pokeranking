@@ -85,6 +85,7 @@ export default function RankingsListPage() {
           title={ranking.title}
           topPokemonImage={normalizePokemonImageSrc(ranking.image)}
           pokemonCount={ranking.pokemonCount}
+          userTotalRankedPokemon={ranking.user?.rankedPokemonCount ?? 0}
           createdAt={ranking.createdAt}
           updatedAt={ranking.updatedAt}
           theme={ranking.theme}

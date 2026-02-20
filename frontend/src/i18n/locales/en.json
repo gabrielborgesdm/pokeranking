@@ -140,7 +140,9 @@
   },
   "rankings": {
     "pokemonCount_one": "{{count}} Pokemon",
-    "pokemonCount_other": "{{count}} Pokemon"
+    "pokemonCount_other": "{{count}} Pokemon",
+    "pokemonCountOnRanking_one": "{{count}} Pokemon on this ranking",
+    "pokemonCountOnRanking_other": "{{count}} Pokemon on this ranking"
   },
   "rankingsList": {
     "title": "Community Rankings",
@@ -705,6 +707,7 @@
     "elite": "Elite Trainer",
     "legendary": "Legendary Trainer",
     "master": "Pokemon Master",
+    "totalRanked": "{{count}} Pokemon across all rankings",
     "nextTier": "{{remaining}} more for {{tier}}",
     "maxTier": "Maximum rank achieved!"
   },
