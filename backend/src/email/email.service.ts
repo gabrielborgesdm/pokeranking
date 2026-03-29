@@ -202,7 +202,7 @@ export class EmailService {
     lang?: string,
   ): Promise<boolean> {
     const language = this.getLanguage(lang);
-    const resetUrl = `${this.frontendUrl}/reset-password?token=${token}`;
+    const resetUrl = `${this.frontendUrl}/main/reset-password?token=${token}`;
 
     const html = this.templates[language].resetPassword({
       name: user.username,
