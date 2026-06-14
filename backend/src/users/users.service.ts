@@ -280,7 +280,7 @@ export class UsersService {
     ];
 
     const pipeline = [
-      { $match: { _id: new Types.ObjectId(id) } },
+      { $match: { _id: new (Types.ObjectId as any)(id) } },
       // Lookup rankings with only necessary fields
       {
         $lookup: {

@@ -1,8 +1,10 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import type { UserResponseDtoRole } from "@pokeranking/api-client";
 
 export function useIsAdmin(): boolean {
   const { data: session } = useSession();
-  return session?.user?.role === "admin" || session?.user?.role === "moderator";
+  const role = session?.user?.role as UserResponseDtoRole | undefined;
+  return role === "admin" || role === "moderator";
 }
