@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  Request,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -20,6 +21,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { POKEMON_TYPE_VALUES } from '@pokeranking/shared';
+import type { AuthenticatedRequest } from '../common/interfaces/authenticated-request.interface';
 import { Public } from '../common/decorators/public.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../common/enums/user-role.enum';
@@ -45,10 +47,10 @@ import { PokemonService } from './pokemon.service';
 @ApiBearerAuth('JWT-auth')
 @Controller('pokemon')
 export class PokemonController {
-  constructor(private readonly pokemonService: PokemonService) {}
+  constructor(private readonly pokemonService: PokemonService) { }
 
   @Post()
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Admin, UserRole.Moderator)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create a new pokemon (Admin only)' })
   @ApiBody({ type: CreatePokemonDto })
@@ -60,8 +62,14 @@ export class PokemonController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   @ApiResponse({ status: 409, description: 'Pokemon already exists' })
-  async create(@Body() createPokemonDto: CreatePokemonDto) {
-    const pokemon = await this.pokemonService.create(createPokemonDto);
+  async create(
+    @Body() createPokemonDto: CreatePokemonDto,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    const pokemon = await this.pokemonService.create(
+      createPokemonDto,
+      req.user._id,
+    );
     return toDto(PokemonResponseDto, pokemon);
   }
 
@@ -194,7 +202,7 @@ export class PokemonController {
   }
 
   @Patch(':id')
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Admin, UserRole.Moderator)
   @ApiOperation({ summary: 'Update pokemon (Admin only)' })
   @ApiParam({
     name: 'id',
@@ -213,13 +221,19 @@ export class PokemonController {
   async update(
     @Param('id') id: string,
     @Body() updatePokemonDto: UpdatePokemonDto,
+    @Request() req: AuthenticatedRequest,
   ) {
-    const pokemon = await this.pokemonService.update(id, updatePokemonDto);
+    const pokemon = await this.pokemonService.update(
+      id,
+      updatePokemonDto,
+      req.user._id,
+      req.user.role,
+    );
     return toDto(PokemonResponseDto, pokemon);
   }
 
   @Delete(':id')
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Admin, UserRole.Moderator)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete pokemon (Admin only)' })
   @ApiParam({
@@ -231,7 +245,7 @@ export class PokemonController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden - Admin role required' })
   @ApiResponse({ status: 404, description: 'Pokemon not found' })
-  remove(@Param('id') id: string) {
-    return this.pokemonService.remove(id);
+  remove(@Param('id') id: string, @Request() req: AuthenticatedRequest) {
+    return this.pokemonService.remove(id, req.user._id, req.user.role);
   }
 }

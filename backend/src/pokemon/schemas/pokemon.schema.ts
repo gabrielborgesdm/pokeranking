@@ -62,6 +62,10 @@ export class Pokemon extends Document {
   @Prop({ type: Number })
   generation?: number;
 
+  //createdBy
+  @Prop({ type: String, trim: true })
+  createdBy?: string;
+
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   Logger,
   NotFoundException,
@@ -9,6 +10,7 @@ import type { QueryFilter } from 'mongoose';
 import { Model } from 'mongoose';
 import { CacheService } from '../common/services/cache.service';
 import { stripUndefined, toDto } from '../common/utils/transform.util';
+import { UserRole } from '../common/enums/user-role.enum';
 import { TK } from '../i18n/constants/translation-keys';
 import { UploadService } from '../upload/upload.service';
 import { BulkCreatePokemonItemDto } from './dto/bulk-create-pokemon-response.dto';
@@ -31,9 +33,9 @@ export class PokemonService {
     @InjectModel(Pokemon.name) private readonly pokemonModel: Model<Pokemon>,
     private readonly cacheService: CacheService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) { }
 
-  async create(createPokemonDto: CreatePokemonDto): Promise<Pokemon> {
+  async create(createPokemonDto: CreatePokemonDto, userId: string): Promise<Pokemon> {
     const existing = await this.pokemonModel
       .findOne({ name: createPokemonDto.name })
       .exec();
@@ -45,7 +47,10 @@ export class PokemonService {
       });
     }
 
-    const pokemon = new this.pokemonModel(createPokemonDto);
+    const pokemon = new this.pokemonModel({
+      ...createPokemonDto,
+      createdBy: userId,
+    });
     const saved = await pokemon.save();
 
     await this.invalidateCountCache();
@@ -202,15 +207,43 @@ export class PokemonService {
     return pokemon;
   }
 
+  /**
+   * Validates if a user can modify a Pokemon.
+   * Admins can always modify.
+   * Moderators can only modify Pokemon they created.
+   * Throws ForbiddenException if validation fails.
+   */
+  private async validateModeratorOrCreator(
+    pokemonId: string,
+    userId: string,
+    userRole: UserRole,
+  ): Promise<Pokemon> {
+    const pokemon = await this.findOne(pokemonId);
+
+    // Admins can always modify
+    if (userRole === UserRole.Admin) {
+      return pokemon;
+    }
+
+    // Moderators can only modify Pokemon they created
+    if (userRole === UserRole.Moderator && pokemon.createdBy !== userId) {
+      throw new ForbiddenException({
+        key: 'POKEMON.CANNOT_MODIFY_OTHERS',
+      });
+    }
+
+    return pokemon;
+  }
+
   async update(
     id: string,
     updatePokemonDto: UpdatePokemonDto,
+    userId: string,
+    userRole: UserRole,
   ): Promise<Pokemon> {
-    const pokemon = await this.pokemonModel.findById(id).exec();
+    const pokemon = await this.validateModeratorOrCreator(id, userId, userRole);
+
     this.logger.debug(`Updating pokemon: ${JSON.stringify(updatePokemonDto)}`);
-    if (!pokemon) {
-      throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
-    }
 
     // Check if image is being updated and delete the old one from the provider
     const oldImage = pokemon.image;
@@ -237,11 +270,9 @@ export class PokemonService {
     return updated;
   }
 
-  async remove(id: string): Promise<Pokemon> {
-    const pokemon = await this.pokemonModel.findById(id).exec();
-    if (!pokemon) {
-      throw new NotFoundException({ key: TK.POKEMON.NOT_FOUND, args: { id } });
-    }
+
+  async remove(id: string, userId: string, userRole: UserRole): Promise<Pokemon> {
+    const pokemon = await this.validateModeratorOrCreator(id, userId, userRole);
 
     // Delete the image from the provider if it exists
     if (pokemon.image) {
