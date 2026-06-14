@@ -13,4 +13,5 @@ export type UserResponseDtoRole =
 export const UserResponseDtoRole = {
   admin: "admin",
   member: "member",
+  moderator: "moderator",
 } as const;
