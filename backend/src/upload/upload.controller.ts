@@ -27,10 +27,10 @@ import { MulterFile } from './providers/base-image.provider';
 @ApiBearerAuth('JWT-auth')
 @Controller('upload')
 export class UploadController {
-  constructor(private readonly uploadService: UploadService) {}
+  constructor(private readonly uploadService: UploadService) { }
 
   @Post('image')
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Admin, UserRole.Moderator)
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -64,7 +64,7 @@ export class UploadController {
   }
 
   @Post('images')
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Admin, UserRole.Moderator)
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FilesInterceptor('files', 50))
   @ApiConsumes('multipart/form-data')
