@@ -422,6 +422,7 @@
   },
   "admin": {
     "pokemon": {
+      "CANNOT_MODIFY_OTHERS": "You don't have permission to modify this Pokemon",
       "title": "Pokemon Management",
       "subtitle": "{{count}} Pokemon total",
       "create": "Add Pokemon",
